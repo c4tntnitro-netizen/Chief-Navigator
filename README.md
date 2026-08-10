@@ -11,9 +11,21 @@ The authoritative inherited concept and its decision boundaries are recorded in 
 ## Current scaffold
 
 - Starsector `0.98a` metadata
-- Minimal Java mod plugin
+- Java mod plugin
+- Playable **Hyperspace Odyssey** campaign-ability prototype
 - Local PowerShell build script using Starsector's bundled JDK and API jars
 - Design notes preserving the prior concept discussion
+
+## Hyperspace Odyssey prototype
+
+The ability is granted automatically on game load for testing. Activate it in
+hyperspace while facing the desired direction. The fleet remains stationary for
+three campaign days, then travels at extreme speed until it intersects a storm,
+slipstream, another fleet, or reaches the 30-light-year test limit.
+
+The prototype validates charging, directional launch, and collision termination.
+Fuel cost, CR damage, route visualization, Sinni recruitment gating, and the
+scripted leap to Waypoint Troy are intentionally deferred.
 
 ## Build
 
@@ -24,4 +36,3 @@ From PowerShell in this directory:
 ```
 
 The build produces `jars/ChiefNavigator.jar`.
-
