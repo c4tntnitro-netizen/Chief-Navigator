@@ -1,0 +1,33 @@
+{
+  "bounds": [
+    560,220,
+    580,0,
+    540,-260,
+    400,-470,
+    180,-560,
+    -160,-560,
+    -400,-470,
+    -540,-260,
+    -560,0,
+    -520,280,
+    -370,470,
+    -160,560,
+    160,560,
+    370,470,
+    520,280
+  ],
+  "builtInMods": ["reduced_explosion"],
+  "center": [627,627],
+  "collisionRadius": 610,
+  "height": 1254,
+  "hullId": "chief_navigator_ithaca_section_core",
+  "hullName": "FOB Ithaca Section Core",
+  "hullSize": "FRIGATE",
+  "shieldCenter": [0,0],
+  "shieldRadius": 1,
+  "spriteName": "graphics/ships/chief_navigator_drifting_wall_reactor_v1.png",
+  "style": "LOW_TECH",
+  "viewOffset": 0,
+  "weaponSlots": [],
+  "width": 1254
+}

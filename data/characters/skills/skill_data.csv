@@ -1,0 +1,2 @@
+id,name,order,tier,reqPoints,reqPointsPerExtraSkill,description,author,combat officer,admiral,admin,tags,icon,Column
+chief_navigator_odyssey_threat_hunter,Threat-Hunter Subroutines,3900,1,0,,"A narrow combat intelligence reconstructed from dead Odyssean research archives. It recognizes the material-starved THREAT's improvised weak points.",Odyssean research archive,TRUE,,,"player_only, npc_only, ai_core_only, codex_unlockable",graphics/icons/skills/target_analysis2.png,

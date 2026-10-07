@@ -1,0 +1,11 @@
+{
+  "displayName": "Live Fortress Core",
+  "fluxCapacitors": 0,
+  "fluxVents": 0,
+  "goalVariant": true,
+  "hullId": "chief_navigator_ithaca_section_core",
+  "hullMods": [],
+  "quality": 1,
+  "variantId": "chief_navigator_ithaca_section_core_Active",
+  "weaponGroups": []
+}

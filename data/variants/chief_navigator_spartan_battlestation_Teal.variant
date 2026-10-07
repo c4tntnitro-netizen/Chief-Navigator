@@ -1,0 +1,35 @@
+{
+  "displayName": "Spartan Battlestation",
+  "fluxCapacitors": 0,
+  "fluxVents": 0,
+  "hullId": "chief_navigator_spartan_battlestation",
+  "hullMods": [],
+  "quality": 1,
+  "variantId": "chief_navigator_spartan_battlestation_Teal",
+  "weaponGroups": [
+    {
+      "autofire": true,
+      "mode": "LINKED",
+      "weapons": {
+        "CN NAVAL": "chief_navigator_drifting_wall_colossal_inert"
+      }
+    }
+  ],
+  "modules": [
+    {"WS 018": "chief_navigator_battlestation_armour3_Teal"},
+    {"WS 019": "chief_navigator_battlestation_armour3_Teal"},
+    {"WS 020": "chief_navigator_battlestation_armour3_Teal"},
+    {"WS 007": "chief_navigator_battlestation_armour4_Teal"},
+    {"WS 008": "chief_navigator_battlestation_armour4_Teal"},
+    {"WS 006": "chief_navigator_battlestation_armour4_Teal"},
+    {"WS 015": "chief_navigator_battlestation_armour2_Teal"},
+    {"WS 016": "chief_navigator_battlestation_armour2_Teal"},
+    {"WS 017": "chief_navigator_battlestation_armour2_Teal"},
+    {"WS 009": "chief_navigator_battlestation_large1_Teal"},
+    {"WS 010": "chief_navigator_battlestation_large2_Teal"},
+    {"WS 011": "chief_navigator_battlestation_large2_Teal"},
+    {"WS 012": "chief_navigator_battlestation_bastion1_Teal"},
+    {"WS 013": "chief_navigator_battlestation_citadel1_Teal"},
+    {"WS 014": "chief_navigator_battlestation_bastion1_Teal"}
+  ]
+}

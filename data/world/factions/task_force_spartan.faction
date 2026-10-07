@@ -1,0 +1,103 @@
+{
+    id:"chief_navigator_task_force_spartan",
+    "displayName":"Task Force Spartan",
+    "displayNameWithArticle":"Task Force Spartan",
+    "displayNameLong":"Task Force Spartan",
+    "displayNameLongWithArticle":"Task Force Spartan",
+    "entityNamePrefix":"",
+    "personNamePrefix":"",
+    "personNamePrefixAOrAn":"a",
+    "displayNameIsOrAre":"is",
+
+    "logo":"graphics/factions/chief_navigator_task_force_spartan.png",
+    "crest":"graphics/factions/crest_chief_navigator_task_force_spartan.png",
+    "shipNamePrefix":"TFS",
+
+    "color":[80,205,220,255],
+    "baseUIColor":[96,220,232,255],
+    "darkUIColor":[24,76,82,175],
+    "gridUIColor":[70,200,215,75],
+
+    "showInIntelTab":false,
+
+    "shipNameSources":{
+        "HEGEMONY":1,
+        "GREEK":2,
+        "ROMAN":1,
+    },
+    "names":{
+        "old english":1,
+        "modern":1,
+        "world":1,
+        "myth":1,
+    },
+    "variantOverrides":{},
+    "hullFrequency":{
+        "tags":{"XIV_bp":1},
+        "hulls":{},
+    },
+    "shipsWhenImporting":{"tags":[],"hulls":[]},
+    "knownShips":{
+        "tags":["heg_aux_bp", "XIV_bp", "hegemony"],
+        "hulls":[
+            "lasher",
+            "enforcer_xiv",
+            "dominator_xiv",
+            "legion_xiv",
+            "onslaught_xiv",
+        ],
+    },
+    "priorityShips":{
+        "tags":[],
+        "hulls":["legion_xiv", "onslaught_xiv"],
+    },
+    "knownFighters":{"tags":["hegemony"],"fighters":[]},
+    "priorityFighters":{"tags":[],"fighters":[]},
+    "knownWeapons":{"tags":["hegemony"],"weapons":[]},
+    "priorityWeapons":{"tags":[],"weapons":[]},
+    "knownHullMods":{"tags":["standard", "hegemony"],"hullMods":[]},
+    "factionDoctrine":{
+        "warships":5,
+        "carriers":2,
+        "phaseShips":0,
+        "officerQuality":5,
+        "shipQuality":5,
+        "numShips":3,
+        "shipSize":5,
+        "aggression":4,
+        "combatFreighterProbability":0,
+        "combatFreighterCombatUseFraction":0,
+        "combatFreighterCombatUseFractionWhenPriority":0,
+        "autofitRandomizeProbability":0,
+        "commanderSkillsShuffleProbability":0,
+        "commanderSkills":[],
+    },
+    "illegalCommodities":[],
+    "music":{
+        "theme":"music_none",
+        "market_neutral":"music_none",
+        "market_hostile":"music_none",
+        "market_friendly":"music_none",
+        "encounter_neutral":"music_hegemony_encounter_neutral",
+        "encounter_hostile":"music_hegemony_encounter_hostile",
+        "encounter_friendly":"music_hegemony_encounter_friendly",
+    },
+    "portraits":{
+        "standard_male":["graphics/portraits/chief_navigator_menelaus.png"],
+        "standard_female":["graphics/portraits/chief_navigator_menelaus.png"],
+    },
+    "ranks":{
+        "ranks":{
+            "chief_navigator_strategos":{"name":"Strategos"},
+        },
+        "posts":{
+            "chief_navigator_strategic_intelligence":{"name":"Strategic Intelligence"},
+        },
+    },
+    "custom":{
+        "engageWhenEvenStrength":true,
+        "allowsTransponderOffTrade":true,
+        "postsNoBounties":true,
+        "fightToTheLast":true,
+    },
+}

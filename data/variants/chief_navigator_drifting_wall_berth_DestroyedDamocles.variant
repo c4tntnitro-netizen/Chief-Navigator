@@ -1,0 +1,20 @@
+{
+  "displayName": "Wrecked Damocles Berth",
+  "fluxCapacitors": 0,
+  "fluxVents": 0,
+  "goalVariant": true,
+  "hullId": "chief_navigator_drifting_wall_berth",
+  "hullMods": [],
+  "permaMods": [],
+  "sMods": [],
+  "variantId": "chief_navigator_drifting_wall_berth_DestroyedDamocles",
+  "weaponGroups": [
+    {
+      "autofire": false,
+      "mode": "LINKED",
+      "weapons": {
+        "WS 002": "chief_navigator_destroyed_damocles"
+      }
+    }
+  ]
+}

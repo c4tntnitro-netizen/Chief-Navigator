@@ -1,0 +1,9 @@
+{
+  "baseHullId": "guardian",
+  "skinHullId": "chief_navigator_last_light_guardian",
+  "hullName": "Guardian",
+  "descriptionId": "guardian",
+  "incompatibleWithBaseHull": true,
+  "removeHints": ["UNBOARDABLE"],
+  "tags": ["derelict", "no_dealer", "no_autofit", "codex_unlockable"]
+}

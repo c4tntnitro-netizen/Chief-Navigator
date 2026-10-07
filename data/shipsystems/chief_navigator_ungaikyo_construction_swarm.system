@@ -1,0 +1,16 @@
+{
+  "id":"chief_navigator_ungaikyo_construction_swarm",
+  "type":"STAT_MOD",
+  "aiType":"CUSTOM",
+  "aiScript":"chiefnavigator.systems.UngaikyoConstructionSwarmAI",
+  "runScriptWhileIdle":true,
+  "statsScript":"chiefnavigator.systems.UngaikyoConstructionSwarmSystem",
+  "useSound":"system_extraction_protocol",
+  "outOfUsesSound":"gun_out_of_ammo",
+  "aiHints":{
+    "threatRange":1500,
+    "threatAmount":4,
+    "threatAngle":0,
+    "threatArc":360
+  }
+}

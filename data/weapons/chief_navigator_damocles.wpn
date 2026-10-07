@@ -1,0 +1,33 @@
+{
+  "id": "chief_navigator_damocles",
+  "specClass": "projectile",
+  "type": "BALLISTIC",
+  "size": "LARGE",
+  "turretSprite": "graphics/weapons/chief_navigator_damocles_base_v2.png",
+  "turretGunSprite": "graphics/weapons/chief_navigator_damocles_barrel_v3.png",
+  "hardpointSprite": "graphics/weapons/chief_navigator_damocles_base_v2.png",
+  "hardpointGunSprite": "graphics/weapons/chief_navigator_damocles_barrel_v3.png",
+  "visualRecoil": 28,
+  "renderHints": [RENDER_BARREL_BELOW],
+  "turretOffsets": [300,0],
+  "turretAngleOffsets": [0],
+  "hardpointOffsets": [300,0],
+  "hardpointAngleOffsets": [0],
+  "barrelMode": "LINKED",
+  "animationType": "NONE",
+  "interruptibleBurst": false,
+  "smokeSpec": {
+    "particleSizeMin": 24,
+    "particleSizeRange": 36,
+    "cloudParticleCount": 12,
+    "cloudDuration": 1.5,
+    "cloudRadius": 18,
+    "blowbackParticleCount": 8,
+    "blowbackDuration": 1.2,
+    "blowbackLength": 70,
+    "blowbackSpread": 22,
+    "particleColor": [125,125,120,95]
+  },
+  "projectileSpecId": "chief_navigator_damocles_bomb",
+  "fireSoundTwo": "bomb_bay_fire"
+}

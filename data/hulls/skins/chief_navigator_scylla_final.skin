@@ -1,0 +1,17 @@
+{
+  "baseHullId": "chief_navigator_scylla_base",
+  "skinHullId": "chief_navigator_scylla_final",
+  "hullName": "Gautama",
+  "descriptionId": "chief_navigator_scylla_final",
+  "tags": ["no_dealer", "no_autofit", "hide_in_codex"],
+  "tech": "Threat",
+  "fighterBays": 0,
+  "spriteName": "graphics/ships/odyssey_bosses/chief_navigator_scylla_v2.png",
+  "baseValueMult": 1,
+  "removeWeaponSlots": [],
+  "removeEngineSlots": [],
+  "removeBuiltInMods": ["chief_navigator_starving_threat", "threat_hullmod"],
+  "builtInMods": ["chief_navigator_scylla_boss"],
+  "removeBuiltInWeapons": [],
+  "builtInWeapons": {}
+}

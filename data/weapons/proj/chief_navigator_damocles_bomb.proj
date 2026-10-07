@@ -1,0 +1,36 @@
+{
+  "id": "chief_navigator_damocles_bomb",
+  "specClass": "missile",
+  "onFireEffect": "chiefnavigator.weapons.DamoclesBombEffect",
+  "missileType": "BOMB",
+  "sprite": "graphics/missiles/bomb_HE.png",
+  "size": [30,40],
+  "center": [15,20],
+  "collisionRadius": 22,
+  "collisionClass": "MISSILE_FF",
+  "explosionColor": [255,205,45,255],
+  "explosionRadius": 300,
+  "armingTime": 0.2,
+  "explosionSpec": {
+    "duration": 0.15,
+    "radius": 250,
+    "coreRadius": 100,
+    "collisionClass": HITS_SHIPS_AND_ASTEROIDS,
+    "collisionClassByFighter": HITS_SHIPS_AND_ASTEROIDS,
+    "particleSizeMin": 10,
+    "particleSizeRange": 14,
+    "particleDuration": 1.2,
+    "particleCount": 160,
+    "particleColor": [255,185,80,255],
+    "explosionColor": [255,205,45,255],
+    "detailedExplosionFlashColorFringe": [255,140,50,255],
+    "detailedExplosionFlashRadius": 420,
+    "useDetailedExplosion": true
+  },
+  "engineSpec": {
+    "turnAcc": 0,
+    "turnRate": 0,
+    "acc": 25,
+    "dec": 20
+  }
+}

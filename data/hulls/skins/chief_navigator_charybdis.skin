@@ -1,0 +1,17 @@
+{
+  "baseHullId": "shrouded_maw",
+  "skinHullId": "chief_navigator_charybdis",
+  "hullName": "Budai",
+  "descriptionId": "chief_navigator_charybdis",
+  "tags": ["no_dealer", "no_autofit", "hide_in_codex"],
+  "tech": "Shrouded Dweller",
+  "systemId": "chief_navigator_budai_convulsive_lunge",
+  "spriteName": "graphics/ships/shroud/maw_flat.png",
+  "baseValueMult": 1,
+  "removeWeaponSlots": [],
+  "removeEngineSlots": [],
+  "removeBuiltInMods": ["dweller_hullmod"],
+  "removeBuiltInWeapons": [],
+  "builtInMods": ["chief_navigator_charybdis_distortion"],
+  "builtInWeapons": {}
+}

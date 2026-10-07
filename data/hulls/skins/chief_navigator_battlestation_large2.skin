@@ -1,0 +1,10 @@
+{
+  "baseHullId": "module_large2_lowtech",
+  "skinHullId": "chief_navigator_battlestation_large2",
+  "hullName": "Teal Combat Support Module",
+  "incompatibleWithBaseHull": true,
+  "spriteName": "graphics/ships/final_battlestation/module_large2_lowtech_teal_v1.png",
+  "fleetPoints": 0,
+  "suppliesToRecover": 0,
+  "tags": ["no_dealer", "no_autofit", "restricted"]
+}

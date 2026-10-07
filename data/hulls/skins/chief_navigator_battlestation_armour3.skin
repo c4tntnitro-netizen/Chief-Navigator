@@ -1,0 +1,10 @@
+{
+  "baseHullId": "module_armour3",
+  "skinHullId": "chief_navigator_battlestation_armour3",
+  "hullName": "Teal Station Armour Module",
+  "incompatibleWithBaseHull": true,
+  "spriteName": "graphics/ships/final_battlestation/station_armour3b_teal_v1.png",
+  "fleetPoints": 0,
+  "suppliesToRecover": 0,
+  "tags": ["no_dealer", "no_autofit", "restricted"]
+}

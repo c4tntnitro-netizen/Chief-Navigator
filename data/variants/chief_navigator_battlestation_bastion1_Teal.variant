@@ -1,0 +1,16 @@
+{
+  "displayName": "Teal",
+  "fluxCapacitors": 0,
+  "fluxVents": 0,
+  "goalVariant": true,
+  "hullId": "chief_navigator_battlestation_bastion1",
+  "hullMods": [],
+  "permaMods": [],
+  "quality": 1,
+  "variantId": "chief_navigator_battlestation_bastion1_Teal",
+  "weaponGroups": [
+    {"autofire": false, "mode": "ALTERNATING", "weapons": {"WS 008": "swarmer"}},
+    {"autofire": true, "mode": "LINKED", "weapons": {"WS 001": "dualflak", "WS 002": "dualflak"}},
+    {"autofire": true, "mode": "LINKED", "weapons": {"WS 000": "vulcan", "WS 003": "vulcan", "WS 004": "vulcan", "WS 005": "vulcan"}}
+  ]
+}

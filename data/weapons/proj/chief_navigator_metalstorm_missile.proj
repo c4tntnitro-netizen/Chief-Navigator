@@ -1,0 +1,40 @@
+{
+  "id": "chief_navigator_metalstorm_missile",
+  "specClass": "missile",
+  "missileType": "MISSILE",
+  "sprite": "graphics/missiles/missile_locust.png",
+  "size": [12,24],
+  "center": [6,12],
+  "collisionRadius": 14,
+  "collisionClass": "MISSILE_NO_FF",
+  "explosionColor": [255,165,65,255],
+  "explosionRadius": 100,
+  "engineSpec": {
+    "turnAcc": 0,
+    "turnRate": 0,
+    "acc": 0,
+    "dec": 0
+  },
+  "engineSlots": [
+    {
+      "id": "ES1",
+      "loc": [-12,0],
+      "style": "CUSTOM",
+      "styleSpec": {
+        "mode": "QUAD_STRIP",
+        "engineColor": [255,150,75,255],
+        "contrailDuration": 0.8,
+        "contrailWidthMult": 2,
+        "contrailWidthAddedFractionAtEnd": 2.5,
+        "contrailMinSeg": 8,
+        "contrailMaxSpeedMult": 0.25,
+        "contrailAngularVelocityMult": 0.5,
+        "contrailColor": [105,105,100,145],
+        "type": "SMOKE"
+      },
+      "width": 5,
+      "length": 28,
+      "angle": 180
+    }
+  ]
+}

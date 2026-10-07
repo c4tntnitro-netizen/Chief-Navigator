@@ -1,0 +1,11 @@
+{
+  "displayName": "Connected Rear Bulkhead",
+  "fluxCapacitors": 0,
+  "fluxVents": 0,
+  "goalVariant": true,
+  "hullId": "chief_navigator_ithaca_rear_bulkhead",
+  "hullMods": [],
+  "quality": 1,
+  "variantId": "chief_navigator_ithaca_rear_bulkhead_Standard",
+  "weaponGroups": []
+}

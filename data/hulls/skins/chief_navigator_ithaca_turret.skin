@@ -1,0 +1,14 @@
+{
+  "baseHullId": "onslaught",
+  "skinHullId": "chief_navigator_ithaca_turret",
+  "hullName": "FOB Ithaca Turret Onslaught",
+  "descriptionPrefix": "A capital-scale battleship hull permanently integrated into FOB Ithaca as a traversable fortress gun emplacement.",
+  "incompatibleWithBaseHull": true,
+  "tags": ["no_dealer", "no_autofit"],
+  "addHints": ["UNBOARDABLE", "HIDE_IN_CODEX"],
+  "systemId": "ammofeed",
+  "fleetPoints": 0,
+  "suppliesToRecover": 0,
+  "maxSpeed": 0,
+  "baseValueMult": 0
+}

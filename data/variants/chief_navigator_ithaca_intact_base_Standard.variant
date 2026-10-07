@@ -1,0 +1,62 @@
+{
+  "displayName": "FOB Ithaca Bastion",
+  "fluxCapacitors": 0,
+  "fluxVents": 0,
+  "hullId": "chief_navigator_ithaca_intact_base",
+  "hullMods": [],
+  "modules": [
+    {
+      "REACTOR": "chief_navigator_drifting_wall_reactor_Active"
+    }
+  ],
+  "quality": 1,
+  "variantId": "chief_navigator_ithaca_intact_base_Standard",
+  "weaponGroups": [
+    {
+      "autofire": true,
+      "mode": "LINKED",
+      "weapons": {
+        "COL_NAVAL_01": "chief_navigator_drifting_wall_colossal_inert",
+        "COL_NAVAL_02": "chief_navigator_drifting_wall_colossal_inert",
+        "COL_NAVAL_03": "chief_navigator_drifting_wall_colossal_inert",
+        "COL_NAVAL_04": "chief_navigator_drifting_wall_colossal_inert"
+      }
+    },
+    {
+      "autofire": true,
+      "mode": "ALTERNATING",
+      "weapons": {
+        "LARGE_BALLISTIC_01": "chief_navigator_drifting_wall_annihilator_launcher",
+        "LARGE_BALLISTIC_02": "chief_navigator_drifting_wall_annihilator_launcher",
+        "LARGE_BALLISTIC_03": "chief_navigator_drifting_wall_annihilator_launcher",
+        "LARGE_BALLISTIC_04": "chief_navigator_drifting_wall_annihilator_launcher"
+      }
+    },
+    {
+      "autofire": true,
+      "mode": "ALTERNATING",
+      "weapons": {
+        "MEDIUM_UNIVERSAL_01": "pulselaser",
+        "MEDIUM_UNIVERSAL_02": "pulselaser",
+        "MEDIUM_UNIVERSAL_03": "heavyneedler",
+        "MEDIUM_UNIVERSAL_04": "heavymauler",
+        "MEDIUM_UNIVERSAL_05": "pulselaser",
+        "MEDIUM_UNIVERSAL_06": "heavyneedler",
+        "MEDIUM_UNIVERSAL_07": "heavyneedler",
+        "MEDIUM_UNIVERSAL_08": "pulselaser",
+        "MEDIUM_UNIVERSAL_09": "heavymauler",
+        "MEDIUM_UNIVERSAL_10": "heavyneedler"
+      }
+    },
+    {
+      "autofire": true,
+      "mode": "ALTERNATING",
+      "weapons": {
+        "LOCUST_PD_01": "chief_navigator_ithaca_locust_pd_array",
+        "LOCUST_PD_03": "chief_navigator_ithaca_locust_pd_array",
+        "LOCUST_PD_04": "chief_navigator_ithaca_locust_pd_array",
+        "LOCUST_PD_06": "chief_navigator_ithaca_locust_pd_array"
+      }
+    }
+  ]
+}

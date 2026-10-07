@@ -1,0 +1,31 @@
+{
+  "bounds": [
+    24, 0,
+    -14, 14,
+    -14, -14
+  ],
+  "center": [18, 18],
+  "collisionRadius": 24,
+  "coversColor": "",
+  "engineSlots": [
+    {
+      "angle": 180,
+      "contrailSize": 48,
+      "length": 22,
+      "location": [-16, 0],
+      "style": "LOW_TECH",
+      "width": 8
+    }
+  ],
+  "height": 44,
+  "hullId": "chief_navigator_boarding_pod_fighter",
+  "hullName": "Boarding Pod",
+  "hullSize": "FIGHTER",
+  "shieldCenter": [0, 0],
+  "shieldRadius": 24,
+  "spriteName": "graphics/ships/shuttle.png",
+  "style": "LOW_TECH",
+  "viewOffset": 0,
+  "weaponSlots": [],
+  "width": 36
+}

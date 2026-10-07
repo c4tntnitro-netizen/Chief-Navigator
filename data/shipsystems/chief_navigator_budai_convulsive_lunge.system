@@ -1,0 +1,12 @@
+{
+  "id":"chief_navigator_budai_convulsive_lunge",
+  "type":"STAT_MOD",
+  "aiType":"CUSTOM",
+  "aiScript":"chiefnavigator.systems.BudaiConvulsiveLungeAI",
+
+  "runScriptWhileIdle":true,
+  "statsScript":"chiefnavigator.systems.BudaiConvulsiveLungeSystem",
+
+  "useSound":"system_convulsive_lunge",
+  "outOfUsesSound":"gun_out_of_ammo"
+}

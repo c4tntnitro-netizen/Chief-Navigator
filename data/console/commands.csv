@@ -1,0 +1,6 @@
+command,class,tags,syntax,help
+AddTopographyData,chiefnavigator.console.AddTopographyData,"chief_navigator,cheat,campaign",addtopographydata <amount>,Adds Hyperspace Topography event progress for testing. Progress is capped at the currently installed event's maximum.
+SpawnIthacaStrike,chiefnavigator.console.SpawnIthacaStrike,"chief_navigator,cheat,campaign",spawnithacastrike [first|second],Spawns a Starving Threat First or Second Strike near the player in Ashen Verge and immediately attacks the nearest surviving FOB Ithaca bastion.
+SpawnSTInvasionFleets,chiefnavigator.console.SpawnSTInvasionFleets,"chief_navigator,cheat,campaign",spawnstinvasionfleets,Spawns three full Starving Threat Third Strike invasion fleets in Ashen Verge; during Labor V this resets their 60-day bastion sieges.
+ForceFinalLabor,chiefnavigator.console.ForceFinalLabor,"chief_navigator,cheat,campaign",forcefinallabor,Skips the prerequisite Labors and immediately activates a fresh Labor V defense of FOB Ithaca.
+MaxUpgradeWallModules,chiefnavigator.console.MaxUpgradeWallModules,"chief_navigator,cheat,campaign",maxupgradewallmodules,Enables all six Ithaca defense components without changing Labor or research-station progress.

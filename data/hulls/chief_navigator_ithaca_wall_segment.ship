@@ -1,0 +1,120 @@
+{
+    "bounds":  [
+                   4010,
+                   300,
+                   4010,
+                   -300,
+                   -4010,
+                   -300,
+                   -4010,
+                   300
+               ],
+    "builtInMods":  [
+                        "vastbulk",
+                        "reduced_explosion"
+                    ],
+    "center":  [
+                   320,
+                   4096
+               ],
+    "collisionRadius":  4025,
+    "height":  8192,
+    "hullId":  "chief_navigator_ithaca_wall_segment",
+    "hullName":  "FOB Ithaca Wall",
+    "hullSize":  "CAPITAL_SHIP",
+    "shieldCenter":  [
+                         0,
+                         0
+                     ],
+    "shieldRadius":  700,
+    "spriteName":  "graphics/combat/ithaca_wall_curved_core_v1.png",
+    "style":  "LOW_TECH",
+    "viewOffset":  0,
+    "weaponSlots":  [
+                        {
+                            "angle":  261,
+                            "arc":  1,
+                            "id":  "WS 000",
+                            "locations":  [
+                                              -2790,
+                                              -650
+                                          ],
+                            "mount":  "HARDPOINT",
+                            "size":  "SMALL",
+                            "type":  "STATION_MODULE"
+                        },
+                        {
+                            "angle":  264,
+                            "arc":  1,
+                            "id":  "WS 001",
+                            "locations":  [
+                                              -1860,
+                                              -820
+                                          ],
+                            "mount":  "HARDPOINT",
+                            "size":  "SMALL",
+                            "type":  "STATION_MODULE"
+                        },
+                        {
+                            "angle":  267,
+                            "arc":  1,
+                            "id":  "WS 002",
+                            "locations":  [
+                                              -930,
+                                              -950
+                                          ],
+                            "mount":  "HARDPOINT",
+                            "size":  "SMALL",
+                            "type":  "STATION_MODULE"
+                        },
+                        {
+                            "angle":  270,
+                            "arc":  1,
+                            "id":  "WS 003",
+                            "locations":  [
+                                              0,
+                                              -1000
+                                          ],
+                            "mount":  "HARDPOINT",
+                            "size":  "SMALL",
+                            "type":  "STATION_MODULE"
+                        },
+                        {
+                            "angle":  273,
+                            "arc":  1,
+                            "id":  "WS 004",
+                            "locations":  [
+                                              930,
+                                              -950
+                                          ],
+                            "mount":  "HARDPOINT",
+                            "size":  "SMALL",
+                            "type":  "STATION_MODULE"
+                        },
+                        {
+                            "angle":  276,
+                            "arc":  1,
+                            "id":  "WS 005",
+                            "locations":  [
+                                              1860,
+                                              -820
+                                          ],
+                            "mount":  "HARDPOINT",
+                            "size":  "SMALL",
+                            "type":  "STATION_MODULE"
+                        },
+                        {
+                            "angle":  279,
+                            "arc":  1,
+                            "id":  "WS 006",
+                            "locations":  [
+                                              2790,
+                                              -650
+                                          ],
+                            "mount":  "HARDPOINT",
+                            "size":  "SMALL",
+                            "type":  "STATION_MODULE"
+                        }
+                    ],
+    "width":  1940
+}

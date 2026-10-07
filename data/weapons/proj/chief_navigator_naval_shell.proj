@@ -1,0 +1,18 @@
+{
+  "id": "chief_navigator_naval_shell",
+  "specClass": "projectile",
+  "onFireEffect": "chiefnavigator.weapons.IthacaNavalShellEffect",
+  "onHitEffect": "chiefnavigator.weapons.IthacaNavalShellEffect",
+  "spawnType": "BALLISTIC",
+  "collisionClass": "PROJECTILE_FF",
+  "collisionClassByFighter": "PROJECTILE_FIGHTER",
+  "length": 320,
+  "hitGlowRadius": 320,
+  "width": 160,
+  "fadeTime": 0.5,
+  "fringeColor": [220,235,205,245],
+  "coreColor": [245,255,230,240],
+  "textureScrollSpeed": 32,
+  "pixelsPerTexel": 5,
+  "bulletSprite": "graphics/missiles/shell_large_green.png"
+}

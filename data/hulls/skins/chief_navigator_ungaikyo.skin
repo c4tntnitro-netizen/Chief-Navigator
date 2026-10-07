@@ -1,0 +1,16 @@
+{
+  "baseHullId": "fabricator_unit",
+  "skinHullId": "chief_navigator_ungaikyo",
+  "hullName": "Ungaikyo",
+  "descriptionId": "chief_navigator_ungaikyo",
+  "tags": ["threat", "no_dealer", "no_autofit", "hide_in_codex"],
+  "tech": "Threat",
+  "systemId": "chief_navigator_ungaikyo_construction_swarm",
+  "spriteName": "graphics/ships/starving_threat/chief_navigator_ungaikyo_fabricator_v1.png",
+  "baseValueMult": 1,
+  "removeWeaponSlots": [],
+  "removeEngineSlots": [],
+  "removeBuiltInMods": [],
+  "removeBuiltInWeapons": [],
+  "builtInWeapons": {}
+}

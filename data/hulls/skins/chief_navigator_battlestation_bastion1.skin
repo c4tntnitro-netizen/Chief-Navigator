@@ -1,0 +1,10 @@
+{
+  "baseHullId": "module_bastion1_lowtech",
+  "skinHullId": "chief_navigator_battlestation_bastion1",
+  "hullName": "Teal Point-Defense Bastion",
+  "incompatibleWithBaseHull": true,
+  "spriteName": "graphics/ships/final_battlestation/module_medium_pd1_lowtech_teal_v1.png",
+  "fleetPoints": 0,
+  "suppliesToRecover": 0,
+  "tags": ["no_dealer", "no_autofit", "restricted"]
+}

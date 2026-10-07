@@ -1,0 +1,17 @@
+{
+  "id": "chief_navigator_drifting_wall_hitscan",
+  "specClass": "projectile",
+  "onFireEffect": "chiefnavigator.weapons.DriftingWallHitscanEffect",
+  "spawnType": "BALLISTIC",
+  "collisionClass": "PROJECTILE_FF",
+  "collisionClassByFighter": "PROJECTILE_FIGHTER",
+  "length": 540,
+  "hitGlowRadius": 300,
+  "width": 360,
+  "fadeTime": 0,
+  "fringeColor": [255,210,95,255],
+  "coreColor": [255,255,235,255],
+  "textureScrollSpeed": 0,
+  "pixelsPerTexel": 1,
+  "bulletSprite": "graphics/weapons/chief_navigator_drifting_wall_impulse_slug_v1.png"
+}

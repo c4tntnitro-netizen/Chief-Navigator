@@ -1,0 +1,22 @@
+{
+  "bounds": [
+    820,3980,
+    820,-3980,
+    -820,-3980,
+    -820,3980
+  ],
+  "builtInMods": ["vastbulk", "reduced_explosion"],
+  "center": [4000,840],
+  "collisionRadius": 4050,
+  "height": 1680,
+  "hullId": "chief_navigator_ithaca_rear_bulkhead",
+  "hullName": "FOB Ithaca Connected Bulkhead",
+  "hullSize": "CAPITAL_SHIP",
+  "shieldCenter": [0,0],
+  "shieldRadius": 1,
+  "spriteName": "graphics/combat/chief_navigator_ithaca_connected_rear_wall.png",
+  "style": "LOW_TECH",
+  "viewOffset": 0,
+  "weaponSlots": [],
+  "width": 8000
+}

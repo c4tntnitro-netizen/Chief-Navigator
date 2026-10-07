@@ -1,0 +1,38 @@
+{
+  "bounds": [
+    280,110,
+    290,0,
+    270,-130,
+    200,-235,
+    90,-280,
+    -80,-280,
+    -200,-235,
+    -270,-130,
+    -280,0,
+    -260,140,
+    -185,235,
+    -80,280,
+    80,280,
+    185,235,
+    260,140
+  ],
+  "builtInMods": [
+    "reduced_explosion",
+    "chief_navigator_wall_contact_safety",
+    "always_detaches"
+  ],
+  "center": [313.5,313.5],
+  "collisionRadius": 305,
+  "height": 627,
+  "hullId": "chief_navigator_drifting_wall_reactor",
+  "hullName": "Drifting Wall Reactor",
+  "hullSize": "FRIGATE",
+  "moduleAnchor": [0,0],
+  "shieldCenter": [0,0],
+  "shieldRadius": 1,
+  "spriteName": "graphics/ships/chief_navigator_drifting_wall_reactor_v1.png",
+  "style": "LOW_TECH",
+  "viewOffset": 0,
+  "weaponSlots": [],
+  "width": 627
+}

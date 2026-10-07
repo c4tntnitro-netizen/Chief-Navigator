@@ -1,0 +1,20 @@
+{
+  "displayName": "Metal Storm",
+  "fluxCapacitors": 0,
+  "fluxVents": 0,
+  "goalVariant": true,
+  "hullId": "chief_navigator_ithaca_metalstorm_mount",
+  "hullMods": [],
+  "permaMods": [],
+  "sMods": [],
+  "variantId": "chief_navigator_ithaca_metalstorm_mount_Standard",
+  "weaponGroups": [
+    {
+      "autofire": true,
+      "mode": "LINKED",
+      "weapons": {
+        "WS 001": "chief_navigator_metalstorm"
+      }
+    }
+  ]
+}

@@ -1,0 +1,6 @@
+{
+  "chief_navigator_silent_wake_current": {
+    "name": "Sanzu Current",
+    "plugin": "chiefnavigator.campaign.SilentWakeCurrentTerrain"
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "displayName": "Live Berth",
+  "fluxCapacitors": 0,
+  "fluxVents": 0,
+  "goalVariant": true,
+  "hullId": "chief_navigator_drifting_wall_berth",
+  "hullMods": [],
+  "permaMods": [],
+  "sMods": [],
+  "variantId": "chief_navigator_drifting_wall_berth_Naval",
+  "weaponGroups": [
+    {
+      "autofire": true,
+      "mode": "LINKED",
+      "weapons": {
+        "WS 001": "chief_navigator_naval_gun"
+      }
+    }
+  ]
+}

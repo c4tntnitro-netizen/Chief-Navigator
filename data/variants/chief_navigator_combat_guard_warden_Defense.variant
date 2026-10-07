@@ -1,0 +1,15 @@
+{
+  "displayName": "Defense",
+  "fluxCapacitors": 8,
+  "fluxVents": 10,
+  "goalVariant": true,
+  "hullId": "chief_navigator_combat_guard_warden",
+  "hullMods": [],
+  "permaMods": [],
+  "sMods": [],
+  "variantId": "chief_navigator_combat_guard_warden_Defense",
+  "weaponGroups": [
+    {"autofire": true, "mode": "LINKED", "weapons": {"WS 001": "shredder"}},
+    {"autofire": true, "mode": "LINKED", "weapons": {"WS 002": "lightag"}}
+  ]
+}

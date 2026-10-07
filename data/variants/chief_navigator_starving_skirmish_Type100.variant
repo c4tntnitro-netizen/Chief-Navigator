@@ -1,0 +1,28 @@
+{
+    "displayName":  "Type 100",
+    "fluxCapacitors":  10,
+    "fluxVents":  10,
+    "goalVariant":  true,
+    "hullId":  "chief_navigator_starving_skirmish_unit",
+    "hullMods":  [
+                     "fragment_swarm",
+                     "magazines",
+                     "missleracks"
+                 ],
+    "permaMods":  [
+
+                  ],
+    "sMods":  [
+
+              ],
+    "variantId":  "chief_navigator_starving_skirmish_Type100",
+    "weaponGroups":  [
+                         {
+                             "autofire":  true,
+                             "mode":  "LINKED",
+                             "weapons":  {
+                                             "WS 003":  "heavy_mass_driver"
+                                         }
+                         }
+                     ]
+}

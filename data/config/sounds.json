@@ -1,0 +1,123 @@
+{
+  "music": {
+    "chief_navigator_avici_intro": [
+      {
+        "file": "KARMA_1Loop.ogg",
+        "source": "sounds/music",
+        "volume": 0.5
+      }
+    ],
+    "chief_navigator_avici_loop": [
+      {
+        "file": "KARMA_Loop_A.ogg",
+        "source": "sounds/music",
+        "volume": 0.5
+      }
+    ],
+    "chief_navigator_avici_loop_b": [
+      {
+        "file": "KARMA_Loop_B.ogg",
+        "source": "sounds/music",
+        "volume": 0.5
+      }
+    ],
+    "chief_navigator_alpha_odyssey_exploration": [
+      {
+        "file": "chief_navigator_alpha_odyssey_exploration.ogg",
+        "source": "sounds/music",
+        "volume": 0.5
+      }
+    ],
+    "chief_navigator_sanzu_exploration": [
+      {
+        "file": "chief_navigator_sanzu_exploration.ogg",
+        "source": "sounds/music",
+        "volume": 0.5
+      }
+    ],
+    "chief_navigator_budai_battle": [
+      {
+        "file": "chief_navigator_budai_battle.ogg",
+        "source": "sounds/music",
+        "volume": 0.5
+      }
+    ],
+    "chief_navigator_final_labor_mission": [
+      {
+        "file": "chief_navigator_final_labor_mission.ogg",
+        "source": "sounds/music",
+        "volume": 0.5
+      }
+    ],
+    "chief_navigator_final_labor_fight": [
+      {
+        "file": "chief_navigator_final_labor_fight.ogg",
+        "source": "sounds/music",
+        "volume": 0.5
+      }
+    ],
+    "chief_navigator_final_labor_perimeter": [
+      {
+        "file": "chief_navigator_final_labor_perimeter.ogg",
+        "source": "sounds/music",
+        "volume": 0.5
+      }
+    ],
+    "chief_navigator_ungaikyo_opening": [
+      {
+        "file": "chief_navigator_ungaikyo_opening.ogg",
+        "source": "sounds/music",
+        "volume": 0.5
+      }
+    ],
+    "chief_navigator_ungaikyo_enraged": [
+      {
+        "file": "chief_navigator_ungaikyo_enraged.ogg",
+        "source": "sounds/music",
+        "volume": 0.5
+      }
+    ],
+    "chief_navigator_sinni_ending": [
+      {
+        "file": "chief_navigator_sinni_ending.ogg",
+        "source": "sounds/music",
+        "volume": 0.5
+      }
+    ]
+  },
+  "chief_navigator_naval_gun_load": [
+    {
+      "file": "sounds/chief_navigator/naval_gun_load.wav",
+      "pitch": 1.0,
+      "volume": 1.0
+    }
+  ],
+  "chief_navigator_naval_gun_fire": [
+    {
+      "file": "sounds/chief_navigator/naval_gun_fire.wav",
+      "pitch": 1.0,
+      "volume": 1.0
+    }
+  ],
+  "chief_navigator_omega_time_freeze": [
+    {
+      "file": "sounds/chief_navigator/omega_time_freeze.wav",
+      "pitch": 1.0,
+      "volume": 1.0
+    }
+  ],
+  "chief_navigator_omega_time_freeze_charge": [
+    {
+      "file": "sounds/chief_navigator/omega_time_freeze_charge.wav",
+      "pitch": 1.0,
+      "volume": 0.9
+    }
+  ],
+  "chief_navigator_budai_enrage_screech": [
+    {
+      "file": "sounds/chief_navigator/budai_enrage_screech.wav",
+      "pitch": 1.0,
+      "volume": 1.0
+    }
+  ]
+}

@@ -1,0 +1,33 @@
+{
+  "displayName": "Gautama Attack Swarm",
+  "fluxCapacitors": 0,
+  "fluxVents": 0,
+  "goalVariant": false,
+  "hullId": "attack_swarm",
+  "hullMods": ["chief_navigator_scylla_fragile_swarm"],
+  "permaMods": [],
+  "sMods": [],
+  "variantId": "chief_navigator_scylla_attack_swarm_Attack",
+  "weaponGroups": [
+    {
+      "autofire": true,
+      "mode": "LINKED",
+      "weapons": {"WS 004": "voltaic_discharge"}
+    },
+    {
+      "autofire": true,
+      "mode": "LINKED",
+      "weapons": {"WS 006": "unstable_fragment"}
+    },
+    {
+      "autofire": true,
+      "mode": "LINKED",
+      "weapons": {"WS 005": "kinetic_fragments"}
+    },
+    {
+      "autofire": true,
+      "mode": "LINKED",
+      "weapons": {"WS 003": "seeker_fragment"}
+    }
+  ]
+}

@@ -1,3 +1,9 @@
 /out/
+/out*/
+/dist/
+/jars/ChiefNavigator.next*.jar
+/docs/SESSION_CHECKPOINT_*.md
+__pycache__/
+*.py[cod]
 *.log
 *.class

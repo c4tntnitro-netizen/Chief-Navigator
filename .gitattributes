@@ -1,0 +1,10 @@
+* text=auto
+*.png -text
+*.jpg -text
+*.jpeg -text
+*.gif -text
+*.ogg -text
+*.mp3 -text
+*.wav -text
+*.zip -text
+*.jar -text

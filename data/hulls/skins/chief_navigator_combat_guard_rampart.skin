@@ -1,0 +1,9 @@
+{
+  "baseHullId": "rampart",
+  "skinHullId": "chief_navigator_combat_guard_rampart",
+  "hullName": "Combat Guard Rampart",
+  "descriptionPrefix": "A Domain Explorarium combat drone restored to the Combat Guard's cold-teal identification standard.",
+  "incompatibleWithBaseHull": true,
+  "spriteName": "graphics/ships/domain_combat_guard/combat_guard_rampart.png",
+  "tags": ["no_dealer", "no_autofit", "restricted", "chief_navigator_domain_combat_guard"]
+}

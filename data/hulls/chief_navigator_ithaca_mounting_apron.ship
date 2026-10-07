@@ -1,0 +1,17 @@
+{
+  "bounds": [1,1, 1,-1, -1,-1, -1,1],
+  "builtInMods": ["reduced_explosion"],
+  "center": [480,4096],
+  "collisionRadius": 4200,
+  "height": 8192,
+  "hullId": "chief_navigator_ithaca_mounting_apron",
+  "hullName": "FOB Ithaca Mounting Apron",
+  "hullSize": "CAPITAL_SHIP",
+  "shieldCenter": [0,0],
+  "shieldRadius": 1,
+  "spriteName": "graphics/combat/ithaca_wall_mounting_apron_v2.png",
+  "style": "LOW_TECH",
+  "viewOffset": 0,
+  "weaponSlots": [],
+  "width": 960
+}

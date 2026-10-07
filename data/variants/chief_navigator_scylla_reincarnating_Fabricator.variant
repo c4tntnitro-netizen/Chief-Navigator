@@ -1,0 +1,64 @@
+{
+  "displayName": "Gautama",
+  "fluxCapacitors": 50,
+  "fluxVents": 50,
+  "goalVariant": true,
+  "hullId": "chief_navigator_scylla_reincarnating",
+  "hullMods": [
+    "magazines"
+  ],
+  "permaMods": [],
+  "sMods": [],
+  "variantId": "chief_navigator_scylla_reincarnating_Fabricator",
+  "weaponGroups": [
+    {
+      "autofire": true,
+      "mode": "LINKED",
+      "weapons": {
+        "WS 001": "heavy_mass_driver",
+        "WS 010": "heavy_mass_driver",
+        "WS 034": "heavy_mass_driver",
+        "WS 035": "heavy_mass_driver"
+      }
+    },
+    {
+      "autofire": false,
+      "mode": "ALTERNATING",
+      "weapons": {
+        "WS 023": "devouring_swarm",
+        "WS 024": "devouring_swarm"
+      }
+    },
+    {
+      "autofire": true,
+      "mode": "LINKED",
+      "weapons": {
+        "WS 008": "light_mass_driver",
+        "WS 012": "light_mass_driver"
+      }
+    },
+    {
+      "autofire": true,
+      "mode": "LINKED",
+      "weapons": {
+        "WS 014": "unstable_fragment",
+        "WS 015": "unstable_fragment"
+      }
+    },
+    {
+      "autofire": true,
+      "mode": "ALTERNATING",
+      "weapons": {
+        "WS 020": "voltaic_discharge"
+      }
+    },
+    {
+      "autofire": true,
+      "mode": "LINKED",
+      "weapons": {
+        "WS 032": "neoferric_quadcoil",
+        "WS 033": "neoferric_quadcoil"
+      }
+    }
+  ]
+}

@@ -1,0 +1,3 @@
+id,variant,tags,tier,rarity,fleet pts,op cost,formation,range,attackRunRange,attackPositionOffset,num,role,role desc,refit,base value,,,,,,,,,,,,,number
+chief_navigator_boarding_pod_wing,chief_navigator_boarding_pod_Fighter,"fighter, no_bp, no_sell, no_dealer, no_drop, no_drop_salvage",0,,0,0,V,0,0,0,2,SUPPORT,Boarding Pods,15,0,,,,,,,,,,,,,9000
+chief_navigator_scylla_attack_swarm_wing,chief_navigator_scylla_attack_swarm_Attack,"fighter, no_bp, no_sell, no_dealer, no_drop, no_drop_salvage, swarm_fighter",0,,0,0,BOX,2000,700,0,1,FIGHTER,Gautama Attack Swarm,5,0,,,,,,,,,,,,,9001

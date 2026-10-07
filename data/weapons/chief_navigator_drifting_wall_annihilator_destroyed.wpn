@@ -1,0 +1,21 @@
+{
+  "specClass": "beam",
+  "id": "chief_navigator_drifting_wall_annihilator_destroyed",
+  "type": "DECORATIVE",
+  "size": "LARGE",
+  "showDamageWhenDecorative": false,
+  "renderBelowAllWeapons": true,
+  "turretSprite": "graphics/weapons/chief_navigator_drifting_wall_annihilator_destroyed.png",
+  "hardpointSprite": "graphics/weapons/chief_navigator_drifting_wall_annihilator_destroyed.png",
+  "turretOffsets": [0,0],
+  "turretAngleOffsets": [0],
+  "hardpointOffsets": [0,0],
+  "hardpointAngleOffsets": [0],
+  "fringeColor": [0,0,0,0],
+  "coreColor": [0,0,0,0],
+  "glowColor": [0,0,0,0],
+  "width": 1,
+  "textureType": "SMOOTH",
+  "textureScrollSpeed": 0,
+  "pixelsPerTexel": 1
+}

@@ -1,0 +1,64 @@
+{
+  "id": "chief_navigator_ithaca_locust_pd_array",
+  "specClass": "projectile",
+  "onFireEffect": "chiefnavigator.weapons.IthacaLocustPDEffect",
+  "everyFrameEffect": "chiefnavigator.weapons.IthacaLocustPDEffect",
+  "type": "MISSILE",
+  "size": "LARGE",
+  "turretSprite": "graphics/weapons/chief_navigator_ithaca_locust_pd_array_v1.png",
+  "hardpointSprite": "graphics/weapons/chief_navigator_ithaca_locust_pd_array_v1.png",
+  "turretOffsets": [
+    -36,18, -72,90, -72,-18, 72,-18, 18,-54, -18,18,
+    -54,-18, 36,18, 54,-18, 18,18, -36,-18, 54,90,
+    -72,-90, 72,18, -54,54, -18,-54, -18,90, 0,90,
+    0,-90, -18,54, 72,54, -36,-90, -18,-18, -54,90,
+    18,54, -72,18, 0,-18, 54,-90, 18,90, 54,-54,
+    36,-18, -54,-90, -72,-54, -18,-90, 0,18, -36,90,
+    36,-90, 72,-90, 18,-18, 72,-54, 54,18, -54,18,
+    -36,-54, -72,54, 36,-54, 54,54, 36,54, 0,54,
+    0,-54, 36,90, 18,-90, -36,54, -54,-54, 72,90
+  ],
+  "hardpointOffsets": [
+    -36,18, -72,90, -72,-18, 72,-18, 18,-54, -18,18,
+    -54,-18, 36,18, 54,-18, 18,18, -36,-18, 54,90,
+    -72,-90, 72,18, -54,54, -18,-54, -18,90, 0,90,
+    0,-90, -18,54, 72,54, -36,-90, -18,-18, -54,90,
+    18,54, -72,18, 0,-18, 54,-90, 18,90, 54,-54,
+    36,-18, -54,-90, -72,-54, -18,-90, 0,18, -36,90,
+    36,-90, 72,-90, 18,-18, 72,-54, 54,18, -54,18,
+    -36,-54, -72,54, 36,-54, 54,54, 36,54, 0,54,
+    0,-54, 36,90, 18,-90, -36,54, -54,-54, 72,90
+  ],
+  "turretAngleOffsets": [
+    -1,1,2,2, -1,1,-2,-1, -2,1,2,-1,
+    -2,-1,2,-1, -1,1,-2,2, -2,-2,-2,-1,
+    2,-1,2,2, -1,-1,2,2, 1,2,-1,1,
+    -2,-2,-2,1, 1,1,1,-2, 1,2,-2,-2,
+    1,1,2,-2, -1,1
+  ],
+  "hardpointAngleOffsets": [
+    -1,1,2,2, -1,1,-2,-1, -2,1,2,-1,
+    -2,-1,2,-1, -1,1,-2,2, -2,-2,-2,-1,
+    2,-1,2,2, -1,-1,2,2, 1,2,-1,1,
+    -2,-2,-2,1, 1,1,1,-2, 1,2,-2,-2,
+    1,1,2,-2, -1,1
+  ],
+  "barrelMode": "ALTERNATING",
+  "animationType": "SMOKE",
+  "interruptibleBurst": true,
+  "displayArcRadius": 500,
+  "smokeSpec": {
+    "particleSizeMin": 10.0,
+    "particleSizeRange": 16.0,
+    "cloudParticleCount": 3,
+    "cloudDuration": 0.9,
+    "cloudRadius": 8.0,
+    "blowbackParticleCount": 3,
+    "blowbackDuration": 1.1,
+    "blowbackLength": 20.0,
+    "blowbackSpread": 10.0,
+    "particleColor": [170,160,150,100]
+  },
+  "projectileSpecId": "locust",
+  "fireSoundTwo": "swarmer_fire"
+}

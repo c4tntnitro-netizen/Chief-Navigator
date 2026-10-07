@@ -1,0 +1,231 @@
+{
+    "bounds":  [
+                   65,
+                   105,
+                   85,
+                   0,
+                   65,
+                   -105,
+                   0,
+                   -115,
+                   -55,
+                   -90,
+                   -65,
+                   0,
+                   -55,
+                   90,
+                   0,
+                   115
+               ],
+    "builtInMods":  [
+                        "automated",
+                        "chief_navigator_starving_threat"
+                    ],
+    "center":  [
+                   124,
+                   72
+               ],
+    "collisionRadius":  180,
+    "coversColor":  "",
+    "engineSlots":  [
+                        {
+                            "angle":  180,
+                            "contrailSize":  64,
+                            "length":  32,
+                            "location":  [
+                                             -70,
+                                             52
+                                         ],
+                            "style":  "THREAT",
+                            "width":  12
+                        },
+                        {
+                            "angle":  180,
+                            "contrailSize":  64,
+                            "length":  32,
+                            "location":  [
+                                             -70,
+                                             -51
+                                         ],
+                            "style":  "THREAT",
+                            "width":  12
+                        },
+                        {
+                            "angle":  180,
+                            "contrailSize":  64,
+                            "length":  64,
+                            "location":  [
+                                             -70,
+                                             64
+                                         ],
+                            "style":  "THREAT",
+                            "width":  24
+                        },
+                        {
+                            "angle":  180,
+                            "contrailSize":  64,
+                            "length":  64,
+                            "location":  [
+                                             -70,
+                                             -63
+                                         ],
+                            "style":  "THREAT",
+                            "width":  24
+                        },
+                        {
+                            "angle":  180,
+                            "contrailSize":  64,
+                            "length":  24,
+                            "location":  [
+                                             -48,
+                                             15
+                                         ],
+                            "style":  "THREAT",
+                            "width":  12
+                        },
+                        {
+                            "angle":  180,
+                            "contrailSize":  64,
+                            "length":  24,
+                            "location":  [
+                                             -48,
+                                             -14
+                                         ],
+                            "style":  "THREAT",
+                            "width":  12
+                        },
+                        {
+                            "angle":  180,
+                            "contrailSize":  64,
+                            "length":  48,
+                            "location":  [
+                                             -53,
+                                             23
+                                         ],
+                            "style":  "THREAT",
+                            "width":  16
+                        },
+                        {
+                            "angle":  180,
+                            "contrailSize":  64,
+                            "length":  48,
+                            "location":  [
+                                             -53,
+                                             -22
+                                         ],
+                            "style":  "THREAT",
+                            "width":  16
+                        }
+                    ],
+    "height":  164,
+    "hullId":  "chief_navigator_starving_standoff_unit",
+    "hullName":  "Starving Line Unit",
+    "hullSize":  "CRUISER",
+    "shieldCenter":  [
+                         10,
+                         0
+                     ],
+    "shieldRadius":  170,
+    "spriteName":  "graphics/ships/starving_threat/starving_threat_standoff_unit.png",
+    "style":  "THREAT",
+    "viewOffset":  0,
+    "weaponSlots":  [
+                        {
+                            "angle":  0,
+                            "arc":  120,
+                            "id":  "WS 003",
+                            "locations":  [
+                                              69,
+                                              -83
+                                          ],
+                            "mount":  "TURRET",
+                            "size":  "SMALL",
+                            "type":  "HYBRID"
+                        },
+                        {
+                            "angle":  30,
+                            "arc":  150,
+                            "id":  "WS 010",
+                            "locations":  [
+                                              42,
+                                              69
+                                          ],
+                            "mount":  "TURRET",
+                            "size":  "MEDIUM",
+                            "type":  "BALLISTIC"
+                        },
+                        {
+                            "angle":  -30,
+                            "arc":  150,
+                            "id":  "WS 011",
+                            "locations":  [
+                                              42,
+                                              -69
+                                          ],
+                            "mount":  "TURRET",
+                            "size":  "MEDIUM",
+                            "type":  "BALLISTIC"
+                        },
+                        {
+                            "angle":  0,
+                            "arc":  90,
+                            "id":  "WS 012",
+                            "locations":  [
+                                              61,
+                                              30
+                                          ],
+                            "mount":  "TURRET",
+                            "size":  "LARGE",
+                            "type":  "BALLISTIC"
+                        },
+                        {
+                            "angle":  0,
+                            "arc":  90,
+                            "id":  "WS 013",
+                            "locations":  [
+                                              61,
+                                              -30
+                                          ],
+                            "mount":  "TURRET",
+                            "size":  "LARGE",
+                            "type":  "BALLISTIC"
+                        },
+                        {
+                            "angle":  0,
+                            "arc":  5,
+                            "id":  "WS 015",
+                            "locations":  [
+                                              77,
+                                              65
+                                          ],
+                            "mount":  "HARDPOINT",
+                            "size":  "SMALL",
+                            "type":  "UNIVERSAL"
+                        },
+                        {
+                            "angle":  0,
+                            "arc":  5,
+                            "id":  "WS 016",
+                            "locations":  [
+                                              66,
+                                              0
+                                          ],
+                            "mount":  "HARDPOINT",
+                            "size":  "SMALL",
+                            "type":  "UNIVERSAL"
+                        },
+                        {
+                            "angle":  0,
+                            "arc":  5,
+                            "id":  "WS 017",
+                            "locations":  [
+                                              77,
+                                              -65
+                                          ],
+                            "mount":  "HARDPOINT",
+                            "size":  "SMALL",
+                            "type":  "UNIVERSAL"
+                        }
+                    ],
+    "width":  248
+}

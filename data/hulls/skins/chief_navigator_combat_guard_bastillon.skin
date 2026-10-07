@@ -1,0 +1,9 @@
+{
+  "baseHullId": "bastillon",
+  "skinHullId": "chief_navigator_combat_guard_bastillon",
+  "hullName": "Combat Guard Bastillon",
+  "descriptionPrefix": "A Domain Explorarium combat drone restored to the Combat Guard's cold-teal identification standard.",
+  "incompatibleWithBaseHull": true,
+  "spriteName": "graphics/ships/domain_combat_guard/combat_guard_bastillon.png",
+  "tags": ["no_dealer", "no_autofit", "restricted", "chief_navigator_domain_combat_guard"]
+}

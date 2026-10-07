@@ -1,0 +1,8 @@
+{
+  "id": "chief_navigator_omega_time_freeze",
+  "type": "STAT_MOD",
+  "aiType": "CUSTOM",
+  "aiScript": "chiefnavigator.systems.OmegaTimeFreezeAI",
+  "runScriptWhileIdle": true,
+  "statsScript": "chiefnavigator.systems.OmegaTimeFreezeSystem"
+}

@@ -1,0 +1,28 @@
+{
+  "bounds": [470,480, 470,-480, -470,-480, -470,480],
+  "builtInMods": ["chief_navigator_ithaca_range", "reduced_explosion"],
+  "center": [480,480],
+  "collisionRadius": 680,
+  "height": 960,
+  "hullId": "chief_navigator_ithaca_damocles_mount",
+  "hullName": "FOB Ithaca Damocles Mount",
+  "hullSize": "FRIGATE",
+  "moduleAnchor": [0,0],
+  "shieldCenter": [0,0],
+  "shieldRadius": 680,
+  "spriteName": "graphics/ships/chief_navigator_ithaca_forward_module.png",
+  "style": "LOW_TECH",
+  "viewOffset": 0,
+  "weaponSlots": [
+    {
+      "angle": 270,
+      "arc": 360,
+      "id": "WS 001",
+      "locations": [0,-105],
+      "mount": "TURRET",
+      "size": "LARGE",
+      "type": "BALLISTIC"
+    }
+  ],
+  "width": 960
+}

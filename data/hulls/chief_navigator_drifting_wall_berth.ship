@@ -1,0 +1,37 @@
+{
+  "bounds": [160,280, 160,-280, -160,-280, -160,280],
+  "builtInMods": ["chief_navigator_ithaca_range", "reduced_explosion"],
+  "center": [180,305],
+  "collisionRadius": 325,
+  "height": 610,
+  "hullId": "chief_navigator_drifting_wall_berth",
+  "hullName": "Drifting Wall Section",
+  "hullSize": "CAPITAL_SHIP",
+  "moduleAnchor": [0,0],
+  "shieldCenter": [0,0],
+  "shieldRadius": 325,
+  "spriteName": "graphics/ships/chief_navigator_drifting_wall_insert_v3.png",
+  "style": "LOW_TECH",
+  "viewOffset": 0,
+  "weaponSlots": [
+    {
+      "angle": 270,
+      "arc": 360,
+      "id": "WS 001",
+      "locations": [0,0],
+      "mount": "TURRET",
+      "size": "LARGE",
+      "type": "BALLISTIC"
+    },
+    {
+      "angle": 0,
+      "arc": 1,
+      "id": "WS 002",
+      "locations": [0,0],
+      "mount": "HARDPOINT",
+      "size": "LARGE",
+      "type": "DECORATIVE"
+    }
+  ],
+  "width": 360
+}

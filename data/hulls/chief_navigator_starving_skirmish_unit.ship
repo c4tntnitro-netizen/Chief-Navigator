@@ -1,0 +1,113 @@
+{
+    "bounds":  [
+                   34,
+                   24,
+                   38,
+                   -24,
+                   0,
+                   -36,
+                   -36,
+                   -28,
+                   -38,
+                   25,
+                   0,
+                   36
+               ],
+    "builtInMods":  [
+                        "automated",
+                        "chief_navigator_starving_threat"
+                    ],
+    "center":  [
+                   43,
+                   43
+               ],
+    "collisionRadius":  64,
+    "coversColor":  "",
+    "engineSlots":  [
+                        {
+                            "angle":  180,
+                            "contrailSize":  64,
+                            "length":  92,
+                            "location":  [
+                                             -42,
+                                             -19
+                                         ],
+                            "style":  "THREAT",
+                            "width":  16
+                        },
+                        {
+                            "angle":  180,
+                            "contrailSize":  64,
+                            "length":  72,
+                            "location":  [
+                                             -39,
+                                             18
+                                         ],
+                            "style":  "THREAT",
+                            "width":  12
+                        }
+                    ],
+    "height":  86,
+    "hullId":  "chief_navigator_starving_skirmish_unit",
+    "hullName":  "Starving Skirmish Unit",
+    "hullSize":  "FRIGATE",
+    "shieldCenter":  [
+                         0,
+                         1
+                     ],
+    "shieldRadius":  60,
+    "spriteName":  "graphics/ships/starving_threat/starving_threat_skirmish.png",
+    "style":  "THREAT",
+    "viewOffset":  0,
+    "weaponSlots":  [
+                        {
+                            "angle":  0,
+                            "arc":  5,
+                            "id":  "WS 000",
+                            "locations":  [
+                                              32,
+                                              -24
+                                          ],
+                            "mount":  "HARDPOINT",
+                            "size":  "SMALL",
+                            "type":  "UNIVERSAL"
+                        },
+                        {
+                            "angle":  -30,
+                            "arc":  150,
+                            "id":  "WS 001",
+                            "locations":  [
+                                              0,
+                                              -22
+                                          ],
+                            "mount":  "TURRET",
+                            "size":  "SMALL",
+                            "type":  "HYBRID"
+                        },
+                        {
+                            "angle":  40,
+                            "arc":  120,
+                            "id":  "WS 002",
+                            "locations":  [
+                                              -1,
+                                              17
+                                          ],
+                            "mount":  "TURRET",
+                            "size":  "SMALL",
+                            "type":  "HYBRID"
+                        },
+                        {
+                            "angle":  0,
+                            "arc":  90,
+                            "id":  "WS 003",
+                            "locations":  [
+                                              22,
+                                              2
+                                          ],
+                            "mount":  "TURRET",
+                            "size":  "MEDIUM",
+                            "type":  "HYBRID"
+                        }
+                    ],
+    "width":  84
+}

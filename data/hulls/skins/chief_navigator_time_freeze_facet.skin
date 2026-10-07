@@ -1,0 +1,16 @@
+{
+  "baseHullId": "facet",
+  "skinHullId": "chief_navigator_time_freeze_facet",
+  "hullName": "Facet",
+  "descriptionId": "facet",
+  "tags": ["no_dealer", "no_autofit", "hide_in_codex"],
+  "tech": "Omega",
+  "systemId": "chief_navigator_omega_time_freeze",
+  "baseValueMult": 1,
+  "removeWeaponSlots": [],
+  "removeEngineSlots": [],
+  "removeBuiltInMods": [],
+  "removeBuiltInWeapons": [],
+  "builtInMods": [],
+  "builtInWeapons": {}
+}

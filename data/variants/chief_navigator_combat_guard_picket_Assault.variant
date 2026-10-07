@@ -1,0 +1,20 @@
+{
+  "displayName": "Assault",
+  "fluxCapacitors": 0,
+  "fluxVents": 3,
+  "goalVariant": true,
+  "hullId": "chief_navigator_combat_guard_picket",
+  "hullMods": [],
+  "permaMods": [],
+  "quality": 0,
+  "variantId": "chief_navigator_combat_guard_picket_Assault",
+  "weaponGroups": [{
+    "autofire": true,
+    "mode": "LINKED",
+    "weapons": {
+      "WS 001": "vulcan",
+      "WS 002": "vulcan",
+      "WS 003": "vulcan"
+    }
+  }]
+}

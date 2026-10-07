@@ -1,0 +1,44 @@
+{
+  "ruleCommandPackages": ["data.campaign.rulecmd"],
+  "chiefNavigatorSinniOptionColor": [255, 96, 104, 255],
+  "chiefNavigatorMirrorExcludedHullIds": [],
+  "drop_prob_officer_chief_navigator_odyssey_combat_core": 1.0,
+  "graphics": {
+    "characters": {
+      "chief_navigator_sinni": "graphics/portraits/chief_navigator_sinni_v5.png",
+      "chief_navigator_menelaus": "graphics/portraits/chief_navigator_menelaus.png",
+      "chief_navigator_voss": "graphics/portraits/chief_navigator_voss_v1.png",
+      "chief_navigator_spartan_officer": "graphics/portraits/chief_navigator_spartan_officer.png"
+    },
+    "illustrations": {
+      "chief_navigator_sinni_eventide_tea": "graphics/illustrations/chief_navigator_sinni_eventide_tea_wide_v4.png",
+      "chief_navigator_alpha_odyssey_arrival": "graphics/illustrations/chief_navigator_alpha_odyssey_arrival_v2.png",
+      "chief_navigator_sinni_ending": "graphics/illustrations/chief_navigator_sinni_ending_v4.png",
+      "chief_navigator_fob_ithaca_approach": "graphics/illustrations/chief_navigator_fob_ithaca_approach_v6.png",
+      "chief_navigator_persean_survivors_aftermath": "graphics/illustrations/chief_navigator_persean_survivors_aftermath.jpg"
+    },
+    "terrain": {
+      "chief_navigator_ashen_verge_nebula_v1": "graphics/terrain/chief_navigator_ashen_verge_nebula_v1.png",
+      "chief_navigator_ashen_verge_nebula_v1_map": "graphics/terrain/chief_navigator_ashen_verge_nebula_v1_map.png"
+    },
+    "chief_navigator_terrain": {
+      "sanzu_combat_nebula": "graphics/terrain/chief_navigator_sanzu_combat_nebula.png",
+      "sanzu_combat_nebula_map": "graphics/terrain/chief_navigator_sanzu_combat_nebula_map.png"
+    },
+    "misc": {
+      "chief_navigator_messina_gravity_inside": "graphics/fx/chief_navigator_messina_gravity_inside.png",
+      "chief_navigator_fob_ithaca_station": "graphics/campaign/fob_ithaca/ithaca_station.png",
+      "chief_navigator_fob_ithaca_station_glow": "graphics/campaign/fob_ithaca/ithaca_station_glow.png",
+      "chief_navigator_fob_ithaca_orbital_ring": "graphics/campaign/fob_ithaca/ithaca_orbital_ring_v4.png",
+      "chief_navigator_fob_ithaca_orbital_ring_glow": "graphics/campaign/fob_ithaca/ithaca_orbital_ring_glow_v4.png",
+      "chief_navigator_ithaca_wall_01_command": "graphics/campaign/fob_ithaca/ithaca_wall_01_command.png",
+      "chief_navigator_ithaca_wall_02_battery": "graphics/campaign/fob_ithaca/ithaca_wall_02_battery.png",
+      "chief_navigator_ithaca_wall_03_hangar": "graphics/campaign/fob_ithaca/ithaca_wall_03_hangar.png",
+      "chief_navigator_ithaca_wall_04_sensor": "graphics/campaign/fob_ithaca/ithaca_wall_04_sensor.png",
+      "chief_navigator_ithaca_wall_05_reactor": "graphics/campaign/fob_ithaca/ithaca_wall_05_reactor.png",
+      "chief_navigator_ithaca_wall_06_logistics": "graphics/campaign/fob_ithaca/ithaca_wall_06_logistics.png",
+      "chief_navigator_ithaca_wall_07_broken_top": "graphics/campaign/fob_ithaca/ithaca_wall_07_broken_top.png",
+      "chief_navigator_ithaca_wall_08_broken_bottom": "graphics/campaign/fob_ithaca/ithaca_wall_08_broken_bottom.png"
+    }
+  }
+}

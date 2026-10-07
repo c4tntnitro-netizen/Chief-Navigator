@@ -1,0 +1,29 @@
+{
+  "id": "chief_navigator_metalstorm",
+  "specClass": "projectile",
+  "type": "BALLISTIC",
+  "size": "LARGE",
+  "everyFrameEffect": "chiefnavigator.weapons.MetalStormVolleyEffect",
+  "turretSprite": "graphics/weapons/chief_navigator_metalstorm_base_v4.png",
+  "hardpointSprite": "graphics/weapons/chief_navigator_metalstorm_base_v4.png",
+  "turretOffsets": [80,0],
+  "turretAngleOffsets": [0],
+  "hardpointOffsets": [80,0],
+  "hardpointAngleOffsets": [0],
+  "barrelMode": "LINKED",
+  "animationType": "SMOKE",
+  "smokeSpec": {
+    "particleSizeMin": 18,
+    "particleSizeRange": 28,
+    "cloudParticleCount": 18,
+    "cloudDuration": 1.2,
+    "cloudRadius": 36,
+    "blowbackParticleCount": 12,
+    "blowbackDuration": 0.9,
+    "blowbackLength": 55,
+    "blowbackSpread": 40,
+    "particleColor": [125,125,120,150]
+  },
+  "projectileSpecId": "chief_navigator_metalstorm_trigger",
+  "fireSoundTwo": "squall_fire"
+}

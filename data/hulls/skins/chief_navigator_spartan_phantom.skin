@@ -1,0 +1,16 @@
+{
+  "baseHullId": "phantom",
+  "skinHullId": "chief_navigator_spartan_phantom",
+  "hullName": "Phantom (Spartan)",
+  "descriptionId": "chief_navigator_spartan_phantom",
+  "tags": ["no_dealer", "no_autofit", "hide_in_codex"],
+  "tech": "Low Tech",
+  "builtInWings": ["chief_navigator_boarding_pod_wing"],
+  "fighterBays": 1,
+  "baseValueMult": 1,
+  "removeWeaponSlots": [],
+  "removeEngineSlots": [],
+  "removeBuiltInMods": [],
+  "removeBuiltInWeapons": [],
+  "builtInWeapons": {}
+}

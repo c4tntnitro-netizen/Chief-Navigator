@@ -1,0 +1,15 @@
+{
+  "id": "chief_navigator_metalstorm_trigger",
+  "specClass": "projectile",
+  "onFireEffect": "chiefnavigator.weapons.MetalStormVolleyEffect",
+  "spawnType": "BALLISTIC",
+  "collisionClass": "NONE",
+  "collisionClassByFighter": "NONE",
+  "length": 1,
+  "hitGlowRadius": 0,
+  "width": 1,
+  "fadeTime": 0,
+  "fringeColor": [0,0,0,0],
+  "coreColor": [0,0,0,0],
+  "bulletSprite": "graphics/missiles/shell_small_yellow.png"
+}

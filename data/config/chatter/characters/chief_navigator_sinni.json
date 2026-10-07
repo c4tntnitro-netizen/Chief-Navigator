@@ -1,0 +1,74 @@
+{
+  "name": "Koyama Sinni",
+  "personalities": ["cautious", "steady", "aggressive"],
+  "gender": ["f"],
+  "chance": 1.0,
+  "talkativeness": 0.85,
+  "categoryTags": ["chief_navigator", "original"],
+  "lines": {
+    "start": [
+      {"text": "Routes plotted. Try not to invalidate them."},
+      {"text": "I see a path. Following it in."},
+      {"text": "Stay close. The battlefield has currents too."}
+    ],
+    "start_boss": [
+      {"text": "That's large. Its blind arcs aren't."},
+      {"text": "There is a route through this. Give me a moment."}
+    ],
+    "retreat": [
+      {"text": "I've found a quieter current. Following it out."},
+      {"text": "Route open. Withdrawing now."}
+    ],
+    "out_of_missiles": [
+      {"text": "Missile racks are dry."},
+      {"text": "No more missiles. Adjusting the route."}
+    ],
+    "engaged": [
+      {"text": "Contact. I see the line."},
+      {"text": "Following their weak vector in."},
+      {"text": "They left an opening."}
+    ],
+    "need_help": [
+      {"text": "The route is closing. I need an opening."},
+      {"text": "Cover this vector, please."}
+    ],
+    "pursuing": [
+      {"text": "Their vector is collapsing."},
+      {"text": "I know where they're going."},
+      {"text": "No current carries them clear."}
+    ],
+    "running": [
+      {"text": "Bad current. Repositioning."},
+      {"text": "This line closes behind me."}
+    ],
+    "hull_90": [
+      {"text": "That was avoidable."},
+      {"text": "Hull struck. Course unchanged."}
+    ],
+    "hull_50": [
+      {"text": "Hull integrity is becoming relevant."},
+      {"text": "I need room to alter course."}
+    ],
+    "hull_30": [
+      {"text": "This route ends badly. Cover me."},
+      {"text": "I can still get us out. Barely."}
+    ],
+    "overload": [
+      {"text": "Flux locked. Give me a moment."},
+      {"text": "Lost the line. Reacquiring."}
+    ],
+    "death": [
+      {"text": "Ship lost. I'm clear."},
+      {"text": "This hull's route ends here."}
+    ],
+    "victory": [
+      {"text": "The sea is quiet again."},
+      {"text": "Exactly where I expected them to break."},
+      {"text": "A clean passage."}
+    ],
+    "victory_boss": [
+      {"text": "There. The impossible route."},
+      {"text": "Even that had a way through."}
+    ]
+  }
+}

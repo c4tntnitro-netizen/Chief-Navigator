@@ -1,0 +1,64 @@
+{
+  "displayName": "Drifting Wall Base",
+  "fluxCapacitors": 0,
+  "fluxVents": 0,
+  "hullId": "chief_navigator_drifting_wall_base",
+  "hullMods": [],
+  "modules": [
+    {
+      "REACTOR": "chief_navigator_drifting_wall_reactor_Active"
+    }
+  ],
+  "quality": 1,
+  "variantId": "chief_navigator_drifting_wall_base_Standard",
+  "weaponGroups": [
+    {
+      "autofire": false,
+      "mode": "LINKED",
+      "weapons": {
+        "COL_NAVAL_01": "chief_navigator_drifting_wall_colossal_destroyed"
+      }
+    },
+    {
+      "autofire": true,
+      "mode": "LINKED",
+      "weapons": {
+        "COL_NAVAL_02": "chief_navigator_drifting_wall_colossal_inert",
+        "COL_NAVAL_03": "chief_navigator_drifting_wall_colossal_inert",
+        "COL_NAVAL_04": "chief_navigator_drifting_wall_colossal_inert"
+      }
+    },
+    {
+      "autofire": false,
+      "mode": "LINKED",
+      "weapons": {
+        "LARGE_BALLISTIC_01": "chief_navigator_drifting_wall_annihilator_destroyed",
+        "LARGE_BALLISTIC_03": "chief_navigator_drifting_wall_annihilator_destroyed"
+      }
+    },
+    {
+      "autofire": true,
+      "mode": "ALTERNATING",
+      "weapons": {
+        "LARGE_BALLISTIC_02": "chief_navigator_drifting_wall_annihilator_launcher",
+        "LARGE_BALLISTIC_04": "chief_navigator_drifting_wall_annihilator_launcher"
+      }
+    },
+    {
+      "autofire": true,
+      "mode": "ALTERNATING",
+      "weapons": {
+        "MEDIUM_UNIVERSAL_01": "pulselaser",
+        "MEDIUM_UNIVERSAL_02": "pulselaser",
+        "MEDIUM_UNIVERSAL_03": "heavyneedler",
+        "MEDIUM_UNIVERSAL_04": "heavymauler",
+        "MEDIUM_UNIVERSAL_05": "pulselaser",
+        "MEDIUM_UNIVERSAL_06": "heavyneedler",
+        "MEDIUM_UNIVERSAL_07": "heavyneedler",
+        "MEDIUM_UNIVERSAL_08": "pulselaser",
+        "MEDIUM_UNIVERSAL_09": "heavymauler",
+        "MEDIUM_UNIVERSAL_10": "heavyneedler"
+      }
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "displayName": "Spartan Boarding",
+  "fluxCapacitors": 10,
+  "fluxVents": 4,
+  "goalVariant": false,
+  "hullId": "chief_navigator_spartan_phantom",
+  "hullMods": [
+    "efficiency_overhaul",
+    "auxiliary_fuel_tanks"
+  ],
+  "permaMods": [],
+  "sMods": [],
+  "variantId": "chief_navigator_spartan_phantom_Boarding",
+  "weaponGroups": []
+}

@@ -1,0 +1,14 @@
+{
+  "quality": 0,
+  "displayName": "Boarding Pod",
+  "hullId": "chief_navigator_boarding_pod_fighter",
+  "variantId": "chief_navigator_boarding_pod_Fighter",
+  "fluxVents": 0,
+  "fluxCapacitors": 0,
+  "hullMods": [
+    "chief_navigator_boarding_pod_fighter_ai"
+  ],
+  "permaMods": [],
+  "sMods": [],
+  "weaponGroups": []
+}
