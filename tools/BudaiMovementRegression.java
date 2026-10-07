@@ -3,6 +3,7 @@ import chiefnavigator.systems.BudaiConvulsiveLungeAI;
 import chiefnavigator.systems.BudaiConvulsiveLungeSystem;
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.combat.*;
+import com.fs.starfarer.api.impl.combat.dweller.DwellerShroud;
 import com.fs.starfarer.api.impl.combat.dweller.DwellerShroud.DwellerShroudParams;
 import java.lang.reflect.Method;
 import java.lang.reflect.Field;
@@ -19,6 +20,18 @@ public final class BudaiMovementRegression {
         final Vector2f position = new Vector2f();
         final Vector2f enemyPosition = new Vector2f(1000, 0);
         final BudaiConvulsiveLungeAI ai = new BudaiConvulsiveLungeAI();
+        final ShipAIConfig config = new ShipAIConfig();
+        final ShipAIPlugin shipAI;
+        final DeployedFleetMemberAPI deployed;
+        final CombatTaskManagerAPI tasks;
+        final CombatFleetManagerAPI manager;
+        final CombatEngineAPI engine;
+        CombatAssignmentType assignment = CombatAssignmentType.RETREAT;
+        boolean forceEngage;
+        boolean preventFullRetreat;
+        int huntOrders;
+        int evaluations;
+        int maneuverCancels;
         float facing;
         float hull = 1f;
         float cooldown;
@@ -35,6 +48,43 @@ public final class BudaiMovementRegression {
         final ShipAPI ship;
 
         Fixture() {
+            shipAI = WallResearchRegression.mock(ShipAIPlugin.class, (name, args) -> {
+                if (name.equals("getConfig")) return config;
+                if (name.equals("forceCircumstanceEvaluation")) evaluations++;
+                if (name.equals("cancelCurrentManeuver")) maneuverCancels++;
+                return null;
+            });
+            deployed = WallResearchRegression.mock(DeployedFleetMemberAPI.class, (name, args) -> null);
+            CombatFleetManagerAPI.AssignmentInfo order = WallResearchRegression.mock(
+                    CombatFleetManagerAPI.AssignmentInfo.class,
+                    (name, args) -> name.equals("getType") ? assignment : null);
+            tasks = WallResearchRegression.mock(CombatTaskManagerAPI.class, (name, args) -> {
+                switch (name) {
+                    case "getAssignmentFor": return order;
+                    case "isPreventFullRetreat": return preventFullRetreat;
+                    case "setPreventFullRetreat": preventFullRetreat = (Boolean) args[0]; break;
+                    case "orderSearchAndDestroy":
+                        check(args.length == 2 && args[0] == deployed && Boolean.FALSE.equals(args[1]),
+                                "Replace only Budai's own order, never the fleet's orders");
+                        assignment = CombatAssignmentType.SEARCH_AND_DESTROY;
+                        huntOrders++;
+                        break;
+                    case "removeAssignment": case "clearTasks": case "setFullAssault":
+                        throw new AssertionError("Do not erase shared orders or force fleet-wide assault");
+                    default: break;
+                }
+                return null;
+            });
+            manager = WallResearchRegression.mock(CombatFleetManagerAPI.class, (name, args) -> {
+                switch (name) {
+                    case "getTaskManager": return tasks;
+                    case "getDeployedFleetMember": return deployed;
+                    case "isCanForceShipsToEngageWhenBattleClearlyLost": return forceEngage;
+                    case "setCanForceShipsToEngageWhenBattleClearlyLost": forceEngage = (Boolean) args[0]; break;
+                    default: break;
+                }
+                return null;
+            });
             ShipSystemAPI system = WallResearchRegression.mock(ShipSystemAPI.class,
                     (name, args) -> {
                         if (name.equals("getState")) return state;
@@ -53,6 +103,9 @@ public final class BudaiMovementRegression {
                     case "setCustomData": data.put((String) args[0], args[1]); break;
                     case "removeCustomData": data.remove(args[0]); break;
                     case "getAIFlags": return flags;
+                    case "getShipAI": return shipAI;
+                    case "setShipAI": case "resetDefaultAI":
+                        throw new AssertionError("Preserve the existing native ship/system AI");
                     case "getOwner": return 1;
                     case "getHullSize": return ShipAPI.HullSize.CAPITAL_SHIP;
                     case "isAlive": case "isCapital": return true;
@@ -85,13 +138,17 @@ public final class BudaiMovementRegression {
             });
             ships.add(ship);
             ships.add(enemy);
-            CombatEngineAPI engine = WallResearchRegression.mock(CombatEngineAPI.class,
+            engine = WallResearchRegression.mock(CombatEngineAPI.class,
                     (name, args) -> {
                         switch (name) {
                             case "isPaused": return paused;
                             case "isEntityInPlay": return true;
                             case "getShips": return ships;
                             case "getCustomData": return engineData;
+                            case "getFleetManager":
+                                check((Integer) args[0] == 1, "Never change the opposing fleet manager");
+                                return manager;
+                            case "addLayeredRenderingPlugin": return ship;
                             case "getTotalElapsedTime": return elapsed;
                             case "getMapWidth": case "getMapHeight": return 10000f;
                             default: return null;
@@ -214,25 +271,110 @@ public final class BudaiMovementRegression {
         check(f.destination() == null, "Stock forward lunges must discard stale rear targets");
 
         Method preventRetreat = CharybdisDistortion.class.getDeclaredMethod(
-                "preventRetreat", ShipAPI.class);
+                "preventRetreat", CombatEngineAPI.class, ShipAPI.class);
         preventRetreat.setAccessible(true);
         for (float hull : new float[] {1f, 0.2f, 0.1f}) {
             f = new Fixture();
             f.hull = hull;
             f.retreating = true;
+            f.flags.setFlag(ShipwideAIFlags.AIFlags.BACK_OFF);
             f.flags.setFlag(ShipwideAIFlags.AIFlags.BACKING_OFF);
-            preventRetreat.invoke(null, f.ship);
+            preventRetreat.invoke(null, f.engine, f.ship);
             check(!f.retreating, "Prevent retreat at every hull level");
-            check(!f.flags.hasFlag(ShipwideAIFlags.AIFlags.BACKING_OFF)
+            check(!f.flags.hasFlag(ShipwideAIFlags.AIFlags.BACK_OFF)
+                            && !f.flags.hasFlag(ShipwideAIFlags.AIFlags.BACKING_OFF)
                             && f.flags.hasFlag(ShipwideAIFlags.AIFlags.DO_NOT_BACK_OFF)
                             && f.flags.hasFlag(ShipwideAIFlags.AIFlags.DO_NOT_BACK_OFF_EVEN_WHILE_VENTING),
                     "Hold ground rather than backing off, including at low hull and while venting");
+            check(f.forceEngage && f.preventFullRetreat && f.huntOrders == 1,
+                    "Block defeat-driven withdrawal and replace Budai's existing retreat order");
+            check("reckless".equals(f.config.personalityOverride)
+                            && f.config.alwaysStrafeOffensively && !f.config.backingOffWhileNotVentingAllowed,
+                    "Configure Fearless in place, retaining native Maw AI and system modules");
+            preventRetreat.invoke(null, f.engine, f.ship);
+            check(f.huntOrders == 1 && f.evaluations == 1 && f.maneuverCancels == 1,
+                    "Ordinary frames must not keep replacing orders or rebuilding/evaluating AI");
+            f.assignment = CombatAssignmentType.RETREAT;
+            preventRetreat.invoke(null, f.engine, f.ship);
+            check(f.huntOrders == 2, "Cancel a later native retreat order too");
+            method("restoreRetreatGuard", ShipAPI.class).invoke(null, f.ship);
+            check(!f.forceEngage && !f.preventFullRetreat,
+                    "Restore the side's original withdrawal settings when Budai leaves");
         }
+        f = new Fixture();
+        f.forceEngage = true;
+        f.preventFullRetreat = true;
+        f.assignment = CombatAssignmentType.DEFEND;
+        preventRetreat.invoke(null, f.engine, f.ship);
+        method("restoreRetreatGuard", ShipAPI.class).invoke(null, f.ship);
+        check(f.forceEngage && f.preventFullRetreat && f.huntOrders == 0,
+                "Preserve preexisting fleet settings and non-retreat assignments");
         verifyNativeSmoke();
+        verifySmokeTransition();
         verifyBubbleDamage();
         System.out.println("PASS: Budai rejects automatic/native rearward escapes, retains forward "
                 + "lunges and cooldown/readiness guards, holds ground while venting, preserves "
-                + "enrage priority, no retreat, normal smoke and 30% bubble damage reduction");
+                + "enrage priority, no retreat orders, temporary heavy native smoke, five-second "
+                + "bubble expansion and 30% bubble damage reduction");
+    }
+
+    private static void verifySmokeTransition() throws Exception {
+        Fixture f = new Fixture();
+        Method smoke = method("updateEnrageSmoke", ShipAPI.class);
+        Method grow = method("advanceBubbleExpansion", CombatEngineAPI.class, ShipAPI.class, float.class);
+        f.data.put(CharybdisDistortion.ENRAGE_SEQUENCE_KEY, new Object());
+        smoke.invoke(null, f.ship); // Native shroud is not available yet.
+        check(!f.data.containsKey("chief_navigator_charybdis_enrage_smoke"),
+                "Missing native shroud must retry without capturing a fake baseline");
+        DwellerShroudParams params = new DwellerShroudParams();
+        params.negativeParticleNumBase = 11;
+        params.negativeParticleNumOverloaded = 5;
+        params.negativeParticleGenRate = 1f;
+        params.baseMembersToMaintain = 250;
+        params.negativeParticleAreaMult = 0.9f;
+        params.negativeParticleDurMult = 1f;
+        new DwellerShroud(f.ship, params); // Real native registration/lookup, no rendering advance.
+        for (int frame = 0; frame < 100; frame++) smoke.invoke(null, f.ship);
+        check(params.negativeParticleNumBase == 44 && params.negativeParticleNumOverloaded == 20
+                        && params.negativeParticleGenRate == 2f,
+                "Heavy smoke is four times the count at twice the emission rate without compounding");
+        check(params.baseMembersToMaintain == 250 && params.negativeParticleAreaMult == 0.9f
+                        && params.negativeParticleDurMult == 1f,
+                "Preserve native particle pool, texture/spread/lifetime and movement");
+
+        String expansionKey = "chief_navigator_charybdis_bubble_expansion";
+        var constructor = Class.forName("chiefnavigator.hullmods.CharybdisDistortion$BubbleExpansion")
+                .getDeclaredConstructor(float.class);
+        constructor.setAccessible(true);
+        f.data.remove(CharybdisDistortion.ENRAGE_SEQUENCE_KEY);
+        f.data.put(expansionKey, constructor.newInstance(1000f));
+        grow.invoke(null, f.engine, f.ship, 2.5f);
+        smoke.invoke(null, f.ship);
+        near(((Number) f.data.get("chief_navigator_charybdis_distortion_radius")).floatValue(), 2500f,
+                "Bubble reaches the midpoint after 2.5 unpaused seconds");
+        check(params.negativeParticleNumBase == 28 && params.negativeParticleNumOverloaded == 13
+                        && params.negativeParticleGenRate == 1.5f,
+                "Smoke emission eases back as the bubble expands");
+        f.paused = true;
+        grow.invoke(null, f.engine, f.ship, 20f);
+        f.paused = false;
+        grow.invoke(null, f.engine, f.ship, 0f);
+        grow.invoke(null, f.engine, f.ship, -5f);
+        near(((Number) f.data.get("chief_navigator_charybdis_distortion_radius")).floatValue(), 2500f,
+                "Pause and non-positive amounts cannot advance the transition");
+        grow.invoke(null, f.engine, f.ship, 2.5f);
+        smoke.invoke(null, f.ship);
+        near(((Number) f.data.get("chief_navigator_charybdis_distortion_radius")).floatValue(), 4000f,
+                "Full radius is reached after exactly five unpaused seconds");
+        check(!f.data.containsKey(expansionKey) && params.negativeParticleNumBase == 11
+                        && params.negativeParticleNumOverloaded == 5 && params.negativeParticleGenRate == 1f,
+                "Completed expansion restores baseline smoke even while still below half hull");
+        f.data.put(CharybdisDistortion.ENRAGE_SEQUENCE_KEY, new Object());
+        smoke.invoke(null, f.ship);
+        method("clearEnrage", ShipAPI.class).invoke(null, f.ship);
+        check(params.negativeParticleNumBase == 11 && params.negativeParticleGenRate == 1f
+                        && !f.data.containsKey(CharybdisDistortion.ENRAGE_SEQUENCE_KEY),
+                "Death/removal cleanup restores the native shroud and clears phase ownership");
     }
 
     private static void verifyNativeSmoke() throws Exception {
@@ -273,7 +415,7 @@ public final class BudaiMovementRegression {
         Method hit = listenerClass.getDeclaredMethod("modifyDamageTaken", Object.class,
                 CombatEntityAPI.class, DamageAPI.class, Vector2f.class, boolean.class);
         hit.setAccessible(true);
-        for (float radius : new float[] {1000f, 4000f}) {
+        for (float radius : new float[] {1000f, 2500f, 4000f}) {
             f.data.put("chief_navigator_charybdis_distortion_radius", radius);
             for (String scenario : new String[] {
                     "projectile", "beam", "inside", "boundary", "heHull", "heShield", "unknown", "foreign"}) {
@@ -304,5 +446,15 @@ public final class BudaiMovementRegression {
 
     private static void check(boolean condition, String message) {
         if (!condition) throw new AssertionError(message);
+    }
+
+    private static Method method(String name, Class<?>... params) throws Exception {
+        Method result = CharybdisDistortion.class.getDeclaredMethod(name, params);
+        result.setAccessible(true);
+        return result;
+    }
+
+    private static void near(float actual, float expected, String message) {
+        check(Math.abs(actual - expected) < 0.001f, message + "; actual=" + actual);
     }
 }

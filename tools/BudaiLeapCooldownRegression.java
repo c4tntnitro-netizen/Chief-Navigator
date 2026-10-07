@@ -30,6 +30,7 @@ public final class BudaiLeapCooldownRegression {
     private static final String RADIUS_KEY = "chief_navigator_charybdis_distortion_radius";
     private static final long RANDOM_SEED = 73019L;
     private static Method advance;
+    private static Method expand;
     private static Constructor<?> sequenceConstructor;
     private static float budaiLeapCooldown;
     private static float regularMawChargeUp;
@@ -162,6 +163,7 @@ public final class BudaiLeapCooldownRegression {
         }
 
         void advanceController(float amount) throws Exception {
+            expand.invoke(null, engine, ship, amount);
             advance.invoke(null, engine, ship, amount);
             check(cooldownWrites == 0, "The enrage sequence must never write system cooldown");
         }
@@ -222,6 +224,9 @@ public final class BudaiLeapCooldownRegression {
             advance = CharybdisDistortion.class.getDeclaredMethod(
                     "advanceEnrageSequence", CombatEngineAPI.class, ShipAPI.class, float.class);
             advance.setAccessible(true);
+            expand = CharybdisDistortion.class.getDeclaredMethod(
+                    "advanceBubbleExpansion", CombatEngineAPI.class, ShipAPI.class, float.class);
+            expand.setAccessible(true);
             verifyDataAndSourceContracts();
             initialCooldownAndReadiness();
             fourNormallyCooledLeaps(false);
@@ -231,7 +236,7 @@ public final class BudaiLeapCooldownRegression {
             rejectedCommandRetryRespectsReadiness();
             System.out.println("PASS: Budai retains the full native 5.5s activation cycle plus a 12s cooldown, preserving "
                     + "positive cooldown/readiness guards, four full-phase leaps, rest/retry gates "
-                    + "and one-shot final Rift/radius buffs without a red tint "
+                    + "and one-shot final Rift buffs/five-second radius growth without a red tint "
                     + "against a mocked native system clock (no live-game or GL claim).");
         } finally {
             Global.setSettings(savedSettings);
@@ -311,7 +316,8 @@ public final class BudaiLeapCooldownRegression {
                     "Fourth completion retains Budai's twelve-second base cooldown");
         }
         float finalCooldown = f.cooldown;
-        near(((Number) f.data.get(RADIUS_KEY)).floatValue(), 4000f, "Post-fourth radius is unchanged");
+        near(((Number) f.data.get(RADIUS_KEY)).floatValue(), 1000f,
+                "The fourth completion starts expansion at the original radius, without a jump");
         near(f.customRift.refire, 3f, "Custom Rift still receives its separate half-refire buff");
         near(f.customRift.cooldown, 3f, "Separate Rift weapon cooldown still clamps to its new refire");
         near(f.stockRift.refire, 4f, "Stock Rift keeps its existing half-refire behavior");
@@ -320,6 +326,15 @@ public final class BudaiLeapCooldownRegression {
                         && f.tintPlugins == 0 && f.ordinary.refireWrites == 0
                         && f.ordinary.cooldownWrites == 0,
                 "Only authored Rift effects are applied; no red tint renderer is installed");
+        f.advanceController(2.5f);
+        near(((Number) f.data.get(RADIUS_KEY)).floatValue(), 2500f,
+                "Bubble grows to its midpoint after 2.5 seconds");
+        f.advanceController(2.49f);
+        near(((Number) f.data.get(RADIUS_KEY)).floatValue(), 3994f,
+                "Expansion must not reach full radius before five seconds");
+        f.advanceController(0.01f);
+        near(((Number) f.data.get(RADIUS_KEY)).floatValue(), 4000f,
+                "Full radius is reached exactly five seconds after the fourth completion");
         for (int i = 0; i < 30; i++) f.advanceController(0.1f);
         near(f.cooldown, finalCooldown, "Post-finish calls never clear the fourth leap cooldown");
         check(f.commands == 4 && f.customRift.refireWrites == 1

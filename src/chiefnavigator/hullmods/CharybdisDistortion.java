@@ -5,11 +5,15 @@ import com.fs.starfarer.api.combat.BeamAPI;
 import com.fs.starfarer.api.combat.BoundsAPI;
 import com.fs.starfarer.api.combat.CombatEngineAPI;
 import com.fs.starfarer.api.combat.CombatEntityAPI;
+import com.fs.starfarer.api.combat.CombatAssignmentType;
+import com.fs.starfarer.api.combat.CombatFleetManagerAPI;
+import com.fs.starfarer.api.combat.CombatTaskManagerAPI;
 import com.fs.starfarer.api.combat.DamageAPI;
 import com.fs.starfarer.api.combat.DamageType;
 import com.fs.starfarer.api.combat.DamagingProjectileAPI;
 import com.fs.starfarer.api.combat.MutableShipStatsAPI;
 import com.fs.starfarer.api.combat.ShipAPI;
+import com.fs.starfarer.api.combat.ShipAIPlugin;
 import com.fs.starfarer.api.combat.ShipCommand;
 import com.fs.starfarer.api.combat.ShipHullSpecAPI;
 import com.fs.starfarer.api.combat.ShipSystemAPI;
@@ -28,6 +32,7 @@ import com.fs.starfarer.api.loading.WeaponSlotAPI;
 import com.fs.starfarer.api.util.IntervalUtil;
 import com.fs.starfarer.api.util.Misc;
 import chiefnavigator.quest.BudaiMusic;
+import chiefnavigator.ai.GuardDroneAI;
 import chiefnavigator.systems.BudaiConvulsiveLungeSystem;
 import java.awt.Color;
 import java.util.HashSet;
@@ -51,6 +56,14 @@ public final class CharybdisDistortion extends DwellerHullmod {
             "chief_navigator_charybdis_enraged";
     public static final String ENRAGE_SEQUENCE_KEY =
             "chief_navigator_charybdis_enrage_sequence";
+    private static final String EXPANSION_KEY =
+            "chief_navigator_charybdis_bubble_expansion";
+    private static final String SMOKE_KEY =
+            "chief_navigator_charybdis_enrage_smoke";
+    private static final String RETREAT_GUARD_KEY =
+            "chief_navigator_charybdis_retreat_guard";
+    private static final String FEARLESS_AI_KEY =
+            "chief_navigator_charybdis_fearless_ai";
     private static final String SLOW_ID_PREFIX =
             "chief_navigator_charybdis_slow_";
     private static final String DAMAGE_REDUCTION_ID =
@@ -72,6 +85,9 @@ public final class CharybdisDistortion extends DwellerHullmod {
     private static final float BLUE_FROM_RED = 0.36f;
     private static final float ENRAGE_HULL_LEVEL = 0.5f;
     private static final float ENRAGED_RADIUS_MULT = 4f;
+    private static final float BUBBLE_EXPANSION_DURATION = 5f;
+    private static final float ENRAGE_SMOKE_COUNT_MULT = 4f;
+    private static final float ENRAGE_SMOKE_RATE_MULT = 2f;
     private static final float ENRAGED_RIFT_REFIRE_MULT = 0.5f;
     private static final int ENRAGE_LUNGE_COUNT = 4;
     private static final float ENRAGE_LUNGE_MIN_DISTANCE = 700f;
@@ -147,7 +163,9 @@ public final class CharybdisDistortion extends DwellerHullmod {
             return;
         }
 
-        if (ship.isHulk() || !engine.isEntityInPlay(ship)) {
+        if (!ship.isAlive() || ship.isHulk() || !engine.isEntityInPlay(ship)) {
+            clearEnrage(ship);
+            restoreRetreatGuard(ship);
             removeDistortion(ship);
             clearSlowdown(engine, ship);
             return;
@@ -162,8 +180,12 @@ public final class CharybdisDistortion extends DwellerHullmod {
                     && !ship.getCustomData().containsKey(ENRAGED_KEY)) {
                 beginEnrage(ship);
             }
-            preventRetreat(ship);
+            preventRetreat(engine, ship);
+            // Advance an existing expansion before the sequence can start a new
+            // one, so the fourth completion begins at the exact current radius.
+            advanceBubbleExpansion(engine, ship, amount);
             advanceEnrageSequence(engine, ship, amount);
+            updateEnrageSmoke(ship);
         }
 
         float radius = getCurrentRadius(ship);
@@ -184,15 +206,64 @@ public final class CharybdisDistortion extends DwellerHullmod {
         maintain(ripple, ship, radius);
     }
 
-    private static void preventRetreat(ShipAPI ship) {
-        if (ship.isRetreating()) {
+    private static void preventRetreat(CombatEngineAPI engine, ShipAPI ship) {
+        boolean reevaluate = ship.isRetreating();
+        if (reevaluate) {
             ship.setRetreating(false, false);
+        }
+        ShipAIPlugin ai = ship.getShipAI();
+        if (ai != null && ai.getConfig() != null
+                && ship.getCustomData().get(FEARLESS_AI_KEY) != ai) {
+            GuardDroneAI.configureFearless(ai.getConfig());
+            ship.setCustomData(FEARLESS_AI_KEY, ai);
+            reevaluate = true;
+        }
+
+        CombatFleetManagerAPI manager = engine.getFleetManager(ship.getOwner());
+        if (manager != null) {
+            CombatTaskManagerAPI tasks = manager.getTaskManager(ship.isAlly());
+            Object cached = ship.getCustomData().get(RETREAT_GUARD_KEY);
+            RetreatGuard guard = cached instanceof RetreatGuard ? (RetreatGuard) cached : null;
+            if (guard == null || guard.manager != manager || guard.tasks != tasks) {
+                restoreRetreatGuard(ship);
+                guard = new RetreatGuard(manager, tasks);
+                ship.setCustomData(RETREAT_GUARD_KEY, guard);
+            }
+            // Budai is a lone boss. Keep his own side engaged even when native
+            // fleet logic decides the fight is lost; never touch the opposing side.
+            manager.setCanForceShipsToEngageWhenBattleClearlyLost(true);
+            if (tasks != null) {
+                tasks.setPreventFullRetreat(true);
+                CombatFleetManagerAPI.AssignmentInfo assignment = tasks.getAssignmentFor(ship);
+                if (assignment != null && assignment.getType() == CombatAssignmentType.RETREAT) {
+                    var deployed = manager.getDeployedFleetMember(ship);
+                    if (deployed != null) {
+                        tasks.orderSearchAndDestroy(deployed, false);
+                        reevaluate = true;
+                    }
+                }
+            }
         }
         ShipwideAIFlags flags = ship.getAIFlags();
         if (flags != null) {
+            flags.unsetFlag(ShipwideAIFlags.AIFlags.BACK_OFF);
             flags.unsetFlag(ShipwideAIFlags.AIFlags.BACKING_OFF);
             flags.setFlag(ShipwideAIFlags.AIFlags.DO_NOT_BACK_OFF, 2f);
             flags.setFlag(ShipwideAIFlags.AIFlags.DO_NOT_BACK_OFF_EVEN_WHILE_VENTING, 2f);
+        }
+        if (reevaluate && ai != null) {
+            ai.cancelCurrentManeuver();
+            ai.forceCircumstanceEvaluation();
+        }
+    }
+
+    private static void restoreRetreatGuard(ShipAPI ship) {
+        Object cached = ship.getCustomData().get(RETREAT_GUARD_KEY);
+        if (cached instanceof RetreatGuard) {
+            RetreatGuard guard = (RetreatGuard) cached;
+            guard.manager.setCanForceShipsToEngageWhenBattleClearlyLost(guard.forceEngage);
+            if (guard.tasks != null) guard.tasks.setPreventFullRetreat(guard.preventFullRetreat);
+            ship.removeCustomData(RETREAT_GUARD_KEY);
         }
     }
 
@@ -296,10 +367,11 @@ public final class CharybdisDistortion extends DwellerHullmod {
     }
 
     private static void finishEnrage(CombatEngineAPI engine, ShipAPI ship) {
+        if (!(ship.getCustomData().get(ENRAGE_SEQUENCE_KEY) instanceof EnrageSequence)) return;
         ship.removeCustomData(ENRAGE_SEQUENCE_KEY);
         ship.removeCustomData(BudaiConvulsiveLungeSystem.TARGET_KEY);
 
-        ship.setCustomData(RADIUS_KEY, BASE_RADIUS * ENRAGED_RADIUS_MULT);
+        ship.setCustomData(EXPANSION_KEY, new BubbleExpansion(getCurrentRadius(ship)));
 
         for (WeaponAPI weapon : ship.getAllWeapons()) {
             if (weapon == null
@@ -316,6 +388,57 @@ public final class CharybdisDistortion extends DwellerHullmod {
             }
         }
 
+    }
+
+    private static void advanceBubbleExpansion(
+            CombatEngineAPI engine, ShipAPI ship, float amount) {
+        if (engine.isPaused() || amount <= 0f) return;
+        Object cached = ship.getCustomData().get(EXPANSION_KEY);
+        if (!(cached instanceof BubbleExpansion)) return;
+        BubbleExpansion expansion = (BubbleExpansion) cached;
+        expansion.elapsed = Math.min(BUBBLE_EXPANSION_DURATION, expansion.elapsed + amount);
+        float progress = expansion.elapsed / BUBBLE_EXPANSION_DURATION;
+        ship.setCustomData(RADIUS_KEY, expansion.startRadius
+                + (BASE_RADIUS * ENRAGED_RADIUS_MULT - expansion.startRadius) * progress);
+        if (progress >= 1f) ship.removeCustomData(EXPANSION_KEY);
+    }
+
+    private static void updateEnrageSmoke(ShipAPI ship) {
+        float strength = ship.getCustomData().containsKey(ENRAGE_SEQUENCE_KEY) ? 1f : 0f;
+        Object expansion = ship.getCustomData().get(EXPANSION_KEY);
+        if (expansion instanceof BubbleExpansion) {
+            strength = 1f - ((BubbleExpansion) expansion).elapsed / BUBBLE_EXPANSION_DURATION;
+        }
+        if (strength <= 0f) {
+            restoreEnrageSmoke(ship);
+            return;
+        }
+        DwellerShroud shroud = DwellerShroud.getShroudFor(ship);
+        if (shroud == null) return; // Retry when the native renderer has initialized.
+        DwellerShroud.DwellerShroudParams params = shroud.getShroudParams();
+        Object cached = ship.getCustomData().get(SMOKE_KEY);
+        EnrageSmoke smoke = cached instanceof EnrageSmoke ? (EnrageSmoke) cached : null;
+        if (smoke == null || smoke.params != params) {
+            restoreEnrageSmoke(ship);
+            smoke = new EnrageSmoke(params);
+            ship.setCustomData(SMOKE_KEY, smoke);
+        }
+        smoke.apply(strength);
+    }
+
+    private static void restoreEnrageSmoke(ShipAPI ship) {
+        Object cached = ship.getCustomData().get(SMOKE_KEY);
+        if (cached instanceof EnrageSmoke) {
+            ((EnrageSmoke) cached).apply(0f);
+            ship.removeCustomData(SMOKE_KEY);
+        }
+    }
+
+    private static void clearEnrage(ShipAPI ship) {
+        restoreEnrageSmoke(ship);
+        ship.removeCustomData(ENRAGE_SEQUENCE_KEY);
+        ship.removeCustomData(EXPANSION_KEY);
+        ship.removeCustomData(BudaiConvulsiveLungeSystem.TARGET_KEY);
     }
 
     private static float getCurrentRadius(ShipAPI ship) {
@@ -508,7 +631,48 @@ public final class CharybdisDistortion extends DwellerHullmod {
         }
     }
 
-    /** Gives the enlarged post-enrage field a restrained red cast. */
+    private static final class BubbleExpansion {
+        private final float startRadius;
+        private float elapsed;
+        private BubbleExpansion(float startRadius) { this.startRadius = startRadius; }
+    }
+
+    private static final class EnrageSmoke {
+        private final DwellerShroud.DwellerShroudParams params;
+        private final int normalCount;
+        private final int overloadedCount;
+        private final float rate;
+
+        private EnrageSmoke(DwellerShroud.DwellerShroudParams params) {
+            this.params = params;
+            normalCount = params.negativeParticleNumBase;
+            overloadedCount = params.negativeParticleNumOverloaded;
+            rate = params.negativeParticleGenRate;
+        }
+
+        private void apply(float strength) {
+            float countMult = 1f + (ENRAGE_SMOKE_COUNT_MULT - 1f) * strength;
+            params.negativeParticleNumBase = Math.round(normalCount * countMult);
+            params.negativeParticleNumOverloaded = Math.round(overloadedCount * countMult);
+            params.negativeParticleGenRate = rate * (1f + (ENRAGE_SMOKE_RATE_MULT - 1f) * strength);
+        }
+    }
+
+    private static final class RetreatGuard {
+        private final CombatFleetManagerAPI manager;
+        private final CombatTaskManagerAPI tasks;
+        private final boolean forceEngage;
+        private final boolean preventFullRetreat;
+
+        private RetreatGuard(CombatFleetManagerAPI manager, CombatTaskManagerAPI tasks) {
+            this.manager = manager;
+            this.tasks = tasks;
+            forceEngage = manager.isCanForceShipsToEngageWhenBattleClearlyLost();
+            preventFullRetreat = tasks != null && tasks.isPreventFullRetreat();
+        }
+    }
+
+    /** Preserves the enlarged native Maw body and its blue-shifted shroud. */
     private static final class CharybdisShipCreator
             extends ShroudedMawShipCreator {
         @Override
