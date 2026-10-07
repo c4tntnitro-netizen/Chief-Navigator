@@ -1,5 +1,8 @@
 # Chief Navigator
 
+**Version 0.5.0 — Starsector 0.98a.** Download the installable ZIP from
+[GitHub Releases](https://github.com/c4tntnitro-netizen/Chief-Navigator/releases/latest).
+
 After completing Labor V's final debrief, **Hunt Budai** and **Hunt Ungaikyo** begin as separate missions. Speak to **Captain Aias Kleon** through FOB Ithaca's comm directory for each location: Avici for Budai, and the derelict Guardian in Last Light for Ungaikyo. Each briefing updates its own quest and map marker; each permanent boss defeat completes only that hunt. Already defeated targets are skipped. The missions add no fleets or rewards and leave existing encounter gates, rosters and the ending cinematic unchanged.
 
 Chief Navigator is a standalone Starsector quest mod centered on **Adept of the Stars and Waves**, a quest about trusting a master smuggler-navigator named Sinni with an expedition fleet and following her through a once-in-a-lifetime route across the Abyss.
@@ -10,9 +13,9 @@ The route begins at a transient departure point called **Waypoint Troy** and end
 
 At Ithaca, the apparent derelict field awakens into an Explorarium defense reserve fighting a new THREAT incursion. These deliberately limited, post-THREAT Domain drones cannot win unaided. The player's climactic objective is not merely to destroy the enemy, but to make the derelicts win and preserve as much of Ithaca's irreplaceable reserve as possible.
 
-The authoritative inherited concept and its decision boundaries are recorded in [docs/CONCEPT.md](docs/CONCEPT.md). Implementation is intentionally limited to a loadable skeleton until the quest architecture is designed against those decisions.
+The inherited concept and its decision boundaries are recorded in [docs/CONCEPT.md](docs/CONCEPT.md).
 
-## Current scaffold
+## Included content
 
 - Starsector `0.98a` metadata
 - Java mod plugin and priority bar quest introducing Sinni
@@ -57,8 +60,11 @@ The authoritative inherited concept and its decision boundaries are recorded in 
 
 ## Installation
 
-Download this repository's ZIP and extract its top-level folder into
-`Starsector/mods`. The mod folder must contain `mod_info.json` directly.
+Download `Chief-Navigator-0.5.0.zip` from
+[the 0.5.0 release](https://github.com/c4tntnitro-netizen/Chief-Navigator/releases/tag/v0.5.0)
+and extract its `Chief Navigator` folder into `Starsector/mods`.
+The mod folder must contain `mod_info.json` directly. When updating, replace
+the previous mod folder with the new one rather than merging its files.
 Install GraphicsLib 1.10.2 or newer and Combat Chatter 1.15.0 or newer, then
 enable Chief Navigator and those dependencies in the Starsector launcher.
 The included `jars/ChiefNavigator.jar` is already compiled for Starsector 0.98a.
@@ -140,6 +146,11 @@ stable jar included in GitHub downloads, close Starsector and run:
 
 The release build produces `jars/ChiefNavigator.jar`. Both modes validate the
 dialogue CSV with the installed game's native loader before compiling.
+
+After committing the release build and metadata, run `python tools/package_release.py`
+to create the installable ZIP and SHA-256 checksum in `dist/`. Packaging includes
+all runtime data, referenced graphics, registered audio, credits and license notices;
+art masters, source recordings, tools and generated build files remain in the repository.
 
 Ungaikyo keeps Fragment Swarm's mechanics but uses vanilla Threat classification
 to omit the blotchy player-retrofit overlay from its dark hull sprite.
