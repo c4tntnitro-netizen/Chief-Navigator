@@ -1,12 +1,17 @@
 # Audio sources
 
+Original project code and original procedural effects are covered by the
+[MIT License](../../LICENSE). Third-party music and supplied recordings retain
+their owners' terms; see [Third-party materials](../../THIRD_PARTY_NOTICES.md)
+and the complete [README music credits](../../README.md#music-credits).
+
 `omega_time_freeze.wav` and `omega_time_freeze_charge.wav` are original,
 procedurally synthesized effects. They contain no recordings, samples, or other
 third-party audio. The reproducible source is
 `tools/generate_time_freeze_audio.ps1`; both effects may be used, modified, and
 redistributed with the mod without attribution.
 
-`budai_enrage_screech.wav` is likewise an original procedural synthesis with
+The archived `budai_enrage_screech_OLD.wav` is an original procedural synthesis with
 no recordings, samples, or third-party audio. Its reproducible source is
 `tools/generate_budai_screech.ps1`, and it may be used, modified, and
 redistributed with the mod without attribution.
@@ -104,3 +109,44 @@ redistribution/resale or Content ID registration. This is not CC BY 4.0.
 - Usage and bundling terms: https://peritune.com/about/
 - Artist publication date: 2026-03-21
 - Unchanged runtime Ogg SHA256: `E54131E7449D06980E77BAF4B22811CFD48C5B1C6B7D2CC694BFC4D2B78651C9`
+
+## Additional retained music and source files
+
+The KARMA tracks also have Ogg versions: `KARMA_1Loop.ogg`,
+`KARMA_Loop_A.ogg` and `KARMA_Loop_B.ogg`. All six KARMA MP3/Ogg files are
+credited to **zippy**, remain inactive, and are excluded from MIT licensing.
+Sanzu's runtime Ogg has the same **zippy** credit as its supplied MP3.
+
+`sounds/music/source/chief_navigator_alpha_odyssey_exploration_no_leadin.ogg`
+is a retained source variant of **Rising Up**, credited **Prod. Ryini Beats**
+under the same recorded noncommercial-use terms as the exploration cue.
+
+`sounds/music/chief_navigator_final_labor_mission.ogg` is the instrumental
+**My Gospel is Gunpowder**, by **Lappy and Autodidactic Studios**, featuring
+**The Epoch House Choir**. Its source is
+[the selected instrumental recording](https://www.youtube.com/watch?v=skkZwYFoa-0).
+
+`sounds/music/chief_navigator_final_labor_fight.ogg` is the vocal
+**My Gospel is Gunpowder**, by **Lappy and Autodidactic Studios**, featuring
+**Christina R and The Epoch House Choir**. The
+[vocal release](https://www.newgrounds.com/audio/listen/1497762) lists
+[CC BY-NC-ND 3.0](https://creativecommons.org/licenses/by-nc-nd/3.0/).
+Both recordings were converted to Ogg Vorbis without changing their
+compositions. They are not covered by the project's MIT grant.
+
+## Supplied sound effects
+
+The current `budai_enrage_screech.wav` is a PCM conversion of the supplied
+`budai_enrage_screech.mp3`, not the archived procedural effect. The source
+recording's creator and license have not been recorded, so neither that MP3
+nor its converted WAV is represented as original MIT-licensed audio.
+The runtime WAV restores the existing sound registration's missing file.
+The recording was converted without trimming, looping or other edits:
+
+```sh
+ffmpeg -n -i sounds/chief_navigator/budai_enrage_screech.mp3 -vn -c:a pcm_s16le -ar 44100 sounds/chief_navigator/budai_enrage_screech.wav
+```
+
+The provenance and license for `naval_gun_load.wav` and `naval_gun_fire.wav`
+have likewise not been recorded. This project does not assert ownership or
+grant MIT rights to those supplied recordings.

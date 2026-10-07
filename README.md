@@ -46,7 +46,7 @@ The authoritative inherited concept and its decision boundaries are recorded in 
 - The `ForceFinalLabor` console command is a test shortcut that exposes Labor V without deleting or falsely completing earlier Labor content, restores its three bastions and full TFS opening rosters, resets only the four-wave encounter, and immediately materializes the three opening Third Strikes.
 - Each of the six derelict research stations drops one unique Ithaca defense component—and no AI cores: Colossal Traverse Macroservos, Naval Cycling Regulator, Caged-Arc Projector, Interception Command Matrix, Siege Munitions Compiler, or Fortress Autoloader Core. Components remain inert cargo until transferred to Menelaus at FOB Ithaca; installation consumes the item and permanently activates only its matching upgrade. Labor II requires delivery and installation of any four distinct components. Menelaus's contact menu continues to track all six installed, recovered, and missing parts and names the exact system and planet orbited by every unrecovered component's station; the final two remain optional and recoverable. The missile batteries carry Hammer torpedoes by default, while the compiler converts them to guided Atropos torpedoes. If Isa has ever joined the officer roster, her permanent naval package adds 50% shield damage and one half-strength, non-propagating refraction beam on enemy-shield contact. The `MaxUpgradeWallModules` console command enables all six research upgrades without removing research stations or advancing Labor II.
 - Completing the final Labor releases FOB Ithaca's gate for normal scanning and reveals that Gautama was only a local coalescence of Ungaikyo, a nanometer-scale black filament web spanning light-years through Devoured Reach. Ungaikyo gathers in Last Light around the derelict Guardian as a unique dark Fabricator with only five initial escorts: one Hive, Overseer, Line, Assault, and Skirmish unit, with no escort Fabricators. The wreck cannot be recovered until Ungaikyo is permanently defeated. At battle start it summons military ships from the player's campaign roster up to a separate 240-DP cap; if those military selections total less than 200 DP, civilian slots are replaced by same-size stock THREAT units until the summon reaches 200 DP or exhausts the roster. These combat-only reflections cost zero DP and do not reduce the escort's deployment allowance. Destroyed reflections are reconstructed one at a time with the THREAT construction animation, remain unrecoverable, and collapse with Ungaikyo. A third-party ship failure quarantines only that source. Gautama reconstruction is suppressed, and Ungaikyo's defeat permanently retires the encounter and unlocks the Guardian's normal recovery interaction. Completion also grows ordinary authored Starving Threat fleets to a stable First, Second, or Third Strike roster; Ungaikyo is exempt. Losing the center battle instead begins renewable Starving Threat incursions from every gate in the Sector, including Core World gates.
-- Budai is an enlarged, blue-shifted Shrouded Maw that acts as a persistent vengeance hunter inside Avici. His controller receives the player's exact live position without using campaign sensors while both fleets are there. He has 2x hull, half armor, widened overdriven Pseudoparticle Jets, Convulsive Lunge, and oversized Hungering Rifts with 1.5x missile durability. He holds his ground, including while venting, and uses ordinary offensive lunges instead of backward escape jumps. He has no HP regeneration. Strictly below 50% HP his music switches irreversibly from Heart of Corruption to The Savor of Tomorrow, even if his hull later rises above half. At or below 50% hull he gives a harsh screech and makes four lunges in random directions and over random distances, each honoring Budai's twelve-second cooldown and native activation readiness; only then does his distortion radius quadruple and double his Hungering Rift fire rate. No leap clears or shortens its live remaining cooldown, including after the fourth. After the player defeats Budai, he disgorges a consumed Onslaught Mk.I in a one-time salvage scene. The wreck is cut apart rather than recovered, yielding two mountable clones of the vanilla Heavy Adjudicator with Isa's help, or one without her. They keep the stock weapon's art, projectile, sound, firing behavior, ammo, and combat statistics; only the built-in-only restriction is removed, and their 500,000-credit base value makes them the most expensive ballistic weapons in the game. Isa helps with the extraction if she has joined the fleet. Budai is permanently defeated and never respawns. He is always authored as a single lone boss, with no post-Labor escort escalation.
+- Budai is an enlarged, blue-shifted Shrouded Maw that acts as a persistent vengeance hunter inside Avici. His controller receives the player's exact live position without using campaign sensors while both fleets are there. He has 1.4x vanilla Maw hull (30% less than his previous hull), half armor, widened overdriven Pseudoparticle Jets, Convulsive Lunge, and oversized Hungering Rifts with 1.5x missile durability. He holds his ground, including while venting, and uses ordinary offensive lunges instead of backward escape jumps. He has no passive HP regeneration. Strictly below 50% HP his music switches irreversibly from Heart of Corruption to The Savor of Tomorrow, even if his hull later rises above half. At or below 50% hull he gives a harsh screech and makes four lunges in random directions and over random distances, each honoring Budai's twelve-second cooldown and native activation readiness; only then does his distortion radius quadruple and double his Hungering Rift fire rate. No leap clears or shortens its live remaining cooldown, including after the fourth. After the player defeats Budai, he disgorges a consumed Onslaught Mk.I in a one-time salvage scene. The wreck is cut apart rather than recovered, yielding two mountable clones of the vanilla Heavy Adjudicator with Isa's help, or one without her. They keep the stock weapon's art, projectile, sound, firing behavior, ammo, and combat statistics; only the built-in-only restriction is removed, and their 500,000-credit base value makes them the most expensive ballistic weapons in the game. Isa helps with the extraction if she has joined the fleet. Budai is permanently defeated and never respawns. He is always authored as a single lone boss, with no post-Labor escort escalation.
 - The Devoured Ring uses a custom eaten-away gateway sprite but is never scannable or part of the Janus network. Inspecting it instead recovers navigation information pointing from the Orion Knot toward the Domain heartland
 - Persistent, plainly detectable Task Force Spartan fleet in the Odyssey Expanse: one XIV Onslaught and two XIV Dominators, continuously restored outside battle, followed after 60 seconds by a leading Eagle XIV and two flanking Lashers entering through the combat map's bottom border
 - Menelaus and FOB Ithaca's three Spartan guard fleets belong to a hidden Task Force Spartan faction with fixed cooperative standing toward the player and fixed hostile standing toward both Starving Threat factions
@@ -171,7 +171,39 @@ the `chief_navigator_no_mirror` tag to a hull or variant. Base-hull exclusions
 cover skins and D-hulls; an excluded nested module excludes the whole parent.
 Excluded sources consume no summon budget and get no substitute reflection.
 
-## Music credit
+## License
+
+Chief Navigator's original code, dialogue, documentation, gameplay additions
+and original assets are available under the [MIT License](LICENSE), copyright
+2026 c4tntnitro-netizen. Third-party music, Starsector-derived assets and other
+third-party material retain their owners' terms and are excluded from that
+grant. See [Third-party materials](THIRD_PARTY_NOTICES.md) for the scope and
+recorded terms.
+
+## Music credits
+
+Every bundled music file is credited below, including inactive and source
+versions. Paths in this table are relative to `sounds/music/`.
+
+| Music and artist credit | Bundled files | Use and source |
+| --- | --- | --- |
+| **Rising Up — Prod. Ryini Beats** | `chief_navigator_alpha_odyssey_exploration.ogg`; `source/chief_navigator_alpha_odyssey_exploration_no_leadin.ogg` | Alpha Odyssey exploration. [Recording](https://www.youtube.com/watch?v=ZqttIDUBYlg). |
+| **Heart of Corruption — Music by Lappy** | `chief_navigator_budai_battle.ogg` | Budai opening and ordinary Gautama battles. [Recording](https://www.youtube.com/watch?v=gBaNsd3Ycc8). |
+| **Watcher of the Cycle -Scene02- (NoVox) — Music by zippy** | `chief_navigator_sanzu_exploration.ogg`; `chief_navigator_sanzu_exploration.mp3` | Sanzu exploration; official June 2026 members-only source download. [Recording](https://www.youtube.com/watch?v=R-4y_0oisEo). |
+| **KARMA — Music by zippy** | `KARMA_1Loop.ogg`, `KARMA_Loop_A.ogg`, `KARMA_Loop_B.ogg`; corresponding `.mp3` files | Inactive former Avici playlist. Artist credit comes from the supplied file metadata. |
+| **My Gospel is Gunpowder (instrumental) — Lappy and Autodidactic Studios, featuring The Epoch House Choir** | `chief_navigator_final_labor_mission.ogg` | Labor V campaign phase. [Instrumental recording](https://www.youtube.com/watch?v=skkZwYFoa-0). |
+| **My Gospel is Gunpowder — Lappy and Autodidactic Studios, featuring Christina R and The Epoch House Choir** | `chief_navigator_final_labor_fight.ogg` | Labor V center battle. [Vocal recording and license](https://www.newgrounds.com/audio/listen/1497762). |
+| **Abyssal Rhapsody — Music by Lappy** | `chief_navigator_final_labor_perimeter.ogg` | Scylla, Siren and Cyclops Strike battles. [Recording](https://www.youtube.com/watch?v=gW2_9Vz_aFI). |
+| **Lord of Ashes — Music by Lappy** | `chief_navigator_ungaikyo_opening.ogg` | Ungaikyo opening. [Selected recording](https://www.youtube.com/watch?v=4nrI88fmc-I). |
+| **The Savor of Tomorrow — Music by Lappy** | `chief_navigator_ungaikyo_enraged.ogg` | Budai and Ungaikyo below-half-hull cue. [Recording](https://www.youtube.com/watch?v=vLWEkvpPBDY). |
+| **Glistening Ripples — Music by PeriTune (Sei Mutsuki)** | `chief_navigator_sinni_ending.ogg`; `source/Peritune_Glistening_Ripples.zip` | Labor V ending after ten seconds of silence. [Track and official download](https://peritune.com/blog/2026/03/21/glistening-ripples/); [selected recording](https://www.youtube.com/watch?v=DUWzOMtUoIE). |
+| **Vanilla Shrouded Dweller encounter cue — Starsector / Fractal Softworks and its music creators** | No bundled copy; native `music_dweller_encounter_hostile` cue | Avici exploration. Supplied by the installed [Starsector game](https://fractalsoftworks.com/). |
+
+The music recordings are excluded from the MIT license. Keep these artist
+credits, source links and their applicable terms. See
+[Third-party materials](THIRD_PARTY_NOTICES.md#music) and
+[Audio sources](sounds/chief_navigator/AUDIO_SOURCES.md) for source and license
+records.
 
 Alpha Odyssey's exploration theme is **Rising Up**, produced by **Ryini
 Beats**. It is used under the artist's stated terms permitting free
@@ -201,9 +233,9 @@ Starsector. The original supplied MP3 files are retained only as source media.
 Labor V's campaign phase and center breach use **My Gospel is Gunpowder** and
 its instrumental version by Lappy
 and Autodidactic Studios, featuring The Epoch House Choir and, on the vocal
-version, Christina R. The music is redistributed for this noncommercial mod
+version, Christina R. The vocal release is listed
 under [CC BY-NC-ND 3.0](https://creativecommons.org/licenses/by-nc-nd/3.0/).
-The source audio was converted to Ogg Vorbis without altering the composition.
+Both source recordings were converted to Ogg Vorbis without altering their compositions; the instrumental source is credited separately.
 
 - [Instrumental source](https://www.youtube.com/watch?v=skkZwYFoa-0)
 - [Vocal source and license record](https://www.newgrounds.com/audio/listen/1497762)

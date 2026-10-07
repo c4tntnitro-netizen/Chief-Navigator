@@ -66,7 +66,7 @@ public final class CharybdisDistortion extends DwellerHullmod {
     private static final float OUTSIDE_DAMAGE_MULT = 0.7f;
     private static final float DEFLECTED_POPUP_COOLDOWN = 0.2f;
     private static final float DEFLECTED_POPUP_SIZE = 28f;
-    private static final float HULL_MULT = 2f;
+    private static final float HULL_MULT = 1.4f;
     private static final float ARMOR_MULT = 0.5f;
     private static final float BODY_SCALE = 1.5f;
     private static final float BLUE_FROM_RED = 0.36f;
