@@ -28,21 +28,12 @@ public final class DriftingWallEncounter {
     /**
      * Keep the temporary hostile Wall representation distinct from the
      * liberated Domain Combat Guard faction. The Wall assault itself does
-     * not pull in campaign patrols; its authored hostile escorts remain.
+     * not pull in campaign patrols or spawn an authored guard escort.
      */
     public static final String COMBAT_PROXY_FACTION_ID = Factions.DERELICT;
     private static final String BASE_VARIANT_ID =
             "chief_navigator_drifting_wall_base_Standard";
-    private static final String[] DRONE_GUARD_VARIANTS = new String[] {
-        "chief_navigator_combat_guard_rampart_Standard",
-        "chief_navigator_combat_guard_rampart_Standard",
-        "chief_navigator_combat_guard_defender_PD",
-        "chief_navigator_combat_guard_defender_PD",
-        "chief_navigator_combat_guard_picket_Assault",
-        "chief_navigator_combat_guard_sentry_FS",
-        "chief_navigator_combat_guard_warden_Defense",
-        "chief_navigator_combat_guard_warden_Defense"
-    };
+    private static final String[] DRONE_GUARD_VARIANTS = new String[0];
     private static final String SPAWNED = "$chief_navigator_drifting_wall_spawned";
     private static final String COMBAT_DISABLED_MARKER =
             "$chief_navigator_drifting_wall_reactor_disabled_in_combat";

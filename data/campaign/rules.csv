@@ -129,7 +129,7 @@ chiefNavigatorSinniEventideRoute,DialogOptionSelected,$option == chief_navigator
 
 She slides a manifest across the table.
 
-""The route will only hold an active fleet worth thirty deployment points. There is an anchorage at Troy where we can store everything else until we return.""",0:chief_navigator_sinni_eventide_preparation:""What should I bring?".",Waypoint Troy and fleet-limit explanation.
+""The route will only hold an active fleet worth fifty deployment points. There is an anchorage at Troy where we can store everything else until we return.""",0:chief_navigator_sinni_eventide_preparation:""What should I bring?".",Waypoint Troy and fleet-limit explanation.
 chiefNavigatorSinniEventidePreparation,DialogOptionSelected,$option == chief_navigator_sinni_eventide_preparation,,"""Efficiency Overhaul wherever it fits. Insulated Engine Assembly, or anything else that reduces your sensor profile. At least one dedicated supply ship and one fuel ship.""
 
 Sinni takes a measured sip.
@@ -4696,14 +4696,8 @@ chiefNavigatorWallReady,ChiefNavigatorDriftingWall,ChiefNavigatorDriftingWallCMD
 chiefNavigatorWallEngage,DialogOptionSelected,$option == chief_navigator_drifting_wall_engage,ChiefNavigatorDriftingWallCMD engage,,,Starts the rules-driven Wall battle without campaign patrol reinforcements.
 chiefNavigatorWallLeave,DialogOptionSelected,$option == chief_navigator_drifting_wall_leave,DismissDialog,,,Leaves the Drifting Wall interaction.
 chiefNavigatorDronePatrol,ChiefNavigatorDronePatrol,,"ChiefNavigatorDronePatrolCMD init
-FireAll ChiefNavigatorDronePatrolOptions
-ChiefNavigatorDronePatrolCMD configureStoryOption chief_navigator_drone_patrol_recruit ""Recruited a Domain Combat Guard drone.""","A short authentication exchange brings $chiefNavigatorDronePatrolName onto your tactical display. Its drones carry Menelaus's restored IFF and hold their course while your fleet approaches. You can authorize the reassignment of a random drone to your command for one story point; the patrol currently has $chiefNavigatorDroneCount ships available.",,Friendly patrol recruitment hub; story confirmation is attached only after all choices exist.
-chiefNavigatorDronePatrolRecruitOption,ChiefNavigatorDronePatrolOptions,ChiefNavigatorDronePatrolCMD hasShips,,,10:chief_navigator_drone_patrol_recruit:Authorize a drone transfer.,Native one-story-point confirmation; choice disabled when no story points remain.
-chiefNavigatorDronePatrolLeaveOption,ChiefNavigatorDronePatrolOptions,,,,100:chief_navigator_drone_patrol_leave:Leave.,Always preserves an exit including after the last drone transfers.
-chiefNavigatorDronePatrolRecruit,DialogOptionSelected,$option == chief_navigator_drone_patrol_recruit,FireBest ChiefNavigatorDronePatrolResult,,,The native confirmed delegate has already resolved payment and transfer; this rule only renders the result.
-chiefNavigatorDronePatrolSuccess,ChiefNavigatorDronePatrolResult,$chiefNavigatorDroneRecruited,,"The patrol releases $chiefNavigatorDroneShipName from its formation. Your officers verify the Domain-Security authorization and bring the drone onto the fleet network as it takes station with your ships.",100:chief_navigator_drone_patrol_continue:Continue.,Shows the actual transferred ship without duplicating the selected-option echo.
-chiefNavigatorDronePatrolRejected,ChiefNavigatorDronePatrolResult,!$chiefNavigatorDroneRecruited,,The transfer cannot be completed. No story point has been spent.,100:chief_navigator_drone_patrol_continue:Continue.,Safely returns when confirmation-time revalidation rejects a stale recruitment offer.
-chiefNavigatorDronePatrolContinue,DialogOptionSelected,$option == chief_navigator_drone_patrol_continue,FireBest ChiefNavigatorDronePatrol,,,Reopens the patrol with its remaining actual roster.
+FireAll ChiefNavigatorDronePatrolOptions","A short authentication exchange brings $chiefNavigatorDronePatrolName onto your tactical display. Its drones carry Menelaus's restored IFF and hold their course while your fleet approaches.",,Friendly patrol authentication; no ship transfers or story-point purchases.
+chiefNavigatorDronePatrolLeaveOption,ChiefNavigatorDronePatrolOptions,,,,100:chief_navigator_drone_patrol_leave:Leave.,Always preserves an exit from the friendly patrol interaction.
 chiefNavigatorDronePatrolLeave,DialogOptionSelected,$option == chief_navigator_drone_patrol_leave,DismissDialog,,,Leaves the friendly patrol interaction.
 chiefNavigatorAviciHabitatDispatch,ChiefNavigatorAviciHabitat,,"ChiefNavigatorAviciHabitatCMD init
 FireBest ChiefNavigatorAviciHabitatStage",,,Initializes local dialogue values before dispatching to the persistent habitat stage.
@@ -5286,7 +5280,7 @@ chiefNavigatorTroyAnchorageAdvice,ChiefNavigatorTroyAnchorage_advice,,ChiefNavig
 
 ""Use Efficiency Overhaul wherever it fits. Insulated Engine Assembly and other hullmods that reduce your sensor profile will make the crossing less dangerous. Bring at least one dedicated supply ship and one fuel ship. If either runs dry out there, no one is coming to refill it.""","0:chief_navigator_troy_back:Back.
 100:chief_navigator_troy_leave:Leave.",Sinni's expedition preparation advice at Waypoint Troy.
-chiefNavigatorTroyAnchorageInvalid,ChiefNavigatorTroyAnchorage_invalid,,,"The departure lock refuses the fleet manifest. Store ships until the active fleet is worth no more than 30 deployment points.",0:chief_navigator_troy_back:Back.,Runtime safeguard for an invalid departure fleet.
+chiefNavigatorTroyAnchorageInvalid,ChiefNavigatorTroyAnchorage_invalid,,,"The departure lock refuses the fleet manifest. Store ships until the active fleet is worth no more than 50 deployment points.",0:chief_navigator_troy_back:Back.,Runtime safeguard for an invalid departure fleet.
 chiefNavigatorTroyAnchorageOpened,ChiefNavigatorTroyAnchorage_opened,,,"Space folds open beside the anchorage. The Troy Terminus is active, and Sinni lays in the short approach.",100:chief_navigator_troy_done:Continue.,Route-opening acknowledgement.
 chiefNavigatorTroyTerminusMain,ChiefNavigatorTroyTerminus_main,,,"The Troy Terminus hangs open where Sinni's calculations predicted: a rotating wound in space with a cold nebular glow beyond it.
 
@@ -5294,7 +5288,7 @@ The passage accepts no more than $chiefNavigatorTroyDPLimit deployment points in
 
 Active fleet: $chiefNavigatorTroyDP / $chiefNavigatorTroyDPLimit deployment points.","0:chief_navigator_troy_enter:Enter the Troy Terminus.
 100:chief_navigator_troy_terminus_leave:Leave.",Troy Terminus outbound interaction.
-chiefNavigatorTroyTerminusInvalid,ChiefNavigatorTroyTerminus_invalid,,,"The wormhole shears away from the fleet's drive field. The active fleet must remain at or below 30 deployment points.",0:chief_navigator_troy_terminus_back:Back.,Runtime safeguard for an invalid Troy transit.
+chiefNavigatorTroyTerminusInvalid,ChiefNavigatorTroyTerminus_invalid,,,"The wormhole shears away from the fleet's drive field. The active fleet must remain at or below 50 deployment points.",0:chief_navigator_troy_terminus_back:Back.,Runtime safeguard for an invalid Troy transit.
 chiefNavigatorTroyTerminusTransit,ChiefNavigatorTroyTerminus_transit,,,"Sinni guides your fleet through a treacherous series of slipstreams and gravity boosts. After expending half your supplies and fuel, your fleet arrives at the Orion Knot Sector.
 
 Sinni flags FOB Ithaca in Ashen Verge on the expedition map.",100:chief_navigator_troy_transit:Continue.,Black-screen Troy transit narration and FOB Ithaca objective reveal.

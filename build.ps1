@@ -3,11 +3,16 @@ param([switch]$Release)
 $ErrorActionPreference = "Stop"
 
 $modRoot = $PSScriptRoot
-$starsectorRoot = Split-Path (Split-Path $modRoot -Parent) -Parent
+$parentRoot = Split-Path $modRoot -Parent
+$starsectorRoot = @($parentRoot, (Split-Path $parentRoot -Parent)) |
+    Where-Object { Test-Path -LiteralPath (Join-Path $_ 'starsector-core') -PathType Container } |
+    Select-Object -First 1
+if (-not $starsectorRoot) { throw "Cannot locate Starsector beside the source repository." }
+$modsRoot = Join-Path $starsectorRoot 'mods'
 $coreRoot = Join-Path $starsectorRoot "starsector-core"
-$graphicsLibJar = Join-Path (Split-Path $modRoot -Parent) "GraphicsLib\jars\Graphics.jar"
-$consoleCommandsJar = Join-Path (Split-Path $modRoot -Parent) "Console Commands\jars\lw_Console.jar"
-$combatChatterJar = Join-Path (Split-Path $modRoot -Parent) "Combat Chatter\jars\CombatChatter.jar"
+$graphicsLibJar = Join-Path $modsRoot "GraphicsLib\jars\Graphics.jar"
+$consoleCommandsJar = Join-Path $modsRoot "Console Commands\jars\lw_Console.jar"
+$combatChatterJar = Join-Path $modsRoot "Combat Chatter\jars\CombatChatter.jar"
 $jdkRoot = Join-Path $starsectorRoot "jdk-23+7\bin"
 $outputRoot = Join-Path $modRoot "out"
 $jarDirectory = Join-Path $modRoot "jars"
@@ -160,7 +165,12 @@ Assert-RuleCommandRegistration -RegisteredPackages $settings.ruleCommandPackages
     -CommandSources $commandSources
 
 New-Item -ItemType Directory -Force -Path $outputRoot, $jarDirectory | Out-Null
-Get-ChildItem -LiteralPath $outputRoot -Force | Remove-Item -Recurse -Force
+$resolvedOutput = (Resolve-Path -LiteralPath $outputRoot).Path
+$resolvedProject = (Resolve-Path -LiteralPath $modRoot).Path
+if (-not $resolvedOutput.StartsWith($resolvedProject + '\', [StringComparison]::OrdinalIgnoreCase)) {
+    throw "Build output must remain inside the source repository."
+}
+Get-ChildItem -LiteralPath $resolvedOutput -Force | Remove-Item -Recurse -Force
 
 & (Join-Path $jdkRoot "javac.exe") -encoding UTF-8 --release 17 -cp $classpath -d $outputRoot $sources
 if ($LASTEXITCODE -ne 0) {

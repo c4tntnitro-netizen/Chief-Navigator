@@ -15,9 +15,9 @@ import com.fs.starfarer.api.util.Misc;
 import java.util.Map;
 import org.lwjgl.input.Keyboard;
 
-/** Free storage and 30-DP checkpoint that opens the Troy Terminus. */
+/** Free storage and 50-DP checkpoint that opens the Troy Terminus. */
 public final class TroyDepartureInteraction extends ChoicePreservingDialogPlugin {
-    public static final float MAX_FLEET_DP = 30f;
+    public static final float MAX_FLEET_DP = 50f;
 
     private static final String TRIGGER_MAIN =
             "ChiefNavigatorTroyAnchorage_main";

@@ -45,7 +45,7 @@ public final class OdysseyExpanseInteraction extends ChoicePreservingDialogPlugi
             dialog.getOptionPanel().setEnabled(RETURN, false);
             dialog.getOptionPanel().setTooltip(
                     RETURN,
-                    "The active fleet must be reduced to 30 DP before it can return to Troy.");
+                    "The active fleet must be reduced to 50 DP before it can return to Troy.");
         } else {
             dialog.getOptionPanel().addOptionConfirmation(
                     RETURN,
@@ -83,7 +83,7 @@ public final class OdysseyExpanseInteraction extends ChoicePreservingDialogPlugi
         if (player == null
                 || fleetDP > TroyDepartureInteraction.MAX_FLEET_DP) {
             dialog.getTextPanel().addPara(
-                    "The return aperture rejects the fleet manifest. The active fleet must remain at or below 30 deployment points.",
+                    "The return aperture rejects the fleet manifest. The active fleet must remain at or below 50 deployment points.",
                     Misc.getNegativeHighlightColor());
             return;
         }

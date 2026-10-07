@@ -18,7 +18,9 @@ import com.fs.starfarer.api.combat.ShipVariantAPI;
 import com.fs.starfarer.api.fleet.FleetMemberAPI;
 import com.fs.starfarer.api.impl.campaign.ids.HullMods;
 import com.fs.starfarer.api.impl.campaign.ids.Tags;
-import com.fs.starfarer.api.impl.campaign.rulecmd.SetStoryOption.StoryOptionParams;
+import com.fs.starfarer.api.util.Misc.Token;
+import com.fs.starfarer.api.util.Misc.TokenType;
+import com.fs.starfarer.api.campaign.rules.MemKeys;
 import java.lang.reflect.Proxy;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -28,7 +30,7 @@ import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 
-/** Reassignment, cancellation, late validation, and exact native payment order. */
+/** Friendly patrol contacts cannot charge story points or transfer ships. */
 public final class DronePatrolRecruitmentRegression {
     interface Call { Object invoke(String name, Object[] args); }
 
@@ -173,6 +175,7 @@ public final class DronePatrolRecruitmentRegression {
             });
             dialog = mock(InteractionDialogAPI.class, (name, args) -> {
                 if (name.equals("getVisualPanel")) return panel;
+                if (name.equals("getInteractionTarget")) return patrol;
                 if (name.equals("addOptionSelectedText")) echoes++;
                 return null;
             });
@@ -183,86 +186,40 @@ public final class DronePatrolRecruitmentRegression {
             }
         }
 
-        ChiefNavigatorDronePatrolCMD.RecruitmentAction action() {
-            return new ChiefNavigatorDronePatrolCMD.RecruitmentAction(dialog,
-                    new StoryOptionParams("recruit", 1, "historianBP", "technology", "recruit"),
-                    patrol, memory(local));
-        }
-
-        void confirm(ChiefNavigatorDronePatrolCMD.RecruitmentAction action) {
-            // Verified native sequence: preConfirm, re-read cost, spend, confirm.
-            action.preConfirm();
-            Global.getSector().getPlayerStats().spendStoryPoints(
-                    action.getRequiredStoryPoints(), false, null, false,
-                    action.getBonusXPFraction(), action.getLogText());
-            action.confirm();
-        }
     }
 
     public static void main(String[] args) {
-        Fixture normal = new Fixture();
-        ChiefNavigatorDronePatrolCMD.RecruitmentAction first = normal.action();
-        check(first.getRequiredStoryPoints() == 1, "Confirmation must advertise exactly one point");
-        check(normal.points == 5 && normal.drones.size() == 3 && normal.ships.isEmpty(),
-                "Opening or canceling confirmation must have no effects");
-        normal.confirm(first);
-        check(normal.points == 4 && normal.spent == 1 && normal.echoes == 1,
-                "Confirmed selection must cost once and echo once");
-        check(normal.drones.size() == 2 && normal.ships.size() == 1
-                        && normal.members.stream().anyMatch(m -> m.api == normal.ships.get(0)),
-                "Recruited ship must be the original member removed from the source");
-        Member joined = normal.members.stream().filter(m -> m.api == normal.ships.get(0)).findFirst().get();
-        check(joined.clones == 1 && joined.permanent.contains(DomainSecurityIFFHullmod.HULLMOD_ID)
-                        && joined.tags.contains(Tags.TAG_AUTOMATED_NO_PENALTY),
-                "Transfer must attach normal permanent IFF/no-penalty authorization");
-        check(Boolean.TRUE.equals(normal.local.get("$chiefNavigatorDroneRecruited")),
-                "Result rule must receive successful transfer state");
-        normal.confirm(first);
-        check(normal.points == 4 && normal.ships.size() == 1 && normal.echoes == 1,
-                "Stale duplicate confirmation must not spend or transfer twice");
-        normal.confirm(normal.action());
-        normal.confirm(normal.action());
-        check(normal.drones.isEmpty() && normal.ships.size() == 3 && normal.points == 2,
-                "Each remaining original drone may be recruited for its own story point");
-        normal.confirm(normal.action());
-        check(normal.points == 2 && normal.ships.size() == 3,
-                "An exhausted patrol must not charge for or manufacture another drone");
-
-        Fixture latePoints = new Fixture();
-        ChiefNavigatorDronePatrolCMD.RecruitmentAction noPoints = latePoints.action();
-        latePoints.points = 0;
-        latePoints.confirm(noPoints);
-        check(latePoints.spent == 0 && latePoints.ships.isEmpty(),
-                "Confirmation must recheck points rather than trust opening state");
-        Fixture vanished = new Fixture();
-        vanished.exists = false;
-        vanished.confirm(vanished.action());
-        check(vanished.spent == 0 && vanished.drones.size() == 3 && vanished.ships.isEmpty(),
-                "Missing source patrol must fail without spending or moving ships");
-        Fixture inTransit = new Fixture();
-        inTransit.transitioning = true;
-        inTransit.confirm(inTransit.action());
-        check(inTransit.spent == 0 && inTransit.ships.isEmpty(), "Transition must defer recruitment");
-        Fixture failure = new Fixture();
-        failure.failAdd = true;
-        failure.confirm(failure.action());
-        check(failure.points == 5 && failure.drones.size() == 3 && failure.ships.isEmpty()
-                        && !Boolean.TRUE.equals(failure.local.get("$chiefNavigatorDroneRecruited")),
-                "Failed transfer must roll back the member and refund exactly one point");
-        Fixture foreign = new Fixture();
-        foreign.id = "some_other_guard_fleet";
-        check(!MenelausTrial.isFriendlyDronePatrol(foreign.patrol),
-                "A marker alone must not enroll a foreign fleet");
-        foreign.id = "chief_navigator_unsealed_guard_0";
-        foreign.patrolState.clear();
-        check(!MenelausTrial.isFriendlyDronePatrol(foreign.patrol),
-                "Namespace alone must not enroll an unmarked fleet");
-        Fixture random = new Fixture();
-        random.members.get(0).fighter = true;
-        random.members.get(1).station = true;
-        check(DronePatrolRecruitment.chooseRandom(random.patrol, new Random(2))
-                        == random.members.get(2).api,
-                "Random selection must exclude fighters and stations");
-        System.out.println("Friendly drone recruitment regression checks passed.");
+        SettingsAPI previousSettings = Global.getSettings();
+        SectorAPI previousSector = Global.getSector();
+        try {
+            Fixture fixture = new Fixture();
+            check(MenelausTrial.isFriendlyDronePatrol(fixture.patrol),
+                    "Exercise the exact marked patrol route, rather than an unrelated fleet");
+            ChiefNavigatorDronePatrolCMD command = new ChiefNavigatorDronePatrolCMD();
+            Map<String, MemoryAPI> memoryMap = Map.of(MemKeys.LOCAL, memory(fixture.local));
+            check(command.execute("test", fixture.dialog,
+                    List.of(new Token("init", TokenType.LITERAL)), memoryMap),
+                    "Friendly contact initialization remains available");
+            for (String action : List.of("hasShips", "configureStoryOption", "recruit", "transfer")) {
+                check(!command.execute("test", fixture.dialog,
+                        List.of(new Token(action, TokenType.LITERAL),
+                                new Token("chief_navigator_drone_patrol_recruit", TokenType.LITERAL),
+                                new Token("Recruited a drone", TokenType.LITERAL)), memoryMap),
+                        "Retired rule actions must not install a payment delegate: " + action);
+            }
+            check(!DronePatrolRecruitment.isAvailable(fixture.patrol)
+                            && DronePatrolRecruitment.getEligibleMembers(fixture.patrol).isEmpty()
+                            && DronePatrolRecruitment.chooseRandom(fixture.patrol, new Random(2)) == null
+                            && !DronePatrolRecruitment.transfer(fixture.patrol, fixture.members.get(0).api),
+                    "Retired direct entry points cannot transfer a real surviving drone");
+            check(fixture.points == 5 && fixture.spent == 0
+                            && fixture.drones.size() == 3 && fixture.ships.isEmpty()
+                            && fixture.members.stream().allMatch(member -> member.clones == 0),
+                    "Contact and stale recruitment attempts preserve points, rosters and variants");
+            System.out.println("PASS: friendly patrol contact and stale transfer actions cannot spend story points or move drones.");
+        } finally {
+            Global.setSector(previousSector);
+            Global.setSettings(previousSettings);
+        }
     }
 }

@@ -208,7 +208,7 @@ The lights beyond the window slide as Eventide's mirrors turn overhead.
 
 She slides a manifest across the table.
 
-"The route will only hold an active fleet worth thirty deployment points. There is an anchorage at Troy where we can store everything else until we return."
+"The route will only hold an active fleet worth fifty deployment points. There is an anchorage at Troy where we can store everything else until we return."
 + ["What should I bring?"] -> eventide_preparation
 
 === eventide_preparation ===

@@ -1,6 +1,5 @@
 package chiefnavigator.topography;
 
-import chiefnavigator.abilities.SinniAmbushStanceAbility;
 import chiefnavigator.quest.SinniBarEvent;
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.CargoAPI;
@@ -264,11 +263,6 @@ public final class SinniHyperspaceTopographyEventIntel extends HyperspaceTopogra
             return;
         }
         if (stage.id == SinniStage.DRIVE_MITES) {
-            if (Global.getSector().getPlayerFleet().getAbility(
-                    SinniAmbushStanceAbility.ID) == null) {
-                Global.getSector().getPlayerFleet().addAbility(
-                        SinniAmbushStanceAbility.ID);
-            }
             return;
         }
         if (stage.id instanceof SinniStage) return;
@@ -334,11 +328,8 @@ public final class SinniHyperspaceTopographyEventIntel extends HyperspaceTopogra
                             + "than only the most powerful ones.", initPad,
                     highlight, "Generate Slipsurge");
         } else if (stageId == SinniStage.DRIVE_MITES) {
-            info.addPara("Unlocks %s. While the stance is active, engaging a "
-                            + "hostile fleet from any terrain that reduces sensor "
-                            + "range or detectability gives you the option to force "
-                            + "a pursuit battle, as if the enemy were attempting to "
-                            + "retreat.", initPad, highlight, "Ambush Stance");
+            info.addPara("Increases the detection-range reduction of %s to %s.",
+                    initPad, highlight, "Running Dark", "65%");
         } else if (stageId == SinniStage.PURSUIT_BURN) {
             info.addPara("Sinni's %s makes generated slipsurges twice as wide and "
                             + "three times as long.", initPad, highlight,
@@ -396,7 +387,7 @@ public final class SinniHyperspaceTopographyEventIntel extends HyperspaceTopogra
                     .getIconName();
         }
         if (stageId == SinniStage.DRIVE_MITES) {
-            return Global.getSettings().getAbilitySpec(SinniAmbushStanceAbility.ID)
+            return Global.getSettings().getAbilitySpec(Abilities.GO_DARK)
                     .getIconName();
         }
         if (stageId == SinniStage.PURSUIT_BURN) {

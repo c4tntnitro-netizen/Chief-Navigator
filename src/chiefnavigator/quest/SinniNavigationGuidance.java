@@ -72,13 +72,13 @@ public final class SinniNavigationGuidance {
                         : TroyArrivalScript.findOdysseyWormhole(troy);
                 destination = withSystem("Troy Terminus", target);
                 objective = "Enter the open Terminus. The active fleet must "
-                        + "still be worth no more than 30 deployment points.";
+                        + "still be worth no more than 50 deployment points.";
             } else {
                 target = troy == null ? null
                         : TroyArrivalScript.findDepartureStation(troy);
                 destination = withSystem("Troy Expedition Anchorage", target);
                 objective = "Dock at the anchorage, store anything above the "
-                        + "30-DP expedition limit, and authorize the route.";
+                        + "50-DP expedition limit, and authorize the route.";
             }
             return finish(destination, objective, target);
         }

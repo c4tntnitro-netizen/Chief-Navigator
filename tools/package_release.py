@@ -9,7 +9,10 @@ from zipfile import ZIP_DEFLATED, ZipFile, ZipInfo
 
 
 ROOT = Path(__file__).resolve().parents[1]
-CORE = ROOT.parent.parent / "starsector-core"
+CORE = next((parent / "starsector-core" for parent in (ROOT.parent, ROOT.parent.parent)
+             if (parent / "starsector-core").is_dir()), None)
+if CORE is None:
+    raise SystemExit("Cannot locate Starsector beside the source repository")
 IMAGE = re.compile(r"graphics/[\w./ -]+\.(?:png|jpe?g|gif|dds)")
 
 

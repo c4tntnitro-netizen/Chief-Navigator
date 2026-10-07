@@ -5,6 +5,14 @@ Sinni expedition, Orion Knot systems, FOB Ithaca, five Labors and post-Labor hun
 
 ## Recent changes
 
+- Waypoint Troy now permits fleets up to 50 DP in both directions.
+- Ambush Stance upgrades Running Dark to a 65% detection-range reduction at
+  1,200 Hyperspace Topography points, replacing its former forced-pursuit effect.
+- Defeated hostile Combat Guard drones can enter ordinary battle recovery
+  without Automated Ships. Friendly patrols no longer offer a drone for 1 SP.
+- The hostile Drifting Wall has two operational naval lasers and no Guard escort.
+- Isa's portrait appears during assisted Budai salvage. Her permanent unlock
+  still grants two Heavy Adjudicators after she leaves the officer roster.
 - Budai uses Fearless AI and refuses retreat orders and fleet withdrawal. His
   half-hull lunge phase produces heavy smoke, followed by a five-second expansion
   of the distortion bubble as smoke emission returns to normal.
@@ -26,7 +34,7 @@ Sinni expedition, Orion Knot systems, FOB Ithaca, five Labors and post-Labor hun
 - The revised download removes about 39 MiB of inactive music and unused campaign
   artwork. Source assets and their credits remain in the repository; legacy hull
   textures remain available for existing saves. The ZIP's internal manifest
-  identifies the exact cleanup commit; the original v0.5.0 tag is preserved.
+  identifies the exact build commit; the original v0.5.0 tag is preserved.
 
 ## Installation
 

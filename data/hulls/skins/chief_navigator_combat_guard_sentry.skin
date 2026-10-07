@@ -5,5 +5,6 @@
   "descriptionPrefix": "A Domain Explorarium combat drone restored to the Combat Guard's cold-teal identification standard.",
   "incompatibleWithBaseHull": true,
   "spriteName": "graphics/ships/domain_combat_guard/combat_guard_sentry.png",
+  "removeHints": ["UNBOARDABLE"],
   "tags": ["no_dealer", "no_autofit", "restricted", "chief_navigator_domain_combat_guard"]
 }

@@ -2,56 +2,67 @@ package chiefnavigator.abilities;
 
 import chiefnavigator.topography.SinniHyperspaceTopographyEventIntel;
 import chiefnavigator.topography.SinniHyperspaceTopographyEventIntel.SinniStage;
+import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.CampaignFleetAPI;
-import com.fs.starfarer.api.campaign.CampaignTerrainAPI;
-import com.fs.starfarer.api.campaign.TerrainAIFlags;
-import com.fs.starfarer.api.impl.campaign.abilities.BaseToggleAbility;
+import com.fs.starfarer.api.impl.campaign.abilities.GoDarkAbility;
+import com.fs.starfarer.api.impl.campaign.ids.Stats;
+import com.fs.starfarer.api.ui.LabelAPI;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
 
-/** A persistent stance that enables Sinni's terrain-assisted ambushes. */
-public final class SinniAmbushStanceAbility extends BaseToggleAbility {
+/** Ambush Stance improves the player's ordinary Running Dark ability. */
+public final class SinniAmbushStanceAbility extends GoDarkAbility {
+    /** Retired standalone toggle, retained so its old instances can be removed. */
     public static final String ID = "chief_navigator_ambush_stance";
+    public static final float AMBUSH_DETECTABILITY_MULT = 0.35f;
 
-    @Override protected void activateImpl() { }
-    @Override protected void applyEffect(float amount, float level) { }
-    @Override protected void deactivateImpl() { }
-    @Override protected void cleanupImpl() { }
-
-    @Override
-    public boolean isUsable() {
-        return super.isUsable()
+    private boolean hasAmbushBenefit(CampaignFleetAPI fleet) {
+        return fleet != null && fleet.isPlayerFleet()
                 && SinniHyperspaceTopographyEventIntel.isTierActive(
                         SinniStage.DRIVE_MITES);
     }
 
+    @Override
+    protected void applyEffect(float amount, float level) {
+        super.applyEffect(amount, level);
+        CampaignFleetAPI fleet = getFleet();
+        if (!hasAmbushBenefit(fleet)) return;
+        float effectLevel = level < 1f ? 0f : level;
+        float detectionMult = AMBUSH_DETECTABILITY_MULT
+                * fleet.getStats().getDynamic().getValue(
+                        Stats.GO_DARK_DETECTED_AT_MULT);
+        // Replace the native ability's own modifier, preserving other bonuses
+        // and vanilla movement, activation and cleanup behavior.
+        fleet.getStats().getDetectedRangeMod().modifyMult(getModId(),
+                1f + (detectionMult - 1f) * effectLevel,
+                "Going dark (Ambush Stance)");
+    }
+
+    /** The replacement perk grants no forced pursuit battles. */
     public static boolean isAmbushReady(CampaignFleetAPI fleet) {
-        if (fleet == null || fleet.getAbility(ID) == null
-                || !fleet.getAbility(ID).isActive()) return false;
-        if (fleet.getContainingLocation() == null) return false;
-        for (CampaignTerrainAPI terrain :
-                fleet.getContainingLocation().getTerrainCopy()) {
-            if (!terrain.getPlugin().containsEntity(fleet)) continue;
-            if (terrain.getPlugin().hasAIFlag(
-                        TerrainAIFlags.REDUCES_SENSOR_RANGE, fleet)
-                    || terrain.getPlugin().hasAIFlag(
-                        TerrainAIFlags.REDUCES_DETECTABILITY, fleet)) {
-                return true;
-            }
-        }
         return false;
     }
 
     @Override
     public void createTooltip(TooltipMakerAPI tooltip, boolean expanded) {
-        tooltip.addTitle("Ambush Stance");
-        tooltip.addPara("While this stance is active, engaging a hostile fleet "
-                        + "from terrain that reduces your sensor range or "
-                        + "detectability gives you the option to force a pursuit "
-                        + "battle, as if the enemy were attempting to retreat.",
-                10f, Misc.getHighlightColor(),
-                "hostile fleet", "force a pursuit battle");
-        tooltip.addPara("Suitable terrain includes nebulae and asteroid fields.",
-                10f, Misc.getGrayColor(), "nebulae", "asteroid fields");
+        String status = turnedOn ? " (on)" : " (off)";
+        if (!Global.CODEX_TOOLTIP_MODE) {
+            LabelAPI title = tooltip.addTitle(spec.getName() + status);
+            title.highlightLast(status);
+            title.setHighlightColor(Misc.getGrayColor());
+        } else {
+            tooltip.addSpacer(-10f);
+        }
+        float detectionMult = hasAmbushBenefit(getFleet())
+                ? AMBUSH_DETECTABILITY_MULT : DETECTABILITY_MULT;
+        String reduction = Math.round((1f - detectionMult) * 100f) + "%";
+        tooltip.addPara("Turns off all non-essential systems, reducing the range "
+                        + "at which the fleet can be detected by %s and forcing "
+                        + "the fleet to %s*.",
+                10f, Misc.getHighlightColor(), reduction, "move slowly");
+        tooltip.addPara("*A fleet is considered slow-moving at a burn level "
+                        + "of half that of its slowest ship.",
+                Misc.getGrayColor(), 10f);
+        addIncompatibleToTooltip(tooltip, expanded);
     }
 }

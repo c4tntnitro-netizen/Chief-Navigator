@@ -1,14 +1,11 @@
 package chiefnavigator.quest;
 
-import chiefnavigator.ai.GuardDroneAI;
-import chiefnavigator.hullmods.IthacaSiegeStalemateHullmod;
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.combat.AutofireAIPlugin;
 import com.fs.starfarer.api.combat.BaseEveryFrameCombatPlugin;
 import com.fs.starfarer.api.combat.ArmorGridAPI;
 import com.fs.starfarer.api.combat.BattleCreationContext;
 import com.fs.starfarer.api.combat.CombatEngineAPI;
-import com.fs.starfarer.api.combat.CombatFleetManagerAPI;
 import com.fs.starfarer.api.combat.ShipAPI;
 import com.fs.starfarer.api.combat.WeaponAPI;
 import com.fs.starfarer.api.combat.WeaponGroupAPI;
@@ -56,7 +53,6 @@ public final class DriftingWallBattleCreationPlugin extends BattleCreationPlugin
         private ShipAPI reactor;
         private boolean reactorInitialized;
         private boolean wallDisabled;
-        private boolean guardsDeployed;
         private float lastReactorHitpoints = -1f;
         private float repairDelayRemaining;
         private float debugElapsed;
@@ -103,7 +99,7 @@ public final class DriftingWallBattleCreationPlugin extends BattleCreationPlugin
             }
             findReactor();
             // Initialization above must match the intact foundation during
-            // deployment. Timers, spawns, repairs, and victory state remain
+            // deployment. Timers, repairs, and victory state remain
             // frozen until combat itself resumes.
             if (engine.isPaused()) return;
             if (!reactorInitialized) return;
@@ -112,8 +108,6 @@ public final class DriftingWallBattleCreationPlugin extends BattleCreationPlugin
                 disableWall();
                 return;
             }
-
-            deployDroneGuards();
             pulseReactor();
             repairReactor(amount);
             int integrity = Math.round(100f
@@ -137,62 +131,6 @@ public final class DriftingWallBattleCreationPlugin extends BattleCreationPlugin
                 reactor.setShowModuleJitterUnder(true);
                 return;
             }
-        }
-
-        private void deployDroneGuards() {
-            if (guardsDeployed) return;
-            CombatFleetManagerAPI manager = engine.getFleetManager(
-                    core.getOwner());
-            String[] variants = DriftingWallEncounter.getDroneGuardVariants();
-            for (int i = 0; i < variants.length; i++) {
-                Vector2f location = findReactorGuardSpawn(
-                        i, variants.length, 1250f + 250f * (i % 2));
-                ShipAPI guard = manager.spawnShipOrWing(
-                        variants[i],
-                        location,
-                        Misc.getAngleInDegrees(
-                                reactor.getLocation(), location),
-                        0f);
-                if (guard != null) {
-                    IthacaSiegeStalemateHullmod.markWallDefender(guard);
-                    // Native combat AI owns pursuit, firing, venting, and
-                    // ship-system use; the spawn location is not a fixed post.
-                    GuardDroneAI.installFreeMovingFearlessAI(guard);
-                }
-            }
-            guardsDeployed = true;
-        }
-
-        private Vector2f findReactorGuardSpawn(
-                int index, int count, float startingRadius) {
-            float rear = Misc.getAngleInDegrees(
-                    core.getLocation(), reactor.getLocation());
-            float spread = count <= 1
-                    ? 0f : -82f + 164f * index / (count - 1f);
-            float angle = rear + spread;
-            Vector2f direction = Misc.getUnitVectorAtDegreeAngle(angle);
-            float radius = startingRadius;
-            Vector2f location = new Vector2f();
-            for (int attempt = 0; attempt < 24; attempt++) {
-                location.set(
-                        reactor.getLocation().x + direction.x * radius,
-                        reactor.getLocation().y + direction.y * radius);
-                if (isClearGuardSpawn(location)) return location;
-                radius += 220f;
-            }
-            return location;
-        }
-
-        private boolean isClearGuardSpawn(Vector2f location) {
-            for (ShipAPI other : engine.getShips()) {
-                if (other == null || other.isExpired()) continue;
-                float spacing = other.getCollisionRadius() + 240f;
-                if (Vector2f.sub(location, other.getLocation(), null)
-                        .lengthSquared() < spacing * spacing) {
-                    return false;
-                }
-            }
-            return true;
         }
 
         private void pulseReactor() {

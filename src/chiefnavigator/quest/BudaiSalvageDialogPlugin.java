@@ -9,8 +9,11 @@ import com.fs.starfarer.api.campaign.SectorAPI;
 import com.fs.starfarer.api.campaign.rules.MemoryAPI;
 import com.fs.starfarer.api.campaign.rules.MemKeys;
 import com.fs.starfarer.api.combat.EngagementResultAPI;
+import com.fs.starfarer.api.characters.FullName;
+import com.fs.starfarer.api.characters.PersonAPI;
 import com.fs.starfarer.api.fleet.FleetMemberAPI;
 import com.fs.starfarer.api.fleet.FleetMemberType;
+import com.fs.starfarer.api.impl.campaign.ids.Factions;
 import java.util.Map;
 
 /** One-time, rules-authored salvage scene after the player's first Budai kill. */
@@ -33,7 +36,27 @@ public final class BudaiSalvageDialogPlugin
 
     private InteractionDialogAPI dialog;
     private Map<String, MemoryAPI> memoryMap;
+    private PersonAPI isa;
     private boolean isaAssisted;
+
+    /** Presentation only: Isa need not remain in the active officer roster. */
+    static PersonAPI createIsaPortrait() {
+        if (Global.getSector() == null || Global.getSettings() == null
+                || Global.getSettings().getModManager() == null
+                || !Global.getSettings().getModManager().isModEnabled(
+                        "ship_trophy_room")) return null;
+        // Use HoT's registered image without resolving another mod's person ID.
+        // This page-local identity is never added to officers or contacts.
+        PersonAPI person = Global.getFactory().createPerson();
+        if (person == null) return null;
+        person.setId("chief_navigator_budai_salvage_isa");
+        person.setName(new FullName("Isa", "Leicester", FullName.Gender.FEMALE));
+        person.setGender(FullName.Gender.FEMALE);
+        person.setFaction(Factions.PLAYER);
+        person.setPortraitSprite(Global.getSettings().getSpriteName(
+                "characters", "ship_trophy_isa"));
+        return person;
+    }
 
     static void request() {
         SectorAPI sector = Global.getSector();
@@ -97,6 +120,14 @@ public final class BudaiSalvageDialogPlugin
         memoryMap = RuleDialogSupport.createMemoryMap(dialog);
         memoryMap.get(MemKeys.LOCAL).set("$chiefNavigatorBudaiPlayerTitle", "Captain");
         isaAssisted = IthacaResearchUpgrades.captureIsaRefractionUnlock();
+        if (isaAssisted) {
+            try {
+                isa = createIsaPortrait();
+            } catch (RuntimeException failure) {
+                Global.getLogger(BudaiSalvageDialogPlugin.class).warn(
+                        "Could not prepare Isa's salvage portrait", failure);
+            }
+        }
         String opening = isaAssisted ? "opening_isa" : "opening_salvage_chief";
         if (!RuleDialogSupport.fire(
                 dialog, memoryMap, RULE_PREFIX + opening)) {
@@ -133,6 +164,10 @@ public final class BudaiSalvageDialogPlugin
                 dialog.dismiss();
                 return;
             }
+        }
+        if (isa != null && ("assess_isa".equals(optionId)
+                || "extract_isa".equals(optionId))) {
+            ConversationPortraits.show(dialog, isa);
         }
         if (!RuleDialogSupport.fire(
                 dialog, memoryMap, RULE_PREFIX + optionId)) {

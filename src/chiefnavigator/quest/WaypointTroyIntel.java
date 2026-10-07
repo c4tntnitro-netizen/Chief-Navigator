@@ -89,7 +89,7 @@ public final class WaypointTroyIntel extends BaseIntelPlugin {
             info.addPara("Sinni has guided the expedition through the Troy Terminus and marked FOB Ithaca in Ashen Verge. Reach the installation and establish contact with whoever still commands it.", 10f);
         } else if (!Global.getSector().getMemoryWithoutUpdate().getBoolean(
                 OdysseyExpanseSystem.ENTERED)) {
-            info.addPara("Sinni has joined your expedition under a cooperative charter. Travel to the expedition anchorage in Waypoint Troy, use its free storage for any ships and cargo you do not intend to bring, and open the route with a fleet worth no more than 30 deployment points.", 10f);
+            info.addPara("Sinni has joined your expedition under a cooperative charter. Travel to the expedition anchorage in Waypoint Troy, use its free storage for any ships and cargo you do not intend to bring, and open the route with a fleet worth no more than 50 deployment points.", 10f);
         } else {
             info.addPara("The expedition has reached the Orion Knot. This "
                     + "entry tracks Sinni's journey and the struggle for FOB "
@@ -152,7 +152,7 @@ public final class WaypointTroyIntel extends BaseIntelPlugin {
                 OdysseyExpanseSystem.ENTERED)
                 && Global.getSector().getMemoryWithoutUpdate()
                 .getBoolean(TreadmillEntryScript.ARRIVAL_NOTICE_SHOWN)) {
-            return "Prepare at the Troy anchorage (30 DP maximum)";
+            return "Prepare at the Troy anchorage (50 DP maximum)";
         }
         if (!Global.getSector().getMemoryWithoutUpdate().getBoolean(
                 OdysseyExpanseSystem.ENTERED)) {

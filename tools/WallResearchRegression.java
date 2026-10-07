@@ -10,7 +10,7 @@ import java.util.*;
 import java.util.function.*;
 import org.lwjgl.util.vector.Vector2f;
 
-/** Headless behavior checks: research scope, live ordnance, EMP targeting, Wall escort. */
+/** Headless behavior checks: research scope, live ordnance, EMP targeting, Wall encounter. */
 public class WallResearchRegression {
     interface Call { Object invoke(String name, Object[] args); }
     static <T> T mock(Class<T> type, Call call) {
@@ -453,75 +453,24 @@ public class WallResearchRegression {
         check(!IthacaResearchUpgrades.hasIsaRefraction(hostileWall),
                 "Isa upgrade must not strengthen hostile Wall");
 
-        String[] expectedGuards = {
-            "chief_navigator_combat_guard_rampart_Standard",
-            "chief_navigator_combat_guard_rampart_Standard",
-            "chief_navigator_combat_guard_defender_PD",
-            "chief_navigator_combat_guard_defender_PD",
-            "chief_navigator_combat_guard_picket_Assault",
-            "chief_navigator_combat_guard_sentry_FS",
-            "chief_navigator_combat_guard_warden_Defense",
-            "chief_navigator_combat_guard_warden_Defense"
-        };
+        Method guardVariants = Class.forName("chiefnavigator.quest.DriftingWallEncounter")
+                .getDeclaredMethod("getDroneGuardVariants");
+        guardVariants.setAccessible(true);
+        check(((String[]) guardVariants.invoke(null)).length == 0,
+                "The hostile Wall has no authored Guard escort");
         int[] spawned = {0};
-        int[] defaultAIInstalled = {0};
-        int[] aiEvaluations = {0};
-        int[] forcedGuardCommands = {0};
         boolean[] paused = {false};
         ShipAPI core = ship("chief_navigator_drifting_wall_base", 0, 1,
                 new Vector2f(0f, 3000f));
         List<ShipAPI> wallShips = new ArrayList<>();
         wallShips.add(core);
-        ShipAIPlugin nativeGuardAI = mock(ShipAIPlugin.class, (n,a) -> {
-            if (n.equals("forceCircumstanceEvaluation")) aiEvaluations[0]++;
-            return null;
-        });
         com.fs.starfarer.api.Global.setSettings(mock(
                 com.fs.starfarer.api.SettingsAPI.class, (n,a) -> {
                     if (n.equals("getColor")) return java.awt.Color.WHITE;
-                    if (!n.equals("createDefaultShipAI")) return null;
-                    ShipAIConfig config = (ShipAIConfig)a[1];
-                    check(com.fs.starfarer.api.impl.campaign.ids.Personalities.RECKLESS
-                                    .equals(config.personalityOverride)
-                                    && config.alwaysStrafeOffensively
-                                    && !config.backingOffWhileNotVentingAllowed
-                                    && !config.turnToFaceWithUndamagedArmor
-                                    && config.burnDriveIgnoreEnemies,
-                            "Wall guards retain native Fearless configuration");
-                    return nativeGuardAI;
+                    return null;
                 }));
         CombatFleetManagerAPI manager = mock(CombatFleetManagerAPI.class, (n,a) -> {
-            if (n.equals("spawnShipOrWing")) {
-                check(spawned[0] < expectedGuards.length
-                                && a[0].equals(expectedGuards[spawned[0]]),
-                        "Only the eight original Combat Guards may deploy");
-                check(Vector2f.sub((Vector2f)a[1], core.getLocation(), null).length()
-                        >= 3399f, "Launch clears station");
-                Vector2f position = new Vector2f((Vector2f)a[1]);
-                for (ShipAPI existing : wallShips) {
-                    check(Vector2f.sub(position, existing.getLocation(), null).length()
-                                    >= existing.getCollisionRadius() + 239f,
-                            "Escort spawn clears existing ships");
-                }
-                spawned[0]++;
-                ShipAPI guard = mock(ShipAPI.class, (name, args2) -> {
-                    if (name.equals("getLocation")) return position;
-                    if (name.equals("getCollisionRadius")) return 50f;
-                    if (name.equals("setShipAI")) {
-                        check(args2[0] == nativeGuardAI,
-                                "Escort receives the engine's default combat AI");
-                        defaultAIInstalled[0]++;
-                    }
-                    if (name.equals("setShipTarget")
-                            || name.equals("giveCommand")
-                            || name.equals("setControlsLocked")) {
-                        forcedGuardCommands[0]++;
-                    }
-                    return null;
-                });
-                wallShips.add(guard);
-                return guard;
-            }
+            if (n.equals("spawnShipOrWing")) spawned[0]++;
             return null;
         });
         CombatEngineAPI engine = mock(CombatEngineAPI.class, (n,a) -> {
@@ -551,24 +500,18 @@ public class WallResearchRegression {
         check(spawned[0] == 0, "No escort launches while paused");
         paused[0] = false;
         advance.invoke(instance, 1f, Collections.emptyList());
-        check(spawned[0] == 8 && defaultAIInstalled[0] == 8
-                        && aiEvaluations[0] == 8,
-                "One complete original escort deploys with native AI");
+        check(spawned[0] == 0, "No escort deploys during combat");
         // Skip unrelated debug logging; the actual live update still advances
         // far beyond the former sixty-second Gargoyle wave threshold.
         Field debugElapsed = plugin.getDeclaredField("debugElapsed");
         debugElapsed.setAccessible(true);
         debugElapsed.set(instance, -10000f);
         advance.invoke(instance, 180f, Collections.emptyList());
-        check(spawned[0] == 8 && defaultAIInstalled[0] == 8
-                        && aiEvaluations[0] == 8,
-                "No Gargoyles, repeated escorts, or repeated AI resets after three minutes");
-        check(forcedGuardCommands[0] == 0,
-                "Wall controller does not pin, target, brake, or lock the escort");
+        check(spawned[0] == 0, "No escort or reinforcement waves after three minutes");
         Field disabled = plugin.getDeclaredField("wallDisabled"); disabled.setAccessible(true);
         disabled.set(instance, true);
         advance.invoke(instance, 120f, Collections.emptyList());
-        check(spawned[0] == 8, "No launches after reactor destruction");
+        check(spawned[0] == 0, "No launches after reactor destruction");
 
         Map<String, Object> campaignMemory = new HashMap<>();
         com.fs.starfarer.api.campaign.rules.MemoryAPI memory = mock(
@@ -599,6 +542,6 @@ public class WallResearchRegression {
                 + "fixed 41/81-round Cloudswarm PD, off-axis launch and "
                 + "missile-only priority, "
                 + "EMP targeting, Isa shield refraction, and native naval-beam collision, "
-                + "native eight-ship Guard escort, no Gargoyle waves, pause and shutdown.");
+                + "no Guard escort or reinforcement waves, pause and shutdown.");
     }
 }

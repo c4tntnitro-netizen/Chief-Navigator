@@ -200,7 +200,7 @@ public final class BudaiInteractionRegression {
             Global.setFactory(previousFactory);
         }
         System.out.println("PASS: scoped Budai native encounter routing, nonhuman identity/opening, "
-                + "ambush precedence, and unchanged combat/salvage/retreat defaults.");
+                + "retired ambush behavior, and unchanged combat/salvage/retreat defaults.");
     }
 
     private static void verifyOwnedRoute(boolean marked, boolean ambush) throws Exception {
@@ -211,15 +211,15 @@ public final class BudaiInteractionRegression {
         }
         f.inAshen = ambush;
         f.ambush = ambush;
-        check(SinniAmbushStanceAbility.isAmbushReady(f.player) == ambush,
-                "The precedence case must use an actually active terrain ambush");
+        check(!SinniAmbushStanceAbility.isAmbushReady(f.player),
+                "The Running Dark replacement must never force pursuit battles");
         Map<String, Object> savedBefore = new HashMap<>(f.saved);
         TreadmillCampaignPlugin router = new TreadmillCampaignPlugin();
         PluginPick<InteractionDialogPlugin> pick = router.pickInteractionDialogPlugin(f.enemy);
         check(pick != null && pick.priority == PickPriority.HIGHEST
                         && pick.plugin instanceof BudaiInteraction,
                 "Canonical/explicitly marked living Budai wins over Ashen and generic ambush routes");
-        verifyConfig(readConfig(pick.plugin), ambush);
+        verifyConfig(readConfig(pick.plugin), false);
         f.assertIdentity();
         PluginPick<BattleCreationPlugin> battle = router.pickBattleCreationPlugin(f.enemy);
         check(battle != null && battle.priority == PickPriority.HIGHEST

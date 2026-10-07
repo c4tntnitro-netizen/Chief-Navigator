@@ -432,8 +432,10 @@ public final class BudaiLeapCooldownRegression {
                 .findFirst().orElseThrow(() -> new AssertionError("Missing Budai system CSV row"))
                 .split(",", -1);
         String budaiCooldown = row[header.indexOf("cooldown")];
+        Path core = Path.of("../starsector-core");
+        if (!Files.isDirectory(core)) core = Path.of("../../starsector-core");
         List<String> vanilla = Files.readAllLines(
-                Path.of("../../starsector-core/data/shipsystems/ship_systems.csv"));
+                core.resolve("data/shipsystems/ship_systems.csv"));
         List<String> vanillaHeader = Arrays.asList(vanilla.get(0).split(",", -1));
         String[] maw = vanilla.stream()
                 .map(line -> line.split(",", -1))

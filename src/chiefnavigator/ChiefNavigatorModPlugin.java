@@ -23,6 +23,7 @@ import com.fs.starfarer.api.combat.ShipAIPlugin;
 import com.fs.starfarer.api.combat.ShipAPI;
 import com.fs.starfarer.api.fleet.FleetMemberAPI;
 import com.fs.starfarer.api.impl.campaign.abilities.GenerateSlipsurgeAbility;
+import com.fs.starfarer.api.impl.campaign.abilities.GoDarkAbility;
 import com.fs.starfarer.api.impl.campaign.ids.Abilities;
 import com.fs.starfarer.api.impl.campaign.ids.Factions;
 import chiefnavigator.quest.SinniBarEvent;
@@ -90,7 +91,7 @@ public final class ChiefNavigatorModPlugin extends BaseModPlugin {
         }
         refreshOverriddenAbilityPlugins();
         restoreRetiredAbilityOverrides();
-        syncAmbushStanceAbility();
+        removeRetiredAmbushStanceAbility();
         Global.getSector().removeTransientScriptsOfClass(SinniStormRiderScript.class);
         Global.getSector().addTransientScript(new SinniStormRiderScript());
         Global.getSector().removeTransientScriptsOfClass(
@@ -243,19 +244,20 @@ public final class ChiefNavigatorModPlugin extends BaseModPlugin {
         refreshAbility(fleet, Abilities.GENERATE_SLIPSURGE,
                 SinniGenerateSlipsurgeAbility.class,
                 GenerateSlipsurgeAbility.class);
+        refreshAbility(fleet, Abilities.GO_DARK,
+                SinniAmbushStanceAbility.class, GoDarkAbility.class);
     }
 
-    private void syncAmbushStanceAbility() {
+    private void removeRetiredAmbushStanceAbility() {
         CampaignFleetAPI fleet = Global.getSector().getPlayerFleet();
         if (fleet == null) return;
-        if (SinniHyperspaceTopographyEventIntel.isTierActive(
-                SinniHyperspaceTopographyEventIntel.SinniStage.DRIVE_MITES)) {
-            if (fleet.getAbility(SinniAmbushStanceAbility.ID) == null) {
-                fleet.addAbility(SinniAmbushStanceAbility.ID);
-            }
-        } else {
+        AbilityPlugin retired = fleet.getAbility(SinniAmbushStanceAbility.ID);
+        if (retired != null) {
+            retired.deactivate();
             fleet.removeAbility(SinniAmbushStanceAbility.ID);
         }
+        Global.getSector().getCharacterData().removeAbility(
+                SinniAmbushStanceAbility.ID);
     }
 
     private void restoreRetiredAbilityOverrides() {

@@ -71,16 +71,19 @@ public final class DriftingWallFireControlParityRegression {
                 "COL_NAVAL_04", 251f, 360f);
 
         assertAutofireGroup(driftingVariant,
-                "COL_NAVAL_02", "COL_NAVAL_03", "COL_NAVAL_04");
+                "COL_NAVAL_02", "COL_NAVAL_03");
         assertInertFixtureGroup(driftingVariant, "COL_NAVAL_01",
                 "chief_navigator_drifting_wall_colossal_inert");
         assertInertFixtureGroup(driftingVariant, "LARGE_BALLISTIC_01",
                 "chief_navigator_drifting_wall_annihilator_launcher");
+        require(!driftingHull.contains("\"COL_NAVAL_04\":")
+                        && !driftingVariant.contains("\"COL_NAVAL_04\":"),
+                "The removed Drifting Wall laser must not remain built in or fitted");
         assertAutofireGroup(ithacaVariant,
                 "COL_NAVAL_01", "COL_NAVAL_02", "COL_NAVAL_03",
                 "COL_NAVAL_04");
         assertSharedNavalWeapon(driftingVariant,
-                "COL_NAVAL_02", "COL_NAVAL_03", "COL_NAVAL_04");
+                "COL_NAVAL_02", "COL_NAVAL_03");
         assertSharedNavalWeapon(ithacaVariant,
                 "COL_NAVAL_01", "COL_NAVAL_02", "COL_NAVAL_03",
                 "COL_NAVAL_04");
@@ -158,12 +161,12 @@ public final class DriftingWallFireControlParityRegression {
         int pauseGuard = battlePlugin.indexOf(
                 "if (engine.isPaused()) return;", discovery);
         int combatWork = battlePlugin.indexOf(
-                "deployDroneGuards();", reactorDiscovery);
+                "repairReactor(amount);", reactorDiscovery);
         require(discovery >= 0 && reactorDiscovery > discovery
                         && pauseGuard > reactorDiscovery
                         && combatWork > pauseGuard,
                 "Deployment pause must initialize/restore/unlock fire control "
-                        + "before freezing spawns, repair, and combat state");
+                        + "before freezing repair and combat state");
         require(!beamEffect.contains("setSuspendAutomaticTurning")
                         && !beamEffect.contains("setForceFireOneFrame")
                         && !beamEffect.contains("setForceNoFireOneFrame")

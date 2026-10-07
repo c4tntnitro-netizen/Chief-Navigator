@@ -94,7 +94,7 @@ public final class ChiefNavigatorDriftingWallCMD extends BaseCommandPlugin {
         config.alwaysAttackVsAttack = true;
         config.impactsAllyReputation = false;
         config.impactsEnemyReputation = false;
-        // Friendly drone patrols are roaming recruitment opportunities, not
+        // Friendly drones are independent system patrols, not
         // an assault force that swarms the hostile Wall.
         config.pullInAllies = false;
         config.pullInEnemies = false;

@@ -110,40 +110,26 @@ public final class DronePatrolDialogueRegression {
 
     private static void verifyPatrolRules(Map<String, List<String>> rules) {
         List<String> hub = rule(rules, "chiefNavigatorDronePatrol");
-        String script = hub.get(3);
-        int choices = script.indexOf("FireAll ChiefNavigatorDronePatrolOptions");
-        int story = script.indexOf("configureStoryOption " + RECRUIT);
-        check(hub.get(1).equals("ChiefNavigatorDronePatrol")
-                        && choices >= 0 && story > choices && hub.get(5).isBlank(),
-                "Build all choices before attaching native story confirmation");
-        List<String> offer = rule(rules, "chiefNavigatorDronePatrolRecruitOption");
+        check(hub.get(3).contains("ChiefNavigatorDronePatrolCMD init")
+                        && hub.get(3).contains("FireAll ChiefNavigatorDronePatrolOptions")
+                        && !hub.get(3).contains("configureStoryOption")
+                        && !hub.get(4).contains("story point") && hub.get(5).isBlank(),
+                "Friendly contact must not advertise or attach story-point transfers");
         List<String> leave = rule(rules, "chiefNavigatorDronePatrolLeaveOption");
-        check(offer.get(1).equals("ChiefNavigatorDronePatrolOptions")
-                        && offer.get(2).equals("ChiefNavigatorDronePatrolCMD hasShips")
-                        && offer.get(5).contains(":" + RECRUIT + ":"),
-                "Only a patrol with eligible ships may offer recruitment");
         check(leave.get(1).equals("ChiefNavigatorDronePatrolOptions")
                         && leave.get(2).isBlank()
                         && leave.get(5).contains(":" + LEAVE + ":"),
-                "Empty or unavailable patrols must retain an unconditional Leave");
-        selected(rule(rules, "chiefNavigatorDronePatrolRecruit"), RECRUIT,
-                "FireBest ChiefNavigatorDronePatrolResult");
-        List<String> success = rule(rules, "chiefNavigatorDronePatrolSuccess");
-        List<String> rejected = rule(rules, "chiefNavigatorDronePatrolRejected");
-        check(success.get(1).equals("ChiefNavigatorDronePatrolResult")
-                        && rejected.get(1).equals(success.get(1))
-                        && success.get(2).equals("$chiefNavigatorDroneRecruited")
-                        && rejected.get(2).equals("!$chiefNavigatorDroneRecruited")
-                        && success.get(3).isBlank() && rejected.get(3).isBlank(),
-                "Result rules must be exclusive render-only outcomes, not free transfers");
-        check(success.get(4).contains("$chiefNavigatorDroneShipName")
-                        && success.get(5).contains(":" + CONTINUE + ":")
-                        && rejected.get(5).contains(":" + CONTINUE + ":"),
-                "Both transfer outcomes need an actual-ship result and valid continuation");
-        selected(rule(rules, "chiefNavigatorDronePatrolContinue"), CONTINUE,
-                "FireBest ChiefNavigatorDronePatrol");
-        selected(rule(rules, "chiefNavigatorDronePatrolLeave"), LEAVE,
-                "DismissDialog");
+                "Friendly contacts must always retain Leave");
+        for (List<String> row : rules.values()) {
+            check(!row.get(5).contains(":" + RECRUIT + ":"),
+                    "No runtime rule may expose the retired recruitment option");
+        }
+        check(!rules.containsKey("chiefNavigatorDronePatrolRecruit")
+                        && !rules.containsKey("chiefNavigatorDronePatrolSuccess")
+                        && !rules.containsKey("chiefNavigatorDronePatrolRejected")
+                        && !rules.containsKey("chiefNavigatorDronePatrolContinue"),
+                "The retired transfer/result chain must be absent");
+        selected(rule(rules, "chiefNavigatorDronePatrolLeave"), LEAVE, "DismissDialog");
     }
 
     private static void verifyWallRules(Map<String, List<String>> rules)
