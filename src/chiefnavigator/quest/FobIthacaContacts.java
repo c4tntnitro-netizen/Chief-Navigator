@@ -148,8 +148,6 @@ public final class FobIthacaContacts {
             captain.setImportance(PersonImportance.HIGH);
             captain.setVoice("soldier");
             captain.setPersonality(Personalities.STEADY);
-            captain.setPortraitSprite(Global.getSettings().getSpriteName(
-                    "characters", "chief_navigator_spartan_officer"));
             captain.getMemoryWithoutUpdate().set(STATIC_CONTACT_OWNER, true);
             captain.getMemoryWithoutUpdate().set(
                     SPARTAN_CAPTAIN_MARKER, true);
@@ -161,10 +159,11 @@ public final class FobIthacaContacts {
         } else {
             sectorMemory.set(SPARTAN_CREATION_LATCH, true);
         }
-        // Aias owns Ithaca's administrative command role. Reapply it on
-        // every lookup so existing saves move Base Commander off Menelaus.
+        // Refresh Aias's authored presentation for new and existing saves.
         captain.setRankId(Ranks.SPACE_CAPTAIN);
         captain.setPostId(Ranks.POST_BASE_COMMANDER);
+        captain.setPortraitSprite(Global.getSettings().getSpriteName(
+                "characters", "chief_navigator_spartan_officer"));
         return captain;
     }
 
