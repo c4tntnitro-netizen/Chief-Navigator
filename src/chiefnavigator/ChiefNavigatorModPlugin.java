@@ -12,6 +12,7 @@ import chiefnavigator.campaign.AlphaOdysseyMusicScript;
 import chiefnavigator.campaign.SanzuMusicScript;
 import chiefnavigator.campaign.OdysseyAICoreCampaignPlugin;
 import chiefnavigator.campaign.DomainSecurityIFFAuthorization;
+import chiefnavigator.campaign.CampaignWorldInitialization;
 import com.fs.starfarer.api.BaseModPlugin;
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.PluginPick;
@@ -74,6 +75,11 @@ public final class ChiefNavigatorModPlugin extends BaseModPlugin {
 
     @Override
     public void onGameLoad(boolean newGame) {
+        // Detect first installation before the other hooks write mod state.
+        // Previously modded saves retain their serialized world, including
+        // missing objects; clean existing campaigns receive it exactly once.
+        boolean initializeWorlds = CampaignWorldInitialization.begin(
+                Global.getSector(), newGame);
         BudaiMusic.resetForGameLoad();
         FinalLaborMusic.resetForGameLoad();
         UngaikyoMusic.resetForGameLoad();
@@ -129,11 +135,7 @@ public final class ChiefNavigatorModPlugin extends BaseModPlugin {
             Global.getSoundPlayer().restartCurrentMusic();
         }
 
-        // Static campaign objects are generated for a new campaign only.
-        // Their serialized instances are authoritative afterward: a missing
-        // system in an existing save is left missing instead of being
-        // reconstructed during load.
-        if (newGame) {
+        if (initializeWorlds) {
             TroyArrivalScript.ensureWaypointTroyExists();
             OdysseyExpanseSystem.ensureExists();
         }

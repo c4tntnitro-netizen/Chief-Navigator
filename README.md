@@ -1,6 +1,6 @@
 # Chief Navigator
 
-**Version 0.5.0 — Starsector 0.98a.** Download the installable ZIP from
+**Version 0.5.1 — Starsector 0.98a.** Download the installable ZIP from
 [GitHub Releases](https://github.com/c4tntnitro-netizen/Chief-Navigator/releases/latest).
 
 After completing Labor V's final debrief, **Hunt Budai** and **Hunt Ungaikyo** begin as separate missions. Speak to **Captain Aias Kleon** through FOB Ithaca's comm directory for each location: Avici for Budai, and the derelict Guardian in Last Light for Ungaikyo. Each briefing updates its own quest and map marker; each permanent boss defeat completes only that hunt. Already defeated targets are skipped. The missions add no fleets or rewards and leave existing encounter gates, rosters and the ending cinematic unchanged.
@@ -60,14 +60,20 @@ The inherited concept and its decision boundaries are recorded in [docs/CONCEPT.
 
 ## Installation
 
-Download `Chief-Navigator-0.5.0.zip` from
-[the 0.5.0 release](https://github.com/c4tntnitro-netizen/Chief-Navigator/releases/tag/v0.5.0)
+Download `Chief-Navigator-0.5.1.zip` from
+[the 0.5.1 release](https://github.com/c4tntnitro-netizen/Chief-Navigator/releases/tag/v0.5.1)
 and extract its `Chief Navigator` folder into `Starsector/mods`.
 The mod folder must contain `mod_info.json` directly. When updating, replace
 the previous mod folder with the new one rather than merging its files.
 Install GraphicsLib 1.10.2 or newer and Combat Chatter 1.15.0 or newer, then
 enable Chief Navigator and those dependencies in the Starsector launcher.
 The included `jars/ChiefNavigator.jar` is already compiled for Starsector 0.98a.
+
+Chief Navigator can be enabled in an existing campaign. On its first load, the
+mod installs Waypoint Troy and the Orion Knot once, then saves a permanent
+initialization marker. Campaigns with existing Chief Navigator state are adopted
+without rebuilding their systems or resetting progression. This does not repair
+previously modded saves with missing world content.
 
 ## Minimal quest test
 
@@ -152,7 +158,7 @@ to create the installable ZIP and SHA-256 checksum in `dist/`. Packaging include
 all runtime data, referenced graphics, registered audio, credits and license notices;
 art masters, source recordings, tools and generated build files remain in the repository.
 
-The 0.5.0 download also omits the inactive KARMA playlist, eight retired campaign
+The runtime download also omits the inactive KARMA playlist, eight retired campaign
 wall tiles, and two frames from an unused campaign renderer. Their artwork and
 recordings remain in the repository; registered legacy hull textures stay in the
 download for existing saves.

@@ -166,28 +166,19 @@ public final class CampaignLifecycleRegression {
     private static void checkLoadLifecycle(String plugin) {
         String load = methodBody(
                 plugin, "public void onGameLoad(boolean newGame)");
-        String newGame = methodBody(
-                plugin, "public void onNewGameAfterEconomyLoad()");
-
         String troyCreation = "TroyArrivalScript.ensureWaypointTroyExists(";
         String odysseyCreation = "OdysseyExpanseSystem.ensureExists(";
-        boolean createsDuringLoad = load.contains(troyCreation)
-                || load.contains(odysseyCreation);
-        if (createsDuringLoad) {
-            String guardedNewGame = methodBody(load, "if (newGame)");
-            check(guardedNewGame.contains(troyCreation)
-                            && guardedNewGame.contains(odysseyCreation),
-                    "Static creation inside onGameLoad must be new-game-only");
-            String existingSavePath = load.replace(guardedNewGame, "");
-            check(!existingSavePath.contains(troyCreation)
-                            && !existingSavePath.contains(odysseyCreation),
-                    "Existing-save load must omit static world recreation");
-        } else {
-            check(newGame.contains(troyCreation),
-                    "Troy creation belongs in the new-game lifecycle");
-            check(newGame.contains(odysseyCreation),
-                    "Odyssey creation belongs in the new-game lifecycle");
-        }
+        checkBefore(load, "CampaignWorldInitialization.begin(",
+                "initializeDomainCombatGuardRelations()",
+                "First-install detection must precede load-time mod flags");
+        String firstInstall = methodBody(load, "if (initializeWorlds)");
+        check(firstInstall.contains(troyCreation)
+                        && firstInstall.contains(odysseyCreation),
+                "First installation must create Troy and the Orion Knot");
+        String existingSavePath = load.replace(firstInstall, "");
+        check(!existingSavePath.contains(troyCreation)
+                        && !existingSavePath.contains(odysseyCreation),
+                "Already initialized saves must omit static world recreation");
 
         String[] forbiddenOnLoad = {
             "cleanupLegacyPrototypeContent(",
