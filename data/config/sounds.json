@@ -1,26 +1,5 @@
 {
   "music": {
-    "chief_navigator_avici_intro": [
-      {
-        "file": "KARMA_1Loop.ogg",
-        "source": "sounds/music",
-        "volume": 0.5
-      }
-    ],
-    "chief_navigator_avici_loop": [
-      {
-        "file": "KARMA_Loop_A.ogg",
-        "source": "sounds/music",
-        "volume": 0.5
-      }
-    ],
-    "chief_navigator_avici_loop_b": [
-      {
-        "file": "KARMA_Loop_B.ogg",
-        "source": "sounds/music",
-        "volume": 0.5
-      }
-    ],
     "chief_navigator_alpha_odyssey_exploration": [
       {
         "file": "chief_navigator_alpha_odyssey_exploration.ogg",

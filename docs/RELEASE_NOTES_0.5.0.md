@@ -23,6 +23,10 @@ Sinni expedition, Orion Knot systems, FOB Ithaca, five Labors and post-Labor hun
   ship edits and the corrected Budai salvage dialogue.
 - Complete music credits, a standard MIT license for original project material,
   and separate third-party notices are included.
+- The revised download removes about 39 MiB of inactive music and unused campaign
+  artwork. Source assets and their credits remain in the repository; legacy hull
+  textures remain available for existing saves. The ZIP's internal manifest
+  identifies the exact cleanup commit; the original v0.5.0 tag is preserved.
 
 ## Installation
 

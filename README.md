@@ -152,6 +152,11 @@ to create the installable ZIP and SHA-256 checksum in `dist/`. Packaging include
 all runtime data, referenced graphics, registered audio, credits and license notices;
 art masters, source recordings, tools and generated build files remain in the repository.
 
+The 0.5.0 download also omits the inactive KARMA playlist, eight retired campaign
+wall tiles, and two frames from an unused campaign renderer. Their artwork and
+recordings remain in the repository; registered legacy hull textures stay in the
+download for existing saves.
+
 Ungaikyo keeps Fragment Swarm's mechanics but uses vanilla Threat classification
 to omit the blotchy player-retrofit overlay from its dark hull sprite.
 

@@ -30,15 +30,7 @@
       "chief_navigator_fob_ithaca_station": "graphics/campaign/fob_ithaca/ithaca_station.png",
       "chief_navigator_fob_ithaca_station_glow": "graphics/campaign/fob_ithaca/ithaca_station_glow.png",
       "chief_navigator_fob_ithaca_orbital_ring": "graphics/campaign/fob_ithaca/ithaca_orbital_ring_v4.png",
-      "chief_navigator_fob_ithaca_orbital_ring_glow": "graphics/campaign/fob_ithaca/ithaca_orbital_ring_glow_v4.png",
-      "chief_navigator_ithaca_wall_01_command": "graphics/campaign/fob_ithaca/ithaca_wall_01_command.png",
-      "chief_navigator_ithaca_wall_02_battery": "graphics/campaign/fob_ithaca/ithaca_wall_02_battery.png",
-      "chief_navigator_ithaca_wall_03_hangar": "graphics/campaign/fob_ithaca/ithaca_wall_03_hangar.png",
-      "chief_navigator_ithaca_wall_04_sensor": "graphics/campaign/fob_ithaca/ithaca_wall_04_sensor.png",
-      "chief_navigator_ithaca_wall_05_reactor": "graphics/campaign/fob_ithaca/ithaca_wall_05_reactor.png",
-      "chief_navigator_ithaca_wall_06_logistics": "graphics/campaign/fob_ithaca/ithaca_wall_06_logistics.png",
-      "chief_navigator_ithaca_wall_07_broken_top": "graphics/campaign/fob_ithaca/ithaca_wall_07_broken_top.png",
-      "chief_navigator_ithaca_wall_08_broken_bottom": "graphics/campaign/fob_ithaca/ithaca_wall_08_broken_bottom.png"
+      "chief_navigator_fob_ithaca_orbital_ring_glow": "graphics/campaign/fob_ithaca/ithaca_orbital_ring_glow_v4.png"
     }
   }
 }
