@@ -64,8 +64,8 @@ public final class CharybdisDistortion extends DwellerHullmod {
 
     private static final float MOVEMENT_MULT = 0.5f;
     private static final float OUTSIDE_DAMAGE_MULT = 0.7f;
-    private static final float EATEN_POPUP_COOLDOWN = 0.2f;
-    private static final float EATEN_POPUP_SIZE = 28f;
+    private static final float DEFLECTED_POPUP_COOLDOWN = 0.2f;
+    private static final float DEFLECTED_POPUP_SIZE = 28f;
     private static final float HULL_MULT = 2f;
     private static final float ARMOR_MULT = 0.5f;
     private static final float BODY_SCALE = 1.5f;
@@ -98,7 +98,7 @@ public final class CharybdisDistortion extends DwellerHullmod {
     private static final float FIGHTER_LIGHTNING_EMP = 50f;
     private static final Color LIGHTNING_FRINGE = new Color(255, 0, 107, 255);
     private static final Color LIGHTNING_CORE = new Color(255, 190, 235, 255);
-    private static final Color EATEN_POPUP_COLOR = new Color(255, 190, 235, 255);
+    private static final Color DEFLECTED_POPUP_COLOR = new Color(255, 190, 235, 255);
 
     private static final DwellerShipCreator CHARYBDIS_CREATOR =
             new CharybdisShipCreator();
@@ -154,8 +154,8 @@ public final class CharybdisDistortion extends DwellerHullmod {
         }
 
         if (!engine.isPaused() && amount > 0f) {
-            // Observe the damaged hull before regeneration can cross back above half.
-            if (BudaiRegeneration.isBudai(ship) && ship.isAlive()) {
+            if (ship.isAlive() && ship.getHullSpec() != null
+                    && "chief_navigator_charybdis".equals(ship.getHullSpec().getHullId())) {
                 BudaiMusic.maintainBattleMusic(ship, true);
             }
             if (ship.getHullLevel() <= ENRAGE_HULL_LEVEL
@@ -164,7 +164,6 @@ public final class CharybdisDistortion extends DwellerHullmod {
             }
             preventRetreat(ship);
             advanceEnrageSequence(engine, ship, amount);
-            BudaiRegeneration.advance(engine, ship, amount);
         }
 
         float radius = getCurrentRadius(ship);
@@ -597,19 +596,19 @@ public final class CharybdisDistortion extends DwellerHullmod {
                             > getCurrentRadius(charybdis)) {
                 damage.getModifier().modifyMult(
                         DAMAGE_REDUCTION_ID, OUTSIDE_DAMAGE_MULT);
-                showEatenPopup(point);
+                showDeflectedPopup(point);
                 return DAMAGE_REDUCTION_ID;
             }
             return null;
         }
 
-        private void showEatenPopup(Vector2f impactPoint) {
+        private void showDeflectedPopup(Vector2f impactPoint) {
             CombatEngineAPI engine = Global.getCombatEngine();
             if (engine == null) {
                 return;
             }
             float now = engine.getTotalElapsedTime(false);
-            if (now - lastPopupTime < EATEN_POPUP_COOLDOWN) {
+            if (now - lastPopupTime < DEFLECTED_POPUP_COOLDOWN) {
                 return;
             }
             lastPopupTime = now;
@@ -618,9 +617,9 @@ public final class CharybdisDistortion extends DwellerHullmod {
                     : new Vector2f(impactPoint);
             engine.addFloatingText(
                     location,
-                    "EATEN!",
-                    EATEN_POPUP_SIZE,
-                    EATEN_POPUP_COLOR,
+                    "DEFLECTED!",
+                    DEFLECTED_POPUP_SIZE,
+                    DEFLECTED_POPUP_COLOR,
                     charybdis,
                     0.25f,
                     0.5f);
