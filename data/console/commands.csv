@@ -1,4 +1,5 @@
 command,class,tags,syntax,help
+InitializeNavigatorWorlds,chiefnavigator.console.InitializeNavigatorWorlds,"chief_navigator,campaign",initializenavigatorworlds,Installs the expedition only when every expedition world is absent and no departure progress exists. One attempt per campaign; never rebuilds surviving content.
 AddTopographyData,chiefnavigator.console.AddTopographyData,"chief_navigator,cheat,campaign",addtopographydata <amount>,Adds Hyperspace Topography event progress for testing. Progress is capped at the currently installed event's maximum.
 SpawnIthacaStrike,chiefnavigator.console.SpawnIthacaStrike,"chief_navigator,cheat,campaign",spawnithacastrike [first|second],Spawns a Starving Threat First or Second Strike near the player in Ashen Verge and immediately attacks the nearest surviving FOB Ithaca bastion.
 SpawnSTInvasionFleets,chiefnavigator.console.SpawnSTInvasionFleets,"chief_navigator,cheat,campaign",spawnstinvasionfleets,Spawns three full Starving Threat Third Strike invasion fleets in Ashen Verge; during Labor V this resets their 60-day bastion sieges.

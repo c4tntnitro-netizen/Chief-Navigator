@@ -188,7 +188,8 @@ public final class WaypointTroyIntel extends BaseIntelPlugin {
 
     @Override
     public SectorEntityToken getMapLocation(SectorMapAPI map) {
-        return SinniNavigationGuidance.getCurrentGuidance().getTarget();
+        return TroyArrivalScript.getMapTarget(
+                SinniNavigationGuidance.getCurrentGuidance().getTarget());
     }
 
     @Override

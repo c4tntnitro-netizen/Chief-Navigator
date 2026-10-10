@@ -314,6 +314,11 @@ public final class CampaignLifecycleRegression {
         checkStaticCreationLifecycle(odyssey, troy);
         checkTroyTopology(troy);
         checkLoadLifecycle(plugin);
+        String creation = methodBody(plugin, "public void onNewGameAfterEconomyLoad()");
+        check(!creation.contains("CampaignWorldInitialization.begin(")
+                        && !creation.contains("TroyArrivalScript.ensureWaypointTroyExists()")
+                        && !creation.contains("OdysseyExpanseSystem.ensureExists()"),
+                "Worlds must not spawn before the engine's initial time advance");
         checkPredatorOwnership(predator);
         checkRecurringPredator(predator);
         checkSharedFleetGuard(troy);

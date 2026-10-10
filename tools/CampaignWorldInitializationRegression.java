@@ -53,6 +53,7 @@ public final class CampaignWorldInitializationRegression {
         int writes;
         final MemoryAPI memory = mock(MemoryAPI.class, (name, args) -> {
             if (name.equals("contains")) return flags.containsKey(args[0]);
+            if (name.equals("getBoolean")) return Boolean.TRUE.equals(flags.get(args[0]));
             if (name.equals("getKeys")) return new ArrayList<>(flags.keySet());
             if (name.equals("set")) {
                 check(args.length == 2, "Initialization marker must never expire");
@@ -168,6 +169,48 @@ public final class CampaignWorldInitializationRegression {
         checkFreshInstallAndReload();
         checkLegacyAndPartialWorlds();
         checkLegacyProgressAndFailure();
+        checkExplicitInstallation();
         System.out.println("Campaign world initialization regression passed.");
+    }
+
+    private static void checkExplicitInstallation() {
+        Save stranded = new Save();
+        stranded.flags.put("$chief_navigator_started", true);
+        stranded.flags.put("$chief_navigator_eventide_briefed", true);
+        check(!stranded.begin(false), "Normal load must still adopt a legacy quest");
+        check(CampaignWorldInitialization.beginExplicitInstallation(stranded.api),
+                "Explicit command must recover a completely absent pre-departure world");
+        check(Boolean.TRUE.equals(stranded.flags.get("$chief_navigator_started"))
+                        && Boolean.TRUE.equals(stranded.flags.get("$chief_navigator_eventide_briefed")),
+                "Explicit installation must preserve the briefing and officer progress");
+        check(!CampaignWorldInitialization.beginExplicitInstallation(stranded.api),
+                "Even a factory failure must never repeat the explicit attempt");
+
+        for (boolean hyper : new boolean[] {false, true}) {
+            Save partial = new Save();
+            if (hyper) partial.hyperEntities.add(entity("chief_navigator_troy_access_hyper"));
+            else partial.systems.add(system("other", entity("chief_navigator_orphan")));
+            check(!CampaignWorldInitialization.beginExplicitInstallation(partial.api),
+                    "Any surviving owned/claimed token must block explicit construction");
+            check(partial.writes == 0, "Refusal must not mutate a partial save");
+        }
+        Save claimant = new Save();
+        claimant.systems.add(system("chief_navigator_foreign_claim"));
+        check(!CampaignWorldInitialization.beginExplicitInstallation(claimant.api),
+                "Foreign namespace claims must remain authoritative");
+        for (String key : new String[] {"$chief_navigator_treadmill_entered",
+                "$chief_navigator_troy_arrival_notice_shown",
+                "$chief_navigator_troy_wormhole_opened",
+                "$chief_navigator_odyssey_expanse_entered",
+                "$chief_navigator_menelaus_trial_accepted",
+                "$chief_navigator_menelaus_final_debrief_complete_v1"}) {
+            Save progressed = new Save();
+            progressed.flags.put(key, true);
+            check(!CampaignWorldInitialization.beginExplicitInstallation(progressed.api),
+                    "Committed expedition progress must block recovery: " + key);
+            check(progressed.writes == 0, "Refusal must preserve committed progress");
+        }
+        check(!CampaignWorldInitialization.beginExplicitInstallation(null),
+                "Explicit command requires a live sector");
     }
 }

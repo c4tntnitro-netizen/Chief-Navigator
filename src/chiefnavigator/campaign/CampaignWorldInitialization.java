@@ -12,6 +12,8 @@ public final class CampaignWorldInitialization {
             "$chief_navigator_world_initialization_attempted_v1";
     private static final String ID_PREFIX = "chief_navigator_";
     private static final String MEMORY_PREFIX = "$chief_navigator_";
+    public static final String EXPLICIT_ATTEMPTED =
+            "$chief_navigator_explicit_world_installation_attempted_v1";
 
     private CampaignWorldInitialization() { }
 
@@ -39,6 +41,33 @@ public final class CampaignWorldInitialization {
         // No expiry: this decision belongs to the campaign, not this session.
         memory.set(ATTEMPTED, true);
         return !existingState;
+    }
+
+    /**
+     * Console-only recovery for an expedition that never acquired any worlds.
+     * This is an explicit installation, never an automatic save-load repair.
+     * Any surviving namespace claim or committed departure blocks it.
+     */
+    public static boolean beginExplicitInstallation(SectorAPI sector) {
+        if (sector == null) return false;
+        MemoryAPI memory = sector.getMemoryWithoutUpdate();
+        if (memory == null || memory.contains(EXPLICIT_ATTEMPTED)
+                || hasWorldState(sector)) return false;
+        String[] progressed = {
+            "$chief_navigator_treadmill_entered",
+            "$chief_navigator_troy_arrival_notice_shown",
+            "$chief_navigator_troy_wormhole_opened",
+            "$chief_navigator_odyssey_expanse_entered",
+            "$chief_navigator_menelaus_trial_accepted",
+            "$chief_navigator_menelaus_final_debrief_complete_v1"
+        };
+        for (String key : progressed) {
+            if (memory.getBoolean(key)) return false;
+        }
+        // Claim before calling either factory; a partial failure cannot retry.
+        memory.set(EXPLICIT_ATTEMPTED, true);
+        memory.set(ATTEMPTED, true);
+        return true;
     }
 
     private static boolean hasWorldState(SectorAPI sector) {

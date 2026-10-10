@@ -151,8 +151,8 @@ public final class SinniContactIntel extends ContactIntel {
 
     @Override
     public SectorEntityToken getMapLocation(SectorMapAPI map) {
-        SectorEntityToken target = SinniNavigationGuidance
-                .getCurrentGuidance().getTarget();
+        SectorEntityToken target = TroyArrivalScript.getMapTarget(
+                SinniNavigationGuidance.getCurrentGuidance().getTarget());
         return target == null ? super.getMapLocation(map) : target;
     }
 }
