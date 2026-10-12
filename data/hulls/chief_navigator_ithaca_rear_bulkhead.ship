@@ -14,7 +14,7 @@
   "hullSize": "CAPITAL_SHIP",
   "shieldCenter": [0,0],
   "shieldRadius": 1,
-  "spriteName": "graphics/combat/chief_navigator_ithaca_connected_rear_wall.png",
+  "spriteName": "graphics/fx/empty.png",
   "style": "LOW_TECH",
   "viewOffset": 0,
   "weaponSlots": [],

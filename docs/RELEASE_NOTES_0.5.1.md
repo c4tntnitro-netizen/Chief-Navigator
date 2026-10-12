@@ -15,6 +15,25 @@ Chief Navigator can now be enabled in an existing Starsector campaign.
 
 All gameplay and salvage fixes from the revised 0.5.0 release are included.
 
+## October 12, 2026 asset revision
+
+The 0.5.1 download now omits three obsolete Ithaca combat textures, removing
+73.7 MiB of uncompressed artwork:
+
+- `chief_navigator_ithaca_connected_rear_wall.png`
+- `ithaca_wall_curved_core_v1.png`
+- `ithaca_wall_mounting_apron_v2.png`
+
+Their legacy hull definitions remain registered with Starsector's transparent
+sprite, retaining their IDs, collision geometry and weapon slots. Current
+Ithaca encounters use separate intact-base artwork. An older saved defense-wall
+hull will lose its visible body. Both Wall fights were tested locally and
+appeared normal after the cleanup.
+
+The public 0.5.1 compiled jar and all other runtime gameplay data are unchanged.
+The archive and checksum manifest identify this asset revision; the original
+`v0.5.1` tag is preserved.
+
 ## Requirements
 
 - Starsector 0.98a

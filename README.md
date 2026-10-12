@@ -160,8 +160,12 @@ art masters, source recordings, tools and generated build files remain in the re
 
 The runtime download also omits the inactive KARMA playlist, eight retired campaign
 wall tiles, and two frames from an unused campaign renderer. Their artwork and
-recordings remain in the repository; registered legacy hull textures stay in the
-download for existing saves.
+recordings remain in the repository. The October 12, 2026 revision of the 0.5.1
+download additionally omits three obsolete Ithaca combat textures (73.7 MiB).
+Their legacy hull definitions use Starsector's transparent sprite while retaining
+their IDs, collision geometry and weapon slots. Current Ithaca encounters use
+separate intact-base artwork; an older saved defense-wall hull will lose its
+visible body. The compiled release jar is unchanged.
 
 Ungaikyo keeps Fragment Swarm's mechanics but uses vanilla Threat classification
 to omit the blotchy player-retrofit overlay from its dark hull sprite.
