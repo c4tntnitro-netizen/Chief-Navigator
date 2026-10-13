@@ -34,6 +34,15 @@ The public 0.5.1 compiled jar and all other runtime gameplay data are unchanged.
 The archive and checksum manifest identify this asset revision; the original
 `v0.5.1` tag is preserved.
 
+## October 13, 2026 Budai hotfix
+
+- Remove Budai's special Hungering Rift from the substrate weapon assembly menu.
+- Fix its tooltip description so hovering it no longer throws a formatting
+  error.
+
+Budai retains his special weapons and their combat statistics. The compiled
+jar is unchanged. Restart Starsector after installing this hotfix.
+
 ## Requirements
 
 - Starsector 0.98a
