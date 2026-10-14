@@ -43,6 +43,18 @@ The archive and checksum manifest identify this asset revision; the original
 Budai retains his special weapons and their combat statistics. The compiled
 jar is unchanged. Restart Starsector after installing this hotfix.
 
+## October 13, 2026 Sinni recruitment hotfix
+
+- Restore the prerequisite for Sinni's initial bar proposal: complete the
+  vanilla Hyperspace Topography ability tree by reaching Generate Slipsurge
+  at 700 points.
+- Fresh campaigns and incomplete topography no longer qualify. Previously
+  earned completion remains valid after the repeatable 1,000-point data payout.
+- Preserve already accepted quests and the normal decline timeout. Sinni's
+  later 1,950-point extension is not an initial recruitment requirement.
+
+This hotfix includes an updated compiled jar. Restart Starsector after updating.
+
 ## Requirements
 
 - Starsector 0.98a
