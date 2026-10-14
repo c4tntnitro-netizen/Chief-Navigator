@@ -116,6 +116,8 @@ public final class OdysseyPredatorScript implements EveryFrameScript {
             "$chief_navigator_ithaca_final_center_assault_ordered_v1";
     private static final String ITHACA_FINAL_CENTER_CREATED_V1 =
             "$chief_navigator_ithaca_final_center_created_v1";
+    private static final String ITHACA_FINAL_CENTER_REFORMATION_PENDING_V1 =
+            "$chief_navigator_ithaca_final_center_reformation_pending_v1";
     private static final String ITHACA_FINAL_CENTER_AUTORE_SOLVE_LOG =
             "$chief_navigator_ithaca_final_center_autoresolve_log_v1";
     private static final String ITHACA_FINAL_CENTER_TFS_TELEPORTED =
@@ -287,6 +289,8 @@ public final class OdysseyPredatorScript implements EveryFrameScript {
     private static final float ITHACA_FINAL_LABOR_SIEGE_BLOCK_DAYS = 2f;
     private static final float ITHACA_FINAL_CENTER_DEFENSE_DISTANCE = 650f;
     private static final float ITHACA_FINAL_CENTER_SPAWN_DISTANCE = 9000f;
+    // Match the authored western breach even when its station is unavailable.
+    private static final float ITHACA_FINAL_CENTER_BREACH_OFFSET_X = -1620f;
     private static final float CHARYBDIS_STAGING_OFFSET = 900f;
     private static final float BUDAI_INITIAL_SPAWN_DISTANCE = 100_000f;
     private static final float CHARYBDIS_SENSOR_OVERRIDE = 1000000f;
@@ -446,7 +450,8 @@ public final class OdysseyPredatorScript implements EveryFrameScript {
         maintainIthacaEndgameConsoleInvasion();
         ensureRogueDerelictPopulation();
         ensureFinalLaborInvasion();
-        ensureGateBreachPopulation();
+        // Labor V now ends with its Gate-scan defeat scene and departure.
+        // The former untested sector-wide incursion controller is retired.
         TroyArrivalScript.retireTimeFreezeFacetSample();
         ensurePostLaborUngaikyo();
         ensureCharybdisHunter();
@@ -3005,6 +3010,7 @@ public final class OdysseyPredatorScript implements EveryFrameScript {
                 IthacaThreatPolicy.FACTION_ID,
                 "Heavenly Strike",
                 true);
+        if (fleet == null) return null;
         fleet.setId(id);
         fleet.setNoFactionInName(true);
         fleet.setTransponderOn(false);
@@ -3810,6 +3816,14 @@ public final class OdysseyPredatorScript implements EveryFrameScript {
         StarSystemAPI ashen = OdysseyExpanseSystem.findSystemById(
                 OdysseyExpanseSystem.ASHEN_VERGE_ID);
         if (ashen == null) return;
+        if (MenelausTrial.isFinalLaborGateScanFailed()) {
+            SectorEntityToken departing = ashen.getEntityById(ITHACA_FINAL_CENTER_FLEET_ID);
+            if (departing instanceof CampaignFleetAPI
+                    && isOwnedFinalLaborCenterFleet((CampaignFleetAPI) departing)) {
+                FinalLaborGateAssault.maintainDeparture((CampaignFleetAPI) departing, ashen);
+            }
+            return;
+        }
         if (!MenelausTrial.isFinalLaborActive()) {
             clearFinalCenterDefenderMarkers(ashen);
             if (OdysseyExpanseSystem
@@ -3908,6 +3922,7 @@ public final class OdysseyPredatorScript implements EveryFrameScript {
         memory.unset(ITHACA_ENDGAME_INVASION_ACTIVE);
         memory.unset(ITHACA_FINAL_CENTER_ASSAULT_ORDERED);
         memory.unset(ITHACA_FINAL_CENTER_CREATED_V1);
+        memory.unset(ITHACA_FINAL_CENTER_REFORMATION_PENDING_V1);
         memory.unset(ITHACA_FINAL_LABOR_PHASE);
         memory.unset(ITHACA_FINAL_LABOR_TFS_TARGET);
         for (IthacaSectionEncounter.Section section
@@ -3999,6 +4014,7 @@ public final class OdysseyPredatorScript implements EveryFrameScript {
         memory.unset(ITHACA_ENDGAME_INVASION_ACTIVE);
         memory.unset(ITHACA_FINAL_CENTER_ASSAULT_ORDERED);
         memory.unset(ITHACA_FINAL_CENTER_CREATED_V1);
+        memory.unset(ITHACA_FINAL_CENTER_REFORMATION_PENDING_V1);
         for (IthacaSectionEncounter.Section section
                 : IthacaSectionEncounter.Section.values()) {
             memory.unset(ithacaEndgamePlayerIntervenedKey(section));
@@ -4029,11 +4045,7 @@ public final class OdysseyPredatorScript implements EveryFrameScript {
         SectorEntityToken center = system.getEntityById(
                 IthacaSectionEncounter.FOB_ENTITY_ID);
         if (!OdysseyExpanseSystem.isFobIthaca(center)) return;
-        CampaignFleetAPI gateDefense = OdysseyExpanseSystem
-                .ensureFobIthacaGateDefenseStation(system);
-        if (gateDefense == null || gateDefense.isEmpty()) return;
-        if (TroyArrivalScript.isFleetBusyForMutation(gateDefense)) return;
-        suppressPerimeterBastionReinforcements(center, true);
+        MemoryAPI memory = Global.getSector().getMemoryWithoutUpdate();
         SectorEntityToken existing = system.getEntityById(
                 ITHACA_FINAL_CENTER_FLEET_ID);
         CampaignFleetAPI fleet = existing instanceof CampaignFleetAPI
@@ -4041,31 +4053,91 @@ public final class OdysseyPredatorScript implements EveryFrameScript {
         if (existing != null && fleet == null) return;
         if (fleet != null) {
             if (!isOwnedFinalLaborCenterFleet(fleet)) return;
-            Global.getSector().getMemoryWithoutUpdate().set(
-                    ITHACA_FINAL_CENTER_CREATED_V1, true);
-            if (fleet.isEmpty()
-                    || TroyArrivalScript.isFleetBusyForMutation(fleet)) {
-                return;
+            FinalLaborGateAssault.advanceClock(fleet, system);
+            if (MenelausTrial.isFinalLaborGateScanFailed()) return;
+            if (TroyArrivalScript.isFleetBusyForMutation(fleet)) return;
+            if (fleet.isEmpty()) {
+                // Native defeat can retain an empty fleet until despawn. Its
+                // observed AI-only loss already authorized re-formation;
+                // never let upkeep re-latch it or block defender restoration.
+                // The exact marker also repairs saves made in that interval.
+                if (!fleet.getMemoryWithoutUpdate().getBoolean(
+                        ITHACA_FINAL_CENTER_AUTORE_SOLVE_LOG)) return;
+                memory.set(ITHACA_FINAL_CENTER_REFORMATION_PENDING_V1, true);
+                memory.unset(ITHACA_FINAL_CENTER_CREATED_V1);
+                system.removeEntity(fleet);
+                fleet = null;
+            } else {
+                memory.set(ITHACA_FINAL_CENTER_CREATED_V1, true);
+                memory.unset(ITHACA_FINAL_CENTER_REFORMATION_PENDING_V1);
             }
-        } else {
-            if (Global.getSector().getMemoryWithoutUpdate().getBoolean(
-                    ITHACA_FINAL_CENTER_CREATED_V1)) return;
-            Global.getSector().getMemoryWithoutUpdate().set(
-                    ITHACA_FINAL_CENTER_CREATED_V1, true);
+        }
+        if (fleet == null && memory.getBoolean(
+                ITHACA_FINAL_CENTER_REFORMATION_PENDING_V1)) {
+            // Unlike generic absence, this durable claim records an actual
+            // AI-only loss and survives native despawn or a save/load boundary.
+            memory.unset(ITHACA_FINAL_CENTER_CREATED_V1);
+        }
+        SectorEntityToken defender = system.getEntityById(
+                OdysseyExpanseSystem.FOB_ITHACA_GATE_DEFENSE_STATION_ID);
+        CampaignFleetAPI gateDefense = OdysseyExpanseSystem
+                .isOwnedFobIthacaGateDefenseStation(defender)
+                ? (CampaignFleetAPI) defender : null;
+        suppressPerimeterBastionReinforcements(center, true);
+        if (fleet == null) {
+            if (memory.getBoolean(ITHACA_FINAL_CENTER_CREATED_V1)) {
+                if (!canRecoverMissingFinalCenter()) return;
+                memory.unset(ITHACA_FINAL_CENTER_CREATED_V1);
+                memory.unset(ITHACA_FINAL_CENTER_ASSAULT_ORDERED);
+                logIthacaStrike("Recovered an active 3/4 finale with no remaining fleet claim.");
+            }
             fleet = createFinalCenterStrikeFleet(
                     ITHACA_FINAL_CENTER_FLEET_ID);
             if (fleet == null) return;
+            fleet.getMemoryWithoutUpdate().set(
+                    ITHACA_FINAL_CENTER_BATTLE_MARKER, true);
             system.addEntity(fleet);
+            memory.set(ITHACA_FINAL_CENTER_CREATED_V1, true);
+            memory.unset(ITHACA_FINAL_CENTER_REFORMATION_PENDING_V1);
             fleet.setLocation(
-                    gateDefense.getLocation().x
+                    (gateDefense == null
+                            ? center.getLocation().x
+                                    + ITHACA_FINAL_CENTER_BREACH_OFFSET_X
+                            : gateDefense.getLocation().x)
                             - ITHACA_FINAL_CENTER_SPAWN_DISTANCE,
-                    gateDefense.getLocation().y);
+                    gateDefense == null ? center.getLocation().y
+                            : gateDefense.getLocation().y);
             logIthacaStrike("Labor V Breach Defense assault spawned id="
                     + fleet.getId() + ", members="
                     + fleet.getFleetData().getMembersListCopy().size()
                     + ", Gautama=true.");
         }
         configureFinalCenterBreach(fleet, system, gateDefense);
+    }
+
+    /** A narrow recovery for old 3/4 saves stranded by the creation latch. */
+    private static boolean canRecoverMissingFinalCenter() {
+        MemoryAPI memory = Global.getSector().getMemoryWithoutUpdate();
+        if (!MenelausTrial.isFinalLaborActive()
+                || !memory.getBoolean(ITHACA_FINAL_LABOR_INITIALIZED)
+                || memory.getBoolean(MenelausTrial.FINAL_DEBRIEF_COMPLETE)) return false;
+        for (IthacaSectionEncounter.Section section : IthacaSectionEncounter.Section.values()) {
+            if (!memory.getBoolean(ithacaFinalLaborLaneRepelledKey(section))) return false;
+        }
+        java.util.Set<LocationAPI> locations = new java.util.HashSet<LocationAPI>();
+        locations.addAll(Global.getSector().getStarSystems());
+        locations.add(Global.getSector().getHyperspace());
+        if (Global.getSector().getAllLocations() != null) {
+            locations.addAll(Global.getSector().getAllLocations());
+        }
+        for (LocationAPI location : locations) {
+            if (location == null) continue;
+            if (location.getEntityById(ITHACA_FINAL_CENTER_FLEET_ID) != null) return false;
+            for (CampaignFleetAPI candidate : location.getFleets()) {
+                if (ITHACA_FINAL_CENTER_FLEET_ID.equals(candidate.getId())) return false;
+            }
+        }
+        return true;
     }
 
     private static void configureFinalCenterBreach(
@@ -4075,7 +4147,8 @@ public final class OdysseyPredatorScript implements EveryFrameScript {
         if (TroyArrivalScript.isFleetBusyForMutation(fleet)) return;
         configureStarvingThreatIdentity(fleet);
         ensureIthacaSiegeStalemateHullmods(fleet);
-        fleet.setName("Heavenly Strike - Gate Assault");
+        fleet.setName(gateDefense == null ? "Heavenly Strike"
+                : "Heavenly Strike - Gate Assault");
         EncounterCombatChatter.configure(fleet, EncounterCombatChatter.HEAVENLY);
         fleet.setFaction(IthacaThreatPolicy.FACTION_ID, true);
         fleet.setNoAutoDespawn(true);
@@ -4091,20 +4164,38 @@ public final class OdysseyPredatorScript implements EveryFrameScript {
         memory.set(MemFlags.MEMORY_KEY_NO_SHIP_RECOVERY, true);
         memory.unset(MemFlags.MEMORY_KEY_MAKE_NON_HOSTILE);
         memory.unset(MemFlags.NON_HOSTILE_OVERRIDES_MAKE_HOSTILE);
+        ensureFinalCenterBattleListener(fleet);
+        SectorEntityToken center = system.getEntityById(
+                IthacaSectionEncounter.FOB_ENTITY_ID);
+        SectorEntityToken targetToken = ensureFinalCenterTargetToken(
+                system, gateDefense, center);
+        if (gateDefense == null) {
+            SectorEntityToken gate = FinalLaborGateAssault.gate(system);
+            SectorEntityToken rally = gate != null ? gate : targetToken == null ? center : targetToken;
+            assignSpartanCenterDefenders(system, fleet, rally);
+            memory.unset(ITHACA_FINAL_CENTER_ASSAULT_ORDERED);
+            FinalLaborGateAssault.configure(fleet, system, rally);
+            if (!MenelausTrial.isFinalLaborGateScanFailed()) {
+                lockFinalCenterBreachTarget(fleet, system, rally);
+            }
+            return;
+        }
+        FinalLaborGateAssault.suspend(fleet);
+        memory.unset(MemFlags.MEMORY_KEY_MAKE_HOSTILE);
+        memory.unset(MemFlags.MEMORY_KEY_MAKE_AGGRESSIVE);
         memory.unset(MemFlags.MEMORY_KEY_MAKE_ALWAYS_PURSUE);
         memory.unset(MemFlags.MEMORY_KEY_PURSUE_PLAYER);
-        ensureFinalCenterBattleListener(fleet);
-        gateDefense.getMemoryWithoutUpdate().set(
-                ITHACA_FINAL_CENTER_BATTLE_MARKER, true);
-        gateDefense.getMemoryWithoutUpdate().unset(
-                MemFlags.FLEET_IGNORED_BY_OTHER_FLEETS);
-        blockAmbientBreachDefenseAttacks(system, gateDefense);
+        if (!TroyArrivalScript.isFleetBusyForMutation(gateDefense)) {
+            gateDefense.getMemoryWithoutUpdate().set(
+                    ITHACA_FINAL_CENTER_BATTLE_MARKER, true);
+            gateDefense.getMemoryWithoutUpdate().unset(
+                    MemFlags.FLEET_IGNORED_BY_OTHER_FLEETS);
+            blockAmbientBreachDefenseAttacks(system, gateDefense);
+        }
         assignSpartanCenterDefenders(system, fleet, gateDefense);
         if (fleet.getBattle() != null) return;
 
-        SectorEntityToken targetToken = ensureFinalCenterTargetToken(
-                system, gateDefense);
-        if (targetToken == null) return;
+        if (targetToken == null) targetToken = gateDefense;
         if (!memory.getBoolean(ITHACA_FINAL_CENTER_ASSAULT_ORDERED)
                 || !isFinalCenterAssaultOrder(
                         fleet, targetToken, gateDefense)) {
@@ -4135,13 +4226,19 @@ public final class OdysseyPredatorScript implements EveryFrameScript {
     }
 
     private static SectorEntityToken ensureFinalCenterTargetToken(
-            StarSystemAPI system, CampaignFleetAPI gateDefense) {
+            StarSystemAPI system,
+            CampaignFleetAPI gateDefense,
+            SectorEntityToken center) {
         SectorEntityToken token = system.getEntityById(
                 ITHACA_FINAL_CENTER_TARGET_ID);
         if (token == null) {
             token = system.createToken(
-                    gateDefense.getLocation().x,
-                    gateDefense.getLocation().y);
+                    gateDefense == null ? center.getLocation().x
+                            + ITHACA_FINAL_CENTER_BREACH_OFFSET_X
+                            : gateDefense.getLocation().x,
+                    gateDefense == null ? center.getLocation().y
+                            : gateDefense.getLocation().y);
+            if (token == null) return null;
             token.setId(ITHACA_FINAL_CENTER_TARGET_ID);
             token.setName("Breach Defense Station assault coordinate");
             markOwnedProxyToken(token);
@@ -4149,6 +4246,12 @@ public final class OdysseyPredatorScript implements EveryFrameScript {
         } else if (!isOwnedProxyToken(token)) {
             logBlockedProxyTokenOnce(ITHACA_FINAL_CENTER_TARGET_ID, token);
             return null;
+        }
+        if (gateDefense == null) {
+            token.setFixedLocation(center.getLocation().x
+                            + ITHACA_FINAL_CENTER_BREACH_OFFSET_X,
+                    center.getLocation().y);
+            return token;
         }
         if (token.getOrbitFocus() != gateDefense
                 || Math.abs(token.getCircularOrbitRadius()
@@ -4182,7 +4285,7 @@ public final class OdysseyPredatorScript implements EveryFrameScript {
     private static void assignSpartanCenterDefenders(
             StarSystemAPI system,
             CampaignFleetAPI invasion,
-            CampaignFleetAPI gateDefense) {
+            SectorEntityToken defenseTarget) {
         int index = 0;
         for (CampaignFleetAPI spartan
                 : OdysseyExpanseSystem.ensureFobIthacaSpartanGuards(system)) {
@@ -4200,10 +4303,10 @@ public final class OdysseyPredatorScript implements EveryFrameScript {
                     ITHACA_FINAL_CENTER_TFS_TELEPORTED)) {
                 double angle = Math.toRadians(150d + 30d * index);
                 spartan.setLocation(
-                        gateDefense.getLocation().x
+                        defenseTarget.getLocation().x
                                 + (float) Math.cos(angle)
                                         * ITHACA_FINAL_CENTER_DEFENSE_DISTANCE,
-                        gateDefense.getLocation().y
+                        defenseTarget.getLocation().y
                                 + (float) Math.sin(angle)
                                         * ITHACA_FINAL_CENTER_DEFENSE_DISTANCE);
                 spartan.setVelocity(0f, 0f);
@@ -4211,19 +4314,19 @@ public final class OdysseyPredatorScript implements EveryFrameScript {
                         ITHACA_FINAL_CENTER_TFS_TELEPORTED, true);
                 logIthacaStrike("Teleported surviving TFS fleet="
                         + spartan.getId()
-                        + " to defend Breach Defense Station.");
+                        + " to defend the Ithaca breach.");
             }
             if (spartan.getCurrentAssignment() == null
                     || spartan.getCurrentAssignment().getAssignment()
                             != FleetAssignment.DEFEND_LOCATION
                     || spartan.getCurrentAssignment().getTarget()
-                            != gateDefense) {
+                            != defenseTarget) {
                 spartan.clearAssignments();
                 spartan.addAssignment(
                         FleetAssignment.DEFEND_LOCATION,
-                        gateDefense,
+                        defenseTarget,
                         ITHACA_ENDGAME_INVASION_DAYS,
-                        "defending Breach Defense Station");
+                        "defending the Ithaca breach");
             }
             if (spartan.getAI() != null) {
                 for (CampaignFleetAPI other : system.getFleets()) {
@@ -4312,27 +4415,9 @@ public final class OdysseyPredatorScript implements EveryFrameScript {
                             + "assault; Gautama and the Heavenly Strike are "
                             + "defeated.");
                     MenelausTrialIntel.syncProgress(true);
-                } else {
-                    CampaignFleetAPI player = Global.getSector()
-                            .getPlayerFleet();
-                    boolean playerDefeated = player != null
-                            && battle.wasFleetDefeated(
-                                    player, primaryWinner);
-                    boolean enemyVictorious = battle.wasFleetVictorious(
-                            fleet, primaryWinner);
-                    if ((playerDefeated || enemyVictorious)
-                            && MenelausTrial.failFinalLabor()) {
-                        Global.getSector().getCampaignUI().addMessage(
-                                "Ithaca has fallen. Starving Threat fleets "
-                                        + "are emerging from gates across "
-                                        + "the Sector.",
-                                Misc.getNegativeHighlightColor());
-                        logIthacaStrike("Player lost the Labor V center "
-                                + "battle; Sector-wide gate incursions are "
-                                + "now active.");
-                    }
                 }
             } else if (enemyDefeated
+                    && !MenelausTrial.isFinalLaborFailed()
                     && !fleet.getMemoryWithoutUpdate().contains(
                     ITHACA_FINAL_CENTER_AUTORE_SOLVE_LOG)) {
                 fleet.getMemoryWithoutUpdate().set(
@@ -4342,6 +4427,8 @@ public final class OdysseyPredatorScript implements EveryFrameScript {
                 // malformed save state never clears the creation latch.
                 Global.getSector().getMemoryWithoutUpdate().unset(
                         ITHACA_FINAL_CENTER_CREATED_V1);
+                Global.getSector().getMemoryWithoutUpdate().set(
+                        ITHACA_FINAL_CENTER_REFORMATION_PENDING_V1, true);
                 logIthacaStrike("TFS autoresolved the Breach Defense assault "
                         + "without "
                         + "the player; the Heavenly Strike will re-form.");
@@ -4353,7 +4440,25 @@ public final class OdysseyPredatorScript implements EveryFrameScript {
                 CampaignFleetAPI fleet,
                 CampaignEventListener.FleetDespawnReason reason,
                 Object param) {
-            // Labor V's recurring controller owns replacement and cleanup.
+            // Recover the old retained-empty-token race even when native
+            // despawn wins the next upkeep tick. A delayed callback for a
+            // replaced token must never undo the new fleet's creation claim.
+            if (Global.getSector() == null
+                    || !isOwnedFinalLaborCenterFleet(fleet)
+                    || !fleet.isEmpty()
+                    || !fleet.getMemoryWithoutUpdate().getBoolean(
+                            ITHACA_FINAL_CENTER_AUTORE_SOLVE_LOG)
+                    || MenelausTrial.isGautamaDefeated()
+                    || MenelausTrial.isFinalLaborFailed()) return;
+            StarSystemAPI system = OdysseyExpanseSystem.findSystemById(
+                    OdysseyExpanseSystem.ASHEN_VERGE_ID);
+            if (system == null) return;
+            SectorEntityToken current = system.getEntityById(
+                    ITHACA_FINAL_CENTER_FLEET_ID);
+            if (current != null && current != fleet) return;
+            MemoryAPI memory = Global.getSector().getMemoryWithoutUpdate();
+            memory.set(ITHACA_FINAL_CENTER_REFORMATION_PENDING_V1, true);
+            memory.unset(ITHACA_FINAL_CENTER_CREATED_V1);
         }
     }
 

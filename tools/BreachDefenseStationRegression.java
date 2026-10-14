@@ -252,8 +252,8 @@ public final class BreachDefenseStationRegression {
                 "Apply safety immediately after reload and on bounded maintenance ticks");
         String predator = Files.readString(Path.of("src/chiefnavigator/quest/OdysseyPredatorScript.java"))
                 .replace("\r\n", "\n");
-        check(predator.contains("gateDefense.getMemoryWithoutUpdate().unset(\n"
-                + "                MemFlags.FLEET_IGNORED_BY_OTHER_FLEETS);"),
+        check(predator.replaceAll("\\s+", " ").contains("gateDefense.getMemoryWithoutUpdate().unset( "
+                + "MemFlags.FLEET_IGNORED_BY_OTHER_FLEETS);"),
                 "Finale setup must explicitly expose the station before attack orders");
         int finalSetup = predator.indexOf("private static void configureFinalCenterBreach(");
         String setup = predator.substring(finalSetup);

@@ -48,6 +48,8 @@ public final class MenelausTrial {
             "$chief_navigator_menelaus_final_debrief_complete_v1";
     public static final String FINAL_LABOR_FAILED =
             "$chief_navigator_menelaus_final_labor_failed_v1";
+    public static final String FINAL_LABOR_GATE_SCAN_FAILED =
+            "$chief_navigator_menelaus_final_labor_gate_scan_failed_v1";
     private static final String LABOR_REPORT_MIGRATION =
             "$chief_navigator_menelaus_labor_reports_migrated_v1";
     private static final String LABOR_I_REPORTED =
@@ -386,7 +388,7 @@ public final class MenelausTrial {
                 && memory().getBoolean(FINAL_LABOR_FAILED);
     }
 
-    /** Commits the irreversible gate-breach consequence after a player loss. */
+    /** Legacy failure entry point retained for existing integrations. */
     public static boolean failFinalLabor() {
         if (Global.getSector() == null || isGautamaDefeated()
                 || isFinalLaborFailed()) {
@@ -396,6 +398,18 @@ public final class MenelausTrial {
         memory().unset(FINAL_DEBRIEF_COMPLETE);
         MenelausTrialIntel.syncProgress(true);
         return true;
+    }
+
+    public static boolean isFinalLaborGateScanFailed() {
+        return Global.getSector() != null
+                && memory().getBoolean(FINAL_LABOR_GATE_SCAN_FAILED);
+    }
+
+    /** Failure is now earned only by the completed, interruptible Gate scan. */
+    public static boolean failFinalLaborGateScan() {
+        if (Global.getSector() == null || isGautamaDefeated() || isFinalLaborFailed()) return false;
+        memory().set(FINAL_LABOR_GATE_SCAN_FAILED, true);
+        return failFinalLabor();
     }
 
     /** The Heavenly Strike is dead, but the player has not reported back. */
@@ -497,8 +511,10 @@ public final class MenelausTrial {
         memory().set(FINAL_LABOR_FORCED_FOR_TESTING, true);
         memory().unset(GAUTAMA_DEFEATED);
         memory().unset(FINAL_LABOR_FAILED);
+        memory().unset(FINAL_LABOR_GATE_SCAN_FAILED);
         memory().unset(FINAL_DEBRIEF_COMPLETE);
         MenelausCompletionDialogPlugin.resetForTesting();
+        FinalLaborGateScanFailureDialogPlugin.resetForTesting();
         memory().set(FINAL_LABOR_REVEALED, true);
         memory().set(FINAL_LABOR_BRIEFED, true);
 

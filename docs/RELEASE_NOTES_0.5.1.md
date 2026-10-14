@@ -55,6 +55,23 @@ jar is unchanged. Restart Starsector after installing this hotfix.
 
 This hotfix includes an updated compiled jar. Restart Starsector after updating.
 
+## October 14, 2026 Heavenly Strike hotfix
+
+- Heavenly Strike now spawns after all three perimeter Strikes are defeated,
+  even when the Breach Defense Station has been destroyed. Recover active
+  saves stuck at 3/4 when no final-fleet claim remains; failed creation can retry.
+- Without the Breach Defense Station, Heavenly Strike approaches Ithaca Gate
+  and performs a saved, interruptible 30-day scan. A lost player battle no
+  longer immediately fails Labor V. Completing the scan shows its defeat scene
+  and withdraws the fleet through Ithaca Gate; no Sector-wide incursions spawn.
+- The two reserve battlestations require a live canonical Breach Defense
+  Station at battle start. Preserve its combat behavior, staged waves and
+  surviving Spartan defenders, including joining with the transponder off.
+
+The confirmed in-game fix includes an updated compiled jar. The Budai tooltip
+and substrate fixes and Sinni recruitment prerequisite remain included. Restart
+Starsector after updating.
+
 ## Requirements
 
 - Starsector 0.98a

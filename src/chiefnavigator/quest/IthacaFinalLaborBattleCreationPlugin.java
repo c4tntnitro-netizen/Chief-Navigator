@@ -5,6 +5,8 @@ import chiefnavigator.hullmods.IthacaSiegeStalemateHullmod;
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.BattleAPI;
 import com.fs.starfarer.api.campaign.CampaignFleetAPI;
+import com.fs.starfarer.api.campaign.SectorEntityToken;
+import com.fs.starfarer.api.campaign.StarSystemAPI;
 import com.fs.starfarer.api.combat.BaseEveryFrameCombatPlugin;
 import com.fs.starfarer.api.combat.BattleCreationContext;
 import com.fs.starfarer.api.combat.CombatEngineAPI;
@@ -37,6 +39,7 @@ public final class IthacaFinalLaborBattleCreationPlugin
             emptyWaveLists();
     private FleetMemberAPI gautamaMember;
     private boolean waveStagingEnabled;
+    private boolean reserveStationsAllowed;
 
     @Override
     public void initBattle(
@@ -44,6 +47,7 @@ public final class IthacaFinalLaborBattleCreationPlugin
         finalCenterWaves = emptyWaveLists();
         gautamaMember = null;
         waveStagingEnabled = false;
+        reserveStationsAllowed = hasLiveBreachDefenseStation();
         context.objectivesAllowed = false;
         context.enemyDeployAll = true;
         context.aiRetreatAllowed = false;
@@ -144,7 +148,8 @@ public final class IthacaFinalLaborBattleCreationPlugin
                 engine,
                 finalCenterWaves,
                 gautamaMember,
-                waveStagingEnabled);
+                waveStagingEnabled,
+                reserveStationsAllowed);
         plugin.initializeWaveController();
         engine.addPlugin(plugin);
     }
@@ -155,6 +160,18 @@ public final class IthacaFinalLaborBattleCreationPlugin
         return elapsed >= WAVE_MINIMUM_DELAY
                 && (livingAuthoredSupport <= WAVE_SURVIVOR_THRESHOLD
                     || elapsed >= WAVE_FORCED_DELAY);
+    }
+
+    /** Capture the campaign defender before combat staging mutates either side. */
+    private static boolean hasLiveBreachDefenseStation() {
+        if (Global.getSector() == null) return false;
+        StarSystemAPI system = OdysseyExpanseSystem.findSystemById(
+                OdysseyExpanseSystem.ASHEN_VERGE_ID);
+        SectorEntityToken station = system == null ? null : system.getEntityById(
+                OdysseyExpanseSystem.FOB_ITHACA_GATE_DEFENSE_STATION_ID);
+        // A station already participating in this battle is busy; that does
+        // not make its surviving canonical campaign core absent.
+        return OdysseyExpanseSystem.isOwnedFobIthacaGateDefenseStation(station);
     }
 
     private static StagingPlan prepareStagingPlan(
@@ -259,6 +276,7 @@ public final class IthacaFinalLaborBattleCreationPlugin
         private final CombatEngineAPI engine;
         private final List<List<FleetMemberAPI>> finalCenterWaves;
         private final FleetMemberAPI gautamaMember;
+        private final boolean reserveStationsAllowed;
         private final Map<ShipAPI, Vector2f> stationAnchors =
                 new IdentityHashMap<ShipAPI, Vector2f>();
         private CombatFleetManagerAPI invasionManager;
@@ -270,15 +288,27 @@ public final class IthacaFinalLaborBattleCreationPlugin
         private float waveElapsed;
         private boolean changedRetreatGuard;
 
+        /** Compatibility entry point: capture the same campaign-presence policy now. */
         private CenterBreachCombatPlugin(
                 CombatEngineAPI engine,
                 List<List<FleetMemberAPI>> finalCenterWaves,
                 FleetMemberAPI gautamaMember,
                 boolean waveStagingActive) {
+            this(engine, finalCenterWaves, gautamaMember, waveStagingActive,
+                    hasLiveBreachDefenseStation());
+        }
+
+        private CenterBreachCombatPlugin(
+                CombatEngineAPI engine,
+                List<List<FleetMemberAPI>> finalCenterWaves,
+                FleetMemberAPI gautamaMember,
+                boolean waveStagingActive,
+                boolean reserveStationsAllowed) {
             this.engine = engine;
             this.finalCenterWaves = finalCenterWaves;
             this.gautamaMember = gautamaMember;
             this.waveStagingActive = waveStagingActive;
+            this.reserveStationsAllowed = reserveStationsAllowed;
         }
 
         private void initializeWaveController() {
@@ -566,6 +596,7 @@ public final class IthacaFinalLaborBattleCreationPlugin
         }
 
         private void deployBattlestations(int defenderOwner) {
+            if (!reserveStationsAllowed) return;
             CombatFleetManagerAPI manager = engine.getFleetManager(
                     defenderOwner);
             if (manager == null) return;
