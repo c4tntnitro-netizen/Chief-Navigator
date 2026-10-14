@@ -168,11 +168,7 @@ public final class SinniHyperspaceTopographyEventIntel extends HyperspaceTopogra
         EventStageData data = event.getDataFor(Stage.GENERATE_SLIPSURGE);
         boolean completed = event.isStageActive(Stage.GENERATE_SLIPSURGE)
                 || (data != null && data.wasEverReached)
-                || event.getProgress() >= PROGRESS_5
-                || (Global.getSector() != null
-                        && Global.getSector().getPlayerFleet() != null
-                        && Global.getSector().getPlayerFleet().getAbility(
-                                Abilities.GENERATE_SLIPSURGE) != null);
+                || event.getProgress() >= PROGRESS_5;
         if (completed && Global.getSector() != null) {
             Global.getSector().getMemoryWithoutUpdate().set(
                     SINNI_REQUIREMENT_MET, true);
