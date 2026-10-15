@@ -10,7 +10,7 @@
   "moduleAnchor": [0,0],
   "shieldCenter": [0,0],
   "shieldRadius": 680,
-  "spriteName": "graphics/ships/chief_navigator_ithaca_forward_module.png",
+  "spriteName": "graphics/fx/empty.png",
   "style": "LOW_TECH",
   "viewOffset": 0,
   "weaponSlots": [
