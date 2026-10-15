@@ -27,7 +27,7 @@
                          0
                      ],
     "shieldRadius":  700,
-    "spriteName":  "graphics/combat/ithaca_wall_curved_core_v1.png",
+    "spriteName":  "graphics/fx/empty.png",
     "style":  "LOW_TECH",
     "viewOffset":  0,
     "weaponSlots":  [
