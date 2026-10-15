@@ -1,0 +1,9 @@
+{
+  "id": "chief_navigator_avici_hunter_domain",
+  "type": "STAT_MOD",
+  "aiType": "CUSTOM",
+  "aiScript": "chiefnavigator.dwellers.AviciHunterSystemAI",
+  "statsScript": "chiefnavigator.dwellers.AviciHunterSystem",
+  "useSound": "system_high_energy_focus_activate",
+  "aiHints": {}
+}

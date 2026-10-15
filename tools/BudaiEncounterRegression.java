@@ -1,5 +1,6 @@
 package chiefnavigator.quest;
 
+import chiefnavigator.dwellers.AviciDwellerContent;
 import com.fs.starfarer.api.FactoryAPI;
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.*;
@@ -31,6 +32,7 @@ public final class BudaiEncounterRegression {
         int despawns;
         int factories;
         String fleetId = TroyArrivalScript.CHARYBDIS_FLEET_ID;
+        String budaiHull = "chief_navigator_charybdis";
         SectorEntityToken entity;
         final Vector2f center = new Vector2f(137f, -22000f);
         Vector2f initialPosition;
@@ -75,7 +77,7 @@ public final class BudaiEncounterRegression {
                     com.fs.starfarer.api.fleet.RepairTrackerAPI.class,
                     (name, args) -> name.equals("getMaxCR") ? 0.7f : null);
             members.add(mock(FleetMemberAPI.class, (name, args) -> {
-                if (name.equals("getHullId")) return "chief_navigator_charybdis";
+                if (name.equals("getHullId")) return budaiHull;
                 if (name.equals("getRepairTracker")) return repair;
                 return null;
             }));
@@ -97,7 +99,11 @@ public final class BudaiEncounterRegression {
                 return null;
             }));
             Global.setFactory(mock(FactoryAPI.class, (name, args) -> {
-                if (name.equals("createFleetMember")) return members.get(0);
+                if (name.equals("createFleetMember")) {
+                    check(AviciDwellerContent.BUDAI_VARIANT.equals(args[1]),
+                            "A fresh encounter requests only the named Hunter variant");
+                    return members.get(0);
+                }
                 if (name.equals("createEmptyFleet")) {
                     factories++;
                     if (constructForPositionTest) return fleet;
@@ -226,6 +232,22 @@ public final class BudaiEncounterRegression {
         f.members.clear();
         f.listener().reportBattleOccurred(f.fleet, null, f.battle);
         check(!OdysseyPredatorScript.isBudaiDefeated(), "Unrelated fleets cannot report this victory");
+
+        f = new Fixture();
+        f.budaiHull = AviciDwellerContent.BUDAI_HULL;
+        f.entity = f.fleet;
+        f.busy = true;
+        f.maintain();
+        check(OdysseyPredatorScript.isBudaiBattle(f.fleet)
+                        && Boolean.TRUE.equals(f.saved.get(SPAWNED)) && f.factories == 0,
+                "The new Hunter keeps the same one-time encounter ownership as a saved legacy Maw");
+        f.listener().reportBattleOccurred(f.fleet, null, f.battle);
+        check(!OdysseyPredatorScript.isBudaiDefeated(), "A surviving Hunter remains retryable");
+        f.members.clear();
+        f.listener().reportBattleOccurred(f.fleet, null, f.battle);
+        check(OdysseyPredatorScript.isBudaiDefeated()
+                        && Boolean.TRUE.equals(f.saved.get(BudaiSalvageDialogPlugin.PENDING)),
+                "The new Hunter's actual death retains the permanent quest/salvage result");
         System.out.println("PASS: Avici vignette-gated one-time spawn at 100,000 units, permanent defeat, alive retreat, "
                 + "player-only salvage, deferred retirement, and player/foreign fleet guards");
     }

@@ -1,5 +1,6 @@
 package chiefnavigator.quest;
 
+import chiefnavigator.dwellers.AviciDwellerContent;
 import com.fs.starfarer.api.FactoryAPI;
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.SettingsAPI;
@@ -33,13 +34,20 @@ public final class BudaiRosterRegression {
         final List<FleetEventListener> listeners = new ArrayList<>();
         final Vector2f center = new Vector2f(137f, -22000f);
         final Vector2f location = new Vector2f();
+        boolean existingMember;
+        String shipName;
         final ShipVariantAPI budaiVariant = mock(ShipVariantAPI.class, (name, args) -> null);
         final RepairTrackerAPI repair = mock(RepairTrackerAPI.class,
                 (name, args) -> name.equals("getMaxCR") ? 0.7f : null);
         final FleetMemberAPI budai = mock(FleetMemberAPI.class, (name, args) -> {
-            if (name.equals("getHullId")) return "chief_navigator_charybdis";
+            if (name.equals("getHullId")) return existingMember
+                    ? "chief_navigator_charybdis" : AviciDwellerContent.BUDAI_HULL;
             if (name.equals("getVariant")) return budaiVariant;
             if (name.equals("getRepairTracker")) return repair;
+            if (name.equals("setShipName") && !existingMember) {
+                shipName = (String) args[0];
+                return null;
+            }
             if (name.startsWith("set")) {
                 throw new AssertionError("Budai's exact member must not be rewritten: " + name);
             }
@@ -100,6 +108,7 @@ public final class BudaiRosterRegression {
         });
 
         Fixture(boolean existing) {
+            existingMember = existing;
             if (existing) {
                 members.add(budai);
                 entity = fleet;
@@ -115,7 +124,7 @@ public final class BudaiRosterRegression {
                 }
                 if (name.equals("createFleetMember")) {
                     memberFactories++;
-                    check("chief_navigator_charybdis_Ravenous".equals(args[1]),
+                    check(AviciDwellerContent.BUDAI_VARIANT.equals(args[1]),
                             "Budai creation must request its one authored variant, never an escort");
                     return budai;
                 }
@@ -175,8 +184,9 @@ public final class BudaiRosterRegression {
         check(f.spawn() == f.fleet && f.entity == f.fleet
                         && f.fleetFactories == 1 && f.memberFactories == 1 && f.added == 1
                         && f.members.size() == 1 && f.members.get(0) == f.budai
-                        && f.flagship == f.budai && f.budai.getVariant() == f.budaiVariant,
-                "Fresh Budai must be exactly its original singleton both before and after the Labors");
+                        && f.flagship == f.budai && f.budai.getVariant() == f.budaiVariant
+                        && "Budai".equals(f.shipName),
+                "Fresh Budai must be exactly one named Hunter both before and after the Labors");
         check(Math.abs(Vector2f.sub(f.location, f.center, null).length() - 100000f) < 0.01f
                         && f.positionWrites == 1,
                 "Solo roster change must preserve the 100,000-unit initial position");

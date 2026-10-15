@@ -1,5 +1,6 @@
 package chiefnavigator.quest;
 
+import chiefnavigator.dwellers.AviciDwellerContent;
 import chiefnavigator.hullmods.IthacaSiegeStalemateHullmod;
 import chiefnavigator.weapons.IthacaResearchUpgrades;
 import com.fs.starfarer.api.EveryFrameScript;
@@ -197,6 +198,10 @@ public final class OdysseyPredatorScript implements EveryFrameScript {
             "$chief_navigator_budai_hunter";
     private static final String BUDAI_SPAWNED =
             "$chief_navigator_budai_spawned";
+    public static final String BUDAI_SPAWNED_AT =
+            "$chief_navigator_budai_spawned_at_v1";
+    public static final String BUDAI_LEGACY_GRACE_AT =
+            "$chief_navigator_budai_manifestation_legacy_grace_at_v1";
     public static final String BUDAI_DEFEATED =
             "$chief_navigator_budai_defeated_v1";
     private static final int FIRST_STRIKE = 0;
@@ -4931,6 +4936,40 @@ public final class OdysseyPredatorScript implements EveryFrameScript {
                 && Global.getSector().getMemoryWithoutUpdate().getBoolean(BUDAI_DEFEATED);
     }
 
+    /** Calendar time since actual creation, or a separate conservative legacy grace period. */
+    public static boolean hasBudaiSpawnedFor(float campaignDays) {
+        if (Global.getSector() == null || Global.getSector().getClock() == null
+                || !Float.isFinite(campaignDays) || campaignDays < 0f) return false;
+        MemoryAPI memory = Global.getSector().getMemoryWithoutUpdate();
+        Object anchor = memory.get(BUDAI_SPAWNED_AT);
+        if (!(anchor instanceof Number)) {
+            anchor = memory.get(BUDAI_LEGACY_GRACE_AT);
+            if (!(anchor instanceof Number)) {
+                CampaignFleetAPI existing = findBudaiFleet();
+                boolean liveProof = existing != null && hasBudai(existing)
+                        && existing.getMemoryWithoutUpdate().getBoolean(BUDAI_HUNTER_MARKER);
+                if (!memory.getBoolean(BUDAI_SPAWNED) && !isBudaiDefeated()
+                        && !liveProof) return false;
+                long now = Global.getSector().getClock().getTimestamp();
+                memory.set(BUDAI_LEGACY_GRACE_AT, now);
+                anchor = Long.valueOf(now);
+            }
+        }
+        float elapsed = Global.getSector().getClock().getElapsedDaysSince(
+                ((Number) anchor).longValue());
+        return Float.isFinite(elapsed) && elapsed >= campaignDays;
+    }
+
+    private static void recordBudaiCreationTime() {
+        MemoryAPI memory = Global.getSector().getMemoryWithoutUpdate();
+        memory.set(BUDAI_SPAWNED, true);
+        if (!(memory.get(BUDAI_SPAWNED_AT) instanceof Number)
+                && Global.getSector().getClock() != null) {
+            memory.set(BUDAI_SPAWNED_AT,
+                    Global.getSector().getClock().getTimestamp());
+        }
+    }
+
     private static void markBudaiDefeated() {
         if (Global.getSector() != null) {
             Global.getSector().getMemoryWithoutUpdate().set(BUDAI_DEFEATED, true);
@@ -4997,14 +5036,15 @@ public final class OdysseyPredatorScript implements EveryFrameScript {
         }
         CampaignFleetAPI fleet = Global.getFactory().createEmptyFleet(
                 Factions.DWELLER, "Budai", true);
+        if (fleet == null) return null;
         fleet.setId(TroyArrivalScript.CHARYBDIS_FLEET_ID);
         fleet.setName("Budai");
         fleet.setNoFactionInName(true);
         fleet.setTransponderOn(false);
 
-        addMember(fleet, "chief_navigator_charybdis_Ravenous");
-        fleet.getFleetData().setFlagship(
-                fleet.getFleetData().getMembersListCopy().get(0));
+        FleetMemberAPI budai = addMember(fleet, AviciDwellerContent.BUDAI_VARIANT);
+        fleet.getFleetData().setFlagship(budai);
+        budai.setShipName("Budai");
         fleet.getFleetData().setSyncNeeded();
         fleet.getFleetData().syncIfNeeded();
 
@@ -5014,6 +5054,7 @@ public final class OdysseyPredatorScript implements EveryFrameScript {
         Vector2f center = avici.getCenter().getLocation();
         fleet.setLocation(center.x + BUDAI_INITIAL_SPAWN_DISTANCE, center.y);
         configureCharybdis(fleet);
+        recordBudaiCreationTime();
         return fleet;
     }
 
@@ -5080,7 +5121,8 @@ public final class OdysseyPredatorScript implements EveryFrameScript {
         if (fleet == null) return false;
         for (FleetMemberAPI member
                 : fleet.getFleetData().getMembersListCopy()) {
-            if ("chief_navigator_charybdis".equals(member.getHullId())) {
+            if ("chief_navigator_charybdis".equals(member.getHullId())
+                    || AviciDwellerContent.BUDAI_HULL.equals(member.getHullId())) {
                 return true;
             }
         }

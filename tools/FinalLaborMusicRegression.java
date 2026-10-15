@@ -197,6 +197,33 @@ public final class FinalLaborMusicRegression {
                 "Gautama must not inherit Budai's Savor phase");
         BudaiMusic.releaseBattleMusic();
 
+        // The ported Avici hunter keeps Budai's music identity. A separately
+        // installed SEP's own Hunger must never acquire that identity.
+        requests[0] = 0;
+        cues.clear();
+        alive[0] = true;
+        hulk[0] = false;
+        hullId[0] = chiefnavigator.dwellers.AviciDwellerContent.BUDAI_HULL;
+        hull[0] = 0.5f;
+        BudaiMusic.playBattle();
+        BudaiMusic.maintainBattleMusic(budai, true);
+        WallResearchRegression.check(requests[0] == 1,
+                "Ported Budai must preserve the exact half-hull boundary");
+        hull[0] = Math.nextDown(0.5f);
+        BudaiMusic.maintainBattleMusic(budai, true);
+        WallResearchRegression.check(requests[0] == 2
+                        && cues.get(1).equals(BudaiMusic.ENRAGED_ID),
+                "Ported Budai must retain the authored Savor transition");
+        BudaiMusic.releaseBattleMusic();
+        requests[0] = 0;
+        cues.clear();
+        hullId[0] = "insatiable_hunger";
+        BudaiMusic.playBattle();
+        BudaiMusic.maintainBattleMusic(budai, true);
+        WallResearchRegression.check(requests[0] == 1,
+                "SEP's own Hunger must not trigger Budai's music phase");
+        BudaiMusic.releaseBattleMusic();
+
         System.out.println("PASS: Labor V Abyssal perimeter/vocal center cues and retries; "
                 + "Budai's strictly-below-half-hull Savor transition, "
                 + "one-shot cue retries, battle reset, Gautama isolation, and campaign handoff.");

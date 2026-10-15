@@ -1,5 +1,6 @@
 package chiefnavigator.quest;
 
+import chiefnavigator.dwellers.AviciDwellerContent;
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.SoundPlayerAPI;
 import com.fs.starfarer.api.combat.ShipAPI;
@@ -35,7 +36,8 @@ public final class BudaiMusic {
     public static void maintainBattleMusic(ShipAPI budai, boolean combatAdvancing) {
         if (combatAdvancing && budai != null && budai.isAlive() && !budai.isHulk()
                 && budai.getHullSpec() != null
-                && "chief_navigator_charybdis".equals(budai.getHullSpec().getHullId())
+                && ("chief_navigator_charybdis".equals(budai.getHullSpec().getHullId())
+                        || AviciDwellerContent.isBudaiHull(budai.getHullSpec().getHullId()))
                 && budai.getHullLevel() < 0.5f) {
             enraged = true;
         }

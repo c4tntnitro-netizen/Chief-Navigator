@@ -4,6 +4,11 @@
   "chiefNavigatorMirrorExcludedHullIds": [],
   "drop_prob_officer_chief_navigator_odyssey_combat_core": 1.0,
   "graphics": {
+    "dweller": {
+      "chief_navigator_avici_brain": "graphics/ships/chief_navigator_avici_brain.png",
+      "chief_navigator_avici_banshee": "graphics/ships/chief_navigator_avici_banshee.png",
+      "chief_navigator_avici_hunter": "graphics/ships/chief_navigator_avici_hunter.png"
+    },
     "characters": {
       "chief_navigator_sinni": "graphics/portraits/chief_navigator_sinni_v5.png",
       "chief_navigator_menelaus": "graphics/portraits/chief_navigator_menelaus.png",

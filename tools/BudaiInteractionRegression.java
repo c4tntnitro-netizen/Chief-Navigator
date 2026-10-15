@@ -43,6 +43,7 @@ public final class BudaiInteractionRegression {
         FullName commanderName = new FullName("Human", "Commander", Gender.MALE);
         String commanderPortrait = "graphics/portraits/portrait1.png";
         String fleetId = TroyArrivalScript.CHARYBDIS_FLEET_ID;
+        String hullId = "chief_navigator_charybdis";
         String fleetName = "Generated human name";
         boolean noFactionInName;
         boolean playerControlled;
@@ -140,7 +141,7 @@ public final class BudaiInteractionRegression {
             local.put(MemFlags.MEMORY_KEY_PATROL_FLEET, true);
             local.put("unrelated_mod_state", "preserve");
             members.add(mock(FleetMemberAPI.class, (name, args) ->
-                    name.equals("getHullId") ? "chief_navigator_charybdis" : null));
+                    name.equals("getHullId") ? hullId : null));
             Global.setSector(mock(SectorAPI.class, (name, args) -> {
                 if (name.equals("getMemoryWithoutUpdate")) return memory(saved);
                 if (name.equals("getPlayerFleet")) return sectorPlayerIsEnemy ? enemy : player;
@@ -188,11 +189,14 @@ public final class BudaiInteractionRegression {
             verifyOwnedRoute(false, false);
             verifyOwnedRoute(true, false);
             verifyOwnedRoute(false, true);
+            verifyHunterRoute();
+            verifyManifestationRoute();
             verifyNegativeScope("foreign");
             verifyNegativeScope("missing boss");
             verifyNegativeScope("player flag");
             verifyNegativeScope("player identity");
             verifyNegativeScope("defeated");
+            verifyNegativeScope("SEP Hunger");
             verifyOpeningRule();
         } finally {
             Global.setSector(previousSector);
@@ -248,6 +252,43 @@ public final class BudaiInteractionRegression {
         }
     }
 
+    private static void verifyHunterRoute() throws Exception {
+        Fixture f = new Fixture();
+        f.hullId = chiefnavigator.dwellers.AviciDwellerContent.BUDAI_HULL;
+        TreadmillCampaignPlugin router = new TreadmillCampaignPlugin();
+        PluginPick<InteractionDialogPlugin> pick = router.pickInteractionDialogPlugin(f.enemy);
+        check(pick != null && pick.plugin instanceof BudaiInteraction,
+                "The new Hunter retains Budai's native encounter route");
+        verifyConfig(readConfig(pick.plugin), false);
+        f.assertIdentity();
+        check(router.pickBattleCreationPlugin(f.enemy).plugin instanceof BudaiBattleCreationPlugin,
+                "The new Hunter retains Budai's dedicated battle and music");
+    }
+
+    private static void verifyManifestationRoute() throws Exception {
+        Fixture f = new Fixture();
+        f.fleetId = AviciDwellerPopulation.id(0);
+        f.hullId = chiefnavigator.dwellers.AviciDwellerContent.BANSHEE_HULL;
+        f.local.put(AviciDwellerPopulation.PATROL_MARKER, true);
+        TreadmillCampaignPlugin router = new TreadmillCampaignPlugin();
+        PluginPick<InteractionDialogPlugin> pick = router.pickInteractionDialogPlugin(f.enemy);
+        check(pick != null && pick.plugin instanceof BudaiInteraction,
+                "Owned manifestations reuse native nonhuman encounter presentation");
+        verifyConfig(readConfig(pick.plugin), false);
+        check(f.presentationWrites == 0 && f.listeners.isEmpty() && !f.local.containsKey(HUNTER)
+                        && router.pickBattleCreationPlugin(f.enemy) == null,
+                "Patrols never acquire Budai's identity, quest listener or battle music");
+        f.local.remove(AviciDwellerPopulation.PATROL_MARKER);
+        pick = router.pickInteractionDialogPlugin(f.enemy);
+        check(pick == null || !(pick.plugin instanceof BudaiInteraction),
+                "An ID without our marker cannot claim a foreign fleet");
+        f.local.put(AviciDwellerPopulation.PATROL_MARKER, true);
+        f.playerControlled = true;
+        pick = router.pickInteractionDialogPlugin(f.enemy);
+        check(pick == null || !(pick.plugin instanceof BudaiInteraction),
+                "Player-owned patrol claims are never managed");
+    }
+
     private static FIDConfig readConfig(InteractionDialogPlugin plugin) throws Exception {
         Field config = FleetInteractionDialogPluginImpl.class.getDeclaredField("config");
         config.setAccessible(true);
@@ -261,6 +302,7 @@ public final class BudaiInteractionRegression {
         if (scope.equals("player flag")) f.playerControlled = true;
         if (scope.equals("player identity")) f.sectorPlayerIsEnemy = true;
         if (scope.equals("defeated")) f.saved.put(OdysseyPredatorScript.BUDAI_DEFEATED, true);
+        if (scope.equals("SEP Hunger")) f.hullId = "insatiable_hunger";
         Map<String, Object> localBefore = new HashMap<>(f.local);
         Map<String, Object> savedBefore = new HashMap<>(f.saved);
         FullName nameBefore = f.commanderName;

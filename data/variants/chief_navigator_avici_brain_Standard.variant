@@ -1,0 +1,25 @@
+{
+  "variantId": "chief_navigator_avici_brain_Standard",
+  "hullId": "chief_navigator_avici_brain",
+  "displayName": "Standard",
+  "goalVariant": false,
+  "fluxCapacitors": 0,
+  "fluxVents": 0,
+  "quality": 1,
+  "permaMods": [],
+  "hullMods": [],
+  "weaponGroups": [
+    {
+      "autofire": false,
+      "mode": "LINKED",
+      "weapons": {
+        "WS0001": "rift_lightning",
+        "WS0002": "rift_lightning",
+        "WS0003": "rift_lightning",
+        "WS0004": "rift_lightning"
+      }
+    }
+  ],
+  "modules": [],
+  "wings": []
+}

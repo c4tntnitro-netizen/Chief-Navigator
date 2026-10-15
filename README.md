@@ -1,7 +1,16 @@
 # Chief Navigator
 
-**Version 0.5.1 — Starsector 0.98a.** Download the installable ZIP from
+**Development version 0.5.2-dev — Starsector 0.98a.** The stable 0.5.1 ZIP remains available from
 [GitHub Releases](https://github.com/c4tntnitro-netizen/Chief-Navigator/releases/latest).
+
+The `dev` branch contains an enemy-only adaptation of TIDAL's Shroud Expansion
+Pack: Shrouded Banshees, Shrouded Brains and the Insatiable Hunter-class Budai.
+It uses vanilla Dweller weapons and Chief Navigator's existing dependencies.
+SEP may be installed separately; its content is left alone and the port uses
+distinct IDs. New Avici manifestations begin 30 campaign days after Budai first
+spawns. See the [development notes](docs/DEV_AVICI_DWELLERS.md) for save behavior,
+encounter limits, credits and verification status. The published 0.5.1 release
+is unchanged.
 
 After completing Labor V's final debrief, **Hunt Budai** and **Hunt Ungaikyo** begin as separate missions. Speak to **Captain Aias Kleon** through FOB Ithaca's comm directory for each location: Avici for Budai, and the derelict Guardian in Last Light for Ungaikyo. Each briefing updates its own quest and map marker; each permanent boss defeat completes only that hunt. Already defeated targets are skipped. The missions add no fleets or rewards and leave existing encounter gates, rosters and the ending cinematic unchanged.
 

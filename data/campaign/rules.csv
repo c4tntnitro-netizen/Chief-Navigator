@@ -1,4 +1,5 @@
 id,trigger,conditions,script,text,options,notes
+chiefNavigatorAviciManifestationEncounterOpening,BeginFleetEncounter,$chief_navigator_avici_manifestation_v1 score:1000,,"A shrouded manifestation prowls through Avici. No transmission accompanies its approach.",,Owned Avici manifestations use native nonhuman fleet interaction without Budai identity or rewards.
 chiefNavigatorBudaiEncounterOpening,BeginFleetEncounter,"$chief_navigator_budai_hunter score:1000
 !$global.chief_navigator_budai_defeated_v1",,"Budai's distortion fills the tactical display. No transmission accompanies its approach.",,Owned Budai bypasses the generic faction FleetDesc; native fleet dialog retains battle and salvage choices.
 chiefNavigatorSinniPrompt,ChiefNavigatorSinniIntro_prompt,,,A waitress approaches you with a note in hand.,0:chief_navigator_sinni_event:Take the note from the woman drinking tea at the bar.,Sinni story-bar prompt.

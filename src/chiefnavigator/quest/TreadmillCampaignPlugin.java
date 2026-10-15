@@ -76,6 +76,12 @@ public final class TreadmillCampaignPlugin extends BaseCampaignPlugin {
                         new OdysseyRescueEscortInteraction(),
                         PickPriority.HIGHEST);
             }
+            if (AviciDwellerPopulation.isOwnedFleet(enemy)) {
+                // Reuse the native nonhuman presentation without Budai's
+                // identity, rewards or special battle/music route.
+                return new PluginPick<InteractionDialogPlugin>(
+                        new BudaiInteraction(false), PickPriority.HIGHEST);
+            }
             if (OdysseyPredatorScript.isBudaiBattle(enemy)) {
                 OdysseyPredatorScript.configureBudaiInteractionIdentity(enemy);
                 CampaignFleetAPI player = com.fs.starfarer.api.Global.getSector()
