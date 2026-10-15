@@ -1,5 +1,7 @@
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.SettingsAPI;
+import com.fs.starfarer.api.campaign.*;
+import com.fs.starfarer.api.campaign.rules.MemoryAPI;
 import com.fs.starfarer.api.combat.*;
 import com.fs.starfarer.api.fleet.FleetMemberAPI;
 import data.hullmods.AxialRotation;
@@ -12,6 +14,32 @@ import org.lwjgl.util.vector.Vector2f;
 /** Actual center-fight deployment/anchor callbacks with the native rotation hullmod. */
 public final class FinalLaborStationRegression extends WallResearchRegression {
     private static final String VARIANT = "chief_navigator_spartan_battlestation_Teal";
+    private static final String CAMPAIGN_STATION_ID = "chief_navigator_fob_ithaca_gate_defense_station";
+
+    private static final class CampaignDefender {
+        boolean busy, player;
+        final List<FleetMemberAPI> members = new ArrayList<>();
+        final FleetDataAPI data = mock(FleetDataAPI.class,
+                (n,a) -> n.equals("getMembersListCopy") ? new ArrayList<>(members) : null);
+        final BattleAPI battle = mock(BattleAPI.class, (n,a) -> null);
+        final CampaignFleetAPI api = mock(CampaignFleetAPI.class, (n,a) -> {
+            if (n.equals("getId")) return CAMPAIGN_STATION_ID;
+            if (n.equals("isStationMode")) return true;
+            if (n.equals("isPlayerFleet")) return player;
+            if (n.equals("getBattle")) return busy ? battle : null;
+            if (n.equals("getFleetData")) return data;
+            if (n.equals("isEmpty")) return members.isEmpty();
+            return null;
+        });
+        CampaignDefender(String variantId) {
+            ShipVariantAPI variant = mock(ShipVariantAPI.class,
+                    (n,a) -> n.equals("getHullVariantId") ? variantId : null);
+            ShipHullSpecAPI hull = mock(ShipHullSpecAPI.class,
+                    (n,a) -> n.equals("getHullId") ? "chief_navigator_spartan_battlestation" : null);
+            members.add(mock(FleetMemberAPI.class, (n,a) -> n.equals("getVariant") ? variant
+                    : n.equals("getHullSpec") ? hull : null));
+        }
+    }
 
     private static final class Station {
         final Vector2f position = new Vector2f(), velocity = new Vector2f();
@@ -74,8 +102,28 @@ public final class FinalLaborStationRegression extends WallResearchRegression {
     }
 
     public static void main(String[] args) throws Exception {
+        SectorAPI previousSector = Global.getSector();
+        SettingsAPI previousSettings = Global.getSettings();
+        try { run(); }
+        finally { Global.setSector(previousSector); Global.setSettings(previousSettings); }
+    }
+
+    private static void run() throws Exception {
         Global.setSettings(mock(SettingsAPI.class,
                 (n, a) -> n.equals("getColor") ? Color.WHITE : null));
+        Map<String,SectorEntityToken> campaignEntities = new HashMap<>();
+        MemoryAPI campaignMemory = mock(MemoryAPI.class, (n,a) -> n.equals("getBoolean") ? true : null);
+        StarSystemAPI campaignSystem = mock(StarSystemAPI.class, (n,a) -> {
+            if (n.equals("getOptionalUniqueId")) return "chief_navigator_odyssey_ashen_verge";
+            if (n.equals("getMemoryWithoutUpdate")) return campaignMemory;
+            if (n.equals("getEntityById")) return campaignEntities.get(a[0]);
+            return null;
+        });
+        Global.setSector(mock(SectorAPI.class, (n,a) ->
+                n.equals("getStarSystems") ? List.of(campaignSystem) : null));
+        CampaignDefender campaignDefender = new CampaignDefender(VARIANT);
+        campaignDefender.busy = true;
+        campaignEntities.put(CAMPAIGN_STATION_ID, campaignDefender.api);
         Station persistent = new Station(VARIANT, 0);
         Station foreign = new Station("station2_Standard", 0);
         Station enemy = new Station(VARIANT, 1);
@@ -159,7 +207,52 @@ public final class FinalLaborStationRegression extends WallResearchRegression {
             check(reserve.rightCommands == 30 && reserve.facing < 90f,
                     "Native Axial Rotation continues commanding rotation over repeated anchor ticks");
         }
-        System.out.println("PASS: exact reserve deployment, native rotation with positional anchors, station/module flash suppression, side isolation and unchanged damage");
+        verifyCampaignPresenceGate(constructor, deploy, campaignEntities, campaignDefender);
+        System.out.println("PASS: battle-start canonical defender gates reserves, busy present defender permits exactly two, "
+                + "native rotation/anchors, station/module flash suppression, side isolation and unchanged damage");
+    }
+
+    private static void verifyCampaignPresenceGate(Constructor<?> constructor, Method deploy,
+            Map<String,SectorEntityToken> entities, CampaignDefender defender) throws Exception {
+        int[] attempts = {0};
+        CombatFleetManagerAPI manager = mock(CombatFleetManagerAPI.class, (n,a) -> {
+            if (n.equals("spawnShipOrWing")) attempts[0]++;
+            return null;
+        });
+        CombatEngineAPI engine = mock(CombatEngineAPI.class,
+                (n,a) -> n.equals("getFleetManager") ? manager : null);
+
+        entities.remove(CAMPAIGN_STATION_ID);
+        Object missing = constructor.newInstance(engine, Collections.emptyList(), null, false);
+        deploy.invoke(missing, 0);
+        check(attempts[0] == 0, "A missing campaign defender cannot add combat reserve stations");
+        entities.put(CAMPAIGN_STATION_ID, defender.api);
+        deploy.invoke(missing, 0);
+        check(attempts[0] == 0, "Later station appearance cannot change a false battle-start snapshot");
+
+        FleetMemberAPI core = defender.members.remove(0);
+        Object empty = constructor.newInstance(engine, Collections.emptyList(), null, false);
+        deploy.invoke(empty, 0);
+        check(attempts[0] == 0, "An empty canonical campaign token cannot add combat reserves");
+        defender.members.add(core);
+
+        CampaignDefender foreign = new CampaignDefender("foreign_variant");
+        entities.put(CAMPAIGN_STATION_ID, foreign.api);
+        Object incompatible = constructor.newInstance(engine, Collections.emptyList(), null, false);
+        deploy.invoke(incompatible, 0);
+        check(attempts[0] == 0, "A foreign nonempty fleet at the station ID cannot authorize reserves");
+
+        defender.player = true;
+        entities.put(CAMPAIGN_STATION_ID, defender.api);
+        Object player = constructor.newInstance(engine, Collections.emptyList(), null, false);
+        deploy.invoke(player, 0);
+        check(attempts[0] == 0, "The player fleet cannot authorize reserve stations");
+        defender.player = false;
+        defender.busy = true;
+        Object present = constructor.newInstance(engine, Collections.emptyList(), null, false);
+        entities.remove(CAMPAIGN_STATION_ID);
+        deploy.invoke(present, 0);
+        check(attempts[0] == 2, "A live canonical defender busy in battle authorizes two from its captured start state");
     }
 
     private static Method method(Class<?> type, String name, Class<?>... arguments) throws Exception {

@@ -10,6 +10,7 @@ import com.fs.starfarer.api.campaign.econ.MarketAPI;
 import com.fs.starfarer.api.campaign.rules.MemoryAPI;
 import com.fs.starfarer.api.characters.FullName;
 import com.fs.starfarer.api.characters.ImportantPeopleAPI;
+import com.fs.starfarer.api.characters.OfficerDataAPI;
 import com.fs.starfarer.api.characters.PersonAPI;
 import com.fs.starfarer.api.impl.campaign.ids.Ranks;
 import com.fs.starfarer.api.impl.campaign.intel.contacts.ContactIntel;
@@ -32,6 +33,19 @@ public final class SinniContact {
         ImportantPeopleAPI people = Global.getSector().getImportantPeople();
         MemoryAPI sectorMemory = Global.getSector().getMemoryWithoutUpdate();
         PersonAPI person = people.getPerson(PERSON_ID);
+        // Reuse a saved officer even if her ImportantPeople index was lost.
+        if (person == null) {
+            CampaignFleetAPI fleet = Global.getSector().getPlayerFleet();
+            if (fleet != null) {
+                for (OfficerDataAPI officer : fleet.getFleetData().getOfficersCopy()) {
+                    if (isOwnedPerson(officer.getPerson())) {
+                        person = officer.getPerson();
+                        people.addPerson(person);
+                        break;
+                    }
+                }
+            }
+        }
         if (person == null) {
             if (sectorMemory.getBoolean(CREATION_LATCH)) return null;
             sectorMemory.set(CREATION_LATCH, true);
@@ -103,6 +117,7 @@ public final class SinniContact {
     public static PersonAPI joinPlayerFleet(TextPanelAPI text) {
         PersonAPI person = getOrCreatePerson();
         if (person == null) return null;
+        SinniOfficerTraining.ensureInherentSkills(person);
         person.setPostId(Ranks.POST_OFFICER);
 
         CampaignFleetAPI fleet = Global.getSector().getPlayerFleet();

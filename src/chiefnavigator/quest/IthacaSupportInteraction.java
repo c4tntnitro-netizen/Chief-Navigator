@@ -3,6 +3,7 @@ package chiefnavigator.quest;
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.BattleAPI;
 import com.fs.starfarer.api.campaign.CampaignFleetAPI;
+import com.fs.starfarer.api.campaign.InteractionDialogAPI;
 import com.fs.starfarer.api.campaign.SectorEntityToken;
 import com.fs.starfarer.api.impl.campaign.FleetInteractionDialogPluginImpl;
 import com.fs.starfarer.api.impl.combat.threat.ThreatFIDConfig;
@@ -18,6 +19,12 @@ public final class IthacaSupportInteraction extends FleetInteractionDialogPlugin
 
     public IthacaSupportInteraction(boolean ambush, boolean starvingThreat) {
         super(supportConfig(ambush, starvingThreat));
+    }
+
+    @Override
+    public void init(InteractionDialogAPI dialog) {
+        FinalLaborBattleJoin.withPermission(dialog.getInteractionTarget(),
+                () -> super.init(dialog));
     }
 
     private static FIDConfig supportConfig(
@@ -103,12 +110,14 @@ public final class IthacaSupportInteraction extends FleetInteractionDialogPlugin
 
     @Override
     public void optionSelected(String optionText, Object optionData) {
-        super.optionSelected(optionText, optionData);
-        // Opening an ongoing battle's preview is not consent to fight. Let
-        // native JOIN admit the player before sending the Wall detachment.
-        if (optionData == OptionId.JOIN_ONGOING_BATTLE && joinedBattle) {
-            pullInWallDetachment();
-        }
+        FinalLaborBattleJoin.withPermission(dialog.getInteractionTarget(), () -> {
+            super.optionSelected(optionText, optionData);
+            // Opening an ongoing battle's preview is not consent to fight. Let
+            // native JOIN admit the player before sending the Wall detachment.
+            if (optionData == OptionId.JOIN_ONGOING_BATTLE && joinedBattle) {
+                pullInWallDetachment();
+            }
+        });
     }
 
     private void pullInWallDetachment() {

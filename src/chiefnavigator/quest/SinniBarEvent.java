@@ -1,5 +1,6 @@
 package chiefnavigator.quest;
 
+import chiefnavigator.topography.SinniHyperspaceTopographyEventIntel;
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.InteractionDialogAPI;
 import com.fs.starfarer.api.campaign.econ.MarketAPI;
@@ -61,7 +62,8 @@ public final class SinniBarEvent extends BaseBarEvent {
         return Global.getSector() != null
                 && !Global.getSector().getMemoryWithoutUpdate().getBoolean(STARTED)
                 && !Global.getSector().getMemoryWithoutUpdate()
-                        .getBoolean(LEGACY_DECLINE_TIMEOUT);
+                        .getBoolean(LEGACY_DECLINE_TIMEOUT)
+                && SinniHyperspaceTopographyEventIntel.hasCompletedVanillaTree();
     }
 
     @Override public String getBarEventId() { return EVENT_ID; }

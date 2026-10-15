@@ -17,9 +17,10 @@ The inherited concept and its decision boundaries are recorded in [docs/CONCEPT.
 
 ## Included content
 
+- Sinni has a level-6 officer cap and two permanent, initially non-elite skills in addition to her ordinary learned skills. **Adept of the Waves** grants +25% maneuverability and +10% top speed; elite adds +15 su/second and the native Helmsmanship-style zero-flux boost at any flux level while not generating flux or while venting/overloaded. **Adept of the Stars** grants +1 system charge, +10% charge regeneration, +10% system range and -15% system cooldown; elite reduces shield, armor and hull damage taken by 15%. Both stack with Helmsmanship and Systems Expertise, and support the normal officer elite upgrade. Existing recruited Sinni officers receive missing skills in place on game load without changing their identity, XP, level, learned skills or existing elite upgrades.
 - Starsector `0.98a` metadata
 - Java mod plugin and priority bar quest introducing Sinni
-- Sinni's proposal is an always-shown native `PortsideBarEvent` at every market bar. Its creator is registered and repaired with the same lifecycle used by Hall of Triumph, while all dialogue remains authored in `rules.csv`; accepting adds her directly to the player's officer roster, creates a permanent callable Contacts-menu entry, and marks a private tea meeting at Eventide. Her contact briefing names the live quest objective and system and supplies a compass course from the player's current location. After the expedition arrives in the Orion Knot, her contact can launch a full-size custom chart menu of its six systems using the same dialog pattern as Hall of Triumph's Ship Gallery, without creating or selecting another Intel entry. The Eventide office briefing reveals the expedition details and marks Waypoint Troy only after the meeting is complete
+- Sinni's proposal appears at market bars after completing the vanilla Hyperspace Topography ability tree: Generate Slipsurge at 700 points. It then remains an always-shown native `PortsideBarEvent` until accepted, with the normal thirty-day timeout after declining. Its creator is registered and repaired with the same lifecycle used by Hall of Triumph, while all dialogue remains authored in `rules.csv`; accepting adds her directly to the player's officer roster, creates a permanent callable Contacts-menu entry, and marks a private tea meeting at Eventide. Her contact briefing names the live quest objective and system and supplies a compass course from the player's current location. After the expedition arrives in the Orion Knot, her contact can launch a full-size custom chart menu of its six systems using the same dialog pattern as Hall of Triumph's Ship Gallery, without creating or selecting another Intel entry. The Eventide office briefing reveals the expedition details and marks Waypoint Troy only after the meeting is complete
 - A bounds-independent Orion Knot chart launched from Sinni's contact after arrival, drawn from the six authored systems' relative campaign coordinates and showing the player's position while inside the Knot
 - Required Combat Chatter integration with a unique Sinni voice set and distinct opening alerts for Scylla Strike, Siren Strike, Cyclops Strike, Heavenly Strike, Budai, Ungaikyo, and the Hegemony/Persean League Expeditionary Fleets. A successful ordinary Gautama reincarnation flashes `WARNING: Reincarnation`, then `Retreat Advised.` on a separate line. In the final Labor fight, his first successful reincarnation instead flashes `WARNING: Multiple Reincarnations Detected` once per battle.
 - Recruiting Sinni extends the vanilla Hyperspace Topography tree with tiers at 1,050, 1,200, 1,350, 1,550, and 1,750 points: Generate Slipsurge becomes usable at any gravity well; Ambush Stance increases Running Dark's detection-range reduction to 65%; Slipsurge Mastery makes generated currents twice as wide and three times as long; Storm Rider halves hyperspace-storm CR damage; and Echo Mapping drops a temporary Remnant-style warning beacon that refires Active Sensor Burst around its fixed location after 3, 6, and 9 days, revealing local contacts and drawing nearby hostiles to the beacon
@@ -75,13 +76,29 @@ initialization marker. Campaigns with existing Chief Navigator state are adopted
 without rebuilding their systems or resetting progression. This does not repair
 previously modded saves with missing world content.
 
+Map expansion compatibility: Troy uses the same relative position in resized
+maps. Its Intel prefers the saved hyperspace entrance outside Troy and retains
+the existing objective if that entrance is missing or invalid. Orion's placement
+helpers use the saved Alpha Odyssey position. Generation retains the guarded
+game-load path; saved terrain and existing worlds are not moved during loading.
+
+For an older campaign in which the expedition was accepted but **none** of its
+worlds were ever installed, use Console Commands' `InitializeNavigatorWorlds`.
+It permits one explicit installation before departure and preserves quest flags.
+It refuses any surviving expedition system/entity, recorded Troy arrival,
+committed departure or Labor progress, or a previous recovery attempt. It does
+not reconstruct partial worlds.
+For diagnostics, the saved IDs are `chief_navigator_treadmill` (Waypoint Troy)
+and `chief_navigator_odyssey_expanse` (Odyssey Expanse); these work as exact
+arguments to Console Commands' `goto` when the systems exist.
+
 ## Minimal quest test
 
 Meet Sinni at any market bar and accept her proposal. She immediately joins as
 an officer and invites you to her office on Eventide. Complete the tea briefing
 there to reveal Waypoint Troy, then enter hyperspace and travel normally to its
-location at approximately `(+59,000,
--45,000)`. Dock at the Troy Expedition Anchorage, store ships and cargo as
+location at approximately `(+59,000, -45,000)` on the vanilla map, scaled with
+the Sector dimensions on resized maps. Dock at the Troy Expedition Anchorage, store ships and cargo as
 needed, and reduce the active fleet to no more than 50 deployment points.
 Choose **Authorize Sinni to open the route**, then fly to the newly opened
 **Troy Terminus** and cross it. The manifest is checked again at the wormhole.

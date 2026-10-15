@@ -170,12 +170,10 @@ public final class MenelausTrialIntel extends BaseIntelPlugin {
         info.addImage(getIcon(), width, 128f, 10f);
         if (laborStage == MenelausTrial.LABOR_GAUTAMA
                 && MenelausTrial.isFinalLaborFailed()) {
-            info.addPara("Ithaca's gate defense has fallen. Starving Threat "
-                    + "formations are now emerging from gates throughout the "
-                    + "Sector, including the Core Worlds. Destroying an "
-                    + "incursion only delays its replacement.",
-                    10f, Misc.getNegativeHighlightColor(),
-                    "Ithaca's gate defense has fallen", "Core Worlds");
+            info.addPara(MenelausTrial.isFinalLaborGateScanFailed()
+                    ? "Heavenly Strike completed its scan of Ithaca Gate. Labor V has failed."
+                    : "Labor V has failed.",
+                    10f, Misc.getNegativeHighlightColor());
         } else if (!completed
                 && MenelausTrial.isLaborReportPending(laborStage)) {
             if (laborStage == MenelausTrial.LABOR_RESEARCH) {
@@ -239,8 +237,12 @@ public final class MenelausTrialIntel extends BaseIntelPlugin {
                     + "center engagement; preserving them makes the final "
                     + "battle substantially easier.", 10f);
             info.addPara("Gautama is absent from the first three fleets and "
-                    + "will not reconstruct after committing the Heavenly "
-                    + "Strike. Break the center assault once it arrives.", 10f);
+                    + "leads the Heavenly Strike. If the Breach Defense Station "
+                    + "is lost, the fleet will approach Ithaca Gate and spend "
+                    + "30 days scanning it. Stop the scan before it finishes "
+                    + "to prevent Labor V from failing. The two reserve "
+                    + "battlestations are only available while Breach Defense "
+                    + "still stands. Losing a battle leaves you time to regroup.", 10f);
         }
         addProgressLine(info, 10f);
 

@@ -4225,9 +4225,10 @@ public final class OdysseyExpanseSystem {
     }
 
     private static Vector2f getExpanseLocation() {
+        Vector2f center = getInitialHoleCenter();
         return new Vector2f(
-                getHoleCenterX() + ENTRY_OFFSET_X,
-                getHoleCenterY() + ENTRY_OFFSET_Y);
+                center.x + ENTRY_OFFSET_X,
+                center.y + ENTRY_OFFSET_Y);
     }
 
     private static float getHoleCenterX() {
@@ -4240,6 +4241,18 @@ public final class OdysseyExpanseSystem {
 
     /** Positions Alpha Odyssey beyond the vanilla map in the remote southeast. */
     private static Vector2f getHoleCenter() {
+        // A saved pocket belongs to its saved system coordinates. Map mods may
+        // change global dimensions between sessions; do not move the boundary
+        // away from the already serialized worlds, terrain, and jump points.
+        StarSystemAPI existing = Global.getSector() == null ? null : findExisting();
+        if (existing != null) {
+            return new Vector2f(existing.getLocation().x - ENTRY_OFFSET_X,
+                    existing.getLocation().y - ENTRY_OFFSET_Y);
+        }
+        return getInitialHoleCenter();
+    }
+
+    private static Vector2f getInitialHoleCenter() {
         return new Vector2f(
                 Global.getSettings().getFloat("sectorWidth")
                         * REMOTE_HOLE_X_FACTOR,

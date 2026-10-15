@@ -27,6 +27,7 @@ public final class MenelausTrialScript implements EveryFrameScript {
             MenelausTrialIntel.syncProgress(false);
         }
         MenelausCompletionDialogPlugin.tryShowPending();
+        FinalLaborGateScanFailureDialogPlugin.tryShowPending();
         if (MenelausTrial.isComplete()) {
             PostLaborHuntIntel.sync(null);
             MenelausTrial.ensurePostTrialConsequences();
