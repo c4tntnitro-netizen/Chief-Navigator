@@ -59,7 +59,7 @@ fleets never contain another Insatiable Hunter.
 
 ## Verification
 
-Verified October 15, 2026 against the canonical development JAR, SHA-256
+Enemy-port checkpoint `979a7bb` was verified October 15, 2026 against its development JAR, SHA-256
 `2ee6badc34e55ba2a6d8fd5c602c0cb08d622f09930a062e3ce0ca18a4c7d74c`.
 The Java 17-target build and native loader pass for all 891 dialogue rules and
 the four changed enemy registries. Content checks pass for all 20 vanilla

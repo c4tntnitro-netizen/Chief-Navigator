@@ -11,6 +11,7 @@ import com.fs.starfarer.api.campaign.SpecialItemData;
 import com.fs.starfarer.api.campaign.comm.IntelManagerAPI;
 import com.fs.starfarer.api.campaign.listeners.ListenerManagerAPI;
 import com.fs.starfarer.api.campaign.rules.MemoryAPI;
+import com.fs.starfarer.api.campaign.econ.MarketAPI;
 import com.fs.starfarer.api.impl.campaign.ids.Abilities;
 import com.fs.starfarer.api.impl.campaign.ids.Items;
 import com.fs.starfarer.api.impl.campaign.intel.events.BaseEventIntel;
@@ -24,9 +25,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
-/** Headless bar eligibility checks against real native topography stages and payout. */
+/** Native THREAT sensor unlock plus real topography stages, payout and saved eligibility. */
 public final class SinniBarEligibilityRegression {
     private static final String DECLINED = "$chief_navigator_sinni_declined_recently";
+    private static final String SENSOR_MODS = "$hasThreatDetectionSensorMods";
 
     interface Call { Object invoke(String name, Object[] args); }
 
@@ -63,6 +65,9 @@ public final class SinniBarEligibilityRegression {
 
     private static final class Fixture {
         final Map<String, Object> saved = new HashMap<String, Object>();
+        final Map<String, Object> playerSaved = new HashMap<String, Object>();
+        final Map<String, Object> fleetSaved = new HashMap<String, Object>();
+        boolean playerMemoryAvailable = true;
         final AbilityPlugin ability = mock(AbilityPlugin.class, (name, args) -> null);
         boolean preGrantedSlipsurge;
         int dataItems;
@@ -70,6 +75,8 @@ public final class SinniBarEligibilityRegression {
         int intelRemoved;
 
         Fixture() {
+            // The existing topography cases isolate that gate after the Mk.I unlock.
+            playerSaved.put(SENSOR_MODS, true);
             Global.setSettings(mock(SettingsAPI.class, (name, args) ->
                     name.equals("getColor") ? Color.CYAN : null));
             MemoryAPI memory = mock(MemoryAPI.class, (name, args) -> {
@@ -80,6 +87,15 @@ public final class SinniBarEligibilityRegression {
                 if (name.equals("unset")) saved.remove(args[0]);
                 return null;
             });
+            MemoryAPI playerMemory = mock(MemoryAPI.class, (name, args) -> {
+                if (name.equals("getBoolean")) return Boolean.TRUE.equals(playerSaved.get(args[0]));
+                if (name.equals("set") || name.equals("unset")) {
+                    throw new AssertionError("Eligibility must never change vanilla player flags");
+                }
+                return null;
+            });
+            MemoryAPI fleetMemory = mock(MemoryAPI.class, (name, args) ->
+                    name.equals("getBoolean") ? Boolean.TRUE.equals(fleetSaved.get(args[0])) : null);
             CargoAPI cargo = mock(CargoAPI.class, (name, args) -> {
                 if (name.equals("addSpecial")) {
                     check(Items.TOPOGRAPHIC_DATA.equals(((SpecialItemData) args[0]).getId()),
@@ -89,6 +105,7 @@ public final class SinniBarEligibilityRegression {
                 return null;
             });
             CampaignFleetAPI player = mock(CampaignFleetAPI.class, (name, args) -> {
+                if (name.equals("getMemoryWithoutUpdate")) return fleetMemory;
                 if (name.equals("getCargo")) return cargo;
                 if (name.equals("getAbility")) {
                     return preGrantedSlipsurge && Abilities.GENERATE_SLIPSURGE.equals(args[0])
@@ -107,6 +124,9 @@ public final class SinniBarEligibilityRegression {
             ListenerManagerAPI listeners = mock(ListenerManagerAPI.class, (name, args) -> null);
             Global.setSector(mock(SectorAPI.class, (name, args) -> {
                 if (name.equals("getMemoryWithoutUpdate")) return memory;
+                if (name.equals("getPlayerMemoryWithoutUpdate")) {
+                    return playerMemoryAvailable ? playerMemory : null;
+                }
                 if (name.equals("getPlayerFleet")) return player;
                 if (name.equals("getIntelManager")) return intel;
                 if (name.equals("getListenerManager")) return listeners;
@@ -144,6 +164,28 @@ public final class SinniBarEligibilityRegression {
             check(!SinniBarEvent.isEligible(), "No sector must suppress the bar event");
 
             Fixture fixture = new Fixture();
+            fixture.completed();
+            fixture.playerSaved.clear();
+            SinniBarEvent cached = new SinniBarEvent();
+            MarketAPI market = mock(MarketAPI.class, (name, values) -> null);
+            check(!SinniBarEvent.isEligible() && !cached.shouldShowAtMarket(market),
+                    "Completed topography must still wait for the Onslaught Mk.I sensor unlock");
+            cached.addPromptAndOption(null, null);
+            fixture.saved.put(SENSOR_MODS, true);
+            fixture.fleetSaved.put(SENSOR_MODS, true);
+            fixture.playerSaved.put("$foundOneslaught", true);
+            fixture.playerSaved.put("$encounteredThreat", true);
+            check(!SinniBarEvent.isEligible(),
+                    "Other Mk.I milestones and same-named sector/fleet flags cannot replace player sensor calibration");
+            fixture.playerSaved.put(SENSOR_MODS, false);
+            check(!SinniBarEvent.isEligible(), "An explicitly false sensor unlock must remain locked");
+            fixture.playerSaved.put(SENSOR_MODS, true);
+            check(SinniBarEvent.isEligible() && cached.shouldShowAtMarket(market),
+                    "The same cached event becomes available immediately after the real native unlock");
+            fixture.playerMemoryAvailable = false;
+            check(!SinniBarEvent.isEligible(), "Unavailable player memory cannot qualify the event");
+
+            fixture = new Fixture();
             check(!SinniBarEvent.isEligible(), "No topography event must suppress Sinni");
             check(HyperspaceTopographyEventIntel.get() == null,
                     "Eligibility must not create a topography event");
@@ -242,7 +284,7 @@ public final class SinniBarEligibilityRegression {
             Global.setSector(priorSector);
             Global.setSettings(priorSettings);
         }
-        System.out.println("PASS: Sinni waits for earned vanilla Hyperspace Topography completion; "
-                + "native payout, saved history, decline, and foreign-event continuity remain intact.");
+        System.out.println("PASS: Sinni requires the native player-memory Mk.I THREAT sensor unlock and earned "
+                + "vanilla Topography completion; cached events, payout, saved history, decline, and foreign-event continuity remain intact.");
     }
 }

@@ -13,6 +13,7 @@ import com.fs.starfarer.api.characters.FullName;
 import com.fs.starfarer.api.impl.campaign.intel.bar.events.BarEventManager;
 import com.fs.starfarer.api.impl.campaign.intel.bar.events.BaseBarEvent;
 import com.fs.starfarer.api.impl.campaign.rulecmd.FireBest;
+import com.fs.starfarer.api.impl.combat.threat.DisposableThreatFleetManager;
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
@@ -59,10 +60,14 @@ public final class SinniBarEvent extends BaseBarEvent {
     }
 
     public static boolean isEligible() {
-        return Global.getSector() != null
-                && !Global.getSector().getMemoryWithoutUpdate().getBoolean(STARTED)
+        if (Global.getSector() == null) return false;
+        MemoryAPI playerMemory = Global.getSector().getPlayerMemoryWithoutUpdate();
+        return !Global.getSector().getMemoryWithoutUpdate().getBoolean(STARTED)
                 && !Global.getSector().getMemoryWithoutUpdate()
                         .getBoolean(LEGACY_DECLINE_TIMEOUT)
+                // Vanilla mk1_explore7 grants THREAT visibility in $player memory.
+                && playerMemory != null
+                && playerMemory.getBoolean(DisposableThreatFleetManager.SENSOR_MODS_KEY)
                 && SinniHyperspaceTopographyEventIntel.hasCompletedVanillaTree();
     }
 
