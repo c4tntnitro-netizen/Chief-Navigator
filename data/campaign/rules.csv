@@ -4680,6 +4680,15 @@ ChiefNavigatorMenelausCMD stage complete
 !$gateScanned
 !$global.canScanGates",,,0:gateScan:Scan the Gate.,Menelaus's authorization exposes vanilla gate scanning even if the player has not separately unlocked generic gate scans.
 chiefNavigatorIthacaGateLeave,DialogOptionSelected,$option == chief_navigator_ithaca_gate_leave,DismissDialog,,,Leaves the sealed Ithaca gate without exposing a scan option.
+chiefNavigatorIthacaGateTravelOption,PopulateGateOptions,"$global.gatesActive
+$global.playerCanUseGates
+$gateScanned
+ChiefNavigatorIthacaGateCMD canTravel",,,17:chief_navigator_travel_ithaca_gate:Travel to FOB Ithaca.,Direct destination after the final Labor debrief and an actual Ithaca gate scan; coexists with vanilla and other mod destinations.
+chiefNavigatorIthacaGateTravelDescription,PopulateGateOptions,"$global.gatesActive
+$global.playerCanUseGates
+$gateScanned
+ChiefNavigatorIthacaGateCMD canTravel",ChiefNavigatorIthacaGateCMD highlight,,,Shows the native fuel cost and disables travel when fuel is insufficient.
+chiefNavigatorIthacaGateTravelSelected,DialogOptionSelected,$option == chief_navigator_travel_ithaca_gate,ChiefNavigatorIthacaGateCMD traverse,,,Revalidates the destination and fuel before native gate transit and listener notification.
 chiefNavigatorRestoredMothership,ChiefNavigatorSealedMothership,ChiefNavigatorMothershipCMD stage friendly,ChiefNavigatorMothershipCMD init,"The $entityName holds position where its predecessor was destroyed. Freshly knitted armor still shows seams around the rebuilt work-bays, but its command partition answers Menelaus's IFF without hesitation.
 
 Combat Guard patrols cycle through its bays and depart toward the Drifting Wall. Farther out, unmoored drones answer with hostile challenge codes.",100:chief_navigator_mothership_leave:Leave.,Restored post-report Guard Mothership under Menelaus's friendly IFF.
