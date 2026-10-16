@@ -34,7 +34,7 @@ The inherited concept and its decision boundaries are recorded in [docs/CONCEPT.
 - Required Combat Chatter integration with a unique Sinni voice set and distinct opening alerts for Scylla Strike, Siren Strike, Cyclops Strike, Heavenly Strike, Budai, Ungaikyo, and the Hegemony/Persean League Expeditionary Fleets. A successful ordinary Gautama reincarnation flashes `WARNING: Reincarnation`, then `Retreat Advised.` on a separate line. In the final Labor fight, his first successful reincarnation instead flashes `WARNING: Multiple Reincarnations Detected` once per battle.
 - Recruiting Sinni extends the vanilla Hyperspace Topography tree with tiers at 1,050, 1,200, 1,350, 1,550, and 1,750 points: Generate Slipsurge becomes usable at any gravity well; Ambush Stance increases Running Dark's detection-range reduction to 65%; Slipsurge Mastery makes generated currents twice as wide and three times as long; Storm Rider halves hyperspace-storm CR damage; and Echo Mapping drops a temporary Remnant-style warning beacon that refires Active Sensor Burst around its fixed location after 3, 6, and 9 days, revealing local contacts and drawing nearby hostiles to the beacon
 - Persistent Waypoint Troy system at the southeast edge of the Sector
-- Troy expedition anchorage and a marketless colony-style FOB Ithaca station with fleet, cargo, refit, Starsector's native Comm Directory, free persistent storage, and free full-fleet repairs, plus a hard 50-DP limit in both directions through Troy Terminus
+- Troy expedition anchorage and a marketless colony-style FOB Ithaca station with fleet, cargo, refit, Starsector's native Comm Directory, free persistent storage, and free full-fleet repairs, plus a configurable fleet-DP limit in both directions through Troy Terminus (50 DP by default; optional LunaLib setting from 1 to 1,000 DP)
 - Recoverable, one-time Rogue Combat Guard flotillas confined to the Odyssey Expanse, Ashen Verge, and Last Light as the expedition's local source of replacement hulls
 - At most two neutral Persean exploration patrols in comparatively safe Sanzu, joined by at most two battered Hegemony exile patrols only after the main expedition arrives; the exiles periodically choose between aggression and flight
 - Six one-use derelict research stations spread across the Odyssey Expanse, Sanzu, and Ashen Verge
@@ -108,7 +108,7 @@ an officer and invites you to her office on Eventide. Complete the tea briefing
 there to reveal Waypoint Troy, then enter hyperspace and travel normally to its
 location at approximately `(+59,000, -45,000)` on the vanilla map, scaled with
 the Sector dimensions on resized maps. Dock at the Troy Expedition Anchorage, store ships and cargo as
-needed, and reduce the active fleet to no more than 50 deployment points.
+needed, and reduce the active fleet to the configured limit (50 deployment points by default). With LunaLib enabled, choose **Chief Navigator → Campaign → Troy fleet deployment point limit** to change it; the current value applies to route opening and both directions of travel.
 Choose **Authorize Sinni to open the route**, then fly to the newly opened
 **Troy Terminus** and cross it. The manifest is checked again at the wormhole.
 It leads directly to the generated Odyssey Expanse nebula inside a reserved

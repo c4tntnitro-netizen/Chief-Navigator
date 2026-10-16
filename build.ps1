@@ -13,6 +13,8 @@ $coreRoot = Join-Path $starsectorRoot "starsector-core"
 $graphicsLibJar = Join-Path $modsRoot "GraphicsLib\jars\Graphics.jar"
 $consoleCommandsJar = Join-Path $modsRoot "Console Commands\jars\lw_Console.jar"
 $combatChatterJar = Join-Path $modsRoot "Combat Chatter\jars\CombatChatter.jar"
+# Compile the isolated optional-settings bridge; LunaLib is not bundled or required to play.
+$lunaLibJar = Join-Path $modsRoot "LunaLib\jars\LunaLib.jar"
 $jdkRoot = Join-Path $starsectorRoot "jdk-23+7\bin"
 $outputRoot = Join-Path $modRoot "out"
 $jarDirectory = Join-Path $modRoot "jars"
@@ -52,7 +54,8 @@ $classpath = @(
     (Join-Path $coreRoot "log4j-1.2.9.jar"),
     $graphicsLibJar,
     $consoleCommandsJar,
-    $combatChatterJar
+    $combatChatterJar,
+    $lunaLibJar
 ) -join ";"
 
 function Assert-RulesCsv {

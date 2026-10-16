@@ -53,6 +53,8 @@ public final class MenelausFlowRegression {
     private static final String UPGRADE = "chief_navigator_fob_ithaca_upgrades";
     private static final String LABORS = "chief_navigator_ithaca_menelaus_labors";
     private static final String DIRECTORY = "chief_navigator_ithaca_directory_back";
+    private static final String MOTHERSHIPS_REPORT_PAGE2 =
+            "chief_navigator_auto_page_chief_navigator_fob_ithaca_motherships_report_2";
     private static final List<Row> ROWS = new ArrayList<>();
     private static int pagesVisited;
 
@@ -699,6 +701,16 @@ public final class MenelausFlowRegression {
         }
         Fixture report = new Fixture(); report.stage(MenelausTrial.LABOR_MOTHERSHIPS, true, true);
         report.fire("ChiefNavigatorFobIthaca");
+        check(report.options.keySet().equals(Set.of(MOTHERSHIPS_REPORT_PAGE2))
+                        && !MenelausTrial.isLaborReported(MenelausTrial.LABOR_MOTHERSHIPS),
+                "The paged Labor I report must wait for its authored continuation without committing the report");
+        report.choose(MOTHERSHIPS_REPORT_PAGE2);
+        check(report.history.get(report.history.size() - 1).contains(
+                        "You can command recovered FOB Ithaca drones without the Automated Ships skill.")
+                        && Arrays.equals(report.textHighlights, new String[] {
+                                "You can command recovered FOB Ithaca drones without the Automated Ships skill."})
+                        && Arrays.equals(report.textHighlightColors, new Color[] {Color.WHITE}),
+                "The authorization notice must retain its native highlight on the continuation page containing it");
         check(report.options.containsKey("chief_navigator_menelaus_report_motherships"), "Completed Labor I needs its report option");
         report.choose("chief_navigator_menelaus_report_motherships");
         check(MenelausTrial.isLaborReported(MenelausTrial.LABOR_MOTHERSHIPS), "Labor I report commits durable stage state");
@@ -752,6 +764,9 @@ public final class MenelausFlowRegression {
         f.fire("PopulateOptions");
         check(f.options.containsKey(LABORS), "Completed Labor I must be reportable even after legacy intro flag expires");
         f.choose(LABORS);
+        check(f.options.keySet().equals(Set.of(MOTHERSHIPS_REPORT_PAGE2)),
+                "The legacy missing-marker contact opens the actual first report page");
+        f.choose(MOTHERSHIPS_REPORT_PAGE2);
         check(f.options.containsKey("chief_navigator_menelaus_report_motherships"),
                 "The exact legacy missing-marker state opens the Labor I report, not an empty contact");
         check(!f.applied.contains("chiefNavigatorFobIthacaBriefing"), "Legacy accepted save never replays introductory scene");

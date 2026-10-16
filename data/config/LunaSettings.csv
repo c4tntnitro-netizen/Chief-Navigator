@@ -1,0 +1,3 @@
+fieldID,fieldName,fieldType,defaultValue,secondaryValue,fieldDescription,minValue,maxValue,tab
+chiefNavigatorTroyFleetHeader,Troy Expedition,Header,Troy Expedition,,,,,Campaign
+chiefNavigatorTroyFleetDPLimit,Troy fleet deployment point limit,Int,50,,Sets the maximum DP of active ships that can open or cross Troy Terminus in either direction. Default: 50 DP. Saved changes apply immediately.,1,1000,Campaign

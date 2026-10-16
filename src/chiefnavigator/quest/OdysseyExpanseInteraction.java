@@ -1,5 +1,6 @@
 package chiefnavigator.quest;
 
+import chiefnavigator.config.ChiefNavigatorSettings;
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.CampaignFleetAPI;
 import com.fs.starfarer.api.campaign.InteractionDialogAPI;
@@ -29,23 +30,25 @@ public final class OdysseyExpanseInteraction extends ChoicePreservingDialogPlugi
                         + "Sinni confirms that the passage remains stable enough to retrace, for now.");
         float fleetDP = TroyDepartureInteraction.getFleetDP(
                 Global.getSector().getPlayerFleet());
+        float dpLimit = ChiefNavigatorSettings.getTroyFleetDPLimit();
         dialog.getTextPanel().addPara(
                 "Return manifest: %s / %s deployment points. The passage enforces the same limit in both directions.",
                 Misc.getTextColor(), Misc.getHighlightColor(),
                 TroyDepartureInteraction.formatDP(fleetDP),
-                TroyDepartureInteraction.formatDP(
-                        TroyDepartureInteraction.MAX_FLEET_DP))
+                TroyDepartureInteraction.formatDP(dpLimit))
                 .setHighlightColors(
-                        fleetDP > TroyDepartureInteraction.MAX_FLEET_DP
+                        fleetDP > dpLimit
                                 ? Misc.getNegativeHighlightColor()
                                 : Misc.getPositiveHighlightColor(),
                         Misc.getHighlightColor());
         dialog.getOptionPanel().addOption("Return through the Troy Terminus", RETURN);
-        if (fleetDP > TroyDepartureInteraction.MAX_FLEET_DP) {
+        if (fleetDP > dpLimit) {
             dialog.getOptionPanel().setEnabled(RETURN, false);
             dialog.getOptionPanel().setTooltip(
                     RETURN,
-                    "The active fleet must be reduced to 50 DP before it can return to Troy.");
+                    "The active fleet must be reduced to "
+                            + TroyDepartureInteraction.formatDP(dpLimit)
+                            + " DP before it can return to Troy.");
         } else {
             dialog.getOptionPanel().addOptionConfirmation(
                     RETURN,
@@ -80,10 +83,11 @@ public final class OdysseyExpanseInteraction extends ChoicePreservingDialogPlugi
     private void returnToTroy() {
         CampaignFleetAPI player = Global.getSector().getPlayerFleet();
         float fleetDP = TroyDepartureInteraction.getFleetDP(player);
-        if (player == null
-                || fleetDP > TroyDepartureInteraction.MAX_FLEET_DP) {
+        float dpLimit = ChiefNavigatorSettings.getTroyFleetDPLimit();
+        if (player == null || fleetDP > dpLimit) {
             dialog.getTextPanel().addPara(
-                    "The return aperture rejects the fleet manifest. The active fleet must remain at or below 50 deployment points.",
+                    "The return aperture rejects the fleet manifest. The active fleet must remain at or below "
+                            + TroyDepartureInteraction.formatDP(dpLimit) + " deployment points.",
                     Misc.getNegativeHighlightColor());
             return;
         }

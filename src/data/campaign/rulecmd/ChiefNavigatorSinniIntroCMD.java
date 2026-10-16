@@ -1,13 +1,16 @@
 package data.campaign.rulecmd;
 
+import chiefnavigator.config.ChiefNavigatorSettings;
 import chiefnavigator.quest.SinniBarEvent;
 import chiefnavigator.quest.SinniContact;
 import chiefnavigator.quest.SinniEventideIntel;
 import chiefnavigator.quest.SinniOneMoreHorizonIntel;
+import chiefnavigator.quest.TroyDepartureInteraction;
 import chiefnavigator.topography.SinniHyperspaceTopographyEventIntel;
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.InteractionDialogAPI;
 import com.fs.starfarer.api.campaign.rules.MemoryAPI;
+import com.fs.starfarer.api.campaign.rules.MemKeys;
 import com.fs.starfarer.api.impl.campaign.rulecmd.BaseCommandPlugin;
 import com.fs.starfarer.api.util.Misc.Token;
 import java.util.List;
@@ -20,6 +23,16 @@ public final class ChiefNavigatorSinniIntroCMD extends BaseCommandPlugin {
                            List<Token> params, Map<String, MemoryAPI> memoryMap) {
         if (params.isEmpty()) return false;
         String action = params.get(0).getString(memoryMap);
+        if ("routeInfo".equals(action)) {
+            MemoryAPI local = memoryMap.get(MemKeys.LOCAL);
+            if (local == null) return false;
+            local.set("$chiefNavigatorTroyDPLimit", TroyDepartureInteraction.formatDP(
+                    ChiefNavigatorSettings.getTroyFleetDPLimit()));
+            return true;
+        }
+        if ("generousRoute".equals(action)) {
+            return ChiefNavigatorSettings.getTroyFleetDPLimit() >= 240f;
+        }
         if ("accept".equals(action)) {
             Global.getSector().getMemoryWithoutUpdate().set(SinniBarEvent.STARTED, true);
             SinniContact.joinPlayerFleet(dialog == null

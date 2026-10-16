@@ -126,11 +126,16 @@ chiefNavigatorSinniEventideDestination,DialogOptionSelected,$option == chief_nav
 The lights beyond the window slide as Eventide's mirrors turn overhead.
 
 ""If anything remains there, the Hegemony intends to claim it. We can arrive first.""",0:chief_navigator_sinni_eventide_route:""How do we reach it?".",Ithaca and Hegemony objective reveal.
-chiefNavigatorSinniEventideRoute,DialogOptionSelected,$option == chief_navigator_sinni_eventide_route,,"""Waypoint Troy,"" Sinni says. ""A temporary terminus at the far southeast edge of the Sector. From there I can guide a small expedition through the Abyss and into the Orion Knot.""
+chiefNavigatorSinniEventideRoute,DialogOptionSelected,$option == chief_navigator_sinni_eventide_route,"ChiefNavigatorSinniIntroCMD routeInfo
+FireBest ChiefNavigatorSinniEventideRouteText",,,Populate the current fleet limit before resolving the route prose.
+chiefNavigatorSinniEventideRouteText,ChiefNavigatorSinniEventideRouteText,,FireAll ChiefNavigatorSinniEventideRouteOptions,"""Waypoint Troy,"" Sinni says. ""A temporary terminus at the far southeast edge of the Sector. From there I can guide a small expedition through the Abyss and into the Orion Knot.""
 
 She slides a manifest across the table.
 
-""The route will only hold an active fleet worth fifty deployment points. There is an anchorage at Troy where we can store everything else until we return.""",0:chief_navigator_sinni_eventide_preparation:""What should I bring?".",Waypoint Troy and fleet-limit explanation.
+""The route will only hold an active fleet worth $chiefNavigatorTroyDPLimit deployment points. There is an anchorage at Troy where we can store everything else until we return.""",,Waypoint Troy and fleet-limit explanation.
+chiefNavigatorSinniEventideRoutePreparationOption,ChiefNavigatorSinniEventideRouteOptions,,,,0:chief_navigator_sinni_eventide_preparation:""What should I bring?".",Normal preparation option remains available at every fleet limit.
+chiefNavigatorSinniEventideRouteLittleLimitOption,ChiefNavigatorSinniEventideRouteOptions,ChiefNavigatorSinniIntroCMD generousRoute,,,"1:chief_navigator_sinni_eventide_little_limit:""Doesn't seem like much of a limitation.""",Available when the configured Troy fleet limit is at least 240 DP.
+chiefNavigatorSinniEventideLittleLimit,DialogOptionSelected,$option == chief_navigator_sinni_eventide_little_limit,,"""Thank you for your praise."" Sinni bows behind her sleeves.",0:chief_navigator_sinni_eventide_preparation:""What should I bring?".",Optional response rejoins expedition preparation without changing progression.
 chiefNavigatorSinniEventidePreparation,DialogOptionSelected,$option == chief_navigator_sinni_eventide_preparation,,"""Efficiency Overhaul wherever it fits. Insulated Engine Assembly, or anything else that reduces your sensor profile. At least one dedicated supply ship and one fuel ship.""
 
 Sinni takes a measured sip.
@@ -1782,9 +1787,7 @@ Another pause.
 
 ""You have surprised me, Captain. This is sufficiently uncommon that you may take satisfaction in it. When the sequence reaches the third Labor, it will be entered as complete.""",0:chief_navigator_menelaus_early_wall_continue:Continue.,One-time Menelaus reaction after the player reclaims the Drifting Wall ahead of Labor III.
 chiefNavigatorFobIthacaMothershipsReport,ChiefNavigatorFobIthaca,"!ChiefNavigatorMenelausCMD stage early_wall
-ChiefNavigatorMenelausCMD stage motherships_report","ChiefNavigatorMenelausCMD init
-SetTextHighlightColors hColor
-SetTextHighlights ""You can command recovered FOB Ithaca drones without the Automated Ships skill.""","Menelaus receives the four destruction records without comment. The tactical display holds each mothership's last position as an empty marker.
+ChiefNavigatorMenelausCMD stage motherships_report",ChiefNavigatorMenelausCMD init,"Menelaus receives the four destruction records without comment. The tactical display holds each mothership's last position as an empty marker.
 
 Then all four markers flare teal.
 
@@ -1792,15 +1795,15 @@ Across the Odyssey Sector, dormant recovery frames converge on the wreck sites. 
 
 For once, the battered helm turns sharply.
 
-""Unexpected. Their destruction propagated the authentication farther than seizure would have.""
-
-New contacts spill from each restored hull: two Guard patrols per mothership, spreading out along independent routes through the system.
+""Unexpected. Their destruction propagated the authentication farther than seizure would have.""",0:chief_navigator_auto_page_chief_navigator_fob_ithaca_motherships_report_2:Continue.,Labor I debrief gates mothership restoration and eight friendly Guard patrols; final paragraph highlights drone command authorization. Auto-paged 1/2.
+chiefNavigatorFobIthacaMothershipsReportPage2,DialogOptionSelected,$option == chief_navigator_auto_page_chief_navigator_fob_ithaca_motherships_report_2,"SetTextHighlightColors hColor
+SetTextHighlights ""You can command recovered FOB Ithaca drones without the Automated Ships skill.""","New contacts spill from each restored hull: two Guard patrols per mothership, spreading out along independent routes through the system.
 
 ""The restored Guard recognizes you. You may approach its patrols and authorize the transfer of a drone to your fleet. The unmoored packs remain severed from Ithaca and will engage my patrols on contact.""
 
 ""Labor I is complete.""
 
-You can command recovered FOB Ithaca drones without the Automated Ships skill.",0:chief_navigator_menelaus_report_motherships:Continue.,Labor I debrief gates mothership restoration and eight friendly Guard patrols; final paragraph highlights drone command authorization.
+You can command recovered FOB Ithaca drones without the Automated Ships skill.",0:chief_navigator_menelaus_report_motherships:Continue.,Automatic runtime continuation 2/2 for chiefNavigatorFobIthacaMothershipsReport.
 chiefNavigatorFobIthacaResearchReport,ChiefNavigatorFobIthaca,"!ChiefNavigatorMenelausCMD stage early_wall
 ChiefNavigatorMenelausCMD stage research_report",ChiefNavigatorMenelausCMD init,"Menelaus reviews the four installed component records one by one. Ithaca's defense wall answers each diagnostic in turn.
 
@@ -5281,7 +5284,7 @@ chiefNavigatorTroyAnchorageAdvice,ChiefNavigatorTroyAnchorage_advice,,ChiefNavig
 
 ""Use Efficiency Overhaul wherever it fits. Insulated Engine Assembly and other hullmods that reduce your sensor profile will make the crossing less dangerous. Bring at least one dedicated supply ship and one fuel ship. If either runs dry out there, no one is coming to refill it.""","0:chief_navigator_troy_back:Back.
 100:chief_navigator_troy_leave:Leave.",Sinni's expedition preparation advice at Waypoint Troy.
-chiefNavigatorTroyAnchorageInvalid,ChiefNavigatorTroyAnchorage_invalid,,,"The departure lock refuses the fleet manifest. Store ships until the active fleet is worth no more than 50 deployment points.",0:chief_navigator_troy_back:Back.,Runtime safeguard for an invalid departure fleet.
+chiefNavigatorTroyAnchorageInvalid,ChiefNavigatorTroyAnchorage_invalid,,,"The departure lock refuses the fleet manifest. Store ships until the active fleet is worth no more than $chiefNavigatorTroyDPLimit deployment points.",0:chief_navigator_troy_back:Back.,Runtime safeguard for an invalid departure fleet.
 chiefNavigatorTroyAnchorageOpened,ChiefNavigatorTroyAnchorage_opened,,,"Space folds open beside the anchorage. The Troy Terminus is active, and Sinni lays in the short approach.",100:chief_navigator_troy_done:Continue.,Route-opening acknowledgement.
 chiefNavigatorTroyTerminusMain,ChiefNavigatorTroyTerminus_main,,,"The Troy Terminus hangs open where Sinni's calculations predicted: a rotating wound in space with a cold nebular glow beyond it.
 
@@ -5289,7 +5292,7 @@ The passage accepts no more than $chiefNavigatorTroyDPLimit deployment points in
 
 Active fleet: $chiefNavigatorTroyDP / $chiefNavigatorTroyDPLimit deployment points.","0:chief_navigator_troy_enter:Enter the Troy Terminus.
 100:chief_navigator_troy_terminus_leave:Leave.",Troy Terminus outbound interaction.
-chiefNavigatorTroyTerminusInvalid,ChiefNavigatorTroyTerminus_invalid,,,"The wormhole shears away from the fleet's drive field. The active fleet must remain at or below 50 deployment points.",0:chief_navigator_troy_terminus_back:Back.,Runtime safeguard for an invalid Troy transit.
+chiefNavigatorTroyTerminusInvalid,ChiefNavigatorTroyTerminus_invalid,,,"The wormhole shears away from the fleet's drive field. The active fleet must remain at or below $chiefNavigatorTroyDPLimit deployment points.",0:chief_navigator_troy_terminus_back:Back.,Runtime safeguard for an invalid Troy transit.
 chiefNavigatorTroyTerminusTransit,ChiefNavigatorTroyTerminus_transit,,,"Sinni guides your fleet through a treacherous series of slipstreams and gravity boosts. After expending half your supplies and fuel, your fleet arrives at the Orion Knot Sector.
 
 Sinni flags FOB Ithaca in Ashen Verge on the expedition map.",100:chief_navigator_troy_transit:Continue.,Black-screen Troy transit narration and FOB Ithaca objective reveal.

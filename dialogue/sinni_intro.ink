@@ -6,6 +6,7 @@
 VAR player_is_female = false
 VAR player_name = "Ang"
 VAR player_title = "Captain"
+VAR troy_dp_limit = 50 // Runtime value comes from Chief Navigator's LunaLib fleet-limit setting.
 
 -> start
 
@@ -208,7 +209,12 @@ The lights beyond the window slide as Eventide's mirrors turn overhead.
 
 She slides a manifest across the table.
 
-"The route will only hold an active fleet worth fifty deployment points. There is an anchorage at Troy where we can store everything else until we return."
+"The route will only hold an active fleet worth {troy_dp_limit} deployment points. There is an anchorage at Troy where we can store everything else until we return."
++ ["What should I bring?"] -> eventide_preparation
++ { troy_dp_limit >= 240 } ["Doesn't seem like much of a limitation."] -> eventide_little_limit
+
+=== eventide_little_limit ===
+"Thank you for your praise." Sinni bows behind her sleeves.
 + ["What should I bring?"] -> eventide_preparation
 
 === eventide_preparation ===

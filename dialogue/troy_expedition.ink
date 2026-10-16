@@ -1,9 +1,10 @@
 // Authoring mirror for the rules-driven Waypoint Troy interaction.
+VAR troy_dp_limit = 50 // Runtime value comes from the LunaLib fleet-limit setting.
 
 === anchorage ===
 The cooperative expedition anchorage holds its docking arms open. Its automated stores can retain ships and cargo until your return.
 
-Sinni's route can carry no more than 50 deployment points of ships. Storage is free; anything left here will remain available when you return.
+Sinni's route can carry no more than {troy_dp_limit} deployment points of ships. Storage is free; anything left here will remain available when you return.
 
 + [Access ship and cargo storage.]
 + [Ask Sinni for advice about preparing the expedition.] -> advice

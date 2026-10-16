@@ -288,7 +288,7 @@ public final class TroyArrivalScript {
         return isDepartureStation(station) ? station : null;
     }
 
-    /** Creates the visible waypoint opened by Sinni after the 50-DP check. */
+    /** Creates the visible waypoint opened by Sinni after the configured fleet-DP check. */
     public static JumpPointAPI ensureOdysseyWormhole(StarSystemAPI system) {
         if (system == null) return null;
         SectorEntityToken existing = system.getEntityById(WORMHOLE_ID);

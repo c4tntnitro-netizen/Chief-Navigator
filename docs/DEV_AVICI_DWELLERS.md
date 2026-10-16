@@ -82,7 +82,7 @@ The population regression covers actual spawn timing, saved timestamps, slot
 ownership, native-style battle despawn and delayed replacements. Existing
 Budai encounter, roster, salvage and music regressions retain legacy coverage.
 
-The earlier LunaLib portal-DP slider remains a separate pending development item.
+Optional LunaLib settings now expose the Troy fleet-DP limit (1–1,000; default 50), applied live to route opening and both directions. At 240 DP or above, the Eventide route briefing offers the additional comment and Sinni response authored by the user. Focused settings, portal, dialogue, guidance and Intel checks pass with LunaLib absent and with installed LunaLib 2.0.4. The broader MenelausFlowRegression still hits its existing Gautama-explanation assertion with both the prior committed rules and current rules; the affected report pagination, final report timing and authorization highlights pass separately.
 
 The public `v0.5.1` ZIP remains SHA-256
 `9fde6b8e174464ad737387ee0f348692ef200953d2c1a0b49d8004b264b52941`;
