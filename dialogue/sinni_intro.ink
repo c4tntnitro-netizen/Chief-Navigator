@@ -3,7 +3,7 @@
 // Runtime side effects are marked with tags and implemented by
 // ChiefNavigatorSinniIntroCMD.
 
-VAR player_is_female = false
+VAR player_is_male = true
 VAR player_name = "Ang"
 VAR player_title = "Captain"
 VAR troy_dp_limit = 50 // Runtime value comes from Chief Navigator's LunaLib fleet-limit setting.
@@ -17,10 +17,9 @@ A waitress approaches you with a note in hand.
 === start ===
 "Captain {player_name}?" The waitress hands you the slip of paper. "The woman at the end of the bar wants to speak to you."
 
-Waiting there is a tall woman with silvery hair and a dusky complexion, surrounded by untouched drinks and shots. As you make your way over, you catch a number of patrons shooting glances at you. She holds a thick mug filled with steaming green tea between her hands and watches you approach with an unreadable expression.
+Waiting there is a tall woman with silvery hair, surrounded by untouched drinks and shots. As you make your way over, you catch a number of patrons shooting glances at you. She holds a thick mug filled with steaming green tea between her hands and watches your approach with a still, neutral expression.
 
 + [Take one of the drinks.] -> drink
-+ [Hold the note up. "You have a job for me?"] -> note
 
 === drink ===
 You gesture at the vast array of drinks by her side.
@@ -29,7 +28,7 @@ Wordlessly, she picks out a shot glass from around her, and sets it in front of 
 
 You down it.
 
-{ player_is_female:
+{ player_is_male:
     A man swears loudly behind you.
     + ["Thanks."] -> drink_2_male
 - else:
@@ -38,106 +37,77 @@ You down it.
 }
 
 === drink_2_male ===
-"They keep buying them for me," the woman says, taking another sip from her mug. Her oversized sleeves have the cut and patterning of some Eventide cantons. She gestures toward the remaining drinks. "As you please."
+"They keep buying them for me," the woman says, taking another sip from her mug. Her oversized sleeves have the cut and patterning of some Eventide cantons. She motions toward the remaining drinks. "As you please."
 + ['Redistribute' the rest of the drinks.] -> drink_3_male
 
 === drink_3_male ===
-"Hey guys?" You say, leaning towards your bodyguards. "The counter's looking kind of cluttered."
+"Hey, guys," you say, leaning toward your bodyguards. "Counter's looking kind of cluttered."
 
-They don't need to be asked twice. Damn vultures. The woman's would-be suitors are clearly unhappy about the arrangement, but what are they going to do? You're the only one with an armed retinue.
--> drinks_cleared
+Your men don't need to be asked twice. The marines make quick work of the array of shots and cocktails. The woman's would-be suitors are clearly unhappy about the arrangement, but a glance at your armed retinue appears to settle things.
 
-=== drinks_cleared ===
 By the time your bodyguards are finished, the bar is considerably emptier.
 + ["So what's this note?"] -> note
 
 === note ===
-The woman takes a sip from her mug.
+
+The woman sets down her mug and draws a dataslate from her sleeve. She tilts it toward you, and a chart opens on your own device. The Persean Sector appears, then shrinks as the view pulls back and pans southwest. Familiar systems slide off the screen. The map keeps scrolling into Abyssal Hyperspace, long after the last familiar system has disappeared.
+
+A red warning box flashes over the chart, but the map continues moving beneath it.
+
+DOMAIN NAVIGATION ADVISORY WARNING # font:small_insignia # style:archive_warning
+
+\/\/ datastream resetting... # font:small_insignia # style:archive_warning
+
+Far beyond the Sector, a small cluster of star systems comes into view. You barely have time to register their names before another message obscures them.
+
+NAVIGATION ACCESS DENIED. Please apply for augmented Domain Interstellar Navigation Access to enable navigation for this area. # font:small_insignia # style:archive_denied
+
+That gets your attention.
+
++ ["You're trying to go outside of the sector."] -> abyss
+
+=== abyss ===
 
 "Yes."
 
-She looks you over for another moment. "I need a fleet."
-+ ["For what?"] -> note_2
-
-=== note_2 ===
-She takes another sip.
-
-"To go to a place."
-+ ["Where?"] -> note_3
-
-=== note_3 ===
-"Far."
-+ [Make a coin gesture.] -> coin
-+ ["How much?"] -> coin
-
-=== coin ===
-She holds her arms out wide.
-+ ["I can work with that."] -> deal
-+ [Nod approvingly.] -> deal
-
-=== deal ===
-The woman sets her mug down.
-
-"I need to go outside the Sector."
-
-That gets your attention.
-+ ["You don't want to go into Abyssal Hyperspace."] -> abyss
-
-=== abyss ===
 The woman cocks her head.
 
 "You've been?"
-+ ["There are... things out there."] -> monsters
-+ ["Everyone knows that."] -> knowledge
+
++ ["There are... 'things' out there."] -> monsters
 
 === monsters ===
 Her eyes light up.
 
 "What things?"
-+ ["These... creatures. Made of pure energy. Hostile."] -> dwellers
-+ ["These... machines. Called 'Threat'. It's some kind of artificial, self-replicating swarm."] -> threat
-
-=== knowledge ===
-She takes another sip from her mug. This time she doesn't reply.
-+ ["And you're still planning to go?"] -> still_going
++ ["These creatures. Made of pure energy. Hostile."] -> dwellers
++ ["These machines. Called 'Threat'. It's some kind of artificial, self-replicating swarm."] -> threat
 
 === dwellers ===
-She stares at you.
+She looks at you.
 
-"Alive?"
+"Creatures? Alive?"
 
-"...Yes. Absolutely."
-
-Her attention sharpens.
-
-"Interesting."
-+ ["That's not the word I'd use."] -> still_going
++ ["Absolutely."] -> endgame
 
 === threat ===
 She goes very still.
 
 "Self-replicating?"
 
-"That's what it looked like."
++ ["That's what it looked like."] -> endgame
 
-She takes a slow sip from her mug. You can see the cup is empty.
+=== endgame ===
+The woman turns towards the bar, staring a hole into the wall. She takes a slow sip from her mug. Her empty mug.
 
 + ["You don't seem worried."] -> still_going
 
 === still_going ===
-"I'm planning an expedition," the woman says. She pours herself more tea. "Outside the Sector. Far enough that most captains would turn back before the charts stopped helping."
+"I'm planning an expedition. I need your fleet," the woman says.
 
 She studies you over the rim of her cup.
 
-"You look like someone who can keep a fleet alive after the edge of a map."
-+ ["And you need my fleet."] -> still_going_2
-
-=== still_going_2 ===
-"Yes."
-
-The woman ponders her cup.
-
-"Come to Eventide. I have an office overlooking the mirror harbor. We can take tea there, and I can explain what the expedition actually entails."
+"Take us to Eventide. I have an office overlooking the mirror harbor, where I will elaborate further."
 -> decision
 
 === decision ===
@@ -169,47 +139,74 @@ Eventide is marked on your navigation plot. # action:accept
 
 [Quest started: ONE MORE HORIZON]
 
-[Reward: +2 Burn speed cap; +1 base Burn level.]
 + [Leave.] -> leave
 
 === eventide_arrival ===
-Your shuttle descends through Eventide's measured night, past ranks of orbital mirrors and the lights of the harbor. Sinni's address leads to a quiet office above the water, furnished in dark wood and screened from the city by broad windows.
+Your shuttle descends through Eventide's sky, past ranks of orbital mirrors and the lights of the harbor. Sinni's address leads to a quiet office above the water, furnished in dark wood and screened from the city by broad windows.
 
-She is already seated at a low table. A second cup waits opposite her.
+A navy-blue banner hangs behind the desk, with a spear emblazoned upon a shield. Inscribed below the spear and shield is a short motto and a designation:
 
-"You came."
+"XIV Battlegroup, 6th Special Operations Force
+
+Task Force Spartan
+
+Molon Labe!" # font:victor16
+
+Sinni strides in, then sits across from you. A holoscreen flickers on her desk and she gives the updates on the screen a single glance before closing it.
+
+"Thank you for making this trip."
 
 Sinni fills your cup, then rests both hands around her own.
 
-"Now I can tell you why I needed a fleet."
+"Now. About your fleet."
+
 + ["I'm listening."] -> eventide_plan
 
 === eventide_plan ===
-"The Hegemony is assembling an expedition beyond the Persean Sector," Sinni says. "They are following records left by the Fourteenth Battlegroup. Records of the forces they abandoned when the gates failed."
+"The Hegemony is assembling an expedition beyond the Persean Sector," Sinni says. “When the Gates failed, the Fourteenth was stranded beyond the Persean Sector. Facing annihilation, the Fourteenth fled Ithaca to begin their exodus through the Persean Abyss. HEGCOM believes now is the time to make the journey back.”
 
 She turns her cup once against the grain of the table.
 
-"My ancestor Helen served with Task Force Spartan at their destination. When the Fourteenth abandoned Ithaca and crossed the Abyss, she went with them. She wrote an account of the journey."
+"But I have something they don't. Records of my great-grandmother. Lone survivor of the Fourteenth's elite detachment, Navigator Helen Argyros of Task Force Spartan."
 
-Sinni lays one hand on the closed folio beside her.
+Sinni gestures at the blue and white livery behind her. It hangs in the dim light of the office.
 
-"Their commanders know there was a destination. Helen's record tells me how the survivors came out. I rebuilt the route in reverse."
-+ ["Where are they going?"] -> eventide_destination
++ ["Ithaca?"] -> eventide_destination
 
 === eventide_destination ===
-"Forward Operating Base Ithaca. A Domain macrobase in the Orion Knot, built to service the forces that carried the Fourteenth into the Sector."
 
-The lights beyond the window slide as Eventide's mirrors turn overhead.
+"Forward Operating Base Ithaca. A Domain macrobase in the Orion Knot Sector, built to support Domain Navy forces in transit to frontier sectors."
 
-"If anything remains there, the Hegemony intends to claim it. We can arrive first."
+Light sweeps across the office as Eventide's mirrors turn overhead. The autoshades descend, returning the room to its former dimness.
+
+"If anything remains there, the Hegemony intends to claim it."
+
+Sinni leans forward, weaving her fingers together. "We have Helen's records. I can get us there faster."
+
 + ["How do we reach it?"] -> eventide_route
++ ["Stealing from the Heggies? I like this plan."] -> eventide_route_0
++ ["Ludd preserve us. You want to race the Hegemony through the Abyss?"] -> eventide_route_1
+
+=== eventide_route_0 ===
+"Careful." Sinni leans back, resting her cup against her cheek. "Were I more patriotically inclined, Captain..."
+
++ ["Alright, alright. Where do we get started?"] -> eventide_route
+
+=== eventide_route_1 ===
+"Scared, Captain?"
+
++ ["More like intrigued. Where do we get started?"] -> eventide_route
++ ["Excited. Where do we get started?"] -> eventide_route
 
 === eventide_route ===
-"Waypoint Troy," Sinni says. "A temporary terminus at the far southeast edge of the Sector. From there I can guide a small expedition through the Abyss and into the Orion Knot."
+"Waypoint Troy," Sinni says. "A terminus. From there I can guide an expedition through the Persean Abyss and into the Orion Knot Sector."
 
-She slides a manifest across the table.
+Another sweep of the mirrors. Light, then dark.
 
-"The route will only hold an active fleet worth {troy_dp_limit} deployment points. There is an anchorage at Troy where we can store everything else until we return."
+She slides a dataslate across the table, and a manifest pops up.
+
+"The route will only hold a small fleet. Up to {troy_dp_limit} deployment points. There is an anchorage at Troy where we can store everything else until we return."
+
 + ["What should I bring?"] -> eventide_preparation
 + { troy_dp_limit >= 240 } ["Doesn't seem like much of a limitation."] -> eventide_little_limit
 
@@ -218,17 +215,18 @@ She slides a manifest across the table.
 + ["What should I bring?"] -> eventide_preparation
 
 === eventide_preparation ===
-"Efficiency Overhaul wherever it fits. Insulated Engine Assembly, or anything else that reduces your sensor profile. At least one dedicated supply ship and one fuel ship."
+"I'd recommend you tool your ships for operational efficiency. Sensor profile reduction. One supply ship and one fuel ship. At least."
 
-Sinni takes a measured sip.
+Sinni cross-references the expedition manifest with your fleet profile. Worryingly, many of your largest, most capable ships are automatically greyed out.
 
-"The route is survivable. Being noticed along it may not be."
+"Being noticed may not be survivable. We should avoid engagements."
+
 + [Add Waypoint Troy to the navigation plot.] -> eventide_complete
 
 === eventide_complete ===
-Sinni touches two fingers to the table. A point appears at the far southeast edge of the Sector map, followed by the identification code for a cooperative anchorage.
+Sinni touches two fingers to her desk. The holoscreen springs up again, mapping the Persean Sector. A point appears at the far southeast edge of the Sector map, followed by the identification code for a cooperative anchorage.
 
-"Waypoint Troy," she says. "Meet me there when your fleet is ready."
+"Depart when you are ready."
 
 Waypoint Troy is marked on your navigation plot. # action:brief
 + [Leave Sinni's office.] -> END

@@ -4,80 +4,60 @@ chiefNavigatorBudaiEncounterOpening,BeginFleetEncounter,"$chief_navigator_budai_
 !$global.chief_navigator_budai_defeated_v1",,"Budai's distortion fills the tactical display. No transmission accompanies its approach.",,Owned Budai bypasses the generic faction FleetDesc; native fleet dialog retains battle and salvage choices.
 chiefNavigatorSinniPrompt,ChiefNavigatorSinniIntro_prompt,,,A waitress approaches you with a note in hand.,0:chief_navigator_sinni_event:Take the note from the woman drinking tea at the bar.,Sinni story-bar prompt.
 chiefNavigatorSinniStart,ChiefNavigatorSinniIntro_start,,,"""Captain $chiefNavigatorPlayerName?"" The waitress hands you the slip of paper. ""The woman at the end of the bar wants to speak to you.""
-Waiting there is a tall woman with silvery hair and a dusky complexion, surrounded by untouched drinks and shots. As you make your way over, you catch a number of patrons shooting glances at you. She holds a thick mug filled with steaming green tea between her hands and watches you approach with an unreadable expression.","0:chief_navigator_sinni_drink:Take one of the drinks.
-10:chief_navigator_sinni_note:Hold the note up. ""You have a job for me?""",Sinni introduction.
+
+Waiting there is a tall woman with silvery hair, surrounded by untouched drinks and shots. As you make your way over, you catch a number of patrons shooting glances at you. She holds a thick mug filled with steaming green tea between her hands and watches your approach with a still, neutral expression.",0:chief_navigator_sinni_drink:Take one of the drinks.,Sinni introduction.
 chiefNavigatorSinniDrinkFemale,ChiefNavigatorSinniIntro_drink,$chief_navigator_player_female,,"You gesture at the vast array of drinks by her side.
 
 Wordlessly, she picks out a shot glass from around her, and sets it in front of you.
 
 You down it.
 
-A man swears loudly behind you.","0:chief_navigator_sinni_drink_2_male:""Thanks.""",Female-player variation.
+A man whistles loudly behind you.","0:chief_navigator_sinni_drink_2_male:""Thanks.""",Female-player variation.
 chiefNavigatorSinniDrinkOther,ChiefNavigatorSinniIntro_drink,!$chief_navigator_player_female,,"You gesture at the vast array of drinks by her side.
 
 Wordlessly, she picks out a shot glass from around her, and sets it in front of you.
 
 You down it.
 
-A man whistles loudly behind you.","0:chief_navigator_sinni_drink_2_male:""Thanks.""",Non-female-player variation.
-chiefNavigatorSinniDrink2,ChiefNavigatorSinniIntro_drink_2_male,,,"""They keep buying them for me,"" the woman says, taking another sip from her mug. Her oversized sleeves have the cut and patterning of some Eventide cantons. She gestures toward the remaining drinks. ""As you please.""",0:chief_navigator_sinni_drink_3_male:'Redistribute' the rest of the drinks.,
-chiefNavigatorSinniDrink3,ChiefNavigatorSinniIntro_drink_3_male,,,"""Hey guys?"" You say, leaning towards your bodyguards. ""The counter's looking kind of cluttered.""
+A man swears loudly behind you.","0:chief_navigator_sinni_drink_2_male:""Thanks.""",Non-female-player variation.
+chiefNavigatorSinniDrink2,ChiefNavigatorSinniIntro_drink_2_male,,,"""They keep buying them for me,"" the woman says, taking another sip from her mug. Her oversized sleeves have the cut and patterning of some Eventide cantons. She motions toward the remaining drinks. ""As you please.""",0:chief_navigator_sinni_drink_3_male:'Redistribute' the rest of the drinks.,
+chiefNavigatorSinniDrink3,ChiefNavigatorSinniIntro_drink_3_male,,,"""Hey, guys,"" you say, leaning toward your bodyguards. ""Counter's looking kind of cluttered.""
 
-They don't need to be asked twice. Damn vultures. The woman's would-be suitors are clearly unhappy about the arrangement, but what are they going to do? You're the only one with an armed retinue.
+Your men don't need to be asked twice. The marines make quick work of the array of shots and cocktails. The woman's would-be suitors are clearly unhappy about the arrangement, but a glance at your armed retinue appears to settle things.
 
 By the time your bodyguards are finished, the bar is considerably emptier.","0:chief_navigator_sinni_note:""So what's this note?""",
-chiefNavigatorSinniNote,ChiefNavigatorSinniIntro_note,,,"The woman takes a sip from her mug.
+chiefNavigatorSinniNote,ChiefNavigatorSinniIntro_note,,"ChiefNavigatorSinniIntroCMD archiveText warning ChiefNavigatorSinniIntro_navigation_warning
+FireBest ChiefNavigatorSinniIntro_note_chart","The woman sets down her mug and draws a dataslate from her sleeve. She tilts it toward you, and a chart opens on your own device. The Persean Sector appears, then shrinks as the view pulls back and pans southwest. Familiar systems slide off the screen. The map keeps scrolling into Abyssal Hyperspace, long after the last familiar system has disappeared.
 
-""Yes.""
+A red warning box flashes over the chart, but the map continues moving beneath it.",,Continuous chart reveal with Hall of Triumph archive warning typography; no intermediate player choice.
+chiefNavigatorSinniNavigationWarning,ChiefNavigatorSinniIntro_navigation_warning,,,"DOMAIN NAVIGATION ADVISORY WARNING
 
-She looks you over for another moment. ""I need a fleet.""","0:chief_navigator_sinni_note_2:""For what?""",
-chiefNavigatorSinniNote2,ChiefNavigatorSinniIntro_note_2,,,"She takes another sip.
+// datastream resetting...",,"Text-only readout in Small Insignia with native warning-red text, matching Hall of Triumph archives."
+chiefNavigatorSinniNoteChart,ChiefNavigatorSinniIntro_note_chart,,"ChiefNavigatorSinniIntroCMD archiveText denied ChiefNavigatorSinniIntro_navigation_denied ""NAVIGATION ACCESS DENIED."" ""Domain Interstellar Navigation Access""
+FireBest ChiefNavigatorSinniIntro_note_reaction","Far beyond the Sector, a small cluster of star systems comes into view. You barely have time to register their names before another message obscures them.",,"Automatic continuation of the same chart reveal, followed directly by the authored player response."
+chiefNavigatorSinniNavigationDenied,ChiefNavigatorSinniIntro_navigation_denied,,,NAVIGATION ACCESS DENIED. Please apply for augmented Domain Interstellar Navigation Access to enable navigation for this area.,,Text-only Small Insignia access denial; muted archive gray with warning-red heading and access highlights supplied by CSV.
+chiefNavigatorSinniNoteReaction,ChiefNavigatorSinniIntro_note_reaction,,,That gets your attention.,"0:chief_navigator_sinni_abyss:""You're trying to go outside of the sector.""",
+chiefNavigatorSinniAbyss,ChiefNavigatorSinniIntro_abyss,,,"""Yes.""
 
-""To go to a place.""","0:chief_navigator_sinni_note_3:""Where?""",
-chiefNavigatorSinniNote3,ChiefNavigatorSinniIntro_note_3,,,"""Far.""","0:chief_navigator_sinni_coin_gesture:Make a coin gesture.
-10:chief_navigator_sinni_coin_price:""How much?""",
-chiefNavigatorSinniCoin,ChiefNavigatorSinniIntro_coin,,,She holds her arms out wide.,"0:chief_navigator_sinni_deal_agree:""I can work with that.""
-10:chief_navigator_sinni_deal_nod:Nod approvingly.",
-chiefNavigatorSinniDeal,ChiefNavigatorSinniIntro_deal,,,"The woman sets her mug down.
+The woman cocks her head.
 
-""I need to go outside the Sector.""
-
-That gets your attention.","0:chief_navigator_sinni_abyss:""You don't want to go into Abyssal Hyperspace.""",
-chiefNavigatorSinniAbyss,ChiefNavigatorSinniIntro_abyss,,,"The woman cocks her head.
-
-""You've been?""","0:chief_navigator_sinni_monsters:""There are... things out there.""
-10:chief_navigator_sinni_knowledge:""Everyone knows that.""",
+""You've been?""","0:chief_navigator_sinni_monsters:""There are... 'things' out there.""",
 chiefNavigatorSinniMonsters,ChiefNavigatorSinniIntro_monsters,,,"Her eyes light up.
 
-""What things?""","0:chief_navigator_sinni_dwellers:""These... creatures. Made of pure energy. Hostile.""
-10:chief_navigator_sinni_threat:""These... machines. Called 'Threat'. It's some kind of artificial, self-replicating swarm.""",
-chiefNavigatorSinniKnowledge,ChiefNavigatorSinniIntro_knowledge,,,"She takes another sip from her mug. This time she doesn't reply.","0:chief_navigator_sinni_still_going:""And you're still planning to go?""",
-chiefNavigatorSinniDwellers,ChiefNavigatorSinniIntro_dwellers,,,"She stares at you.
+""What things?""","0:chief_navigator_sinni_dwellers:""These creatures. Made of pure energy. Hostile.""
+10:chief_navigator_sinni_threat:""These machines. Called 'Threat'. It's some kind of artificial, self-replicating swarm.""",
+chiefNavigatorSinniDwellers,ChiefNavigatorSinniIntro_dwellers,,,"She looks at you.
 
-""Alive?""
-
-""...Yes. Absolutely.""
-
-Her attention sharpens.
-
-""Interesting.""","0:chief_navigator_sinni_still_going:""That's not the word I'd use.""",
+""Creatures? Alive?""","0:chief_navigator_sinni_endgame:""Absolutely.""",
 chiefNavigatorSinniThreat,ChiefNavigatorSinniIntro_threat,,,"She goes very still.
 
-""Self-replicating?""
-
-""That's what it looked like.""
-
-She takes a slow sip from her mug. You can see the cup is empty.","0:chief_navigator_sinni_still_going:""You don't seem worried.""",
-chiefNavigatorSinniStillGoing,ChiefNavigatorSinniIntro_still_going,,,"""I'm planning an expedition,"" the woman says. She pours herself more tea. ""Outside the Sector.""
+""Self-replicating?""","0:chief_navigator_sinni_endgame:""That's what it looked like.""",
+chiefNavigatorSinniEndgame,ChiefNavigatorSinniIntro_endgame,,,"The woman turns towards the bar, staring a hole into the wall. She takes a slow sip from her mug. Her empty mug.","0:chief_navigator_sinni_still_going:""You don't seem worried.""",
+chiefNavigatorSinniStillGoing,ChiefNavigatorSinniIntro_still_going,,FireAll ChiefNavigatorSinniIntro_decision,"""I'm planning an expedition. I need your fleet,"" the woman says.
 
 She studies you over the rim of her cup.
 
-""I have heard you are capable.""","0:chief_navigator_sinni_still_going_2:""And you need my fleet.""",
-chiefNavigatorSinniStillGoing2,ChiefNavigatorSinniIntro_still_going_2,,FireAll ChiefNavigatorSinniIntro_decision,"""Yes.""
-
-The woman ponders her cup.
-
-""Come to Eventide. I have an office overlooking the mirror harbor. We can take tea there, and I can explain what the expedition actually entails.""",,Question hub and Eventide invitation.
+""Take us to Eventide. I have an office overlooking the mirror harbor, where I will elaborate further.""",,Expedition proposal and Eventide invitation.
 chiefNavigatorSinniDecisionName,ChiefNavigatorSinniIntro_decision,!$chiefNavigatorSinniAskedName,,,"0:chief_navigator_sinni_name:""Right. What's your name?""",Adds the one-shot name question until selected.
 chiefNavigatorSinniDecisionWhy,ChiefNavigatorSinniIntro_decision,!$chiefNavigatorSinniAskedWhy,,,"10:chief_navigator_sinni_why_me:""One last thing... why did you pick me?""",Adds the one-shot motivation question until selected.
 chiefNavigatorSinniDecisionExit,ChiefNavigatorSinniIntro_decision,,,,"20:chief_navigator_sinni_accept:Take Sinni on as an officer.
@@ -96,54 +76,73 @@ Eventide is marked on your navigation plot.
 
 [Quest started: ADEPT OF THE STARS AND WAVES]
 
-[Quest started: ONE MORE HORIZON]
-",100:chief_navigator_sinni_leave:Leave.,Recruitment creates the Eventide tea objective and marked sightseeing quest; Troy remains unrevealed.
+[Quest started: ONE MORE HORIZON]",100:chief_navigator_sinni_leave:Leave.,Recruitment creates the Eventide tea objective and marked sightseeing quest; Troy remains unrevealed.
 
 chiefNavigatorSinniEventideOption,PopulateOptions,"$id == eventide
 $global.chief_navigator_started
 !$global.chief_navigator_eventide_briefed
 $menuState == main",,,70:chief_navigator_sinni_eventide_office:Visit Sinni's office.,Eventide-only expedition briefing entry point.
-chiefNavigatorSinniEventideArrival,DialogOptionSelected,$option == chief_navigator_sinni_eventide_office,ChiefNavigatorPeopleCMD illustrated chief_navigator_sinni_eventide_tea,"Your shuttle descends through Eventide's measured night, past ranks of orbital mirrors and the lights of the harbor. Sinni's address leads to a quiet office above the water, furnished in dark wood and screened from the city by broad windows.
+chiefNavigatorSinniEventideArrival,DialogOptionSelected,$option == chief_navigator_sinni_eventide_office,"ChiefNavigatorPeopleCMD illustrated chief_navigator_sinni_eventide_tea
+ChiefNavigatorSinniIntroCMD styledText victor16 ChiefNavigatorSinniEventideInscription
+FireBest ChiefNavigatorSinniEventideArrivalContinue","Your shuttle descends through Eventide's sky, past ranks of orbital mirrors and the lights of the harbor. Sinni's address leads to a quiet office above the water, furnished in dark wood and screened from the city by broad windows.
 
-She is already seated at a low table. A second cup waits opposite her.
+A navy-blue banner hangs behind the desk, with a spear emblazoned upon a shield. Inscribed below the spear and shield is a short motto and a designation:",,Tea meeting opening; the supplied illustration is shown here and retained through the scene.
+chiefNavigatorSinniEventideInscription,ChiefNavigatorSinniEventideInscription,,,"""XIV Battlegroup, 6th Special Operations Force
 
-""You came.""
+Task Force Spartan
+
+Molon Labe!""",,"Text-only Task Force Spartan inscription rendered in native Victor 16, enlarged from the default Victor 14."
+chiefNavigatorSinniEventideArrivalContinue,ChiefNavigatorSinniEventideArrivalContinue,,,,0:chief_navigator_sinni_eventide_arrival_continue:Continue.,Runtime pagination after the office banner.
+chiefNavigatorSinniEventideArrivalSeated,DialogOptionSelected,$option == chief_navigator_sinni_eventide_arrival_continue,,"Sinni strides in, then sits across from you. A holoscreen flickers on her desk and she gives the updates on the screen a single glance before closing it.
+
+""Thank you for making this trip.""
 
 Sinni fills your cup, then rests both hands around her own.
 
-""Now I can tell you why I needed a fleet.""",0:chief_navigator_sinni_eventide_listen:""I'm listening.".",Tea meeting opening; the supplied illustration is shown here and retained through the scene.
-chiefNavigatorSinniEventidePlan,DialogOptionSelected,$option == chief_navigator_sinni_eventide_listen,,"""The Hegemony is assembling an expedition beyond the Persean Sector,"" Sinni says. ""They are following records left by the Fourteenth Battlegroup. Records of the forces they abandoned when the gates failed.""
+""Now. About your fleet.""","0:chief_navigator_sinni_eventide_listen:""I'm listening.""",
+chiefNavigatorSinniEventidePlan,DialogOptionSelected,$option == chief_navigator_sinni_eventide_listen,,"""The Hegemony is assembling an expedition beyond the Persean Sector,"" Sinni says. ""When the Gates failed, the Fourteenth was stranded beyond the Persean Sector. Facing annihilation, the Fourteenth fled Ithaca to begin their exodus through the Persean Abyss. HEGCOM believes now is the time to make the journey back.""
 
 She turns her cup once against the grain of the table.
 
-""My ancestor Helen served with an elite detachment of the 14th called 'Task Force Spartan'. When the Fourteenth abandoned their positions and crossed the Abyss, she went with them. She wrote an account of the journey.""
+""But I have something they don't. Records of my great-grandmother. Lone survivor of the Fourteenth's elite detachment, Navigator Helen Argyros of Task Force Spartan.""
 
-Sinni lays one hand on the closed folio beside her.
+Sinni gestures at the blue and white livery behind her. It hangs in the dim light of the office.","0:chief_navigator_sinni_eventide_destination:""Ithaca?""",First expedition detail.
+chiefNavigatorSinniEventideDestination,DialogOptionSelected,$option == chief_navigator_sinni_eventide_destination,,"""Forward Operating Base Ithaca. A Domain macrobase in the Orion Knot Sector, built to support Domain Navy forces in transit to frontier sectors.""
 
-""Their commanders know there was a destination. Helen's record tells me how the survivors came out. I rebuilt the route in reverse.""",0:chief_navigator_sinni_eventide_destination:""Where are they going?".",First expedition detail.
-chiefNavigatorSinniEventideDestination,DialogOptionSelected,$option == chief_navigator_sinni_eventide_destination,,"""Forward Operating Base Ithaca. A Domain macrobase in the Orion Knot, built to service Domain Naval forces transiting into the Persean Sector.""
+Light sweeps across the office as Eventide's mirrors turn overhead. The autoshades descend, returning the room to its former dimness.
 
-The lights beyond the window slide as Eventide's mirrors turn overhead.
+""If anything remains there, the Hegemony intends to claim it.""
 
-""If anything remains there, the Hegemony intends to claim it. We can arrive first.""",0:chief_navigator_sinni_eventide_route:""How do we reach it?".",Ithaca and Hegemony objective reveal.
+Sinni leans forward, weaving her fingers together. ""We have Helen's records. I can get us there faster.""","0:chief_navigator_sinni_eventide_route:""How do we reach it?""
+10:chief_navigator_sinni_eventide_route_0:""Stealing from the Heggies? I like this plan.""
+20:chief_navigator_sinni_eventide_route_1:""Ludd preserve us. You want to race the Hegemony through the Abyss?""",Ithaca and Hegemony objective reveal.
+chiefNavigatorSinniEventideRoute0,DialogOptionSelected,$option == chief_navigator_sinni_eventide_route_0,,"""Careful."" Sinni leans back, resting her cup against her cheek. ""Were I more patriotically inclined, Captain...""","0:chief_navigator_sinni_eventide_route:""Alright, alright. Where do we get started?""",
+chiefNavigatorSinniEventideRoute1,DialogOptionSelected,$option == chief_navigator_sinni_eventide_route_1,,"""Scared, Captain?""","0:chief_navigator_sinni_eventide_route_intrigued:""More like intrigued. Where do we get started?""
+10:chief_navigator_sinni_eventide_route_excited:""Excited. Where do we get started?""",
+chiefNavigatorSinniEventideRouteIntrigued,DialogOptionSelected,$option == chief_navigator_sinni_eventide_route_intrigued,"ChiefNavigatorSinniIntroCMD routeInfo
+FireAll ChiefNavigatorSinniEventideRouteText",,,Distinct option ID for a converging authored response; populate the live limit before rendering.
+chiefNavigatorSinniEventideRouteExcited,DialogOptionSelected,$option == chief_navigator_sinni_eventide_route_excited,"ChiefNavigatorSinniIntroCMD routeInfo
+FireAll ChiefNavigatorSinniEventideRouteText",,,Distinct option ID for a converging authored response; populate the live limit before rendering.
 chiefNavigatorSinniEventideRoute,DialogOptionSelected,$option == chief_navigator_sinni_eventide_route,"ChiefNavigatorSinniIntroCMD routeInfo
 FireBest ChiefNavigatorSinniEventideRouteText",,,Populate the current fleet limit before resolving the route prose.
-chiefNavigatorSinniEventideRouteText,ChiefNavigatorSinniEventideRouteText,,FireAll ChiefNavigatorSinniEventideRouteOptions,"""Waypoint Troy,"" Sinni says. ""A temporary terminus at the far southeast edge of the Sector. From there I can guide a small expedition through the Abyss and into the Orion Knot.""
+chiefNavigatorSinniEventideRouteText,ChiefNavigatorSinniEventideRouteText,,FireAll ChiefNavigatorSinniEventideRouteOptions,"""Waypoint Troy,"" Sinni says. ""A terminus. From there I can guide an expedition through the Persean Abyss and into the Orion Knot Sector.""
 
-She slides a manifest across the table.
+Another sweep of the mirrors. Light, then dark.
 
-""The route will only hold an active fleet worth $chiefNavigatorTroyDPLimit deployment points. There is an anchorage at Troy where we can store everything else until we return.""",,Waypoint Troy and fleet-limit explanation.
-chiefNavigatorSinniEventideRoutePreparationOption,ChiefNavigatorSinniEventideRouteOptions,,,,0:chief_navigator_sinni_eventide_preparation:""What should I bring?".",Normal preparation option remains available at every fleet limit.
+She slides a dataslate across the table, and a manifest pops up.
+
+""The route will only hold a small fleet. Up to $chiefNavigatorTroyDPLimit deployment points. There is an anchorage at Troy where we can store everything else until we return.""",,Waypoint Troy and fleet-limit explanation.
+chiefNavigatorSinniEventideRoutePreparationOption,ChiefNavigatorSinniEventideRouteOptions,,,,"0:chief_navigator_sinni_eventide_preparation:""What should I bring?""",Normal preparation option remains available at every fleet limit.
 chiefNavigatorSinniEventideRouteLittleLimitOption,ChiefNavigatorSinniEventideRouteOptions,ChiefNavigatorSinniIntroCMD generousRoute,,,"1:chief_navigator_sinni_eventide_little_limit:""Doesn't seem like much of a limitation.""",Available when the configured Troy fleet limit is at least 240 DP.
-chiefNavigatorSinniEventideLittleLimit,DialogOptionSelected,$option == chief_navigator_sinni_eventide_little_limit,,"""Thank you for your praise."" Sinni bows behind her sleeves.",0:chief_navigator_sinni_eventide_preparation:""What should I bring?".",Optional response rejoins expedition preparation without changing progression.
-chiefNavigatorSinniEventidePreparation,DialogOptionSelected,$option == chief_navigator_sinni_eventide_preparation,,"""Efficiency Overhaul wherever it fits. Insulated Engine Assembly, or anything else that reduces your sensor profile. At least one dedicated supply ship and one fuel ship.""
+chiefNavigatorSinniEventideLittleLimit,DialogOptionSelected,$option == chief_navigator_sinni_eventide_little_limit,,"""Thank you for your praise."" Sinni bows behind her sleeves.","0:chief_navigator_sinni_eventide_preparation:""What should I bring?""",Optional response rejoins expedition preparation without changing progression.
+chiefNavigatorSinniEventidePreparation,DialogOptionSelected,$option == chief_navigator_sinni_eventide_preparation,,"""I'd recommend you tool your ships for operational efficiency. Sensor profile reduction. One supply ship and one fuel ship. At least.""
 
-Sinni takes a measured sip.
+Sinni cross-references the expedition manifest with your fleet profile. Worryingly, many of your largest, most capable ships are automatically greyed out.
 
-""The route is survivable. Being noticed along it may not be.""",0:chief_navigator_sinni_eventide_mark_troy:Add Waypoint Troy to the navigation plot.,Expedition preparation advice.
-chiefNavigatorSinniEventideComplete,DialogOptionSelected,$option == chief_navigator_sinni_eventide_mark_troy,ChiefNavigatorSinniIntroCMD brief,"Sinni touches two fingers to the table. A point appears at the far southeast edge of the Sector map, followed by the identification code for a cooperative anchorage.
+""Being noticed may not be survivable. We should avoid engagements.""",0:chief_navigator_sinni_eventide_mark_troy:Add Waypoint Troy to the navigation plot.,Expedition preparation advice.
+chiefNavigatorSinniEventideComplete,DialogOptionSelected,$option == chief_navigator_sinni_eventide_mark_troy,ChiefNavigatorSinniIntroCMD brief,"Sinni touches two fingers to her desk. The holoscreen springs up again, mapping the Persean Sector. A point appears at the far southeast edge of the Sector map, followed by the identification code for a cooperative anchorage.
 
-""Waypoint Troy,"" she says. ""Meet me there when your fleet is ready.""
+""Depart when you are ready.""
 
 Waypoint Troy is marked on your navigation plot.",100:defaultLeave:Leave Sinni's office.,Completes the Eventide stage and creates the Troy quest marker.
 
