@@ -72,6 +72,19 @@ The confirmed in-game fix includes an updated compiled jar. The Budai tooltip
 and substrate fixes and Sinni recruitment prerequisite remain included. Restart
 Starsector after updating.
 
+## October 22, 2026 Budai weapon isolation hotfix
+
+- Reserve Budai's custom Hungering Rift and Pseudoparticle Jet for his authored
+  loadout by removing faction and autofit selection tags and adding the native
+  `SYSTEM` selection exclusion.
+- Use native blueprint, market, dealer and drop exclusions for both weapons.
+- Preserve their combat statistics, effects, boss fittings and earlier tooltip
+  fix. The Heavy Adjudicator reward remains mountable.
+
+This is a weapon-data hotfix; the compiled jar is unchanged. It does not remove
+weapons from fleets already generated in a save. The reported bounty's original
+selection path remains unconfirmed. Restart Starsector after updating.
+
 ## Requirements
 
 - Starsector 0.98a
