@@ -1,5 +1,6 @@
 package chiefnavigator.quest;
 
+import chiefnavigator.config.ChiefNavigatorSettings;
 import chiefnavigator.weapons.IthacaResearchUpgrades;
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.CampaignFleetAPI;
@@ -64,6 +65,8 @@ public final class SinniNavigationGuidance {
 
         if (!Global.getSector().getMemoryWithoutUpdate().getBoolean(
                 OdysseyExpanseSystem.ENTERED)) {
+            String dpLimit = TroyDepartureInteraction.formatDP(
+                    ChiefNavigatorSettings.getTroyFleetDPLimit());
             StarSystemAPI troy = TroyArrivalScript.findWaypointTroy();
             boolean opened = Global.getSector().getMemoryWithoutUpdate()
                     .getBoolean(TroyArrivalScript.WORMHOLE_OPENED);
@@ -72,13 +75,13 @@ public final class SinniNavigationGuidance {
                         : TroyArrivalScript.findOdysseyWormhole(troy);
                 destination = withSystem("Troy Terminus", target);
                 objective = "Enter the open Terminus. The active fleet must "
-                        + "still be worth no more than 50 deployment points.";
+                        + "still be worth no more than " + dpLimit + " deployment points.";
             } else {
                 target = troy == null ? null
                         : TroyArrivalScript.findDepartureStation(troy);
                 destination = withSystem("Troy Expedition Anchorage", target);
                 objective = "Dock at the anchorage, store anything above the "
-                        + "50-DP expedition limit, and authorize the route.";
+                        + dpLimit + "-DP expedition limit, and authorize the route.";
             }
             return finish(destination, objective, target);
         }

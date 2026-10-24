@@ -60,6 +60,11 @@ The inherited concept and its decision boundaries are recorded in [docs/CONCEPT.
 
 ## Installation
 
+LunaLib is optional. If installed and enabled, its Chief Navigator setting
+controls the Troy fleet limit from 1 to 1,000 deployment points; the default
+and the fallback without LunaLib are 50 DP. The limit applies in both directions.
+
+
 Download `Chief-Navigator-0.5.1.zip` from
 [the 0.5.1 release](https://github.com/c4tntnitro-netizen/Chief-Navigator/releases/tag/v0.5.1)
 and extract its `Chief Navigator` folder into `Starsector/mods`.

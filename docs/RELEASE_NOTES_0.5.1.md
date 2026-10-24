@@ -85,6 +85,26 @@ This is a weapon-data hotfix; the compiled jar is unchanged. It does not remove
 weapons from fleets already generated in a save. The reported bounty's original
 selection path remains unconfirmed. Restart Starsector after updating.
 
+## October 23, 2026 dialogue and fleet-limit update
+
+- Revise Sinni's introduction, Eventide briefing, expedition preparation advice,
+  and the first arrival in the Orion Knot, including readable archive messages.
+- Add an optional LunaLib fleet deployment-point limit, from 1 to 1,000 DP.
+  The default remains 50 DP. The current setting controls route opening,
+  both transit directions, dialogue, navigation guidance, and Intel.
+- Correct Troy's advice menus: the first page has no Esc shortcut; the final
+  page has no Back option and binds Esc to Leave.
+- Remove the secondary captions beneath system names on Sinni's local chart.
+
+LunaLib is optional. Without it, the limit remains 50 DP. Lowering the limit
+below the current fleet's DP can block transit until the limit is raised or
+the fleet is reduced. This update does not rebuild saved worlds, replace
+fleets, or reset quest progress. Existing system names are retained; the
+planned system renames are not included.
+
+The archive contains a matching compiled jar and retains the earlier 0.5.1
+hotfixes. The original `v0.5.1` tag is preserved. Restart Starsector after updating.
+
 ## Requirements
 
 - Starsector 0.98a

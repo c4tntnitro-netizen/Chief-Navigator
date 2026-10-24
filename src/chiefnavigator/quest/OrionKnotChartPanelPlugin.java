@@ -64,17 +64,12 @@ final class OrionKnotChartPanelPlugin extends BaseCustomUIPanelPlugin {
         {OdysseyExpanseSystem.SILENT_WAKE_ID,
                 OdysseyExpanseSystem.MESSINA_ID}
     };
-    private static final int GLYPH_ODYSSEY = 0;
-    private static final int GLYPH_BLACK_HOLE = 1;
-    private static final int GLYPH_CURRENT = 2;
-    private static final int GLYPH_STAR = 3;
-    private static final int GLYPH_WHITE_DWARF = 4;
     private static final int GLYPH_STARLESS = 5;
     private static final float SIDE_PAD = 105f;
     private static final float TOP_PAD = 96f;
     private static final float BOTTOM_PAD = 104f;
     private static final float LABEL_WIDTH = 190f;
-    private static final float LABEL_HEIGHT = 42f;
+    private static final float LABEL_HEIGHT = 22f;
     private static final float NODE_RADIUS = 20f;
 
     private final float width;
@@ -119,7 +114,7 @@ final class OrionKnotChartPanelPlugin extends BaseCustomUIPanelPlugin {
             Color iconColor = spec == null || spec.getIconColor() == null
                     ? SYSTEM_COLORS[index] : spec.getIconColor();
             nodes.add(new Node(SYSTEM_IDS[index],
-                    cleanSystemName(system.getName()), detailFor(index), index,
+                    cleanSystemName(system.getName()), index,
                     system.getLocation().x, system.getLocation().y,
                     SYSTEM_COLORS[index], iconColor,
                     Global.getSettings().getSprite(iconPath)));
@@ -296,9 +291,6 @@ final class OrionKnotChartPanelPlugin extends BaseCustomUIPanelPlugin {
             LabelAPI label = labelPanel.addPara(node.name, 0f);
             label.setAlignment(Alignment.MID);
             label.setColor(node.color);
-            LabelAPI detail = labelPanel.addPara(node.detail, 1f);
-            detail.setAlignment(Alignment.MID);
-            detail.setColor(Misc.getGrayColor());
             boolean placeAbove = node.y < BOTTOM_PAD + LABEL_HEIGHT + 18f;
             float top = placeAbove
                     ? height - node.y - NODE_RADIUS - 6f - LABEL_HEIGHT
@@ -476,17 +468,6 @@ final class OrionKnotChartPanelPlugin extends BaseCustomUIPanelPlugin {
                 ? name.substring(0, name.length() - suffix.length()) : name;
     }
 
-    private static String detailFor(int index) {
-        switch (index) {
-            case GLYPH_ODYSSEY: return "Troy arrival";
-            case GLYPH_BLACK_HOLE: return "Supermassive Black Hole";
-            case GLYPH_CURRENT: return "Southbound current";
-            case GLYPH_STAR: return "FOB Ithaca";
-            case GLYPH_WHITE_DWARF: return "Hidden Guardian";
-            default: return "Skeletal System";
-        }
-    }
-
     private static void color(Color color, float alpha) {
         GL11.glColor4f(color.getRed() / 255f, color.getGreen() / 255f,
                 color.getBlue() / 255f, Math.max(0f, Math.min(1f, alpha)));
@@ -552,7 +533,6 @@ final class OrionKnotChartPanelPlugin extends BaseCustomUIPanelPlugin {
     private static final class Node {
         private final String id;
         private final String name;
-        private final String detail;
         private final int glyph;
         private final float worldX;
         private final float worldY;
@@ -562,12 +542,11 @@ final class OrionKnotChartPanelPlugin extends BaseCustomUIPanelPlugin {
         private float x;
         private float y;
 
-        private Node(String id, String name, String detail, int glyph,
+        private Node(String id, String name, int glyph,
                 float worldX, float worldY, Color color, Color iconColor,
                 SpriteAPI icon) {
             this.id = id;
             this.name = name;
-            this.detail = detail;
             this.glyph = glyph;
             this.worldX = worldX;
             this.worldY = worldY;

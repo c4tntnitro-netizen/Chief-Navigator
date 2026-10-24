@@ -1,5 +1,6 @@
 package chiefnavigator.quest;
 
+import chiefnavigator.config.ChiefNavigatorSettings;
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.CampaignFleetAPI;
 import com.fs.starfarer.api.campaign.CampaignUIAPI;
@@ -15,8 +16,10 @@ import com.fs.starfarer.api.util.Misc;
 import java.util.Map;
 import org.lwjgl.input.Keyboard;
 
-/** Free storage and 50-DP checkpoint that opens the Troy Terminus. */
+/** Free storage and configurable fleet-DP checkpoint that opens the Troy Terminus. */
 public final class TroyDepartureInteraction extends ChoicePreservingDialogPlugin {
+    /** Compatibility default; live checks use ChiefNavigatorSettings. */
+    @Deprecated
     public static final float MAX_FLEET_DP = 50f;
 
     private static final String TRIGGER_MAIN =
@@ -27,12 +30,18 @@ public final class TroyDepartureInteraction extends ChoicePreservingDialogPlugin
             "ChiefNavigatorTroyAnchorage_route_open";
     private static final String TRIGGER_ADVICE =
             "ChiefNavigatorTroyAnchorage_advice";
+    private static final String TRIGGER_ADVICE_2 =
+            "ChiefNavigatorTroyAnchorage_advice_2";
     private static final String TRIGGER_INVALID =
             "ChiefNavigatorTroyAnchorage_invalid";
     private static final String TRIGGER_OPENED =
             "ChiefNavigatorTroyAnchorage_opened";
     private static final String STORAGE = "chief_navigator_troy_storage";
     private static final String ADVICE = "chief_navigator_troy_advice";
+    private static final String ADVICE_BUT = "chief_navigator_troy_advice_but";
+    private static final String ADVICE_MORE = "chief_navigator_troy_advice_more";
+    private static final String APPRECIATED = "chief_navigator_troy_appreciated";
+    private static final String SURE = "chief_navigator_troy_sure";
     private static final String BACK = "chief_navigator_troy_back";
     private static final String DEPART = "chief_navigator_troy_depart";
     private static final String DONE = "chief_navigator_troy_done";
@@ -54,10 +63,8 @@ public final class TroyDepartureInteraction extends ChoicePreservingDialogPlugin
     private void showOptions() {
         CampaignFleetAPI player = Global.getSector().getPlayerFleet();
         float fleetDP = getFleetDP(player);
-
-        MemoryAPI local = memoryMap.get(MemKeys.LOCAL);
-        local.set(DP_VALUE, formatDP(fleetDP));
-        local.set(DP_LIMIT, formatDP(MAX_FLEET_DP));
+        float dpLimit = ChiefNavigatorSettings.getTroyFleetDPLimit();
+        updateManifest(fleetDP, dpLimit);
         boolean missionStarted = SinniEventideIntel.isBriefed();
         boolean routeOpen = Global.getSector().getMemoryWithoutUpdate()
                 .getBoolean(TroyArrivalScript.WORMHOLE_OPENED);
@@ -68,7 +75,7 @@ public final class TroyDepartureInteraction extends ChoicePreservingDialogPlugin
         } else {
             RuleDialogSupport.fire(dialog, memoryMap, TRIGGER_MAIN);
         }
-        if (missionStarted && !routeOpen && fleetDP > MAX_FLEET_DP) {
+        if (missionStarted && !routeOpen && fleetDP > dpLimit) {
             dialog.getOptionPanel().setEnabled(DEPART, false);
         }
         dialog.getOptionPanel().setShortcut(
@@ -80,10 +87,15 @@ public final class TroyDepartureInteraction extends ChoicePreservingDialogPlugin
         if (STORAGE.equals(optionData)) {
             openStorage();
         } else if (ADVICE.equals(optionData)) {
+            updateManifest(getFleetDP(Global.getSector().getPlayerFleet()),
+                    ChiefNavigatorSettings.getTroyFleetDPLimit());
             RuleDialogSupport.fire(dialog, memoryMap, TRIGGER_ADVICE);
+        } else if (ADVICE_BUT.equals(optionData) || ADVICE_MORE.equals(optionData)) {
+            RuleDialogSupport.fire(dialog, memoryMap, TRIGGER_ADVICE_2);
             dialog.getOptionPanel().setShortcut(
-                    BACK, Keyboard.KEY_ESCAPE, false, false, false, false);
-        } else if (BACK.equals(optionData)) {
+                    LEAVE, Keyboard.KEY_ESCAPE, false, false, false, false);
+        } else if (APPRECIATED.equals(optionData) || SURE.equals(optionData)
+                || BACK.equals(optionData)) {
             showOptions();
         } else if (DEPART.equals(optionData)) {
             beginJourney();
@@ -113,8 +125,10 @@ public final class TroyDepartureInteraction extends ChoicePreservingDialogPlugin
     private void beginJourney() {
         CampaignFleetAPI player = Global.getSector().getPlayerFleet();
         float fleetDP = getFleetDP(player);
+        float dpLimit = ChiefNavigatorSettings.getTroyFleetDPLimit();
+        updateManifest(fleetDP, dpLimit);
         if (!SinniEventideIntel.isBriefed()
-                || player == null || fleetDP > MAX_FLEET_DP
+                || player == null || fleetDP > dpLimit
                 || !(player.getContainingLocation() instanceof StarSystemAPI)) {
             RuleDialogSupport.fire(dialog, memoryMap, TRIGGER_INVALID);
             dialog.getOptionPanel().setShortcut(
@@ -141,6 +155,12 @@ public final class TroyDepartureInteraction extends ChoicePreservingDialogPlugin
         RuleDialogSupport.fire(dialog, memoryMap, TRIGGER_OPENED);
         dialog.getOptionPanel().setShortcut(
                 DONE, Keyboard.KEY_ESCAPE, false, false, false, false);
+    }
+
+    private void updateManifest(float fleetDP, float dpLimit) {
+        MemoryAPI local = memoryMap.get(MemKeys.LOCAL);
+        local.set(DP_VALUE, formatDP(fleetDP));
+        local.set(DP_LIMIT, formatDP(dpLimit));
     }
 
     public static float getFleetDP(CampaignFleetAPI fleet) {

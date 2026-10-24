@@ -13,36 +13,18 @@ $coreRoot = Join-Path $starsectorRoot "starsector-core"
 $graphicsLibJar = Join-Path $modsRoot "GraphicsLib\jars\Graphics.jar"
 $consoleCommandsJar = Join-Path $modsRoot "Console Commands\jars\lw_Console.jar"
 $combatChatterJar = Join-Path $modsRoot "Combat Chatter\jars\CombatChatter.jar"
+# Compile the isolated optional-settings bridge; LunaLib is not bundled or required to play.
+$lunaLibJar = Join-Path $modsRoot "LunaLib\jars\LunaLib.jar"
 $jdkRoot = Join-Path $starsectorRoot "jdk-23+7\bin"
-$outputRoot = Join-Path $modRoot "out"
+$stagingRoot = Join-Path $modRoot ('out_build_staging\' + [Guid]::NewGuid().ToString('N'))
+$outputRoot = Join-Path $stagingRoot 'classes'
+$javaTmpRoot = Join-Path $stagingRoot 'java_tmp'
+$stagedJarPath = Join-Path $stagingRoot 'ChiefNavigator.jar'
 $jarDirectory = Join-Path $modRoot "jars"
-$jarPath = $null
-$candidateNames = if ($Release) {
-    @("ChiefNavigator.jar")
-} else {
-    @("ChiefNavigator.next.jar", "ChiefNavigator.next2.jar")
-}
-foreach ($candidateName in $candidateNames) {
-    $candidate = Join-Path $jarDirectory $candidateName
-    try {
-        $probe = [System.IO.File]::Open(
-            $candidate,
-            [System.IO.FileMode]::OpenOrCreate,
-            [System.IO.FileAccess]::ReadWrite,
-            [System.IO.FileShare]::None)
-        $probe.Dispose()
-        $jarPath = $candidate
-        break
-    } catch [System.IO.IOException] {
-        continue
-    }
-}
-if ($null -eq $jarPath) {
-    if ($Release) {
-        throw "ChiefNavigator.jar is locked. Close Starsector before building a release."
-    }
-    throw "Both Chief Navigator build jar slots are locked."
-}
+. (Join-Path $modRoot 'tools\install_build_jar.ps1')
+$modInfoPath = Join-Path $modRoot 'mod_info.json'
+$modInfo = [System.IO.File]::ReadAllText($modInfoPath)
+$jarPath = Join-Path $jarDirectory (Get-ChiefNavigatorBuildJarName -ModInfo $modInfo -Release:$Release)
 
 $classpath = @(
     (Join-Path $coreRoot "starfarer.api.jar"),
@@ -52,7 +34,8 @@ $classpath = @(
     (Join-Path $coreRoot "log4j-1.2.9.jar"),
     $graphicsLibJar,
     $consoleCommandsJar,
-    $combatChatterJar
+    $combatChatterJar,
+    $lunaLibJar
 ) -join ";"
 
 function Assert-RulesCsv {
@@ -65,7 +48,7 @@ function Assert-RulesCsv {
         (Join-Path $coreRoot "fs.common_obf.jar"),
         (Join-Path $coreRoot "json.jar")
     ) -join ";"
-    & (Join-Path $jdkRoot "java.exe") --source 17 -cp $nativeCsvClasspath `
+    & (Join-Path $jdkRoot "java.exe") "-Djava.io.tmpdir=$javaTmpRoot" --source 17 -cp $nativeCsvClasspath `
         (Join-Path $modRoot "tools\RulesCsvValidation.java") $Path
     if ($LASTEXITCODE -ne 0) {
         throw "Starsector's native rules.csv validation failed."
@@ -147,59 +130,51 @@ function Assert-RuleCommandRegistration {
     }
 }
 
-Assert-RulesCsv (Join-Path $modRoot "data\campaign\rules.csv")
+try {
+    New-Item -ItemType Directory -Force -Path $outputRoot, $javaTmpRoot, $jarDirectory | Out-Null
+    Assert-RulesCsv (Join-Path $modRoot "data\campaign\rules.csv")
 
-$sources = Get-ChildItem -LiteralPath (Join-Path $modRoot "src") -Recurse -Filter "*.java" |
-    Select-Object -ExpandProperty FullName
+    $sources = Get-ChildItem -LiteralPath (Join-Path $modRoot "src") -Recurse -Filter "*.java" |
+        Select-Object -ExpandProperty FullName
 
-if (-not $sources) {
-    throw "No Java sources found."
+    if (-not $sources) {
+        throw "No Java sources found."
+    }
+
+    $settings = Get-Content -LiteralPath (Join-Path $modRoot "data\config\settings.json") -Raw |
+        ConvertFrom-Json
+    $commandSources = @($sources | Where-Object {
+        [System.IO.Path]::GetFileName($_) -match '^ChiefNavigator.*CMD\.java$'
+    })
+    Assert-RuleCommandRegistration -RegisteredPackages $settings.ruleCommandPackages `
+        -CommandSources $commandSources
+
+    $resolvedOutput = (Resolve-Path -LiteralPath $outputRoot).Path
+    $resolvedProject = (Resolve-Path -LiteralPath $modRoot).Path
+    if (-not $resolvedOutput.StartsWith($resolvedProject + '\', [StringComparison]::OrdinalIgnoreCase)) {
+        throw "Build output must remain inside the source repository."
+    }
+    $sourceArguments = Join-Path $stagingRoot 'sources.args'
+    $quotedSources = @($sources | ForEach-Object { '"' + $_.Replace('\', '/') + '"' })
+    [System.IO.File]::WriteAllLines($sourceArguments, $quotedSources,
+        [System.Text.UTF8Encoding]::new($false))
+    & (Join-Path $jdkRoot "javac.exe") "-J-Djava.io.tmpdir=$javaTmpRoot" -encoding UTF-8 --release 17 -cp $classpath -d $outputRoot ("@" + $sourceArguments)
+    if ($LASTEXITCODE -ne 0) {
+        throw "javac failed with exit code $LASTEXITCODE"
+    }
+
+    Assert-RuleCommandRegistration -RegisteredPackages $settings.ruleCommandPackages `
+        -CommandSources $commandSources -CompiledRoot $outputRoot
+
+    & (Join-Path $jdkRoot "jar.exe") "-J-Djava.io.tmpdir=$javaTmpRoot" --create --file $stagedJarPath -C $outputRoot .
+    if ($LASTEXITCODE -ne 0) {
+        throw "jar failed with exit code $LASTEXITCODE"
+    }
+
+    Install-ChiefNavigatorBuildJar -StagedJarPath $stagedJarPath -DestinationPath $jarPath `
+        -ModInfoPath $modInfoPath -ExpectedModInfo $modInfo
+
+} finally {
+    Remove-ChiefNavigatorBuildStage -StageRoot $stagingRoot -ProjectRoot $modRoot
 }
-
-$settings = Get-Content -LiteralPath (Join-Path $modRoot "data\config\settings.json") -Raw |
-    ConvertFrom-Json
-$commandSources = @($sources | Where-Object {
-    [System.IO.Path]::GetFileName($_) -match '^ChiefNavigator.*CMD\.java$'
-})
-Assert-RuleCommandRegistration -RegisteredPackages $settings.ruleCommandPackages `
-    -CommandSources $commandSources
-
-New-Item -ItemType Directory -Force -Path $outputRoot, $jarDirectory | Out-Null
-$resolvedOutput = (Resolve-Path -LiteralPath $outputRoot).Path
-$resolvedProject = (Resolve-Path -LiteralPath $modRoot).Path
-if (-not $resolvedOutput.StartsWith($resolvedProject + '\', [StringComparison]::OrdinalIgnoreCase)) {
-    throw "Build output must remain inside the source repository."
-}
-Get-ChildItem -LiteralPath $resolvedOutput -Force | Remove-Item -Recurse -Force
-
-& (Join-Path $jdkRoot "javac.exe") -encoding UTF-8 --release 17 -cp $classpath -d $outputRoot $sources
-if ($LASTEXITCODE -ne 0) {
-    throw "javac failed with exit code $LASTEXITCODE"
-}
-
-Assert-RuleCommandRegistration -RegisteredPackages $settings.ruleCommandPackages `
-    -CommandSources $commandSources -CompiledRoot $outputRoot
-
-& (Join-Path $jdkRoot "jar.exe") --create --file $jarPath -C $outputRoot .
-if ($LASTEXITCODE -ne 0) {
-    throw "jar failed with exit code $LASTEXITCODE"
-}
-
-$jarRelative = "jars/" + [System.IO.Path]::GetFileName($jarPath)
-$modInfoPath = Join-Path $modRoot "mod_info.json"
-$modInfo = [System.IO.File]::ReadAllText($modInfoPath)
-$jarsPattern = [regex]'"jars"\s*:\s*\[[^\]]*\]'
-$jarsMatch = $jarsPattern.Match($modInfo)
-if (-not $jarsMatch.Success) {
-    throw "Could not find the jars field in mod_info.json."
-}
-$updatedModInfo = $jarsPattern.Replace(
-    $modInfo,
-    ('"jars": ["' + $jarRelative + '"]'),
-    1)
-[System.IO.File]::WriteAllText(
-    $modInfoPath,
-    $updatedModInfo,
-    [System.Text.UTF8Encoding]::new($false))
-
 Write-Host "BUILD OK -> $jarPath"

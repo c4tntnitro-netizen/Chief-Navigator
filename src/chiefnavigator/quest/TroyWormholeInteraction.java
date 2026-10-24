@@ -1,5 +1,6 @@
 package chiefnavigator.quest;
 
+import chiefnavigator.config.ChiefNavigatorSettings;
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.CampaignFleetAPI;
 import com.fs.starfarer.api.campaign.CargoAPI;
@@ -41,13 +42,10 @@ public final class TroyWormholeInteraction extends ChoicePreservingDialogPlugin 
                 dialog.getInteractionTarget().getCustomInteractionDialogImageVisual());
         float fleetDP = TroyDepartureInteraction.getFleetDP(
                 Global.getSector().getPlayerFleet());
-        MemoryAPI local = memoryMap.get(
-                com.fs.starfarer.api.campaign.rules.MemKeys.LOCAL);
-        local.set(DP_VALUE, TroyDepartureInteraction.formatDP(fleetDP));
-        local.set(DP_LIMIT, TroyDepartureInteraction.formatDP(
-                TroyDepartureInteraction.MAX_FLEET_DP));
+        float dpLimit = ChiefNavigatorSettings.getTroyFleetDPLimit();
+        updateManifest(fleetDP, dpLimit);
         RuleDialogSupport.fire(dialog, memoryMap, TRIGGER_MAIN);
-        if (fleetDP > TroyDepartureInteraction.MAX_FLEET_DP) {
+        if (fleetDP > dpLimit) {
             dialog.getOptionPanel().setEnabled(ENTER, false);
         }
         dialog.getOptionPanel().setShortcut(
@@ -76,9 +74,10 @@ public final class TroyWormholeInteraction extends ChoicePreservingDialogPlugin 
 
     private void beginTransit() {
         CampaignFleetAPI player = Global.getSector().getPlayerFleet();
-        if (player == null
-                || TroyDepartureInteraction.getFleetDP(player)
-                        > TroyDepartureInteraction.MAX_FLEET_DP) {
+        float fleetDP = TroyDepartureInteraction.getFleetDP(player);
+        float dpLimit = ChiefNavigatorSettings.getTroyFleetDPLimit();
+        updateManifest(fleetDP, dpLimit);
+        if (player == null || fleetDP > dpLimit) {
             RuleDialogSupport.fire(dialog, memoryMap, TRIGGER_INVALID);
             dialog.getOptionPanel().setShortcut(
                     BACK, Keyboard.KEY_ESCAPE, false, false, false, false);
@@ -95,9 +94,10 @@ public final class TroyWormholeInteraction extends ChoicePreservingDialogPlugin 
     private void enterNebula() {
         if (transitCommitted) return;
         CampaignFleetAPI player = Global.getSector().getPlayerFleet();
-        if (player == null
-                || TroyDepartureInteraction.getFleetDP(player)
-                        > TroyDepartureInteraction.MAX_FLEET_DP) {
+        float fleetDP = TroyDepartureInteraction.getFleetDP(player);
+        float dpLimit = ChiefNavigatorSettings.getTroyFleetDPLimit();
+        updateManifest(fleetDP, dpLimit);
+        if (player == null || fleetDP > dpLimit) {
             RuleDialogSupport.fire(dialog, memoryMap, TRIGGER_INVALID);
             return;
         }
@@ -121,6 +121,13 @@ public final class TroyWormholeInteraction extends ChoicePreservingDialogPlugin 
                 terminus,
                 new JumpPointAPI.JumpDestination(entry, "The Odyssey Expanse"),
                 0.5f);
+    }
+
+    private void updateManifest(float fleetDP, float dpLimit) {
+        MemoryAPI local = memoryMap.get(
+                com.fs.starfarer.api.campaign.rules.MemKeys.LOCAL);
+        local.set(DP_VALUE, TroyDepartureInteraction.formatDP(fleetDP));
+        local.set(DP_LIMIT, TroyDepartureInteraction.formatDP(dpLimit));
     }
 
     @Override public void optionMousedOver(String optionText, Object optionData) { }
