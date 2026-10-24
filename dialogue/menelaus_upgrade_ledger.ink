@@ -3,9 +3,7 @@
 === menelaus_upgrade_ledger ===
 Menelaus opens Ithaca's defense-integration ledger.
 
-“Recovered components are inert cargo. Transfer authorization is final: Ithaca consumes each physical unit while installing it in the defense wall, and the corresponding upgrade becomes permanent.”
-
-Labor II requires four installed upgrades. All six components remain independently tracked and may be recovered and installed.
+“What have you brought for Ithaca's defense?”
 
 Installed upgrades: {installed} of {total}.
 Recovered and awaiting installation: {available}.
