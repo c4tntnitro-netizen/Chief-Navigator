@@ -11,6 +11,7 @@ import com.fs.starfarer.api.campaign.SectorAPI;
 import com.fs.starfarer.api.campaign.SectorEntityToken;
 import com.fs.starfarer.api.campaign.TextPanelAPI;
 import com.fs.starfarer.api.campaign.VisualPanelAPI;
+import com.fs.starfarer.api.campaign.rules.MemKeys;
 import com.fs.starfarer.api.campaign.rules.MemoryAPI;
 import com.fs.starfarer.api.campaign.rules.RuleAPI;
 import com.fs.starfarer.api.campaign.rules.RulesAPI;
@@ -21,6 +22,7 @@ import com.fs.starfarer.api.combat.ShipHullSpecAPI;
 import com.fs.starfarer.api.combat.ShipVariantAPI;
 import com.fs.starfarer.api.fleet.FleetMemberAPI;
 import com.fs.starfarer.api.impl.campaign.ids.Entities;
+import com.fs.starfarer.api.util.Misc;
 import java.awt.Color;
 import java.lang.reflect.Proxy;
 import java.nio.charset.StandardCharsets;
@@ -29,8 +31,15 @@ import java.nio.file.Path;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 /** Headless checks for first-contact routing and additive completion state. */
 public final class FobIthacaApproachRegression {
@@ -61,53 +70,146 @@ public final class FobIthacaApproachRegression {
         if (!condition) throw new AssertionError(message);
     }
 
-    static int occurrences(String text, String phrase) {
-        int count = 0;
-        for (int start = 0; (start = text.indexOf(phrase, start)) >= 0;
-                start += phrase.length()) count++;
-        return count;
+    static String normalizeProse(String text) {
+        return text.replace('“', '"').replace('”', '"')
+                .replace('’', '\'').replace("**", "")
+                .replaceAll("#\\s*font:victor14", "")
+                .replace("{player_title}", "$chiefNavigatorFobIthacaPlayerTitle")
+                .replaceAll("\\s+", " ").trim();
     }
 
     static void verifyChoiceContinuations() throws Exception {
+        String prefix = "ChiefNavigatorFobIthacaApproach_";
+        String inscriptionTrigger = "ChiefNavigatorFobIthacaApproachInscription";
+        String channelTailTrigger = "ChiefNavigatorFobIthacaApproachOpenChannelContinue";
         Path root = Path.of("").toAbsolutePath();
         String rules = Files.readString(root.resolve("data/campaign/rules.csv"),
-                StandardCharsets.UTF_8).replace("\r\n", "\n");
-        int start = rules.indexOf("chiefNavigatorFobIthacaApproachOpening,");
-        int end = rules.indexOf("chiefNavigatorFobIthacaApproachComplete,", start);
-        check(start >= 0 && end > start, "The authored approach scene must exist");
-        String scene = rules.substring(start, end);
+                StandardCharsets.UTF_8);
+        // Use the same installed CSV loader as the external build check.
+        JSONArray parsed = (JSONArray) Class.forName("com.fs.starfarer.loading.G")
+                .getMethod("o00000", String.class).invoke(null, rules);
+        Map<String, JSONObject> runtime = new LinkedHashMap<>();
+        for (int index = 0; index < parsed.length(); index++) {
+            JSONObject row = parsed.getJSONObject(index);
+            String trigger = row.optString("trigger");
+            if (!trigger.startsWith(prefix) && !trigger.equals(inscriptionTrigger)
+                    && !trigger.equals(channelTailTrigger)) continue;
+            check(runtime.put(trigger, row) == null,
+                    "Approach stages must have one unambiguous rule: " + trigger);
+        }
         String ink = Files.readString(root.resolve("dialogue/fob_ithaca_approach.ink"),
                 StandardCharsets.UTF_8).replace("\r\n", "\n");
-        String[] spokenChoices = {
-            "\"I know!\" You key into the fleetwide channel. \"All ships, fan out—!\"",
-            "\"Instructions received. We mean no—.\"",
-            "\"Strategos?\""
+        String[] stages = {
+            "opening", "reveal", "battle", "battle_2", "defense_guns",
+            "fan_out", "contacts", "warships", "open_channel",
+            "confirm_receipt", "acknowledge", "identify", "decline",
+            "macrocomplex_awake", "strategos", "fourteenth", "ring_breach"
         };
-        String[] optionIds = {"fan_out", "acknowledge", "strategos"};
-        String[] continuations = {
-            "Teal-blue light consumes the viewscreen.",
-            "\"Compliance acknowledged.\"",
-            "\"An old Domain appointment. Unified theater authority.\""
-        };
-        String[] ruleIds = {"FanOut", "Acknowledge", "Strategos"};
-        for (int index = 0; index < spokenChoices.length; index++) {
-            String quotedCsv = spokenChoices[index].replace("\"", "\"\"");
-            String quotedInk = spokenChoices[index]
-                    .replaceAll("\"([^\"]*)\"", "“$1”");
-            check(occurrences(scene, quotedCsv) == 1
-                            && scene.contains("0:" + optionIds[index] + ":" + quotedCsv),
-                    "Runtime must keep the spoken choice only as its option: " + optionIds[index]);
-            check(occurrences(ink, quotedInk) == 1
-                            && ink.contains("+ [" + quotedInk + "] -> " + optionIds[index]),
-                    "Ink must keep the spoken choice only as its option: " + optionIds[index]);
-            check(scene.contains("chiefNavigatorFobIthacaApproach" + ruleIds[index]
-                            + ",ChiefNavigatorFobIthacaApproach_" + optionIds[index]
-                            + ",,,\"" + continuations[index].replace("\"", "\"\"")),
-                    "Runtime must continue after the echoed choice: " + optionIds[index]);
-            String inkContinuation = continuations[index]
-                    .replaceAll("\"([^\"]*)\"", "“$1”");
-            check(ink.contains("=== " + optionIds[index] + " ===\n\n" + inkContinuation),
-                    "Ink must mirror the runtime continuation: " + optionIds[index]);
+        Pattern knotPattern = Pattern.compile(
+                "(?ms)^=== ([a-z_0-9]+) ===\\s*\\n(.*?)(?=^=== |\\z)");
+        Pattern choicePattern = Pattern.compile(
+                "(?m)^\\+ \\[(.+)\\] -> ([A-Za-z_0-9]+)\\s*$");
+        Matcher knots = knotPattern.matcher(ink);
+        Set<String> visited = new HashSet<>();
+        int authored = 0;
+        for (String stage : stages) {
+            check(knots.find() && knots.group(1).equals(stage),
+                    "Ink must retain the revised approach sequence at " + stage);
+            String block = knots.group(2);
+            Matcher choice = choicePattern.matcher(block);
+            check(choice.find(), "Each authored approach stage needs its choice: " + stage);
+            String label = normalizeProse(choice.group(1));
+            String next = choice.group(2);
+            String prose = normalizeProse(block.substring(0, choice.start()));
+            check(!choice.find(), "Approach stages remain a single choice chain: " + stage);
+            check(next.equals(authored + 1 < stages.length ? stages[authored + 1] : "END"),
+                    "The revised authored choice must reach the next stage: " + stage);
+
+            StringBuilder runtimeProse = new StringBuilder();
+            String trigger = prefix + stage;
+            while (true) {
+                JSONObject row = runtime.get(trigger);
+                check(row != null && visited.add(trigger),
+                        "Every approach choice must reach one existing, noncyclic page: " + trigger);
+                check(row.optString("conditions").isBlank(),
+                        "Approach narration must remain available on its existing route: " + trigger);
+                runtimeProse.append(' ').append(row.optString("text"));
+                if (trigger.equals(prefix + "open_channel")) {
+                    check(row.optString("options").isBlank()
+                                    && row.optString("script").replace("\r\n", "\n").equals(
+                                            "ChiefNavigatorSinniIntroCMD styledText victor "
+                                                    + inscriptionTrigger + "\nFireBest " + channelTailTrigger),
+                            "Opening comms must scope Victor to the inscription, then resume ordinary dialogue");
+                    JSONObject inscription = runtime.get(inscriptionTrigger);
+                    check(inscription != null && visited.add(inscriptionTrigger)
+                                    && inscription.optString("conditions").isBlank()
+                                    && inscription.optString("script").isBlank()
+                                    && inscription.optString("options").isBlank(),
+                            "The Victor inscription must remain an automatic text-only segment");
+                    runtimeProse.append(' ').append(inscription.optString("text"));
+                    trigger = channelTailTrigger;
+                    continue;
+                }
+                check(row.optString("script").isBlank(),
+                        "Narrative pages must not commit completion or other state: " + trigger);
+                String[] options = row.optString("options").strip().split("\\R");
+                check(options.length == 1, "Each runtime approach page needs one option: " + trigger);
+                String[] option = options[0].split(":", 3);
+                check(option.length == 3 && option[0].matches("[0-9]+"),
+                        "Approach choice must retain its native option format: " + trigger);
+                if (option[1].startsWith("chief_navigator_auto_page_")) {
+                    check(option[2].equals("Continue."),
+                            "Runtime pagination must use an ordinary Continue: " + trigger);
+                    trigger = prefix + option[1];
+                    continue;
+                }
+                check(option[1].equals(next.equals("END") ? "complete" : next)
+                                && normalizeProse(option[2]).equals(label),
+                        "Runtime must retain the authored choice and its route: " + stage);
+                break;
+            }
+            check(normalizeProse(runtimeProse.toString()).equals(prose),
+                    "Runtime pages must preserve all authored prose in order: " + stage);
+            if (label.startsWith("\"")) {
+                check(!prose.contains(label),
+                        "Spoken choices must not be repeated in the preceding prose: " + stage);
+            }
+            authored++;
+        }
+        check(!knots.find(), "The mirror must not retain retired approach stages");
+        JSONObject complete = runtime.get(prefix + "complete");
+        check(complete != null && complete.optString("conditions").isBlank()
+                        && complete.optString("text").isBlank()
+                        && complete.optString("options").isBlank()
+                        && complete.optString("script").equals("FireAll ChiefNavigatorFobIthaca"),
+                "Final completion must retain its existing full Menelaus introduction handoff");
+        check(visited.size() + 1 == runtime.size(),
+                "No retired or unreachable approach pages may remain");
+        check(ink.contains("+ [\"They're losing.\"] -> END"),
+                "The final spoken choice replaces the old Continue without changing completion");
+        String titleToken = "$chiefNavigatorFobIthacaPlayerTitle";
+        MemoryAPI titleMemory = mock(MemoryAPI.class, (name, args) -> {
+            if (name.equals("getKeys")) return List.of(titleToken);
+            if (name.equals("get") && titleToken.equals(args[0])) return "Captain";
+            return null;
+        });
+        Map<String, MemoryAPI> scope = Map.of(MemKeys.LOCAL, titleMemory);
+        SettingsAPI previousSettings = Global.getSettings();
+        try {
+            Global.setSettings(mock(SettingsAPI.class, (name, args) ->
+                    name.equals("getColor") ? Color.WHITE : null));
+            String reveal = Misc.replaceTokensFromMemory(
+                    runtime.get(prefix + "reveal").optString("text"), scope);
+            check(reveal.contains("\"Captain--!\" Sinni turns toward you."),
+                    "Native replacement must preserve punctuation beside the reveal's player title");
+            for (JSONObject row : runtime.values()) {
+                String rendered = Misc.replaceTokensFromMemory(
+                        row.optString("text") + row.optString("options"), scope);
+                check(!rendered.contains(titleToken),
+                        "Native replacement must resolve every approach title in prose and choices");
+            }
+        } finally {
+            Global.setSettings(previousSettings);
         }
     }
 
@@ -118,8 +220,14 @@ public final class FobIthacaApproachRegression {
         try {
             List<String> events = new ArrayList<>();
             Map<Object, String> options = new HashMap<>();
-            MemoryAPI memory = mock(MemoryAPI.class, (name, args) ->
-                    name.equals("getBoolean") ? true : null);
+            MemoryAPI memory = mock(MemoryAPI.class, (name, args) -> {
+                if (name.equals("getBoolean")) return true;
+                if (name.equals("set") && FobIthacaApproachScript.COMPLETE.equals(args[0])) {
+                    check(Boolean.TRUE.equals(args[1]), "Completion must remain additive");
+                    events.add("complete");
+                }
+                return null;
+            });
             PersonAPI player = mock(PersonAPI.class, (name, args) -> null);
             PersonAPI sinni = mock(PersonAPI.class, (name, args) -> {
                 if (name.equals("getId")) return SinniContact.PERSON_ID;
@@ -232,11 +340,21 @@ public final class FobIthacaApproachRegression {
                             && events.indexOf("thirdPlayer") < events.indexOf(
                                     "rule:ChiefNavigatorFobIthacaApproach_open_channel"),
                     "Aias's banner must retain both Sinni and player portraits before his page");
-            options.put("officer_orders", "Continue.");
-            interaction.optionSelected("Continue.", "officer_orders");
+            options.put("confirm_receipt", "Continue.");
+            interaction.optionSelected("Continue.", "confirm_receipt");
             check(Collections.frequency(events, "captainBanner") == 1
                             && Collections.frequency(events, "hideSinni") == 1,
                     "Following pages must retain Kleon's faction panel without rebuilding it");
+            check(!events.contains("complete"),
+                    "Ordinary approach choices must not commit first-contact completion");
+            options.put("complete", "\"They're losing.\"");
+            interaction.optionSelected("\"They're losing.\"", "complete");
+            check(Collections.frequency(events, "complete") == 1
+                            && Collections.frequency(events, "echo:complete") == 1
+                            && events.indexOf("echo:complete") < events.indexOf("complete")
+                            && events.indexOf("complete") < events.indexOf(
+                                    "rule:ChiefNavigatorFobIthacaApproach_complete"),
+                    "The final spoken choice must echo, persist completion, then open Menelaus");
         } finally {
             Global.setSector(previousSector);
             Global.setFactory(previousFactory);
@@ -396,7 +514,7 @@ public final class FobIthacaApproachRegression {
 
         FobIthacaApproachScript.markComplete();
         check(FobIthacaApproachScript.isComplete(),
-                "Continue must persist the additive completion flag");
+                "The final option must persist the additive completion flag");
         check(FobIthacaApproachScript.shouldOpenStationIntroduction(
                         target(IthacaSectionEncounter.FOB_ENTITY_ID)),
                 "The first station interaction must open Menelaus's intro");
@@ -426,7 +544,7 @@ public final class FobIthacaApproachRegression {
         String interaction = Files.readString(Path.of("").toAbsolutePath()
                         .resolve("src/chiefnavigator/quest/"
                                 + "FobIthacaApproachInteraction.java"),
-                StandardCharsets.UTF_8);
+                StandardCharsets.UTF_8).replace("\r\n", "\n");
         check(interaction.contains(
                         "showPersonInfo(player, true);\n"
                                 + "            if (sinni != null) {\n"

@@ -150,7 +150,7 @@ A navy-blue banner hangs behind the desk, with a spear emblazoned upon a shield.
 
 Task Force Spartan
 
-Molon Labe!" # font:victor16
+Molon Labe!" # font:victor14
 
 Sinni strides in, then sits across from you. A holoscreen flickers on her desk and she gives the updates on the screen a single glance before closing it.
 

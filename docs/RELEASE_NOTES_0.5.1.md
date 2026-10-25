@@ -105,6 +105,19 @@ planned system renames are not included.
 The archive contains a matching compiled jar and retains the earlier 0.5.1
 hotfixes. The original `v0.5.1` tag is preserved. Restart Starsector after updating.
 
+## October 24, 2026 Ithaca dialogue update
+
+- Rewrite the first approach to FOB Ithaca, from the ring's reveal through
+  Task Force Spartan's interception and the damaged ring's final reveal.
+- Restore Victor 14 for the Spartan inscriptions in Sinni's office and
+  the Ithaca approach, with ordinary dialogue resuming afterward.
+- Shorten Menelaus's upgrade-ledger greeting and show the drone-command
+  highlight on the report page containing that advice.
+
+The approach was tested in game. The update preserves existing quest progress
+and the current Ashen Verge system name. It retains the earlier 0.5.1 hotfixes
+and the original `v0.5.1` tag. Restart Starsector after updating.
+
 ## Requirements
 
 - Starsector 0.98a

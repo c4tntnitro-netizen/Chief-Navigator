@@ -87,7 +87,7 @@ function Assert-RulesCsv {
             }
             $optionLabel = $Matches[2].Trim()
             $punctuationProbe = $optionLabel -replace '\s+\([^()]*\)$', ''
-            if ($punctuationProbe -notmatch '[.?!](?:"|”)?$') {
+            if ($punctuationProbe -notmatch '(?:[.?!](?:"|”)?|—(?:"|”))$') {
                 throw "rules.csv rule '$($row.id)' has an option without terminal punctuation: '$optionLabel'."
             }
         }
