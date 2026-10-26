@@ -5,6 +5,7 @@ import json
 from pathlib import Path
 import re
 import subprocess
+import sys
 from zipfile import ZIP_DEFLATED, ZipFile, ZipInfo
 
 
@@ -23,6 +24,9 @@ def git(*args):
 
 
 def main():
+    # Publication checkouts must not inherit a personal author or old history.
+    subprocess.run([sys.executable, str(ROOT / ".githooks" / "check_identity.py"),
+                    "history", "HEAD"], cwd=ROOT, check=True)
     metadata = json.loads((ROOT / "mod_info.json").read_text(encoding="utf-8-sig"))
     version = metadata["version"]
     if not re.fullmatch(r"\d+\.\d+\.\d+", version):
