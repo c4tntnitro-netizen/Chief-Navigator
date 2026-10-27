@@ -38,7 +38,7 @@ The marker for the Odyssey Expanse still burns gold at the edge of the theater.
 
         “The first Labor remains: break the sealed command partitions of the four Guard Motherships in the Odyssey Sector. Their exact coordinates are marked on your campaign map.”
 
-        The Domain-Security IFF Transponder authorizes recovered Domain derelict drones to answer your command without Automated Ships expertise. {motherships_defeated} of four motherships have been destroyed. Their restored forms and {friendly_guard_patrols} friendly guard patrols will not appear until the completed Labor is reported to Menelaus.
+        Accepting the first Labor grants a one-time reward: the Automated Ships skill, or one skill point if you already have it. Normal automated ship limits apply. {motherships_defeated} of four motherships have been destroyed. Their restored forms and {friendly_guard_patrols} friendly drone patrols will not appear until the completed Labor is reported to Menelaus.
 
         + [“Understood.”] -> menelaus_contact_labor_1_active
     - else:
@@ -56,13 +56,16 @@ The marker for the Odyssey Expanse still burns gold at the edge of the theater.
 
         “Regrettably, they failed. The Drifting Wall repelled every attempt to recover it. Worse, the Guard Motherships' sealed command partitions no longer recognize FOB Ithaca's authority.”
 
-        A security package appears beside the four contacts.
+        A training package appears beside the four contacts.
 
-        “Accept, and I will upload their coordinates along with a Domain-Security IFF Transponder. Break the motherships' command partitions. The resulting authentication traces will give me a route back into their guard networks.”
+        “Accept, and I will upload their coordinates and a training package. Break the motherships' command partitions. The resulting authentication traces will give me a route back into their guard networks.”
 
-        The image of Ithaca's gate appears beside the contacts, crossed by a Spartan lockout sigil.
+        Menelaus brings the training package to the foreground.
 
-        “One boundary is absolute. Do not scan the gate housed inside FOB Ithaca. I will not authorize access.”
+        “Take this. A universal automated ship IFF tag. Use it to build up your strength and scatter humanity's foes to the wind.”
+
+        // Runtime: highlight this game description in green.
+        Accepting the first Labor grants the Automated Ships skill. If you already have it, you receive one skill point instead.
 
         - (menelaus_labor_1_briefing_options)
         * [“Anything I should know about the drone presence?”] -> menelaus_labor_1_drone
@@ -75,8 +78,6 @@ The marker for the Odyssey Expanse still burns gold at the edge of the theater.
 “Expect resistance, but nothing beyond your capabilities.”
 
 A pause.
-
-“The transponder does not alter salvage access. Any Domain derelict drone recovered through ordinary procedures will accept its authorization, regardless of whether your officers possess Automated Ships expertise.”
 
 Menelaus tilts his head.
 
@@ -102,7 +103,7 @@ The four points burn gold.
 
 ~ labor_1_accepted = true
 
-The four routes settle onto your campaign map. The IFF authentication package enters your fleet command network.
+The four routes settle onto your campaign map. Menelaus delivers his training package: the Automated Ships skill, or one skill point if you already have it.
 
 “Good.”
 

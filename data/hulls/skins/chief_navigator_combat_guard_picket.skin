@@ -6,5 +6,5 @@
   "incompatibleWithBaseHull": true,
   "spriteName": "graphics/ships/domain_combat_guard/combat_guard_picket.png",
   "removeHints": ["UNBOARDABLE"],
-  "tags": ["no_dealer", "no_autofit", "restricted", "chief_navigator_domain_combat_guard"]
+  "tags": ["derelict", "no_dealer", "no_autofit", "restricted", "chief_navigator_domain_combat_guard"]
 }

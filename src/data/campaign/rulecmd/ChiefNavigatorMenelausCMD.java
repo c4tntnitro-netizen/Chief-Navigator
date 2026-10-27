@@ -1,5 +1,6 @@
 package data.campaign.rulecmd;
 
+import chiefnavigator.campaign.DomainSecurityIFFAuthorization;
 import chiefnavigator.quest.MenelausTrial;
 import chiefnavigator.quest.MenelausTrialIntel;
 import chiefnavigator.quest.FobIthacaContacts;
@@ -232,6 +233,9 @@ public final class ChiefNavigatorMenelausCMD extends BaseCommandPlugin {
         if ("init".equals(action)) {
             PersonAPI menelaus = MenelausTrial.getOrCreateMenelaus();
             if (dialog != null) {
+                // An accepted campaign can claim the new one-time skill
+                // reward here without replaying Labor-I acceptance.
+                DomainSecurityIFFAuthorization.grant();
                 FobIthacaContacts.ensureForStation(
                         dialog.getInteractionTarget());
                 ConversationPortraits.show(dialog, menelaus,

@@ -6,11 +6,13 @@ import com.fs.starfarer.api.campaign.InteractionDialogAPI;
 import com.fs.starfarer.api.campaign.JumpPointAPI;
 import com.fs.starfarer.api.campaign.JumpPointAPI.JumpDestination;
 import com.fs.starfarer.api.campaign.LocationAPI;
+import com.fs.starfarer.api.campaign.OrbitAPI;
 import com.fs.starfarer.api.campaign.SectorEntityToken;
 import com.fs.starfarer.api.campaign.StarSystemAPI;
 import com.fs.starfarer.api.util.Misc;
 import java.util.ArrayList;
 import java.util.List;
+import org.lwjgl.util.vector.Vector2f;
 
 /** Narrow correction for older Alpha saves with duplicate reciprocal exits. */
 public final class AlphaOdysseyJumpRepair {
@@ -73,7 +75,9 @@ public final class AlphaOdysseyJumpRepair {
             if (!safe || isOpen(local)) continue;
             JumpPointAPI retained = endpoints.get(0);
             for (JumpPointAPI endpoint : endpoints) {
-                if (Misc.getDistance(retained, endpoint) > MAX_DUPLICATE_DISTANCE
+                if ((Misc.getDistance(retained, endpoint) > MAX_DUPLICATE_DISTANCE
+                            && !sharesNativeExitOrbit(retained, endpoint,
+                                    local, expanse, hyperspace))
                         || isOpen(endpoint)
                         || (endpoint != retained
                             && (isCourseTarget(endpoint)
@@ -96,6 +100,41 @@ public final class AlphaOdysseyJumpRepair {
             }
         }
         return removed;
+    }
+
+    /** Native generation can append another exit at a different system radius. */
+    private static boolean sharesNativeExitOrbit(JumpPointAPI first,
+            JumpPointAPI duplicate, JumpPointAPI local,
+            StarSystemAPI system, LocationAPI hyperspace) {
+        SectorEntityToken anchor = system.getHyperspaceAnchor();
+        OrbitAPI firstOrbit = first.getOrbit();
+        OrbitAPI duplicateOrbit = duplicate.getOrbit();
+        if (anchor == null || anchor.getContainingLocation() != hyperspace
+                || !Misc.isHyperspaceAnchor(anchor)
+                || Misc.getStarSystemForAnchor(anchor) != system
+                || firstOrbit == null || duplicateOrbit == null
+                || firstOrbit.getFocus() != anchor
+                || duplicateOrbit.getFocus() != anchor) return false;
+
+        float bearing = Misc.getAngleInDegreesStrict(local.getLocation());
+        float period = local.getOrbit() == null
+                ? 100f : local.getOrbit().getOrbitalPeriod();
+        return followsLocalJump(firstOrbit, anchor, bearing, period,
+                        system.getMaxRadiusInHyperspace())
+                && followsLocalJump(duplicateOrbit, anchor, bearing, period,
+                        system.getMaxRadiusInHyperspace());
+    }
+
+    private static boolean followsLocalJump(OrbitAPI orbit,
+            SectorEntityToken anchor, float bearing, float period,
+            float systemRadius) {
+        Vector2f location = orbit.computeCurrentLocation();
+        if (location == null) return false;
+        float radius = Misc.getDistance(anchor.getLocation(), location);
+        return radius > 0f && radius <= systemRadius
+                && Misc.getAngleDiff(bearing, Misc.getAngleInDegreesStrict(
+                        anchor.getLocation(), location)) <= 0.1f
+                && Math.abs(orbit.getOrbitalPeriod() - period) <= 0.01f;
     }
 
     private static boolean isOpen(SectorEntityToken token) {

@@ -714,27 +714,21 @@ public final class IthacaSectionEncounter {
         switch (section) {
             case NORTH:
                 return new String[] {
-                    "chief_navigator_combat_guard_rampart_Standard",
-                    "chief_navigator_combat_guard_defender_PD",
-                    "chief_navigator_combat_guard_defender_PD",
-                    "chief_navigator_combat_guard_sentry_FS",
-                    "chief_navigator_combat_guard_warden_Defense"
+                    "defender_PD",
+                    "sentry_FS",
+                    "warden_Defense"
                 };
             case EAST:
                 return new String[] {
-                    "chief_navigator_combat_guard_rampart_Standard",
-                    "chief_navigator_combat_guard_picket_Assault",
-                    "chief_navigator_combat_guard_picket_Assault",
-                    "chief_navigator_combat_guard_defender_PD",
-                    "chief_navigator_combat_guard_warden_Defense"
+                    "picket_Assault",
+                    "defender_PD",
+                    "warden_Defense"
                 };
             case SOUTH:
                 return new String[] {
-                    "chief_navigator_combat_guard_rampart_Standard",
-                    "chief_navigator_combat_guard_defender_PD",
-                    "chief_navigator_combat_guard_sentry_FS",
-                    "chief_navigator_combat_guard_sentry_FS",
-                    "chief_navigator_combat_guard_warden_Defense"
+                    "defender_PD",
+                    "sentry_FS",
+                    "warden_Defense"
                 };
             default:
                 return new String[0];

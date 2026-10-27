@@ -31,20 +31,21 @@ public final class MenelausLaborOneDialogueRegression {
         String rules = Files.readString(
                 ROOT.resolve("data/campaign/rules.csv"),
                 StandardCharsets.UTF_8);
-        String droneNotice = "You can command recovered FOB Ithaca drones "
-                + "without the Automated Ships skill.";
+        String droneNotice = "Your first-Labor reward was the Automated Ships "
+                + "skill, or one skill point if you already had it. "
+                + "Normal automated ship limits apply.";
         int reportStart = rules.indexOf("chiefNavigatorFobIthacaMothershipsReport,");
         int reportEnd = rules.indexOf("chiefNavigatorFobIthacaResearchReport,", reportStart);
         check(reportStart >= 0 && reportEnd > reportStart,
                 "Labor-I completion report must remain available");
         String report = rules.substring(reportStart, reportEnd);
         contains(report, "SetTextHighlightColors hColor",
-                "Drone authorization notice must use the standard highlight color");
+                "Drone reward notice must use the standard highlight color");
         contains(report, "SetTextHighlights \"\"" + droneNotice + "\"\"",
-                "The full authorization notice must be highlighted");
+                "The full reward notice must be highlighted");
         contains(report.replace("\r\n", "\n"),
                 "\"\"Labor I is complete.\"\"\n\n" + droneNotice,
-                "Authorization notice must follow completion as the final paragraph");
+                "Reward notice must follow completion as the final paragraph");
         String ink = Files.readString(
                 ROOT.resolve("dialogue/menelaus_contact_labor_1.ink"),
                 StandardCharsets.UTF_8);
@@ -90,8 +91,8 @@ public final class MenelausLaborOneDialogueRegression {
                 "Sinni's affirmative shuttle branch must be bounded");
         String sinniAssumeBranch = rules.substring(sinniAssume, sinniReady);
         contains(sinniAssumeBranch,
-                "FireAll ChiefNavigatorMenelausFirstSinniGo",
-                "Inviting Sinni must proceed directly to the station party");
+                "FireAll ChiefNavigatorMenelausFirstSinniInsistsOptions",
+                "Inviting Sinni must offer the explicit Sara/Yvan guard order before the station party");
         check(!sinniAssumeBranch.contains("Object? You?"),
                 "Inviting Sinni must not offer an objection afterward");
         check(!sinniAssumeBranch.contains(
@@ -207,8 +208,37 @@ public final class MenelausLaborOneDialogueRegression {
                 "Only the explicit acceptance route may start Labor I");
         contains(acceptance, "The four routes settle onto your campaign map",
                 "Coordinates must be granted after acceptance");
-        contains(acceptance, "IFF authentication package enters",
-                "IFF must be granted after acceptance");
+        contains(acceptance, "Menelaus delivers his training package: the Automated Ships skill, or one skill point if you already have it.",
+                "Acceptance must describe the skill-or-point reward");
+        String rewardBriefing = "Accept, and I will upload their coordinates "
+                + "and a training package.";
+        contains(rules, rewardBriefing,
+                "Shared briefing must explain the reward before all acceptance paths");
+        contains(ink, rewardBriefing,
+                "Ink must mirror the skill-or-point briefing");
+        String rewardDescription = "Accepting the first Labor grants the "
+                + "Automated Ships skill. If you already have it, you receive "
+                + "one skill point instead.";
+        contains(rules.replace("\r\n", "\n"),
+                "SetTextHighlightColors good\nSetTextHighlights \"\"" + rewardDescription + "\"\"",
+                "Reward explanation must use the full green paragraph");
+        contains(ink, rewardDescription, "Ink must mirror the game description");
+        check(count(rules, rewardDescription) == 2
+                        && count(ink, rewardDescription) == 1,
+                "Reward explanation appears only in the main briefing, plus its highlight selector");
+        check(!rules.contains("\n\"\"" + rewardDescription)
+                        && !ink.contains("“" + rewardDescription),
+                "Reward explanation must be game prose outside Menelaus's speech");
+        check(!rules.contains("without Automated Ships expertise")
+                        && !rules.contains("without the Automated Ships skill")
+                        && !rules.contains("permanent built-in system"),
+                "Runtime must not promise the retired custom IFF exemption");
+        int legacyAccept = rules.indexOf("chiefNavigatorMenelausAccept,DialogOptionSelected");
+        int legacyEnd = rules.indexOf("chiefNavigatorMenelausReportMotherships,", legacyAccept);
+        check(legacyAccept >= 0 && legacyEnd > legacyAccept,
+                "Legacy acceptance route must remain available");
+        check(!rules.substring(legacyAccept, legacyEnd).contains(rewardDescription),
+                "Legacy acceptance must not repeat the briefing explanation");
 
         contains(rules, "the Odyssey Expanse",
                 "Runtime dialogue must use the current system name");
@@ -220,8 +250,10 @@ public final class MenelausLaborOneDialogueRegression {
                 "Labor objective must match the implemented encounter");
         contains(rules, "Their escorts are secondary",
                 "Dialogue must not require escort destruction");
-        contains(rules, "Do not scan the gate housed inside FOB Ithaca",
-                "Menelaus's gate prohibition must remain explicit");
+        String iffTagLine = "Take this. A universal automated ship IFF tag. "
+                + "Use it to build up your strength and scatter humanity's foes to the wind.";
+        contains(rules, iffTagLine,
+                "Menelaus's briefing must use the requested IFF-tag line");
         contains(rules, "two hundred and eighty-six cycles ago",
                 "Collapse history must preserve the authored date");
         contains(rules, "Lieutenant Commander Helen Argyros",
@@ -300,8 +332,8 @@ public final class MenelausLaborOneDialogueRegression {
                 "Ink must mirror the current regional name");
         contains(ink, "Their escorts are secondary",
                 "Ink must mirror the implemented Labor objective");
-        contains(ink, "Do not scan the gate housed inside FOB Ithaca",
-                "Ink must mirror the gate prohibition");
+        contains(ink, iffTagLine,
+                "Ink must mirror the requested IFF-tag line");
         contains(ink, "=== menelaus_labor_1_repair ===",
                 "Ink must mirror the Labor-I repair return route");
         check(!ink.contains("Alpha Odyssey"),

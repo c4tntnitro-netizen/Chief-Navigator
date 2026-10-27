@@ -1659,7 +1659,7 @@ Thousands of them swarm around the breach, hauling debris, sealing compartments,
 Sinni stares at the devastation. She turns to you.
 
 ""Captain. They're alive.""","0:complete:""They're losing.""",One-time FOB Ithaca approach scene. Completion is committed only from the final spoken option.
-chiefNavigatorFobIthacaApproachComplete,ChiefNavigatorFobIthacaApproach_complete,,FireAll ChiefNavigatorFobIthaca,,,Flows directly from the one-time approach into the full station introduction.
+chiefNavigatorFobIthacaApproachComplete,ChiefNavigatorFobIthacaApproach_complete,,DismissDialog,,,Closes the approach; contacting Ithaca's central module opens the full station introduction.
 chiefNavigatorFobIthacaEarlyWall,ChiefNavigatorFobIthaca,ChiefNavigatorMenelausCMD stage early_wall,ChiefNavigatorMenelausCMD initEarlyWall,"Menelaus appears beneath the scarred Greek helm. Before he speaks, the signal freezes. A dense block of combat telemetry unfolds beside him: reactor-collapse timing, shutdown handshakes, and the Drifting Wall's newly accepted IFF.
 
 For several seconds, he says nothing.
@@ -1682,15 +1682,15 @@ Across the Odyssey Sector, dormant recovery frames converge on the wreck sites. 
 
 For once, the battered helm turns sharply.
 
-""Unexpected. Their destruction propagated the authentication farther than seizure would have.""",0:chief_navigator_auto_page_chief_navigator_fob_ithaca_motherships_report_2:Continue.,Labor I debrief gates mothership restoration and eight friendly Guard patrols; final paragraph highlights drone command authorization. Auto-paged 1/2.
+""Unexpected. Their destruction propagated the authentication farther than seizure would have.""",0:chief_navigator_auto_page_chief_navigator_fob_ithaca_motherships_report_2:Continue.,Labor I debrief gates mothership restoration and eight friendly drone patrols; final paragraph highlights the one-time Automated Ships reward. Auto-paged 1/2.
 chiefNavigatorFobIthacaMothershipsReportPage2,DialogOptionSelected,$option == chief_navigator_auto_page_chief_navigator_fob_ithaca_motherships_report_2,"SetTextHighlightColors hColor
-SetTextHighlights ""You can command recovered FOB Ithaca drones without the Automated Ships skill.""","New contacts spill from each restored hull: two Guard patrols per mothership, spreading out along independent routes through the system.
+SetTextHighlights ""Your first-Labor reward was the Automated Ships skill, or one skill point if you already had it. Normal automated ship limits apply.""","New contacts spill from each restored hull: two derelict drone patrols per mothership, spreading out along independent routes through the system.
 
-""The restored Guard recognizes you. You may approach its patrols and authorize the transfer of a drone to your fleet. The unmoored packs remain severed from Ithaca and will engage my patrols on contact.""
+""The restored Guard recognizes you. Its drone patrols will assist you against hostile fleets. You may recover disabled hostile drones through ordinary battle salvage. The unmoored packs remain severed from Ithaca and will engage my patrols on contact.""
 
 ""Labor I is complete.""
 
-You can command recovered FOB Ithaca drones without the Automated Ships skill.",0:chief_navigator_menelaus_report_motherships:Continue.,Automatic runtime continuation 2/2 for chiefNavigatorFobIthacaMothershipsReport.
+Your first-Labor reward was the Automated Ships skill, or one skill point if you already had it. Normal automated ship limits apply.",0:chief_navigator_menelaus_report_motherships:Continue.,Automatic runtime continuation 2/2 for chiefNavigatorFobIthacaMothershipsReport.
 chiefNavigatorFobIthacaResearchReport,ChiefNavigatorFobIthaca,"!ChiefNavigatorMenelausCMD stage early_wall
 ChiefNavigatorMenelausCMD stage research_report",ChiefNavigatorMenelausCMD init,"Menelaus reviews the four installed component records one by one. Ithaca's defense wall answers each diagnostic in turn.
 
@@ -1745,11 +1745,9 @@ chiefNavigatorFobIthacaBriefing,ChiefNavigatorFobIthaca,"!ChiefNavigatorMenelaus
 ChiefNavigatorMenelausCMD stage briefing
 !ChiefNavigatorMenelausCMD introduced",,"Your command shuttle leaves your flagship under Spartan escort.
 
-The central module of FOB Ithaca grows until it fills every viewport, a vast sea of black against black, its bulk swallowing up the stars in the background.
+The central module of FOB Ithaca grows until it fills every viewport, a vast sea of black against black, its bulk swallowing up the stars in the background. Up close, the central module stops resembling a station. Armor cliffs rise for kilometers. Docking apertures large enough to dock the Domain Navy’s largest warships, barely visible without their lights on, nestle between batteries large enough to engage capital ships.
 
-Up close, the central module stops resembling a station. Armor cliffs rise for kilometers. Docking apertures glow between batteries large enough to engage capital ships.
-
-Maintenance drones move across the surface in endless streams. Some are little larger than a person. Others haul armor plates larger than your shuttle. A team of them, illuminated only by sparks in the night, are repairing a tear so large in the module you could fly a Wolf through it.",0:chief_navigator_menelaus_first_shuttle_continue:Continue.,Begins the full one-time Menelaus first-contact scene before the reusable Labor-I hub.
+Maintenance drones move across the surface in endless streams. Some are little larger than a person. Others haul armor plates larger than your shuttle. A team of them works by the light of its own welding sparks, repairing a tear in the module large enough to fly a cruiser through.",0:chief_navigator_menelaus_first_shuttle_continue:Continue.,Begins the full one-time Menelaus first-contact scene before the reusable Labor-I hub.
 chiefNavigatorFobIthacaBriefingMenu,ChiefNavigatorFobIthaca,"!ChiefNavigatorMenelausCMD stage early_wall
 ChiefNavigatorMenelausCMD stage briefing
 ChiefNavigatorMenelausCMD introduced","ChiefNavigatorMenelausCMD init
@@ -1760,39 +1758,30 @@ The marker for the Odyssey Expanse still burns gold at the edge of the theater.
 ""What do you require?""",,Opens the reusable pre-/active-Labor-I Menelaus dialogue hub.
 chiefNavigatorMenelausFirstShuttleContinue,DialogOptionSelected,$option == chief_navigator_menelaus_first_shuttle_continue,ChiefNavigatorPeopleCMD show sinni player,"A transmission crackles through the cabin speakers.
 
-""Inbound shuttle, maintain present vector. Berth assignment transmitted.""
+""Inbound shuttle, this is West Ithaca Naval Control, maintain present vector. You're cleared through the inner defense perimeter.""
 
-Your pilot acknowledges and banks toward a docking aperture opening in Ithaca's black armor. The maneuvering thrusters pulse beneath your feet, and then the walls swallow you.
+Your pilot acknowledges and banks toward a docking aperture opening in Ithaca's armor. The maneuvering thrusters pulse beneath your feet, and then the walls swallow you. You feel the characteristic downward lurch of artificial gravity as your ship crosses the berth threshold.",0:chief_navigator_auto_page_chief_navigator_menelaus_first_shuttle_continue_2:Continue.,Full Menelaus first contact: ShuttleContinue. Auto-paged 1/2.
+chiefNavigatorMenelausFirstShuttleContinuePage2,DialogOptionSelected,$option == chief_navigator_auto_page_chief_navigator_menelaus_first_shuttle_continue_2,,"Stars disappear behind the shuttle. Guidance lamps streak past the windows as you descend through layer after layer of the macrocomplex. There is a heavy jolt as docking clamps seize the shuttle. The engines spool down, their vibration fading from the deck beneath your boots.
 
-Stars disappear behind the shuttle. Guidance lamps streak past the windows as you descend through layer after layer of the macrocomplex.
-
-There is a heavy jolt as docking clamps seize the shuttle. The engines spool down, their vibration fading from the deck beneath your boots.
-
-For the first time since entering Ashen Verge, everything is still.
+For the first time since entering the Ashen Verge system, everything is still.
 
 You unfasten your restraints. Your bodyguards do the same.
 
-Across the cabin, Sinni is already standing.","0:chief_navigator_menelaus_first_sinni_stay:""Stay in the shuttle, Sinni. Coming here is dangerous enough.""
+Across the cabin, Sinni is already standing.","0:chief_navigator_menelaus_first_sinni_stay:""Stay in the shuttle. Coming here is dangerous enough.""
 10:chief_navigator_menelaus_first_sinni_assume:""I assume you're coming.""
-20:chief_navigator_menelaus_first_sinni_ready:""Ready?""",Full Menelaus first contact: shuttle arrival.
+20:chief_navigator_menelaus_first_sinni_ready:""Ready?""",Automatic runtime continuation 2/2 for chiefNavigatorMenelausFirstShuttleContinue.
 chiefNavigatorMenelausFirstSinniStay,DialogOptionSelected,$option == chief_navigator_menelaus_first_sinni_stay,,"""No.""
 
-You stop.
+You stop.","0:chief_navigator_menelaus_first_sinni_stay_no:""No?""
+10:chief_navigator_menelaus_first_sinni_stay_insubordination:""That sounded like insubordination.""",Full Menelaus first contact: SinniStay.
+chiefNavigatorMenelausFirstSinniStayNo,DialogOptionSelected,$option == chief_navigator_menelaus_first_sinni_stay_no,FireAll ChiefNavigatorMenelausFirstSinniInsists,,,Full Menelaus first contact: SinniStayNo.
+chiefNavigatorMenelausFirstSinniStayInsubordination,DialogOptionSelected,$option == chief_navigator_menelaus_first_sinni_stay_insubordination,FireAll ChiefNavigatorMenelausFirstSinniInsists,,,Full Menelaus first contact: SinniStayInsubordination.
+chiefNavigatorMenelausFirstSinniAssume,DialogOptionSelected,$option == chief_navigator_menelaus_first_sinni_assume,FireAll ChiefNavigatorMenelausFirstSinniInsistsOptions,"""Yes.""
 
-Sinni rises from her seat.
+Sinni straightens her sleeves.",,Full Menelaus first contact: SinniAssume.
+chiefNavigatorMenelausFirstSinniReady,DialogOptionSelected,$option == chief_navigator_menelaus_first_sinni_ready,FireAll ChiefNavigatorMenelausFirstSinniInsistsOptions,"""Yes.""
 
-She simply said no.","0:chief_navigator_menelaus_first_sinni_stay_no:""No?""
-10:chief_navigator_menelaus_first_sinni_stay_insubordination:""Huh. That sounded like insubordination.""",Full Menelaus first contact: Sinni refuses to remain aboard.
-chiefNavigatorMenelausFirstSinniStayNo,DialogOptionSelected,$option == chief_navigator_menelaus_first_sinni_stay_no,FireAll ChiefNavigatorMenelausFirstSinniInsists,,,Routes the first refusal response into Sinni's insistence.
-chiefNavigatorMenelausFirstSinniStayInsubordination,DialogOptionSelected,$option == chief_navigator_menelaus_first_sinni_stay_insubordination,FireAll ChiefNavigatorMenelausFirstSinniInsists,,,Routes the insubordination response into Sinni's insistence.
-chiefNavigatorMenelausFirstSinniAssume,DialogOptionSelected,$option == chief_navigator_menelaus_first_sinni_assume,FireAll ChiefNavigatorMenelausFirstSinniGo,"""Yes.""
-
-Immediate.
-
-Sinni rises and straightens her sleeves.",,Full Menelaus first contact: Sinni accepts the invitation and joins the station party.
-chiefNavigatorMenelausFirstSinniReady,DialogOptionSelected,$option == chief_navigator_menelaus_first_sinni_ready,FireAll ChiefNavigatorMenelausFirstSinniGo,"""Yes.""
-
-Sinni is already standing, apparently more ready than you are.",,Full Menelaus first contact: Sinni is ready.
+Sinni is already standing, apparently more ready than you are.",,Full Menelaus first contact: SinniReady.
 chiefNavigatorMenelausFirstSinniInsists,ChiefNavigatorMenelausFirstSinniInsists,,FireAll ChiefNavigatorMenelausFirstSinniInsistsOptions,"Sinni clasps her hands before her.
 
 ""Captain.""
@@ -1803,87 +1792,71 @@ The concession does not follow.
 
 The look in her eyes is serious.
 
-""I am going with you.""
-
-There is no anger, no pleading, no compromise.
-
-Just Sinni.",,Full Menelaus first contact: Sinni insists on entering Ithaca.
-chiefNavigatorMenelausFirstSinniInsistsRequestOption,ChiefNavigatorMenelausFirstSinniInsistsOptions,,,,"0:chief_navigator_menelaus_first_sinni_request:""Was that a request?""",Keeps the request question beside either living-bodyguard option in the same native option group.
-chiefNavigatorMenelausFirstSinniInsistsSaraOption,ChiefNavigatorMenelausFirstSinniInsistsOptions,!$global.chief_navigator_sara_dead,,,"10:chief_navigator_menelaus_first_sinni_insists_go:""Okay. Sara. Try to keep our Chief Nav alive.""",Sara-specific station-party option while she remains alive.
-chiefNavigatorMenelausFirstSinniInsistsYvanOption,ChiefNavigatorMenelausFirstSinniInsistsOptions,$global.chief_navigator_sara_dead,,,"10:chief_navigator_menelaus_first_sinni_insists_go_yvan:""Okay. Yvan. Try to keep our Chief Nav alive.""",Yvan replaces Sara in the station-party option after her death on Kshaya.
+""I am going with you.""",,Full Menelaus first contact: SinniInsists.
+chiefNavigatorMenelausFirstSinniInsistsSaraOption,ChiefNavigatorMenelausFirstSinniInsistsOptions,!$global.chief_navigator_sara_dead,,,"0:chief_navigator_menelaus_first_sinni_insists_go:""Okay. Sara. Try to keep our Chief Nav alive.""",Full Menelaus first contact: SinniInsistsSaraOption.
+chiefNavigatorMenelausFirstSinniInsistsYvanOption,ChiefNavigatorMenelausFirstSinniInsistsOptions,$global.chief_navigator_sara_dead,,,"0:chief_navigator_menelaus_first_sinni_insists_go_yvan:""Okay. Yvan. Try to keep our Chief Nav alive.""",Full Menelaus first contact: SinniInsistsYvanOption.
 chiefNavigatorMenelausFirstSinniRequest,DialogOptionSelected,$option == chief_navigator_menelaus_first_sinni_request,FireAll ChiefNavigatorMenelausFirstSinniRequestOptions,"""No.""
 
 A beat.
 
-""Respectfully.""",,Full Menelaus first contact: Sinni clarifies that she was not asking.
-chiefNavigatorMenelausFirstSinniRequestSaraOption,ChiefNavigatorMenelausFirstSinniRequestOptions,!$global.chief_navigator_sara_dead,,,"10:chief_navigator_menelaus_first_sinni_request_go:""Okay. Sara, respectfully don't leave Sinni out of your sight.""",Sara-specific respectful station-party option while she remains alive.
-chiefNavigatorMenelausFirstSinniRequestYvanOption,ChiefNavigatorMenelausFirstSinniRequestOptions,$global.chief_navigator_sara_dead,,,"10:chief_navigator_menelaus_first_sinni_request_go_yvan:""Okay. Yvan, respectfully don't leave Sinni out of your sight.""",Yvan replaces Sara in the respectful station-party option after her death on Kshaya.
-chiefNavigatorMenelausFirstSinniInsistsGo,DialogOptionSelected,$option == chief_navigator_menelaus_first_sinni_insists_go,FireAll ChiefNavigatorMenelausFirstSinniGo,,,Routes Sinni's insistence into the station party.
-chiefNavigatorMenelausFirstSinniRequestGo,DialogOptionSelected,$option == chief_navigator_menelaus_first_sinni_request_go,FireAll ChiefNavigatorMenelausFirstSinniGo,,,Routes Sinni's respectful refusal into the station party.
-chiefNavigatorMenelausFirstSinniInsistsGoYvan,DialogOptionSelected,$option == chief_navigator_menelaus_first_sinni_insists_go_yvan,FireAll ChiefNavigatorMenelausFirstSinniGo,,,Routes the post-Kshaya option into the station party without Sara.
-chiefNavigatorMenelausFirstSinniRequestGoYvan,DialogOptionSelected,$option == chief_navigator_menelaus_first_sinni_request_go_yvan,FireAll ChiefNavigatorMenelausFirstSinniGo,,,Routes the post-Kshaya respectful option into the station party without Sara.
+""Respectfully.""",,Legacy hidden request response; no request question is offered in the revised scene.
+chiefNavigatorMenelausFirstSinniRequestSaraOption,ChiefNavigatorMenelausFirstSinniRequestOptions,!$global.chief_navigator_sara_dead,,,"0:chief_navigator_menelaus_first_sinni_request_go:""Okay. Sara, respectfully don't leave Sinni out of your sight.""",Full Menelaus first contact: SinniRequestSaraOption.
+chiefNavigatorMenelausFirstSinniRequestYvanOption,ChiefNavigatorMenelausFirstSinniRequestOptions,$global.chief_navigator_sara_dead,,,"0:chief_navigator_menelaus_first_sinni_request_go_yvan:""Okay. Yvan, respectfully don't leave Sinni out of your sight.""",Full Menelaus first contact: SinniRequestYvanOption.
+chiefNavigatorMenelausFirstSinniInsistsGo,DialogOptionSelected,$option == chief_navigator_menelaus_first_sinni_insists_go,FireAll ChiefNavigatorMenelausFirstSinniGo,,,Full Menelaus first contact: SinniInsistsGo.
+chiefNavigatorMenelausFirstSinniRequestGo,DialogOptionSelected,$option == chief_navigator_menelaus_first_sinni_request_go,FireAll ChiefNavigatorMenelausFirstSinniGo,,,Full Menelaus first contact: SinniRequestGo.
+chiefNavigatorMenelausFirstSinniInsistsGoYvan,DialogOptionSelected,$option == chief_navigator_menelaus_first_sinni_insists_go_yvan,FireAll ChiefNavigatorMenelausFirstSinniGo,,,Full Menelaus first contact: SinniInsistsGoYvan.
+chiefNavigatorMenelausFirstSinniRequestGoYvan,DialogOptionSelected,$option == chief_navigator_menelaus_first_sinni_request_go_yvan,FireAll ChiefNavigatorMenelausFirstSinniGo,,,Full Menelaus first contact: SinniRequestGoYvan.
 chiefNavigatorMenelausFirstSinniGo,ChiefNavigatorMenelausFirstSinniGo,!$global.chief_navigator_sara_dead,ChiefNavigatorPeopleCMD show sinni sara player,"Sara rises and checks her sidearm.
 
-""Got it. I'll make sure our Chief Navigator doesn't discover any exciting new ways to get shot.""
+""Roger. Hey nav, try not to discover any exciting new ways to die.""
 
-Sinni gives her a flat look.
+""I don't plan to."" Sinni gives her a flat look.
 
-""I don't intend to.""
+""So sayeth your gravestone.""",0:chief_navigator_menelaus_first_disembark:Continue.,Full Menelaus first contact: SinniGo.
+chiefNavigatorMenelausFirstSinniGoWithoutSara,ChiefNavigatorMenelausFirstSinniGo,$global.chief_navigator_sara_dead,ChiefNavigatorPeopleCMD show sinni player,"Yvan rises and checks his sidearm, then nods.
 
-""That's what makes them exciting.""
+""Understood. Nav, stay close at all times.""
 
-The outer hatch unlocks with a heavy thump as pressure equalizes, then retracts into the shuttle wall.",0:chief_navigator_auto_page_chief_navigator_menelaus_first_sinni_go_2:Continue.,Full Menelaus first contact: the party disembarks. Auto-paged 1/4.
-chiefNavigatorMenelausFirstSinniGoWithoutSara,ChiefNavigatorMenelausFirstSinniGo,$global.chief_navigator_sara_dead,,"Yvan rises and checks his sidearm, then inclines his head.
+Your nav clasps her hands together and bows.
 
-""Understood.""
+""Thank you, sergeant.""",0:chief_navigator_menelaus_first_disembark:Continue.,Full Menelaus first contact: SinniGoWithoutSara.
+chiefNavigatorMenelausFirstDisembarkOption,DialogOptionSelected,$option == chief_navigator_menelaus_first_disembark,"ChiefNavigatorMenelausCMD showSpartan
+FireAll ChiefNavigatorMenelausFirstDisembark",,,Full Menelaus first contact: DisembarkOption.
+chiefNavigatorMenelausFirstDisembark,ChiefNavigatorMenelausFirstDisembark,,,"The outer hatch unlocks with a heavy thump as pressure equalizes, then retracts into the shuttle wall. Three Spartans are waiting on the other side: two armed marines and an officer carrying a battered data slate.
 
-The outer hatch unlocks with a heavy thump as pressure equalizes, then retracts into the shuttle wall.",0:chief_navigator_auto_page_chief_navigator_menelaus_first_sinni_go_2:Continue.,Post-Kshaya version of the station party disembarking without Sara.
-chiefNavigatorMenelausFirstSinniGoPage2,DialogOptionSelected,$option == chief_navigator_auto_page_chief_navigator_menelaus_first_sinni_go_2,ChiefNavigatorPeopleCMD show sinni player,"Three Spartans are waiting on the other side: two armed marines and an officer carrying a battered data slate. There is no honor guard, no ceremony.
+The officer looks first at you. It is the same Spartan officer who intercepted you outside the ring.
 
-The officer looks first at you, then at Sinni.
+""You're the commanding officer?""","0:chief_navigator_menelaus_first_reception_name:""$chiefNavigatorLaborFivePlayerTitle $chiefNavigatorLaborFivePlayerName.""
+10:chief_navigator_menelaus_first_reception_red_carpet:""I was expecting a red carpet.""",Full Menelaus first contact: Disembark.
+chiefNavigatorMenelausFirstReceptionName,DialogOptionSelected,$option == chief_navigator_menelaus_first_reception_name,FireAll ChiefNavigatorMenelausFirstReception,,,Full Menelaus first contact: ReceptionName.
+chiefNavigatorMenelausFirstReceptionRedCarpet,DialogOptionSelected,$option == chief_navigator_menelaus_first_reception_red_carpet,FireAll ChiefNavigatorMenelausFirstReception,,,Full Menelaus first contact: ReceptionRedCarpet.
+chiefNavigatorMenelausFirstReception,ChiefNavigatorMenelausFirstReception,,,"""Commodore Aias Kleon."" The officer snaps off a quick salute. ""Commanding officer of Task Force Spartan.""
 
-""Captain. Chief Navigator.""
+He turns without another word.
 
-Sinni inclines her head.
+Beyond him, the docking gallery is enormous and mostly empty. Automated tugs move fuel and ammunition between the few occupied berths while repair drones crawl over damaged hulls and disappear into open maintenance shafts.
 
-""Correct.""
+There are people here, but not many. A pilot helps guide cargo into storage. An officer with lieutenant's bars is elbow-deep in an open maintenance panel. Two marines carry ration crates down a service corridor. Nobody seems particularly interested in the fleet that just arrived from beyond their sky. Everyone is busy.
 
-""Follow me.""
+Your escort leads you toward a waiting monorail.",0:chief_navigator_menelaus_first_monorail:Continue.,Full Menelaus first contact: Reception.
+chiefNavigatorMenelausFirstMonorail,DialogOptionSelected,$option == chief_navigator_menelaus_first_monorail,,"The monorail pulls away from the docks. For a while, Ithaca almost resembles a conventional military station. Workshops, barracks, medical compartments, and storage galleries slide past the windows. A mess hall has perhaps a dozen people inside.
 
-He turns without another word.",0:chief_navigator_auto_page_chief_navigator_menelaus_first_sinni_go_3:Continue.,Automatic runtime continuation 2/4 for chiefNavigatorMenelausFirstSinniGo.
-chiefNavigatorMenelausFirstSinniGoPage3,DialogOptionSelected,$option == chief_navigator_auto_page_chief_navigator_menelaus_first_sinni_go_3,,"Beyond him, the docking gallery is enormous and mostly empty. Automated tugs move fuel and ammunition between the few occupied berths while repair drones crawl over damaged hulls and disappear into open maintenance shafts.
+But the same pattern repeats everywhere: too much space, too few people. A pilot walks past carrying a diagnostic unit. A marine pushes a supply cart. An officer in engineering coveralls is walking out of a hydroponics bay, covered in dirt and fertilizer.
 
-There are people here, but not many. A pilot helps guide cargo into storage. An officer with lieutenant's bars is elbow-deep in an open maintenance panel. Two marines carry ration crates down a service corridor.
+Then the lights outside stop. The monorail races through an entire district with its lights turned off. Habitation towers, transit platforms, workshops, and warehouses loom beyond the glass, visible only when the train's running lights sweep across them.
 
-Nobody seems particularly interested in the fleet that just arrived from beyond their sky. Everyone is working.",0:chief_navigator_auto_page_chief_navigator_menelaus_first_sinni_go_4:Continue.,Automatic runtime continuation 3/4 for chiefNavigatorMenelausFirstSinniGo.
-chiefNavigatorMenelausFirstSinniGoPage4,DialogOptionSelected,$option == chief_navigator_auto_page_chief_navigator_menelaus_first_sinni_go_4,,Your escort leads you toward a waiting monorail.,0:chief_navigator_menelaus_first_monorail:Continue.,Automatic runtime continuation 4/4 for chiefNavigatorMenelausFirstSinniGo.
-chiefNavigatorMenelausFirstMonorail,DialogOptionSelected,$option == chief_navigator_menelaus_first_monorail,,"The monorail pulls away from the docks.
-
-For a while, Ithaca almost resembles a conventional military station. Workshops, barracks, medical compartments, and storage galleries slide past the windows. A mess hall has perhaps a dozen people inside.
-
-But the same pattern follows you everywhere: too much station, too few people.
-
-A pilot walks past carrying a diagnostic unit. A marine pushes a supply cart. An officer in engineering coveralls has half her body buried in an open maintenance panel.",0:chief_navigator_auto_page_chief_navigator_menelaus_first_monorail_2:Continue.,Full Menelaus first contact: the monorail enters a quiet district. Auto-paged 1/3.
-chiefNavigatorMenelausFirstMonorailPage2,DialogOptionSelected,$option == chief_navigator_auto_page_chief_navigator_menelaus_first_monorail_2,,"Nobody here seems to have only one job.
-
-Then the lights outside stop.
-
-Blackness swallows the windows—not space, but structure.
-
-The monorail races through an entire district with its lights turned off. Habitation towers, transit platforms, workshops, and warehouses loom beyond the glass, visible only when the train's running lights sweep across them.",0:chief_navigator_auto_page_chief_navigator_menelaus_first_monorail_3:Continue.,Automatic runtime continuation 2/3 for chiefNavigatorMenelausFirstMonorail.
-chiefNavigatorMenelausFirstMonorailPage3,DialogOptionSelected,$option == chief_navigator_auto_page_chief_navigator_menelaus_first_monorail_3,,"Something moves below. Then another. Soon you make out hundreds of maintenance drones crawling through the darkness, opening access panels, replacing conduits, and tending machinery no human being is there to see.","0:chief_navigator_menelaus_first_quiet_power:""Power failure?""
-10:chief_navigator_menelaus_first_quiet_what:""What's out there?""
-20:chief_navigator_menelaus_first_quiet_watch:Keep watching.",Automatic runtime continuation 3/3 for chiefNavigatorMenelausFirstMonorail.
-chiefNavigatorMenelausFirstQuietPower,DialogOptionSelected,$option == chief_navigator_menelaus_first_quiet_power,FireAll ChiefNavigatorMenelausFirstQuiet,,,Routes a monorail observation into the quiet-district explanation.
-chiefNavigatorMenelausFirstQuietWhat,DialogOptionSelected,$option == chief_navigator_menelaus_first_quiet_what,FireAll ChiefNavigatorMenelausFirstQuiet,,,Routes a monorail observation into the quiet-district explanation.
-chiefNavigatorMenelausFirstQuietWatch,DialogOptionSelected,$option == chief_navigator_menelaus_first_quiet_watch,FireAll ChiefNavigatorMenelausFirstQuiet,,,Routes a monorail observation into the quiet-district explanation.
-chiefNavigatorMenelausFirstQuiet,ChiefNavigatorMenelausFirstQuiet,,,"""Quiet district,"" your escort says without looking up from his data slate.","0:chief_navigator_menelaus_first_quiet_2:""Quiet district?""",Full Menelaus first contact: the escort names the dark district.
+Something moves below. Then another. Soon you make out hundreds of maintenance drones crawling through the darkness, opening access panels, replacing conduits, and tending machinery no human being is there to see.","0:chief_navigator_menelaus_first_quiet_power:""Power failure?""
+10:chief_navigator_menelaus_first_quiet_what:""What's out there?""",Full Menelaus first contact: Monorail.
+chiefNavigatorMenelausFirstQuietPower,DialogOptionSelected,$option == chief_navigator_menelaus_first_quiet_power,FireAll ChiefNavigatorMenelausFirstQuiet,,,Full Menelaus first contact: QuietPower.
+chiefNavigatorMenelausFirstQuietWhat,DialogOptionSelected,$option == chief_navigator_menelaus_first_quiet_what,FireAll ChiefNavigatorMenelausFirstQuiet,,,Full Menelaus first contact: QuietWhat.
+chiefNavigatorMenelausFirstQuietWatch,DialogOptionSelected,$option == chief_navigator_menelaus_first_quiet_watch,FireAll ChiefNavigatorMenelausFirstQuiet,,,Full Menelaus first contact: QuietWatch.
+chiefNavigatorMenelausFirstQuiet,ChiefNavigatorMenelausFirstQuiet,,,"""Quiet district,"" your escort says without looking up from his data slate.","0:chief_navigator_menelaus_first_quiet_2:""Quiet district?""",Full Menelaus first contact: Quiet.
 chiefNavigatorMenelausFirstQuiet2,DialogOptionSelected,$option == chief_navigator_menelaus_first_quiet_2,,"""No permanent personnel assignment. Life support is reduced to maintenance levels.""
 
-He gestures toward the dark city outside.
+Kleon gestures toward the dark city outside.
 
-""Strategos maintains pressure integrity, transit, structural systems, and essential fabrication. The drones handle the rest.""","0:chief_navigator_menelaus_first_quiet_3:""How much of Ithaca is like this?""",Full Menelaus first contact: the escort explains a quiet district.
-chiefNavigatorMenelausFirstQuiet3,DialogOptionSelected,$option == chief_navigator_menelaus_first_quiet_3,,"""Ninety-two percent.""
+""The Strategos maintains pressure integrity, transit, structural systems, and essential fabrication. Drones handle the rest.""","0:chief_navigator_menelaus_first_quiet_3:""How much of Ithaca is like this?""",Full Menelaus first contact: Quiet2.
+chiefNavigatorMenelausFirstQuiet3,DialogOptionSelected,$option == chief_navigator_menelaus_first_quiet_3,,"""Ninety-eight percent.""
 
 You look back through the window.
 
@@ -1891,162 +1864,127 @@ Entire districts pass in darkness, swaths of metal complexes larger than most se
 
 Sinni approaches the rail window, her reflection hanging over the black glass.
 
-Before she can react, her reflection vanishes as something immense passes over the monorail.
-
-At first, you mistake it for part of Ithaca's superstructure. Then welding sparks flare across its underside.","0:chief_navigator_menelaus_first_onslaught_what:""What is that?""
-10:chief_navigator_menelaus_first_onslaught_look:Look up.",Full Menelaus first contact: the monorail passes an automated shipyard.
-chiefNavigatorMenelausFirstOnslaughtWhat,DialogOptionSelected,$option == chief_navigator_menelaus_first_onslaught_what,FireAll ChiefNavigatorMenelausFirstOnslaught,,,Routes the shipyard observation into the Onslaught reveal.
-chiefNavigatorMenelausFirstOnslaughtLook,DialogOptionSelected,$option == chief_navigator_menelaus_first_onslaught_look,FireAll ChiefNavigatorMenelausFirstOnslaught,,,Routes the shipyard observation into the Onslaught reveal.
+Before she can react, her reflection vanishes as something immense passes over the monorail. At first, you mistake it for part of Ithaca's superstructure. Then welding sparks flare across its underside.","0:chief_navigator_menelaus_first_onslaught_what:""What is that?""
+10:chief_navigator_menelaus_first_onslaught_look:Look up.",Full Menelaus first contact: Quiet3.
+chiefNavigatorMenelausFirstOnslaughtWhat,DialogOptionSelected,$option == chief_navigator_menelaus_first_onslaught_what,FireAll ChiefNavigatorMenelausFirstOnslaught,,,Full Menelaus first contact: OnslaughtWhat.
+chiefNavigatorMenelausFirstOnslaughtLook,DialogOptionSelected,$option == chief_navigator_menelaus_first_onslaught_look,FireAll ChiefNavigatorMenelausFirstOnslaught,,,Full Menelaus first contact: OnslaughtLook.
 chiefNavigatorMenelausFirstOnslaught,ChiefNavigatorMenelausFirstOnslaught,,,"A prow emerges from the darkness, followed by meters of armor and then the unmistakable silhouette of an Onslaught.
 
-The battleship hangs above the transit line, pristine and completely unpainted, its unfinished hull suspended between rows of nanoforges. There are no work lamps, no scaffolds, no human beings.
+The battleship hangs above the transit line, pristine and completely unpainted, its unfinished hull suspended between rows of nanoforges. A slab of armor slides from one of the forge arrays, still glowing faintly from manufacture. Tug drones seize it and carry it across the cavern, where other machines catch the plate against the Onslaught's flank.
 
-A slab of armor slides from one of the forge arrays, still glowing faintly from manufacture. Tug drones seize it and carry it across the cavern, where other machines catch the plate against the Onslaught's flank.
+A moment later, welding arcs flash through the dark. For an instant, the entire battleship is visible before darkness swallows it again. Another armor plate emerges from the nanoforges.","0:chief_navigator_menelaus_first_onslaught_2:""They're building an Onslaught.""",Full Menelaus first contact: Onslaught.
+chiefNavigatorMenelausFirstOnslaught2,DialogOptionSelected,$option == chief_navigator_menelaus_first_onslaught_2,,"""Construction allocation SPN-17. To be christened 'The Scythian',"" the Spartan officer says, checking his slate. ""Scheduled completion in a year.""
 
-A moment later, welding arcs flash through the dark. For an instant, the entire battleship is visible before darkness swallows it again.
+He goes back to his slate.
 
-Another armor plate emerges from the nanoforges.","0:chief_navigator_menelaus_first_onslaught_2:""They're building an Onslaught.""",Full Menelaus first contact: Ithaca's automated Onslaught construction.
-chiefNavigatorMenelausFirstOnslaught2,DialogOptionSelected,$option == chief_navigator_menelaus_first_onslaught_2,,"""Construction allocation SPN-17,"" the Spartan officer says, checking his slate. ""Scheduled completion in twenty-three days.""","0:chief_navigator_menelaus_first_onslaught_3:""Twenty-three days?""",Full Menelaus first contact: the escort gives the construction schedule.
-chiefNavigatorMenelausFirstOnslaught3,DialogOptionSelected,$option == chief_navigator_menelaus_first_onslaught_3,FireAll ChiefNavigatorMenelausFirstAfterOnslaught,"""Assuming no further loss of industrial capacity.""
-
-He goes back to his slate.",,Full Menelaus first contact: the escort qualifies the construction schedule.
-chiefNavigatorMenelausFirstAfterOnslaught,ChiefNavigatorMenelausFirstAfterOnslaught,,,"The Onslaught vanishes behind you, though its welding flashes remain visible in the distance for several seconds.
-
-Sinni watches until the last one disappears.
-
-""Two hundred years,"" she murmurs.
-
-You glance toward her.
-
-Another dark habitation block slides past the window.
-
-The monorail begins to slow as light returns beyond the windows. Ahead, a fortified transit platform emerges from the darkness.
+The Onslaught vanishes behind you, though its welding flashes remain visible in the distance for several seconds. Another dark habitation block slides past the window. The monorail begins to slow as light returns beyond the windows. Ahead, a fortified transit platform emerges from the darkness.
 
 Your escort stands.
 
-""We have arrived.""",0:chief_navigator_menelaus_first_strategos_approach:Continue.,Full Menelaus first contact: arrival at the Strategos complex.
-chiefNavigatorMenelausFirstStrategosApproach,DialogOptionSelected,$option == chief_navigator_menelaus_first_strategos_approach,,"The platform opens directly into a military complex.
+""We're here.""",0:chief_navigator_menelaus_first_strategos_approach:Continue.,Full Menelaus first contact: Onslaught2.
+chiefNavigatorMenelausFirstStrategosApproach,DialogOptionSelected,$option == chief_navigator_menelaus_first_strategos_approach,,"The platform opens directly into a lounge complex. Simple reception, but accommodating enough. There are a few sofas, and an empty reception desk. You even pass by what looked like an unmanned cafe.
 
 Your escort leads you and your retinue through three security checkpoints before you reach a pair of tall black doors at the end of the corridor.
 
 There is no office number or command insignia, only a single word written above them in old Domain script.
 
-STRATEGOS
+STRATEGOS - ORION KNOT SECTOR
 
 The Spartan officer stops.
 
 ""Strategos Menelaus will receive you now.""
 
-The doors open.",0:chief_navigator_menelaus_first_holodeck:Enter.,Full Menelaus first contact: the party reaches Menelaus's holodeck.
-chiefNavigatorMenelausFirstHolodeck,DialogOptionSelected,$option == chief_navigator_menelaus_first_holodeck,ChiefNavigatorPeopleCMD show sinni player,"The room beyond is circular, windowless, and completely empty.
-
-No desk. No command staff. No tactical table. You catch your bodyguards thumbing their weapons nervously.
+The doors open.",0:chief_navigator_menelaus_first_holodeck:Enter.,Full Menelaus first contact: StrategosApproach.
+chiefNavigatorMenelausFirstHolodeck,DialogOptionSelected,$option == chief_navigator_menelaus_first_holodeck,ChiefNavigatorPeopleCMD show sinni player,"The room beyond is circular, windowless, and completely empty. You catch your bodyguards thumbing their weapons nervously.
 
 Actually, why didn't your escorts confiscate them?
 
 Sinni looks around.
 
-""It's a holodeck.""",0:chief_navigator_auto_page_chief_navigator_menelaus_first_holodeck_2:Continue.,Full Menelaus first contact: Menelaus appears in the holodeck. Auto-paged 1/5.
-chiefNavigatorMenelausFirstHolodeckPage2,DialogOptionSelected,$option == chief_navigator_auto_page_chief_navigator_menelaus_first_holodeck_2,,"Stars hang overhead and beneath your feet. Ithaca's orbital ring curves through the chamber while the central module hangs at its heart. Fleet positions begin appearing around it, followed by defense networks, supply routes, industrial output, power flow, and casualty estimates.
+""It's a holodeck.""
+
+Lights shine from below.",0:chief_navigator_auto_page_chief_navigator_menelaus_first_holodeck_2:Continue.,Full Menelaus first contact: Holodeck. Auto-paged 1/3.
+chiefNavigatorMenelausFirstHolodeckPage2,DialogOptionSelected,$option == chief_navigator_auto_page_chief_navigator_menelaus_first_holodeck_2,,"Stars shimmer into existence, hanging overhead and rising from beneath your feet. Ithaca's orbital ring curves through the chamber while the central module hangs at its heart. Fleet positions begin appearing around it, followed by defense networks, supply routes, industrial output, power flow, and casualty estimates. Behind your head, the Ashen Verge star fills the room with a warm, ambient light.
 
 Thousands of streams of information fold through one another faster than you can follow.
 
-Then they move aside.
+Then they move aside.",0:chief_navigator_auto_page_chief_navigator_menelaus_first_holodeck_3:Continue.,Automatic runtime continuation 2/3 for chiefNavigatorMenelausFirstHolodeck.
+chiefNavigatorMenelausFirstHolodeckPage3,DialogOptionSelected,$option == chief_navigator_auto_page_chief_navigator_menelaus_first_holodeck_3,,A humanoid face assembled from overlapping geometric planes slowly begins rendering into view at the center of the chamber.,0:chief_navigator_menelaus_first_holodeck_reveal:Continue.,Automatic runtime continuation 3/3 for chiefNavigatorMenelausFirstHolodeck.
+chiefNavigatorMenelausFirstHolodeckReveal,DialogOptionSelected,$option == chief_navigator_menelaus_first_holodeck_reveal,ChiefNavigatorMenelausCMD init,"The features are almost human.
 
-A humanoid face assembled from overlapping geometric planes slowly begins rendering into view at the center of the chamber.",0:chief_navigator_auto_page_chief_navigator_menelaus_first_holodeck_3:Continue.,Automatic runtime continuation 2/5 for chiefNavigatorMenelausFirstHolodeck.
-chiefNavigatorMenelausFirstHolodeckPage3,DialogOptionSelected,$option == chief_navigator_auto_page_chief_navigator_menelaus_first_holodeck_3,ChiefNavigatorMenelausCMD init,"The features are almost human.
+A Corinthian helm crowns the avatar, its cheek guards and brow formed from the same layered, crystalline geometry. A broad transverse crest stretches across the crown. Beneath it, the face seems less sculpted than calculated into existence. Plates of light shift by fractions of a degree as you look at him, suggesting cheekbones, a mouth, the bridge of a nose.
 
-A model of a Corinthian helm has been worked into the avatar, its cheek guards and brow breaking apart into the same layered, crystalline geometry. A broad transverse crest stretches across the crown. Beneath it, the face seems less sculpted than calculated into existence. Plates of light shift by fractions of a degree as you look at him, suggesting cheekbones, a mouth, the bridge of a nose.
+Only the eyes remain completely stable. They are a shocking blue-white.",0:chief_navigator_auto_page_chief_navigator_menelaus_first_holodeck_reveal_2:Continue.,Full Menelaus first contact: HolodeckReveal. Auto-paged 1/3.
+chiefNavigatorMenelausFirstHolodeckRevealPage2,DialogOptionSelected,$option == chief_navigator_auto_page_chief_navigator_menelaus_first_holodeck_reveal_2,,"You have the strange sensation that you are not standing in a room with Menelaus, but inside something that has chosen to give you its attention.
 
-Only the eyes remain completely stable.
-
-One burns a shocking blue, the other white.",0:chief_navigator_auto_page_chief_navigator_menelaus_first_holodeck_4:Continue.,Automatic runtime continuation 3/5 for chiefNavigatorMenelausFirstHolodeck.
-chiefNavigatorMenelausFirstHolodeckPage4,DialogOptionSelected,$option == chief_navigator_auto_page_chief_navigator_menelaus_first_holodeck_4,,"The machine's presence is overwhelming. The avatar practically unmakes you with its gaze. You have the strange sensation that you are not standing in a room containing Menelaus, but inside something that has chosen to give you its attention.
-
-Like standing before a god.
-
-His gaze settles on you.
+Its gaze settles on you.
 
 ""Captain.""
 
-Its voice is thunderous, calm, and unmistakably human.",0:chief_navigator_auto_page_chief_navigator_menelaus_first_holodeck_5:Continue.,Automatic runtime continuation 4/5 for chiefNavigatorMenelausFirstHolodeck.
-chiefNavigatorMenelausFirstHolodeckPage5,DialogOptionSelected,$option == chief_navigator_auto_page_chief_navigator_menelaus_first_holodeck_5,,"""I am Menelaus, Domain Intelligence Nexus VG1239-GH1729.""
-
-The geometry of his face shifts almost imperceptibly.
-
-""I have held the office of Strategos of the Orion Knot Theater for the last two hundred and eighty-six cycles.""","0:chief_navigator_menelaus_first_business_direct:""Strategos Menelaus.""
-10:chief_navigator_menelaus_first_unexpected:""I wasn't expecting... this.""",Automatic runtime continuation 5/5 for chiefNavigatorMenelausFirstHolodeck.
-chiefNavigatorMenelausFirstBusinessDirect,DialogOptionSelected,$option == chief_navigator_menelaus_first_business_direct,FireAll ChiefNavigatorMenelausFirstBusiness,,,Routes the formal greeting into Menelaus's request.
+Its voice is thunderous. Supernatural. Yet unmistakably human.",0:chief_navigator_auto_page_chief_navigator_menelaus_first_holodeck_reveal_3:Continue.,Automatic runtime continuation 2/3 for chiefNavigatorMenelausFirstHolodeckReveal.
+chiefNavigatorMenelausFirstHolodeckRevealPage3,DialogOptionSelected,$option == chief_navigator_auto_page_chief_navigator_menelaus_first_holodeck_reveal_3,,"""I am Menelaus, Domain Intelligence Nexus VG1239331775."" The geometry of his face shifts almost imperceptibly. ""I have held the office of Strategos of the Orion Knot Theater for the last two hundred and eighty-six cycles.""","0:chief_navigator_menelaus_first_business_direct:""Strategos Menelaus.""
+10:chief_navigator_menelaus_first_unexpected:""I wasn't expecting this.""",Automatic runtime continuation 3/3 for chiefNavigatorMenelausFirstHolodeckReveal.
+chiefNavigatorMenelausFirstBusinessDirect,DialogOptionSelected,$option == chief_navigator_menelaus_first_business_direct,FireAll ChiefNavigatorMenelausFirstBusiness,,,Full Menelaus first contact: BusinessDirect.
 chiefNavigatorMenelausFirstUnexpected,DialogOptionSelected,$option == chief_navigator_menelaus_first_unexpected,,"""I thought not.""
 
 Menelaus regards you for another moment.","0:chief_navigator_menelaus_first_core_alpha:""You're an Alpha Core.""
 10:chief_navigator_menelaus_first_core_ai:""You're an AI.""
 20:chief_navigator_menelaus_first_abomination_unexpected:""Ludd help us. You're an abomination.""
-30:chief_navigator_menelaus_first_business_then:""Strategos, then.""",Full Menelaus first contact: the player reacts to the Alpha core.
-chiefNavigatorMenelausFirstCoreAlpha,DialogOptionSelected,$option == chief_navigator_menelaus_first_core_alpha,FireAll ChiefNavigatorMenelausFirstCore,,,Routes recognition of Menelaus's nature into his classification.
-chiefNavigatorMenelausFirstCoreAi,DialogOptionSelected,$option == chief_navigator_menelaus_first_core_ai,FireAll ChiefNavigatorMenelausFirstCore,,,Routes recognition of Menelaus's nature into his classification.
-chiefNavigatorMenelausFirstBusinessThen,DialogOptionSelected,$option == chief_navigator_menelaus_first_business_then,FireAll ChiefNavigatorMenelausFirstBusiness,,,Routes acceptance of Menelaus's title into his request.
+30:chief_navigator_menelaus_first_business_then:""Strategos, then.""",Full Menelaus first contact: Unexpected.
+chiefNavigatorMenelausFirstCoreAlpha,DialogOptionSelected,$option == chief_navigator_menelaus_first_core_alpha,FireAll ChiefNavigatorMenelausFirstCore,,,Full Menelaus first contact: CoreAlpha.
+chiefNavigatorMenelausFirstCoreAi,DialogOptionSelected,$option == chief_navigator_menelaus_first_core_ai,FireAll ChiefNavigatorMenelausFirstCore,,,Full Menelaus first contact: CoreAi.
+chiefNavigatorMenelausFirstBusinessThen,DialogOptionSelected,$option == chief_navigator_menelaus_first_business_then,FireAll ChiefNavigatorMenelausFirstBusiness,,,Full Menelaus first contact: BusinessThen.
 chiefNavigatorMenelausFirstCore,ChiefNavigatorMenelausFirstCore,,,"""Yes.""
 
 The answer comes without hesitation.
 
 ""I am classified as an 'Alpha'-level artificial intelligence. Issued at Jupiter Station by the Amystris lab.""
 
-A constellation of blue-white geometry turns slowly behind him.","0:chief_navigator_menelaus_first_business_core:""Strategos, then.""
-10:chief_navigator_menelaus_first_abomination_core:""Ludd help us. You're an abomination.""",Full Menelaus first contact: Menelaus identifies his classification.
-chiefNavigatorMenelausFirstBusinessCore,DialogOptionSelected,$option == chief_navigator_menelaus_first_business_core,FireAll ChiefNavigatorMenelausFirstBusiness,,,Routes acceptance of Menelaus's title into his request.
-chiefNavigatorMenelausFirstAbominationUnexpected,DialogOptionSelected,$option == chief_navigator_menelaus_first_abomination_unexpected,FireAll ChiefNavigatorMenelausFirstAbomination,,,Routes the hostile response into Menelaus's rebuke.
-chiefNavigatorMenelausFirstAbominationCore,DialogOptionSelected,$option == chief_navigator_menelaus_first_abomination_core,FireAll ChiefNavigatorMenelausFirstAbomination,,,Routes the hostile response into Menelaus's rebuke.
-chiefNavigatorMenelausFirstAbomination,ChiefNavigatorMenelausFirstAbomination,!$global.chief_navigator_sara_dead,ChiefNavigatorPeopleCMD show menelaus sinni sara,"The avatar's visage darkens. Literally.
+The constellations of the surrounding stars turn slowly behind him.","0:chief_navigator_menelaus_first_business_core:""Strategos, then.""
+10:chief_navigator_menelaus_first_abomination_core:""Ludd help us. You're an abomination.""",Full Menelaus first contact: Core.
+chiefNavigatorMenelausFirstBusinessCore,DialogOptionSelected,$option == chief_navigator_menelaus_first_business_core,FireAll ChiefNavigatorMenelausFirstBusiness,,,Full Menelaus first contact: BusinessCore.
+chiefNavigatorMenelausFirstAbominationUnexpected,DialogOptionSelected,$option == chief_navigator_menelaus_first_abomination_unexpected,FireAll ChiefNavigatorMenelausFirstAbomination,,,Full Menelaus first contact: AbominationUnexpected.
+chiefNavigatorMenelausFirstAbominationCore,DialogOptionSelected,$option == chief_navigator_menelaus_first_abomination_core,FireAll ChiefNavigatorMenelausFirstAbomination,,,Full Menelaus first contact: AbominationCore.
+chiefNavigatorMenelausFirstAbomination,ChiefNavigatorMenelausFirstAbomination,!$global.chief_navigator_sara_dead,ChiefNavigatorPeopleCMD show menelaus sinni sara,"The avatar's visage visibly darkens.
 
-""You will address me as STRATEGOS, as befits my station.""
+""You will address me as 'STRATEGOS', as befits my station.""
 
-The avatar looms overhead, not by stepping forward, but by simply growing.
+The avatar looms overhead by simply growing. The face of Menelaus expands until those impossible eyes hang above you like stars. The holodeck darkens around him, leaving the blue-white architecture of his form burning against the void.
 
-Wordlessly, Sinni reaches out and grabs your hand.
+Several of your bodyguards recoil. Sara's pistol clears its holster, but Yvan catches her wrist and yanks the weapon back down before she can level it.
 
-The face of Menelaus expands until those impossible eyes hang above you like stars. The holodeck darkens around him, leaving the blue-white architecture of his form burning against the void.
+That was the right call. As if that toy would be of any use here.
 
-Several of your bodyguards recoil. Sara's pistol clears its holster, but Yvan catches her wrist and slaps the weapon back down before she can level it.
-
-As if that toy would be of any use here.
-
-Menelaus lets the moment stretch, allowing you and your retinue to quail beneath his wrath.
+The moment stretches.
 
 ""Are we understood?"" he asks.","0:chief_navigator_menelaus_first_hmm_understood:""Understood, Strategos.""
 10:chief_navigator_menelaus_first_hmm_apologies:""Apologies. Point taken.""
-20:chief_navigator_menelaus_first_hmm_silent:Say nothing.",Full Menelaus first contact: Menelaus demands his proper title.
-chiefNavigatorMenelausFirstAbominationWithoutSara,ChiefNavigatorMenelausFirstAbomination,$global.chief_navigator_sara_dead,,"The avatar's visage darkens. Literally.
+20:chief_navigator_menelaus_first_hmm_silent:Say nothing.",Full Menelaus first contact: Abomination.
+chiefNavigatorMenelausFirstAbominationWithoutSara,ChiefNavigatorMenelausFirstAbomination,$global.chief_navigator_sara_dead,ChiefNavigatorPeopleCMD show menelaus sinni,"The avatar's visage visibly darkens.
 
-""You will address me as STRATEGOS, as befits my station.""
+""You will address me as 'STRATEGOS', as befits my station.""
 
-The avatar looms overhead, not by stepping forward, but by simply growing.
-
-Wordlessly, Sinni reaches out and grabs your hand.
-
-The face of Menelaus expands until those impossible eyes hang above you like stars. The holodeck darkens around him, leaving the blue-white architecture of his form burning against the void.
+The avatar looms overhead by simply growing. The face of Menelaus expands until those impossible eyes hang above you like stars. The holodeck darkens around him, leaving the blue-white architecture of his form burning against the void.
 
 Several of your bodyguards recoil.
 
-Menelaus lets the moment stretch, allowing you and your retinue to quail beneath his wrath.
+The moment stretches.
 
 ""Are we understood?"" he asks.","0:chief_navigator_menelaus_first_hmm_understood:""Understood, Strategos.""
 10:chief_navigator_menelaus_first_hmm_apologies:""Apologies. Point taken.""
-20:chief_navigator_menelaus_first_hmm_silent:Say nothing.",Post-Kshaya version of Menelaus's rebuke without Sara.
-chiefNavigatorMenelausFirstHmmUnderstood,DialogOptionSelected,$option == chief_navigator_menelaus_first_hmm_understood,FireAll ChiefNavigatorMenelausFirstHmm,,,Routes the response to Menelaus's rebuke into his request.
-chiefNavigatorMenelausFirstHmmApologies,DialogOptionSelected,$option == chief_navigator_menelaus_first_hmm_apologies,FireAll ChiefNavigatorMenelausFirstHmm,,,Routes the response to Menelaus's rebuke into his request.
-chiefNavigatorMenelausFirstHmmSilent,DialogOptionSelected,$option == chief_navigator_menelaus_first_hmm_silent,FireAll ChiefNavigatorMenelausFirstHmm,,,Routes the response to Menelaus's rebuke into his request.
-chiefNavigatorMenelausFirstHmm,ChiefNavigatorMenelausFirstHmm,,FireAll ChiefNavigatorMenelausFirstBusiness,"""Onto my request.""",,Full Menelaus first contact: Menelaus returns to business.
+20:chief_navigator_menelaus_first_hmm_silent:Say nothing.",Full Menelaus first contact: AbominationWithoutSara.
+chiefNavigatorMenelausFirstHmmUnderstood,DialogOptionSelected,$option == chief_navigator_menelaus_first_hmm_understood,FireAll ChiefNavigatorMenelausFirstHmm,,,Full Menelaus first contact: HmmUnderstood.
+chiefNavigatorMenelausFirstHmmApologies,DialogOptionSelected,$option == chief_navigator_menelaus_first_hmm_apologies,FireAll ChiefNavigatorMenelausFirstHmm,,,Full Menelaus first contact: HmmApologies.
+chiefNavigatorMenelausFirstHmmSilent,DialogOptionSelected,$option == chief_navigator_menelaus_first_hmm_silent,FireAll ChiefNavigatorMenelausFirstHmm,,,Full Menelaus first contact: HmmSilent.
+chiefNavigatorMenelausFirstHmm,ChiefNavigatorMenelausFirstHmm,,FireAll ChiefNavigatorMenelausFirstBusiness,"""Onto my request.""",,Full Menelaus first contact: Hmm.
 chiefNavigatorMenelausFirstBusiness,ChiefNavigatorMenelausFirstBusiness,,"ChiefNavigatorPeopleCMD show menelaus sinni
 FireAll ChiefNavigatorMenelausFirstStatusOptions","""I am in need of your assistance.""
 
-The words are almost absurd coming from something that fills the room like a god.
+The words are almost absurd coming from something this powerful.
 
-Menelaus raises one hand, and Ithaca contracts beneath you. The orbital ring becomes a thin circle of light. The central module shrinks with it, followed by the moons, planets, and finally the whole of Ashen Verge.
+Menelaus raises a digital hand, and Ithaca contracts beneath you. The orbital ring becomes a thin circle of light. The central module shrinks with it, followed by the moons, planets, and finally the whole of Ashen Verge.
 
-Then red begins to spread across the system.
-
-Hundreds of Threat contacts populate the map. Some are marked as destroyed. Others pulse steadily at the edges of Spartan patrol zones, while entire regions of the system are shaded in warning colors.
+Then red begins to spread across the system. Hundreds of Threat contacts populate the map. Some are marked as destroyed. Others pulse steadily at the edges of Spartan patrol zones, while entire regions of the system are shaded in warning colors.
 
 The wound you saw in Ithaca's orbital ring glows brightest of all.
 
@@ -2054,82 +1992,67 @@ The wound you saw in Ithaca's orbital ring glows brightest of all.
 
 A number appears beside the ring and begins counting downward.
 
-""That condition will not persist.""",,Full Menelaus first contact: Menelaus shows Ithaca's strategic position.
-chiefNavigatorMenelausFirstStatusLosingOption,ChiefNavigatorMenelausFirstStatusOptions,!$chiefNavigatorMenelausFirstAskedLosing,,,"0:chief_navigator_menelaus_first_losing:""You're losing.""",One-shot status question in the Menelaus introduction.
-chiefNavigatorMenelausFirstStatusNeedOption,ChiefNavigatorMenelausFirstStatusOptions,,,,"10:chief_navigator_menelaus_first_need:""What do you need from me?""",Persistent request question in the Menelaus introduction.
+""That condition will not persist.""",,Full Menelaus first contact: Business.
+chiefNavigatorMenelausFirstStatusLosingOption,ChiefNavigatorMenelausFirstStatusOptions,,,,"0:chief_navigator_menelaus_first_losing:""You're losing.""",Full Menelaus first contact: StatusLosingOption.
 chiefNavigatorMenelausFirstLosing,DialogOptionSelected,$option == chief_navigator_menelaus_first_losing,ChiefNavigatorMenelausCMD showGautama,"""Yes.""
 
 Menelaus brings up the schematics of a ship.
 
 ""For two hundred and forty-six cycles, we maintained our position with minimal losses. Until the arrival of this.""
 
-The vessel rotates slowly between you.
+The vessel rotates slowly between you. Menelaus narrows his eyes.
 
-Menelaus narrows his eyes.
-
-""We have designated it 'Gautama.' A vector of the same entities responsible for the megadeath incident at Hipparcos during the third cycle of the 204th Assembly.""
+""We have designated it 'Gautama.' A singularity of the same entities responsible for the megadeath incident at Hipparcos during the third cycle of the 204th Assembly.""
 
 The image of Ithaca appears beside it.
 
-""This... thing penetrated our defenses and sheared an entire module from the orbital defense ring.""","0:chief_navigator_menelaus_first_losing_2:""We saw it. The Drifting Wall module in the Alpha Odyssey sector. That was from here.""",Full Menelaus first contact: Menelaus identifies Gautama.
+""This abomination penetrated our defenses and sheared an entire module from the orbital defense ring.""","0:chief_navigator_menelaus_first_losing_2:""The Drifting Wall module in the Alpha Odyssey sector was from here.""",Full Menelaus first contact: Losing.
 chiefNavigatorMenelausFirstLosing2,DialogOptionSelected,$option == chief_navigator_menelaus_first_losing_2,ChiefNavigatorPeopleCMD show menelaus sinni,"Menelaus lowers his helm.
-
-Was that shame?
 
 ""It is my greatest failure.""
 
 A series of cryogenic vaults illuminate across the macrocomplex.
 
-""It was because of Gautama that I reactivated Task Force Spartan from cryosuspension. They have shored up the defenses as best they can. For now.""",0:chief_navigator_menelaus_first_losing_return:Continue.,Full Menelaus first contact: Menelaus acknowledges his failure.
-chiefNavigatorMenelausFirstLosingReturn,DialogOptionSelected,$option == chief_navigator_menelaus_first_losing_return,"$chiefNavigatorMenelausFirstAskedLosing = true 0
-ChiefNavigatorMenelausCMD init
-FireAll ChiefNavigatorMenelausFirstStatusOptions",,,Returns to Menelaus's strategic-status choices and restores his portrait after the Gautama schematic.
-chiefNavigatorMenelausFirstNeed,DialogOptionSelected,$option == chief_navigator_menelaus_first_need,,"Menelaus dismisses the tactical display.
+""It was because of Gautama that I reactivated Task Force Spartan from cryosuspension. They have shored up the defenses as best they can.""",0:chief_navigator_menelaus_first_losing_return:Continue.,Full Menelaus first contact: Losing2.
+chiefNavigatorMenelausFirstLosingReturn,DialogOptionSelected,$option == chief_navigator_menelaus_first_losing_return,"ChiefNavigatorMenelausCMD init
+FireAll ChiefNavigatorMenelausFirstNeed",,,Full Menelaus first contact: LosingReturn.
+chiefNavigatorMenelausFirstNeedLegacy,DialogOptionSelected,$option == chief_navigator_menelaus_first_need,FireAll ChiefNavigatorMenelausFirstNeed,,,Full Menelaus first contact: NeedLegacy.
+chiefNavigatorMenelausFirstNeed,ChiefNavigatorMenelausFirstNeed,,,"Menelaus dismisses the tactical display.
 
-""I need you to act as an independent roaming force.""
+""I cannot spare any more of them. I need you to act as an independent roaming force.""
 
-The map of Ashen Verge changes around him. Spartan formations collapse back toward Ithaca, their patrol routes clustering tightly around the surviving defensive perimeter.
+The map of Ashen Verge changes around him. Spartan formations collapse back toward Ithaca, their patrol routes clustering tightly around the surviving defensive perimeter. Distant points illuminate across the theater: wrecks, Threat concentrations, abandoned installations, lost supply depots. Places far beyond the reach of the Spartan pickets.
 
-""Task Force Spartan cannot be everywhere. Every ship I send beyond the defense area weakens Ithaca, and every casualty costs me personnel I cannot replace.""
-
-His gaze settles on you.
-
-""You suffer from neither limitation.""",0:chief_navigator_auto_page_chief_navigator_menelaus_first_need_2:Continue.,Full Menelaus first contact: Menelaus offers the Labors. Auto-paged 1/4.
-chiefNavigatorMenelausFirstNeedPage2,DialogOptionSelected,$option == chief_navigator_auto_page_chief_navigator_menelaus_first_need_2,,"Distant points illuminate across the theater: wrecks, Threat concentrations, abandoned installations, lost supply depots. Places far beyond the reach of the Spartan pickets.
-
-""I have objectives throughout the Orion Knot which must be completed, and no force I can presently spare to complete them.""
+His gaze settles on you.",0:chief_navigator_auto_page_chief_navigator_menelaus_first_need_2:Continue.,Full Menelaus first contact: Need. Auto-paged 1/4.
+chiefNavigatorMenelausFirstNeedPage2,DialogOptionSelected,$option == chief_navigator_auto_page_chief_navigator_menelaus_first_need_2,,"""I have objectives throughout the Orion Knot which must be completed, and no force I can presently spare to complete them.""
 
 Menelaus raises one hand.
 
-""I call them my Labors.""
+""These are my Labors.""
 
-The word hangs in the holodeck with more ceremony than anything else he has said.",0:chief_navigator_auto_page_chief_navigator_menelaus_first_need_3:Continue.,Automatic runtime continuation 2/4 for chiefNavigatorMenelausFirstNeed.
-chiefNavigatorMenelausFirstNeedPage3,DialogOptionSelected,$option == chief_navigator_auto_page_chief_navigator_menelaus_first_need_3,,"""Undertake them at your discretion. Destroy what threatens this theater. Recover what has been lost. Restore what can still be restored. And where circumstances demand judgment, exercise yours.""
+The word hangs in the holodeck with more ceremony than anything else he has said.
 
-A series of Domain seals appear around him.
+""Undertake them. Destroy what threatens this theater. Recover what has been lost. Restore what once was broken. And where circumstances demand judgment, exercise yours.""
 
-""Accomplish my Labors, and by the authority vested in me by the Domain of Man, I will compensate you accordingly.""
+A series of Domain seals appear around him.",0:chief_navigator_auto_page_chief_navigator_menelaus_first_need_3:Continue.,Automatic runtime continuation 2/4 for chiefNavigatorMenelausFirstNeed.
+chiefNavigatorMenelausFirstNeedPage3,DialogOptionSelected,$option == chief_navigator_auto_page_chief_navigator_menelaus_first_need_3,,"""Accomplish my Labors, and by the authority vested in me by the Domain of Man, as the highest authority of the Orion Knot Sector, I will compensate you accordingly.""
 
-Ship schematics, weapons inventories, industrial stockpiles, and ancient Domain credentials flicker into existence around him.",0:chief_navigator_auto_page_chief_navigator_menelaus_first_need_4:Continue.,Automatic runtime continuation 3/4 for chiefNavigatorMenelausFirstNeed.
-chiefNavigatorMenelausFirstNeedPage4,DialogOptionSelected,$option == chief_navigator_auto_page_chief_navigator_menelaus_first_need_4,FireAll ChiefNavigatorMenelausFirstNeedOptions,"""Materiel. Ships. Access to Ithaca's arsenals and fabrication capacity. Salvage rights. Requisition authority. Military clearances.""
+Ship schematics, weapons inventories, industrial stockpiles, and ancient Domain credentials flicker into existence around him.
 
-Menelaus lowers his hand.
+""Materiel. Ships. Access to Ithaca's arsenals and fabrication capacity. Salvage rights. Requisition authority. Military clearances. Authority, where I possess the right to grant it.""
 
-""Authority, where I possess the right to grant it.""
-
-A pause.
-
-""And wealth enough that I doubt you will find the arrangement unrewarding.""",,Automatic runtime continuation 4/4 for chiefNavigatorMenelausFirstNeed.
-chiefNavigatorMenelausFirstNeedMercenaryOption,ChiefNavigatorMenelausFirstNeedOptions,!$chiefNavigatorMenelausFirstAskedMercenary,,,"0:chief_navigator_menelaus_first_need_mercenary:""You're hiring me as a mercenary.""",One-shot mercenary question in the Menelaus introduction.
-chiefNavigatorMenelausFirstNeedAuthorityOption,ChiefNavigatorMenelausFirstNeedOptions,!$chiefNavigatorMenelausFirstAskedAuthority,,,"10:chief_navigator_menelaus_first_need_authority:""You can actually grant Domain authority?""",One-shot authority question in the Menelaus introduction.
-chiefNavigatorMenelausFirstNeedRefuseOption,ChiefNavigatorMenelausFirstNeedOptions,!$chiefNavigatorMenelausFirstAskedRefuse,,,"20:chief_navigator_menelaus_first_need_refuse:""And if I don't want to work for you?""",One-shot refusal question in the Menelaus introduction.
-chiefNavigatorMenelausFirstNeedAcceptOption,ChiefNavigatorMenelausFirstNeedOptions,,,,"30:chief_navigator_menelaus_first_need_accept_direct:""Understood. Show me the Labors.""",Persistent direct acceptance choice in the Menelaus introduction.
+A pause.",0:chief_navigator_auto_page_chief_navigator_menelaus_first_need_4:Continue.,Automatic runtime continuation 3/4 for chiefNavigatorMenelausFirstNeed.
+chiefNavigatorMenelausFirstNeedPage4,DialogOptionSelected,$option == chief_navigator_auto_page_chief_navigator_menelaus_first_need_4,FireAll ChiefNavigatorMenelausFirstNeedOptions,"""And wealth enough that I doubt you will find the arrangement unrewarding.""",,Automatic runtime continuation 4/4 for chiefNavigatorMenelausFirstNeed.
+chiefNavigatorMenelausFirstNeedMercenaryOption,ChiefNavigatorMenelausFirstNeedOptions,!$chiefNavigatorMenelausFirstAskedMercenary,,,"0:chief_navigator_menelaus_first_need_mercenary:""You're hiring me as a mercenary.""",Full Menelaus first contact: NeedMercenaryOption.
+chiefNavigatorMenelausFirstNeedAuthorityOption,ChiefNavigatorMenelausFirstNeedOptions,!$chiefNavigatorMenelausFirstAskedAuthority,,,"10:chief_navigator_menelaus_first_need_authority:""You can actually grant Domain authority?""",Full Menelaus first contact: NeedAuthorityOption.
+chiefNavigatorMenelausFirstNeedRefuseOption,ChiefNavigatorMenelausFirstNeedOptions,!$chiefNavigatorMenelausFirstAskedRefuse,,,"20:chief_navigator_menelaus_first_need_refuse:""And if I don't want to work for you?""",Full Menelaus first contact: NeedRefuseOption.
+chiefNavigatorMenelausFirstNeedAcceptOption,ChiefNavigatorMenelausFirstNeedOptions,,,,"30:chief_navigator_menelaus_first_need_accept_direct:""Understood. Show me the Labors.""",Full Menelaus first contact: NeedAcceptOption.
 chiefNavigatorMenelausFirstNeedMercenary,DialogOptionSelected,$option == chief_navigator_menelaus_first_need_mercenary,"$chiefNavigatorMenelausFirstAskedMercenary = true 0
 FireAll ChiefNavigatorMenelausFirstNeedReturnOptions","""If that terminology pleases you.""
 
 There is the faintest shift in the geometry of his face.
 
-""I prefer 'independent auxiliary.'""",,Full Menelaus first contact: Menelaus answers the mercenary question.
+""I prefer 'independent auxiliary.'""",,Full Menelaus first contact: NeedMercenary.
 chiefNavigatorMenelausFirstNeedAuthority,DialogOptionSelected,$option == chief_navigator_menelaus_first_need_authority,"$chiefNavigatorMenelausFirstAskedAuthority = true 0
 FireAll ChiefNavigatorMenelausFirstNeedReturnOptions","""I am Strategos of the Orion Knot Theater.""
 
@@ -2139,25 +2062,25 @@ For once, Menelaus sounds almost offended that the answer should require explana
 
 His gaze hardens.
 
-""None have come to relieve me of my duties in two hundred and eighty-six cycles.""",,Full Menelaus first contact: Menelaus answers the authority question.
+""None have come to relieve me of my duties in two hundred and eighty-six cycles.""",,Full Menelaus first contact: NeedAuthority.
 chiefNavigatorMenelausFirstNeedRefuse,DialogOptionSelected,$option == chief_navigator_menelaus_first_need_refuse,"$chiefNavigatorMenelausFirstAskedRefuse = true 0
 FireAll ChiefNavigatorMenelausFirstNeedReturnOptions","""Then you will refuse.""
 
-Menelaus says it without anger.
+Menelaus says it plainly.
 
-""I have neither the personnel nor the inclination to compel you.""
+""I have neither the cause nor inclination to compel you.""
 
-A pause.
+Another pause.
 
 ""Although I suspect you did not cross the Persean Abyss merely to turn around.""
 
 Sinni turns to look at you.
 
-She nods.",,Full Menelaus first contact: Menelaus answers the refusal question.
-chiefNavigatorMenelausFirstNeedReturnAcceptOption,ChiefNavigatorMenelausFirstNeedReturnOptions,,,,"0:chief_navigator_menelaus_first_need_accept_direct:""Understood. Show me the Labors.""",Accepts directly after asking Menelaus a follow-up question.
-chiefNavigatorMenelausFirstNeedReturnContinueOption,ChiefNavigatorMenelausFirstNeedReturnOptions,,,,10:chief_navigator_menelaus_first_need_return:Continue.,Returns to Menelaus's strategic-status choices.
-chiefNavigatorMenelausFirstNeedReturn,DialogOptionSelected,$option == chief_navigator_menelaus_first_need_return,FireAll ChiefNavigatorMenelausFirstStatusOptions,,,Returns from a Labor-offer follow-up to the status menu.
-chiefNavigatorMenelausFirstNeedAcceptDirect,DialogOptionSelected,$option == chief_navigator_menelaus_first_need_accept_direct,FireAll ChiefNavigatorMenelausFirstNeedAccept,,,Accepts Menelaus's proposal directly.
+She nods.",,Full Menelaus first contact: NeedRefuse.
+chiefNavigatorMenelausFirstNeedReturnAcceptOption,ChiefNavigatorMenelausFirstNeedReturnOptions,,,,"0:chief_navigator_menelaus_first_need_accept_direct:""Understood. Show me the Labors.""",Full Menelaus first contact: NeedReturnAcceptOption.
+chiefNavigatorMenelausFirstNeedReturnContinueOption,ChiefNavigatorMenelausFirstNeedReturnOptions,,,,10:chief_navigator_menelaus_first_need_return:Continue.,Full Menelaus first contact: NeedReturnContinueOption.
+chiefNavigatorMenelausFirstNeedReturn,DialogOptionSelected,$option == chief_navigator_menelaus_first_need_return,FireAll ChiefNavigatorMenelausFirstNeedOptions,,,Full Menelaus first contact: NeedReturn.
+chiefNavigatorMenelausFirstNeedAcceptDirect,DialogOptionSelected,$option == chief_navigator_menelaus_first_need_accept_direct,FireAll ChiefNavigatorMenelausFirstNeedAccept,,,Full Menelaus first contact: NeedAcceptDirect.
 chiefNavigatorMenelausFirstSinniHelen,DialogOptionSelected,$option == chief_navigator_menelaus_labor_one_helen,,"Before Menelaus can continue, Sinni steps forward.
 
 ""Lord Strategos.""
@@ -2214,7 +2137,7 @@ chiefNavigatorMenelausFirstNeedAccept,ChiefNavigatorMenelausFirstNeedAccept,,,""
 
 Ashen Verge unfolds around Menelaus once again.
 
-""Then let's begin.""",0:chief_navigator_menelaus_first_finish:Continue.,Full Menelaus first contact: Menelaus accepts the auxiliary.
+""Then let's begin.""",0:chief_navigator_menelaus_first_finish:Continue.,Full Menelaus first contact: NeedAccept.
 chiefNavigatorMenelausFirstFinishOption,DialogOptionSelected,$option == chief_navigator_menelaus_first_finish,"$global.chief_navigator_menelaus_intro_shown_v1 = true
 $global.chief_navigator_menelaus_intro_shown_v2 = true
 ChiefNavigatorMenelausCMD finishIntro",,,Commits the one-time station introduction and opens FOB Ithaca's station interface.
@@ -2307,26 +2230,28 @@ Four lights blink within the amber nebula. Menelaus enlarges the contacts.
 
 ""Regrettably, they failed. The Drifting Wall repelled every attempt to recover it. Worse, the Guard Motherships' sealed command partitions no longer recognize FOB Ithaca's authority.""
 
-A security package appears beside the four contacts.",0:chief_navigator_auto_page_chief_navigator_menelaus_labor_one_briefing_3:Continue.,Automatic runtime continuation 2/3 for chiefNavigatorMenelausLaborOneBriefing.
-chiefNavigatorMenelausLaborOneBriefingPage3,DialogOptionSelected,$option == chief_navigator_auto_page_chief_navigator_menelaus_labor_one_briefing_3,FireAll ChiefNavigatorMenelausLaborOneBriefingOptions,"""Accept, and I will upload their coordinates along with a Domain-Security IFF Transponder. Break the motherships' command partitions. The resulting authentication traces will give me a route back into their guard networks.""
+A training package appears beside the four contacts.",0:chief_navigator_auto_page_chief_navigator_menelaus_labor_one_briefing_3:Continue.,Automatic runtime continuation 2/3 for chiefNavigatorMenelausLaborOneBriefing.
+chiefNavigatorMenelausLaborOneBriefingPage3,DialogOptionSelected,$option == chief_navigator_auto_page_chief_navigator_menelaus_labor_one_briefing_3,"SetTextHighlightColors good
+SetTextHighlights ""Accepting the first Labor grants the Automated Ships skill. If you already have it, you receive one skill point instead.""
+FireAll ChiefNavigatorMenelausLaborOneBriefingOptions","""Accept, and I will upload their coordinates and a training package. Break the motherships' command partitions. The resulting authentication traces will give me a route back into their guard networks.""
 
-The image of Ithaca's gate appears beside the contacts, crossed by a Spartan lockout sigil.
+Menelaus brings the training package to the foreground.
 
-""One boundary is absolute. Do not scan the gate housed inside FOB Ithaca. I will not authorize access.""",,Automatic runtime continuation 3/3 for chiefNavigatorMenelausLaborOneBriefing.
+""Take this. A universal automated ship IFF tag. Use it to build up your strength and scatter humanity's foes to the wind.""
+
+Accepting the first Labor grants the Automated Ships skill. If you already have it, you receive one skill point instead.",,Automatic runtime continuation 3/3 for chiefNavigatorMenelausLaborOneBriefing.
 chiefNavigatorMenelausLaborOneActive,DialogOptionSelected,"$option == chief_navigator_menelaus_labor_one
 $global.chief_navigator_menelaus_trial_accepted",,"Menelaus raises one hand. Four gold contacts expand across the theater.
 
 ""The first Labor remains: break the sealed command partitions of the four Guard Motherships in the Odyssey Sector. Their exact coordinates are marked on your campaign map.""
 
-The Domain-Security IFF Transponder authorizes recovered Domain derelict drones to answer your command without Automated Ships expertise. $chiefNavigatorMothershipsDefeated of four motherships have been destroyed. Their restored forms and $chiefNavigatorFriendlyGuards friendly guard patrols will not appear until the completed Labor is reported to Menelaus.","100:chief_navigator_menelaus_labor_one_active_back:""Understood.""",Active Labor-I status reached through the shared topic.
+Accepting the first Labor grants a one-time reward: the Automated Ships skill, or one skill point if you already have it. Normal automated ship limits apply. $chiefNavigatorMothershipsDefeated of four motherships have been destroyed. Their restored forms and $chiefNavigatorFriendlyGuards friendly drone patrols will not appear until the completed Labor is reported to Menelaus.","100:chief_navigator_menelaus_labor_one_active_back:""Understood.""",Active Labor-I status reached through the shared topic.
 chiefNavigatorMenelausLaborOneDroneOption,ChiefNavigatorMenelausLaborOneBriefingOptions,!$chiefNavigatorMenelausL1AskedDrone,,,"0:chief_navigator_menelaus_labor_one_drone:""Anything I should know about the drone presence?""",One-shot drone question within the current interaction.
 chiefNavigatorMenelausLaborOneUnderstoodOption,ChiefNavigatorMenelausLaborOneBriefingOptions,,,,"100:chief_navigator_menelaus_labor_one_understood:""Understood.""",Advances from the briefing to explicit acceptance.
 chiefNavigatorMenelausLaborOneDrone,DialogOptionSelected,$option == chief_navigator_menelaus_labor_one_drone,"$chiefNavigatorMenelausL1AskedDrone = true 0
 FireAll ChiefNavigatorMenelausLaborOneBriefingOptions","""Expect resistance, but nothing beyond your capabilities.""
 
 A pause.
-
-""The transponder does not alter salvage access. Any Domain derelict drone recovered through ordinary procedures will accept its authorization, regardless of whether your officers possess Automated Ships expertise.""
 
 Menelaus tilts his head.
 
@@ -2339,7 +2264,7 @@ The four points burn gold.
 
 ""That is your first Labor.""","0:chief_navigator_menelaus_labor_one_accept:""I accept.""",Final confirmation before Labor I becomes active.
 chiefNavigatorMenelausLaborOneAccept,DialogOptionSelected,$option == chief_navigator_menelaus_labor_one_accept,"ChiefNavigatorMenelausCMD accept
-FireAll ChiefNavigatorMenelausLaborOneHub","The four routes settle onto your campaign map. The IFF authentication package enters your fleet command network.
+FireAll ChiefNavigatorMenelausLaborOneHub","The four routes settle onto your campaign map. Menelaus delivers his training package: the Automated Ships skill, or one skill point if you already have it.
 
 ""Good.""",,Accepts Labor I and returns to the now-active Labor-I hub.
 chiefNavigatorMenelausLaborOneActiveBack,DialogOptionSelected,$option == chief_navigator_menelaus_labor_one_active_back,FireAll ChiefNavigatorMenelausLaborOneHub,,,Returns from active Labor-I status to the hub.
@@ -3544,9 +3469,7 @@ And Menelaus listens.",0:chief_navigator_menelaus_helen_end:Leave them with Hele
 chiefNavigatorMenelausHelenEnd,DialogOptionSelected,$option == chief_navigator_menelaus_helen_end,"$global.chief_navigator_menelaus_helen_final_heard_v2 = true
 DismissDialog",,,Completes the one-time final Helen conversation.
 chiefNavigatorMenelausAccept,DialogOptionSelected,$option == chief_navigator_menelaus_accept,"ChiefNavigatorMenelausCMD accept
-FireAll ChiefNavigatorFobIthacaServiceOptions","Menelaus opens the first objective channel and uploads the exact coordinates of all four Guard Motherships to your campaign map. A Domain-Security IFF Transponder authentication package settles into your fleet command network.
-
-""The transponder will let your crews command recovered Domain derelict drones without Automated Ships expertise. Each eligible recovered hull will carry the authorization as a permanent built-in system.""
+FireAll ChiefNavigatorFobIthacaServiceOptions","Menelaus opens the first objective channel and uploads the exact coordinates of all four Guard Motherships to your campaign map. His training package enters your command network.
 
 ""These are Labors, not errands. Complete this one, and I will open the next.""",,Accepts the first sequential Labor; service options keep the defense ledger hidden until Labor-II acceptance.
 chiefNavigatorMenelausReportMotherships,DialogOptionSelected,$option == chief_navigator_menelaus_report_motherships,"ChiefNavigatorMenelausCMD report motherships
@@ -4567,14 +4490,14 @@ ChiefNavigatorMenelausCMD stage complete
 chiefNavigatorIthacaGateLeave,DialogOptionSelected,$option == chief_navigator_ithaca_gate_leave,DismissDialog,,,Leaves the sealed Ithaca gate without exposing a scan option.
 chiefNavigatorRestoredMothership,ChiefNavigatorSealedMothership,ChiefNavigatorMothershipCMD stage friendly,ChiefNavigatorMothershipCMD init,"The $entityName holds position where its predecessor was destroyed. Freshly knitted armor still shows seams around the rebuilt work-bays, but its command partition answers Menelaus's IFF without hesitation.
 
-Combat Guard patrols cycle through its bays and depart toward the Drifting Wall. Farther out, unmoored drones answer with hostile challenge codes.",100:chief_navigator_mothership_leave:Leave.,Restored post-report Guard Mothership under Menelaus's friendly IFF.
+Derelict drone patrols cycle through its bays and spread out through the system. Farther out, unmoored drones answer with hostile challenge codes.",100:chief_navigator_mothership_leave:Leave.,Restored post-report Guard Mothership under Menelaus's friendly IFF.
 chiefNavigatorSealedMothershipLocked,ChiefNavigatorSealedMothership,ChiefNavigatorMothershipCMD stage locked,ChiefNavigatorMothershipCMD init,"The $entityName hangs motionless in the dark. Its command partition does not answer the currently authorized Labor channel.",100:chief_navigator_mothership_leave:Leave.,Guard Mothership remains locked until its sequential Labor becomes active.
-chiefNavigatorSealedMothership,ChiefNavigatorSealedMothership,ChiefNavigatorMothershipCMD stage active,ChiefNavigatorMothershipCMD init,"The $entityName hangs motionless in the dark, its ancient hull sealed behind a silent command partition. Strong energy signatures flare inside its work-bays as the surrounding Combat Guard forms up. Weapon emplacements are powering up across the mothership itself.","10:chief_navigator_mothership_engage:Engage the mothership.
-100:chief_navigator_mothership_leave:Leave.",Fixed vanilla Domain mothership POI whose temporary battle includes the mothership and its Combat Guard escort.
-chiefNavigatorMothershipEngage,DialogOptionSelected,$option == chief_navigator_mothership_engage,ChiefNavigatorMothershipCMD engage,,,Creates the vanilla mothership and Combat Guard battle fleet.
+chiefNavigatorSealedMothership,ChiefNavigatorSealedMothership,ChiefNavigatorMothershipCMD stage active,ChiefNavigatorMothershipCMD init,"The $entityName hangs motionless in the dark, its ancient hull sealed behind a silent command partition. Strong energy signatures flare inside its work-bays as the surrounding derelict drones form up. Weapon emplacements are powering up across the mothership itself.","10:chief_navigator_mothership_engage:Engage the mothership.
+100:chief_navigator_mothership_leave:Leave.",Fixed vanilla Domain mothership POI whose temporary battle includes the mothership and its derelict drone escort.
+chiefNavigatorMothershipEngage,DialogOptionSelected,$option == chief_navigator_mothership_engage,ChiefNavigatorMothershipCMD engage,,,Creates the vanilla mothership and derelict drone battle fleet.
 chiefNavigatorMothershipLeave,DialogOptionSelected,$option == chief_navigator_mothership_leave,DismissDialog,,,Leaves the fixed mothership POI.
 chiefNavigatorWallLaborFiveSupport,ChiefNavigatorDriftingWall,"ChiefNavigatorDriftingWallCMD stage friendly
-ChiefNavigatorDriftingWallCMD supportAvailable",ChiefNavigatorDriftingWallCMD support,"The Drifting Wall acknowledges your approach and opens a channel to its guard network. Two Guard Bastions detach from the station's defensive formation and take station alongside your fleet. Their orders are to accompany you through the defense of Ithaca; they remain under Menelaus's command.",100:chief_navigator_drifting_wall_leave:Leave.,Grants one two-Bastion allied escort detachment on interaction during accepted ongoing Labor V.
+ChiefNavigatorDriftingWallCMD supportAvailable",ChiefNavigatorDriftingWallCMD support,"The Drifting Wall acknowledges your approach and opens a channel to its guard network. Two Bastillon droneships detach from the station's defensive formation and take station alongside your fleet. Their orders are to accompany you through the defense of Ithaca; they remain under Menelaus's command.",100:chief_navigator_drifting_wall_leave:Leave.,Grants one two-Bastillon allied escort detachment on interaction during accepted ongoing Labor V.
 chiefNavigatorWallFriendly,ChiefNavigatorDriftingWall,"ChiefNavigatorDriftingWallCMD stage friendly
 !ChiefNavigatorDriftingWallCMD supportAvailable",ChiefNavigatorDriftingWallCMD init,"The Drifting Wall remains fixed in the dark, but its targeting arrays pass over your fleet without locking. Menelaus's IFF exception is active. Recovered derelict guards hold formation among the rebuilt emplacements.",100:chief_navigator_drifting_wall_leave:Leave.,Completed Drifting Wall Labor state; excludes the one-time Labor-V escort dispatch.
 chiefNavigatorWallRepairing,ChiefNavigatorDriftingWall,ChiefNavigatorDriftingWallCMD stage repairing,ChiefNavigatorDriftingWallCMD init,"The Drifting Wall is silent. Its reactor containment remains dark while autonomous frames rebuild the damaged assembly. Estimated restoration time: $chiefNavigatorWallRepairDays days.",100:chief_navigator_drifting_wall_leave:Leave.,Temporary post-combat repair state.

@@ -9,11 +9,13 @@ import com.fs.starfarer.api.campaign.CampaignUIAPI;
 import com.fs.starfarer.api.campaign.InteractionDialogAPI;
 import com.fs.starfarer.api.campaign.JumpPointAPI;
 import com.fs.starfarer.api.campaign.LocationAPI;
+import com.fs.starfarer.api.campaign.OrbitAPI;
 import com.fs.starfarer.api.campaign.PersistentUIDataAPI;
 import com.fs.starfarer.api.campaign.SectorAPI;
 import com.fs.starfarer.api.campaign.SectorEntityToken;
 import com.fs.starfarer.api.campaign.StarSystemAPI;
 import com.fs.starfarer.api.campaign.rules.MemoryAPI;
+import com.fs.starfarer.campaign.StarSystem.UpdateFromSystemLocationOrbit;
 import java.lang.reflect.Field;
 import java.lang.reflect.Proxy;
 import java.awt.Color;
@@ -23,7 +25,10 @@ import java.util.List;
 import java.util.Map;
 import org.lwjgl.util.vector.Vector2f;
 
-/** Headless checks for the user-authorized duplicate Alpha jump repair. */
+/**
+ * Headless checks for the user-authorized duplicate Alpha jump repair.
+ * Run with -Xverify:none for the installed engine's obfuscated member names.
+ */
 public final class OdysseyDuplicateJumpRegression {
     interface Call { Object invoke(String name, Object[] arguments); }
 
@@ -77,6 +82,8 @@ public final class OdysseyDuplicateJumpRegression {
         final String systemId;
         final LocationAPI api;
         boolean hyperspace;
+        SectorEntityToken anchor;
+        float maxRadiusInHyperspace = 1811.585f;
 
         World(String systemId) {
             this.systemId = systemId;
@@ -90,6 +97,8 @@ public final class OdysseyDuplicateJumpRegression {
             if (name.equals("getName")) return systemId == null ? "Hyperspace" : "Odyssey Expanse";
             if (name.equals("getMemoryWithoutUpdate")) return memory.api;
             if (name.equals("getLocation")) return position;
+            if (name.equals("getHyperspaceAnchor")) return anchor;
+            if (name.equals("getMaxRadiusInHyperspace")) return maxRadiusInHyperspace;
             if (name.equals("isHyperspace")) return hyperspace;
             if (name.equals("getAllEntities")) return new ArrayList<>(entities);
             if (name.equals("getJumpPoints")) {
@@ -153,6 +162,7 @@ public final class OdysseyDuplicateJumpRegression {
         final Memory memory = new Memory();
         int destinationWrites;
         boolean wormhole;
+        OrbitAPI orbit;
         final JumpPointAPI api;
 
         Jump(World world, String id, String label, float x, float y) {
@@ -168,6 +178,7 @@ public final class OdysseyDuplicateJumpRegression {
             if (name.equals("getId")) return id;
             if (name.equals("getName")) return label;
             if (name.equals("getLocation")) return position;
+            if (name.equals("getOrbit")) return orbit;
             if (name.equals("getContainingLocation")) return world.api;
             if (name.equals("getMemoryWithoutUpdate")) return memory.api;
             if (name.equals("isWormhole")) return wormhole;
@@ -198,6 +209,31 @@ public final class OdysseyDuplicateJumpRegression {
         }
     }
 
+    static final class Anchor {
+        final Memory memory = new Memory();
+        final Vector2f position = new Vector2f(149600f, -92600f);
+        LocationAPI location;
+        boolean systemAnchor = true;
+        final SectorEntityToken api = mock(SectorEntityToken.class, (name, args) -> {
+            if (name.equals("getId")) return "native_system_anchor";
+            if (name.equals("getLocation")) return position;
+            if (name.equals("getContainingLocation")) return location;
+            if (name.equals("getMemoryWithoutUpdate")) return memory.api;
+            if (name.equals("hasTag")) return systemAnchor && "system_anchor".equals(args[0]);
+            if (name.startsWith("set") || name.startsWith("add") || name.startsWith("remove")) {
+                throw new AssertionError("Repair must not mutate the system anchor: " + name);
+            }
+            return null;
+        });
+
+        Anchor(Fixture fixture) {
+            location = fixture.hyper.api;
+            memory.values.put("$anchor_starSystem", fixture.expanse.system());
+            fixture.expanse.anchor = api;
+            fixture.hyper.entities.add(api);
+        }
+    }
+
     static final class Fixture {
         final Memory sectorMemory = new Memory();
         final World expanse = new World(OdysseyExpanseSystem.SYSTEM_ID);
@@ -206,6 +242,7 @@ public final class OdysseyDuplicateJumpRegression {
         final World hyper = new World(null);
         final List<StarSystemAPI> systems = new ArrayList<>();
         final List<Jump> jumps = new ArrayList<>();
+        Anchor anchor;
         SectorEntityToken interactionTarget;
         SectorEntityToken courseTarget;
         SectorEntityToken ultimateCourseTarget;
@@ -287,21 +324,40 @@ public final class OdysseyDuplicateJumpRegression {
         final JumpPointAPI.JumpDestination retainedRecord;
         final JumpPointAPI.JumpDestination retainedReciprocal;
 
-        Pair() throws Exception {
+        Pair() throws Exception { this(false); }
+
+        Pair(boolean nativeOrbit) throws Exception {
             fixture = new Fixture();
-            local = fixture.jump(fixture.expanse, "9a91", 5472.772f, -639.3867f);
-            first = fixture.jump(fixture.hyper, "9a96", 149789.17f, -92622.01f);
-            redundant = fixture.jump(fixture.hyper, "9b3c", 149928.48f, -92638.21f);
+            local = nativeOrbit
+                    ? fixture.jump(fixture.expanse, "141cb", 10223.507f, -9839.19f)
+                    : fixture.jump(fixture.expanse, "9a91", 5472.772f, -639.3867f);
+            first = nativeOrbit
+                    ? fixture.jump(fixture.hyper, "141d6", 150339.88f, -93311.664f)
+                    : fixture.jump(fixture.hyper, "9a96", 149789.17f, -92622.01f);
+            redundant = nativeOrbit
+                    ? fixture.jump(fixture.hyper, "14287", 150869.6f, -93821.195f)
+                    : fixture.jump(fixture.hyper, "9b3c", 149928.48f, -92638.21f);
             retainedRecord = local.link(first);
             local.link(redundant);
             retainedReciprocal = first.link(local);
             redundant.link(local);
+            if (nativeOrbit) {
+                Anchor anchor = fixture.anchor = new Anchor(fixture);
+                first.orbit = nativeOrbit(anchor.api, local.api, first.api, 1026.585f);
+                redundant.orbit = nativeOrbit(anchor.api, local.api, redundant.api, 1761.585f);
+            }
         }
 
         int repair() {
             return AlphaOdysseyJumpRepair.repairDuplicates(
                     fixture.expanse.system(), fixture.hyper.api);
         }
+    }
+
+    static OrbitAPI nativeOrbit(SectorEntityToken anchor, SectorEntityToken source,
+            SectorEntityToken endpoint, float radius) {
+        // Native implementation is used only by this external verification tool.
+        return new UpdateFromSystemLocationOrbit(anchor, source, source, endpoint, radius);
     }
 
     static void checkRouteUntouched(Jump jump,
@@ -417,6 +473,104 @@ public final class OdysseyDuplicateJumpRegression {
                 "Never delete the retained endpoint when two records target the same token");
     }
 
+    static void nativeSavedFailure() throws Exception {
+        Pair pair = new Pair(true);
+        check(Math.abs(Vector2f.sub(pair.first.position, pair.redundant.position, null).length()
+                        - 735f) < 0.02f,
+                "Reproduce the live save's 735-unit endpoint separation");
+        check(Vector2f.sub(pair.first.orbit.computeCurrentLocation(), pair.first.position, null)
+                        .length() < 0.02f
+                        && Vector2f.sub(pair.redundant.orbit.computeCurrentLocation(),
+                                pair.redundant.position, null).length() < 0.02f,
+                "Actual native orbit must reproduce both saved endpoint coordinates");
+        OrbitAPI firstOrbit = pair.first.orbit;
+        Vector2f firstPosition = new Vector2f(pair.first.position);
+        Vector2f localPosition = new Vector2f(pair.local.position);
+        check(pair.repair() == 1, "Live 735-unit native duplicate must remove one extra endpoint");
+        check(pair.local.destinations.size() == 1
+                        && pair.local.destinations.get(0) == pair.retainedRecord
+                        && pair.first.destinations.get(0) == pair.retainedReciprocal
+                        && pair.first.orbit == firstOrbit
+                        && pair.first.position.equals(firstPosition)
+                        && pair.local.position.equals(localPosition)
+                        && pair.fixture.hyper.removed.size() == 1
+                        && pair.fixture.hyper.removed.get(0) == pair.redundant.api,
+                "Native duplicate repair must preserve saved identity, records, orbit and positions");
+        check(pair.retainedRecord.getMinDistFromToken() == 37f
+                        && pair.retainedRecord.getMaxDistFromToken() == 83f,
+                "Native duplicate repair must preserve arrival distances");
+        int writes = pair.fixture.writes();
+        check(pair.repair() == 0 && pair.fixture.writes() == writes,
+                "Native duplicate correction must be idempotent");
+
+        Pair movingSource = new Pair(true);
+        movingSource.local.orbit = mock(OrbitAPI.class, (name, args) ->
+                name.equals("getOrbitalPeriod") ? 327.5f : null);
+        check(movingSource.repair() == 1,
+                "Native endpoints must follow a local jump with its own nondefault orbital period");
+    }
+
+    static void nativeOrbitGuards() throws Exception {
+        Pair missingOrbit = new Pair(true);
+        missingOrbit.redundant.orbit = null;
+        checkNoRepair(missingOrbit, "Far endpoint without native orbit evidence");
+
+        Pair foreignFocus = new Pair(true);
+        SectorEntityToken wrongAnchor = mock(SectorEntityToken.class, (name, args) ->
+                name.equals("getLocation") ? foreignFocus.fixture.anchor.position : null);
+        foreignFocus.redundant.orbit = nativeOrbit(wrongAnchor, foreignFocus.local.api,
+                foreignFocus.redundant.api, 1761.585f);
+        checkNoRepair(foreignFocus, "Far endpoint bound to another anchor");
+
+        Pair foreignOwner = new Pair(true);
+        foreignOwner.fixture.anchor.memory.values.put("$anchor_starSystem",
+                foreignOwner.fixture.other.system());
+        checkNoRepair(foreignOwner, "Anchor belongs to another system");
+
+        Pair untaggedAnchor = new Pair(true);
+        untaggedAnchor.fixture.anchor.systemAnchor = false;
+        checkNoRepair(untaggedAnchor, "Anchor lacks native system-anchor tag");
+
+        Pair wrongLocation = new Pair(true);
+        wrongLocation.fixture.anchor.location = wrongLocation.fixture.expanse.api;
+        checkNoRepair(wrongLocation, "Anchor is outside hyperspace");
+
+        Pair otherBearing = new Pair(true);
+        Jump wrongSource = otherBearing.fixture.jump(otherBearing.fixture.expanse,
+                "other_source", 10000f, -9000f);
+        otherBearing.redundant.orbit = nativeOrbit(otherBearing.fixture.anchor.api,
+                wrongSource.api, otherBearing.redundant.api, 1761.585f);
+        checkNoRepair(otherBearing, "Native orbit follows another local bearing");
+
+        Pair otherPeriod = new Pair(true);
+        OrbitAPI correct = otherPeriod.redundant.orbit;
+        otherPeriod.redundant.orbit = mock(OrbitAPI.class, (name, args) -> {
+            if (name.equals("getFocus")) return correct.getFocus();
+            if (name.equals("computeCurrentLocation")) return correct.computeCurrentLocation();
+            if (name.equals("getOrbitalPeriod")) return 100.02f;
+            return null;
+        });
+        checkNoRepair(otherPeriod, "Far endpoint has another orbital period");
+
+        Pair outsideFootprint = new Pair(true);
+        outsideFootprint.fixture.expanse.maxRadiusInHyperspace = 1700f;
+        checkNoRepair(outsideFootprint, "Native endpoint exceeds owned system footprint");
+
+        Pair zeroRadius = new Pair(true);
+        zeroRadius.redundant.orbit = nativeOrbit(zeroRadius.fixture.anchor.api,
+                zeroRadius.local.api, zeroRadius.redundant.api, 0f);
+        checkNoRepair(zeroRadius, "Zero-radius orbit has no source bearing");
+
+        Pair shared = new Pair(true);
+        shared.fixture.jump(shared.fixture.foreign, "shared_incoming", 400f, 500f)
+                .link(shared.redundant);
+        checkNoRepair(shared, "Native redundant endpoint shared with a foreign route");
+        Pair hyperShared = new Pair(true);
+        hyperShared.fixture.jump(hyperShared.fixture.hyper, "shared_incoming", 400f, 500f)
+                .link(hyperShared.redundant);
+        checkNoRepair(hyperShared, "Native redundant endpoint shared with a hyperspace route");
+    }
+
     static void conservativeGuards() throws Exception {
         Pair unowned = new Pair();
         unowned.fixture.expanse.memory.values.clear();
@@ -475,31 +629,36 @@ public final class OdysseyDuplicateJumpRegression {
     }
 
     static void busyGuards() throws Exception {
-        Pair transition = new Pair();
+        busyGuards(false);
+        busyGuards(true);
+    }
+
+    static void busyGuards(boolean nativeOrbit) throws Exception {
+        Pair transition = new Pair(nativeOrbit);
         transition.fixture.playerTransition = true;
         checkNoRepair(transition, "Player in hyperspace transition");
-        Pair battle = new Pair();
+        Pair battle = new Pair(nativeOrbit);
         battle.fixture.playerBattle = mock(BattleAPI.class, (name, args) -> null);
         checkNoRepair(battle, "Player in battle");
-        Pair localDialog = new Pair();
+        Pair localDialog = new Pair(nativeOrbit);
         localDialog.fixture.interactionTarget = localDialog.local.api;
         checkNoRepair(localDialog, "Open local jump interaction");
-        Pair retainedDialog = new Pair();
+        Pair retainedDialog = new Pair(nativeOrbit);
         retainedDialog.fixture.interactionTarget = retainedDialog.first.api;
         checkNoRepair(retainedDialog, "Open retained hyperspace interaction");
-        Pair extraDialog = new Pair();
+        Pair extraDialog = new Pair(nativeOrbit);
         extraDialog.fixture.interactionTarget = extraDialog.redundant.api;
         checkNoRepair(extraDialog, "Open redundant hyperspace interaction");
-        Pair course = new Pair();
+        Pair course = new Pair(nativeOrbit);
         course.fixture.courseTarget = course.redundant.api;
         checkNoRepair(course, "Player current autopilot step targets redundant endpoint");
-        Pair ultimateCourse = new Pair();
+        Pair ultimateCourse = new Pair(nativeOrbit);
         ultimateCourse.fixture.ultimateCourseTarget = ultimateCourse.redundant.api;
         checkNoRepair(ultimateCourse, "Player ultimate course targets redundant endpoint");
-        Pair persistedCourse = new Pair();
+        Pair persistedCourse = new Pair(nativeOrbit);
         persistedCourse.fixture.persistedCourseTarget = persistedCourse.redundant.api;
         checkNoRepair(persistedCourse, "Player persisted course targets redundant endpoint");
-        Pair keptCourse = new Pair();
+        Pair keptCourse = new Pair(nativeOrbit);
         keptCourse.fixture.courseTarget = keptCourse.first.api;
         check(keptCourse.repair() == 1 && keptCourse.fixture.courseTarget == keptCourse.first.api,
                 "Repair may preserve a course to the retained endpoint without rewriting it");
@@ -538,6 +697,8 @@ public final class OdysseyDuplicateJumpRegression {
             return null;
         }));
         savedFailure();
+        nativeSavedFailure();
+        nativeOrbitGuards();
         sameTokenRecords();
         conservativeGuards();
         busyGuards();

@@ -16,13 +16,16 @@ import com.fs.starfarer.api.fleet.FleetMemberAPI;
 import com.fs.starfarer.api.fleet.RepairTrackerAPI;
 import com.fs.starfarer.api.impl.campaign.ids.MemFlags;
 import java.lang.reflect.Proxy;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.json.JSONObject;
 import org.lwjgl.util.vector.Vector2f;
 
-/** Gates, exact two-ship grant, scoped combat eligibility, and outcome cleanup. */
+/** Gates, small vanilla drone grant, scoped combat eligibility, and cleanup. */
 public final class DriftingWallLaborSupportRegression {
     interface Call { Object invoke(String name, Object[] args); }
     static <T> T mock(Class<T> type, Call call) {
@@ -171,7 +174,8 @@ public final class DriftingWallLaborSupportRegression {
         }
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
+        checkNativeDroneRosters();
         Fixture f = new Fixture();
         check(DriftingWallLaborSupport.supportAvailable(f.wall), "Accepted Labor V enables support");
         f.state.put(MenelausTrial.FINAL_LABOR_BRIEFED, false);
@@ -189,8 +193,8 @@ public final class DriftingWallLaborSupportRegression {
         check(!DriftingWallLaborSupport.supportAvailable(f.player), "Foreign target grants no support");
         check(DriftingWallLaborSupport.grant(f.wall), "Wall assigns support automatically");
         check(f.ships.size() == 2 && f.variants.equals(List.of(
-                DriftingWallLaborSupport.BASTION_VARIANT,
-                DriftingWallLaborSupport.BASTION_VARIANT)), "Exactly two Guard Bastions are created");
+                "bastillon_Standard", "bastillon_Standard")),
+                "Support is a small stock Derelict fleet without Guard hulls or capitals");
         check(f.assignment == FleetAssignment.FOLLOW && f.assignmentTarget == f.player,
                 "Detachment follows the player rather than assaulting the Wall");
         check(f.escortState.get(MemFlags.FLEET_IGNORES_OTHER_FLEETS) == Boolean.TRUE,
@@ -233,6 +237,59 @@ public final class DriftingWallLaborSupportRegression {
         f.state.put(MenelausTrial.FINAL_LABOR_FAILED, true);
         DriftingWallLaborSupport.advance();
         check(f.removals == 0, "Cleanup never removes a player-controlled fleet");
+        f = new Fixture();
+        f.escortId = DriftingWallLaborSupport.FLEET_ID;
+        f.escortLocation = f.location;
+        f.escortState.put(DriftingWallLaborSupport.MARKER, true);
+        f.state.put(DriftingWallLaborSupport.GRANTED, true);
+        f.state.put(DriftingWallLaborSupport.FLEET_REFERENCE, f.escort);
+        FleetMemberAPI savedGuard = mock(FleetMemberAPI.class, (name, values) -> {
+            if (name.equals("setVariant")) {
+                throw new AssertionError("Existing Guard ships must retain saved variants");
+            }
+            return null;
+        });
+        f.ships.add(savedGuard);
+        DriftingWallLaborSupport.advance();
+        check(f.fleetCreations == 0 && f.ships.equals(List.of(savedGuard))
+                        && f.removals == 0,
+                "Existing attrited Guard detachments retain their ships without replacement");
         System.out.println("Drifting Wall Labor V support regression checks passed.");
+    }
+
+    private static void checkNativeDroneRosters() throws Exception {
+        Map<String, Path> stockVariants = new HashMap<>();
+        Path stockData = Path.of("../../starsector-core/data");
+        try (var paths = Files.walk(stockData.resolve("variants"))) {
+            paths.filter(path -> path.toString().endsWith(".variant"))
+                    .forEach(path -> stockVariants.put(
+                            path.getFileName().toString()
+                                    .replace(".variant", ""), path));
+        }
+        List<String> variants = new ArrayList<>();
+        variants.add(DriftingWallLaborSupport.BASTION_VARIANT);
+        for (IthacaSectionEncounter.Section section
+                : IthacaSectionEncounter.Section.values()) {
+            String[] screen = IthacaSectionEncounter.getDroneGuardVariants(section);
+            check(screen.length == 3,
+                    "Each stationary bastion has a small three-drone screen");
+            variants.addAll(List.of(screen));
+        }
+        for (String variantId : variants) {
+            Path variantPath = stockVariants.get(variantId);
+            check(variantPath != null,
+                    "Every new support or screen drone uses an installed stock variant: "
+                            + variantId);
+            JSONObject variant = new JSONObject(Files.readString(variantPath));
+            String hullId = variant.getString("hullId");
+            JSONObject hull = new JSONObject(Files.readString(
+                    stockData.resolve("hulls").resolve(hullId + ".ship")));
+            check(List.of("FRIGATE", "DESTROYER").contains(
+                            hull.getString("hullSize")),
+                    "Screens and support must contain only small native drones: "
+                            + variantId);
+            check(!hullId.startsWith("chief_navigator_"),
+                    "New drones must not use compatibility Guard hulls");
+        }
     }
 }

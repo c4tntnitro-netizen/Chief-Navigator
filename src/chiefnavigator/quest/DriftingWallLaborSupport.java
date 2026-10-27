@@ -21,8 +21,7 @@ public final class DriftingWallLaborSupport {
             "$chief_navigator_drifting_wall_labor_five_support_granted";
     static final String FLEET_REFERENCE =
             "$chief_navigator_drifting_wall_labor_five_support_fleet";
-    static final String BASTION_VARIANT =
-            "chief_navigator_combat_guard_bastillon_Standard";
+    static final String BASTION_VARIANT = "bastillon_Standard";
     static final int BASTION_COUNT = 2;
 
     private DriftingWallLaborSupport() { }
@@ -48,7 +47,7 @@ public final class DriftingWallLaborSupport {
         }
         CampaignFleetAPI fleet = Global.getFactory().createEmptyFleet(
                 IthacaSectionEncounter.COMBAT_GUARD_FACTION_ID,
-                "Wall Guard Detachment", true);
+                "Wall Drone Detachment", true);
         fleet.setId(FLEET_ID);
         fleet.setNoFactionInName(true);
         fleet.setTransponderOn(false);
@@ -109,6 +108,8 @@ public final class DriftingWallLaborSupport {
                         != FleetAssignment.FOLLOW
                 || fleet.getCurrentAssignment().getTarget() != player)) {
             followPlayer(fleet, player);
+        } else if (player != null) {
+            fleet.getCurrentAssignment().setActionText("escorting your fleet");
         }
     }
 
@@ -150,7 +151,7 @@ public final class DriftingWallLaborSupport {
             CampaignFleetAPI fleet, CampaignFleetAPI player) {
         fleet.clearAssignments();
         fleet.addAssignment(FleetAssignment.FOLLOW, player, 1000000f,
-                "escorting your fleet for the fifth Labor");
+                "escorting your fleet");
     }
 
     private static MemoryAPI memory() {

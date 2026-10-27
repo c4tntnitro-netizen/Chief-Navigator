@@ -1,6 +1,5 @@
 package chiefnavigator.quest;
 
-import chiefnavigator.campaign.DomainSecurityIFFAuthorization;
 import com.fs.starfarer.api.EveryFrameScript;
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.StarSystemAPI;
@@ -23,7 +22,6 @@ public final class MenelausTrialScript implements EveryFrameScript {
         if (system != null) MenelausTrial.refreshProgress(system);
         MenelausSensorLabor.refreshWorldState();
         if (MenelausTrial.isAccepted()) {
-            DomainSecurityIFFAuthorization.synchronizeAuthorization();
             MenelausTrialIntel.syncProgress(false);
         }
         MenelausCompletionDialogPlugin.tryShowPending();

@@ -88,7 +88,7 @@ public final class MenelausFlowRegression {
     }
 
     /** Native expression's static package inventory needs a headless settings document. */
-    private static void initializeExpressions() throws Exception {
+    static void initializeExpressions() throws Exception {
         JSONObject settings = new JSONObject().put("ruleCommandPackages", new JSONArray()
                 .put("com.fs.starfarer.api.impl.campaign.rulecmd").put("data.campaign.rulecmd"));
         Class<?> nativeSettings = Class.forName("com.fs.starfarer.settings.StarfarerSettings");
@@ -178,7 +178,7 @@ public final class MenelausFlowRegression {
         }
     }
 
-    private static void readRules() throws Exception {
+    static void readRules() throws Exception {
         String csv = Files.readString(Path.of("data/campaign/rules.csv"), StandardCharsets.UTF_8);
         List<String> row = new ArrayList<>();
         StringBuilder cell = new StringBuilder();
@@ -200,7 +200,7 @@ public final class MenelausFlowRegression {
         check(!quoted && row.isEmpty(), "Authored rules must end with balanced CSV fields");
     }
 
-    private static final class Fixture {
+    static final class Fixture {
         final Memory global = new Memory(), local = new Memory(), entity = new Memory();
         final Map<String, MemoryAPI> scope = new LinkedHashMap<>();
         final Map<String, Memory> castMemory = new LinkedHashMap<>();
@@ -222,7 +222,7 @@ public final class MenelausFlowRegression {
             if (name.equals("getMemoryWithoutUpdate")) return local;
             return null;
         });
-        final PersonAPI player = castPerson("player", "Captain", "");
+        final PersonAPI player = castPerson("player", "Avery", "Kestrel");
         final PersonAPI sinni = castPerson(SinniContact.PERSON_ID, "Sinni", "");
         final PersonAPI aias = castPerson(FobIthacaContacts.SPARTAN_CAPTAIN_PERSON_ID, "Aias", "Kleon");
         final PersonAPI voss = castPerson(OdysseyStrandedFleetsScript.VOSS_PERSON_ID, "Oren", "Voss");
@@ -342,7 +342,11 @@ public final class MenelausFlowRegression {
                 return null;
             });
             RulesAPI rules = mock(RulesAPI.class, (name, args) -> {
-                if (name.equals("performTokenReplacement")) return args[1];
+                if (name.equals("performTokenReplacement")) {
+                    @SuppressWarnings("unchecked")
+                    Map<String, MemoryAPI> memory = (Map<String, MemoryAPI>) args[3];
+                    return Misc.replaceTokensFromMemory((String) args[1], memory);
+                }
                 if (name.equals("getAllMatching") || name.equals("getBestMatching")) {
                     String trigger = (String) args[1];
                     if (trigger.equals("FireAllIntercept")) return null;
@@ -706,11 +710,11 @@ public final class MenelausFlowRegression {
                 "The paged Labor I report must wait for its authored continuation without committing the report");
         report.choose(MOTHERSHIPS_REPORT_PAGE2);
         check(report.history.get(report.history.size() - 1).contains(
-                        "You can command recovered FOB Ithaca drones without the Automated Ships skill.")
+                        "Your first-Labor reward was the Automated Ships skill, or one skill point if you already had it. Normal automated ship limits apply.")
                         && Arrays.equals(report.textHighlights, new String[] {
-                                "You can command recovered FOB Ithaca drones without the Automated Ships skill."})
+                                "Your first-Labor reward was the Automated Ships skill, or one skill point if you already had it. Normal automated ship limits apply."})
                         && Arrays.equals(report.textHighlightColors, new Color[] {Color.WHITE}),
-                "The authorization notice must retain its native highlight on the continuation page containing it");
+                "The reward notice must retain its native highlight on the continuation page containing it");
         check(report.options.containsKey("chief_navigator_menelaus_report_motherships"), "Completed Labor I needs its report option");
         report.choose("chief_navigator_menelaus_report_motherships");
         check(MenelausTrial.isLaborReported(MenelausTrial.LABOR_MOTHERSHIPS), "Labor I report commits durable stage state");
@@ -774,7 +778,6 @@ public final class MenelausFlowRegression {
 
     private static void verifyInterruptedTopics() throws Exception {
         String[][] topics = {
-            {"chiefNavigatorMenelausFirstLosing", "chiefNavigatorMenelausFirstLosingReturn", "$chiefNavigatorMenelausFirstAskedLosing"},
             {"chiefNavigatorMenelausLaborTwoCollapse", "chiefNavigatorMenelausLaborTwoCollapsePage3", "$chiefNavigatorMenelausL2AskedCollapse"},
             {"chiefNavigatorMenelausLaborTwoCryo", "chiefNavigatorMenelausLaborTwoGautamaEnd", "$chiefNavigatorMenelausL2AskedCryo"},
             {"chiefNavigatorMenelausLaborTwoHelen", "chiefNavigatorMenelausLaborTwoHelenEnd", "$chiefNavigatorMenelausL2AskedHelen"},
@@ -800,12 +803,10 @@ public final class MenelausFlowRegression {
         for (boolean saraDead : List.of(false, true)) {
             Fixture f = new Fixture(); f.global.set("$chief_navigator_sara_dead", saraDead);
             f.fire("ChiefNavigatorMenelausFirstSinniInsists");
-            check(f.options.containsKey("chief_navigator_menelaus_first_sinni_request"),
-                    "Nested bodyguard options must preserve the request question");
-            check(f.options.size() == 2 && f.options.containsKey(saraDead
+            check(f.options.size() == 1 && f.options.containsKey(saraDead
                     ? "chief_navigator_menelaus_first_sinni_insists_go_yvan"
                     : "chief_navigator_menelaus_first_sinni_insists_go"),
-                    "First introduction retains request and exactly the living guard route");
+                    "The authored insistence offers exactly the living guard route");
         }
         for (boolean components : List.of(false, true)) {
             Fixture f = new Fixture(); f.stage(MenelausTrial.LABOR_RESEARCH, false, true);
@@ -818,6 +819,77 @@ public final class MenelausFlowRegression {
             f.choose("chief_navigator_fob_ithaca_upgrades_back");
             check(!f.options.isEmpty(), "Ledger Back returns to a functional Labor menu");
         }
+    }
+
+    private static void verifyGuardAssignment(Fixture f, boolean saraDead,
+            String guardChoice, String route) {
+        String guard = saraDead ? "Yvan" : "Sara";
+        String otherGuard = saraDead ? "Sara" : "Yvan";
+        check(f.options.keySet().equals(Set.of(guardChoice)),
+                route + " must require the explicit " + guard + " guard order, got " + f.options);
+        String order = f.options.get(guardChoice);
+        check(order.contains(guard) && !order.contains(otherGuard)
+                        && (order.contains("Chief Nav alive") || order.contains("Sinni out of your sight")),
+                route + " must visibly order the living guard to protect Sinni: " + order);
+        String beforeOrder = String.join("\n", f.history);
+        check(!beforeOrder.contains("Sara rises and checks her sidearm")
+                        && !beforeOrder.contains("Yvan rises and checks his sidearm"),
+                route + " must not acknowledge a guard order before the player gives it");
+        check(!f.global.getBoolean(INTRO) && !MenelausTrial.isAccepted(),
+                route + " must not advance quest state while awaiting the guard order");
+
+        f.choose(guardChoice);
+        check(f.options.keySet().equals(Set.of("chief_navigator_menelaus_first_disembark")),
+                route + " must retain the existing disembark continuation after the guard responds");
+        String afterOrder = String.join("\n", f.history);
+        check(afterOrder.contains(guard + " rises and checks")
+                        && !afterOrder.contains(otherGuard + " rises and checks"),
+                route + " must show only the assigned living guard's acknowledgment");
+        f.choose("chief_navigator_menelaus_first_disembark");
+        check(f.options.keySet().equals(Set.of(
+                        "chief_navigator_menelaus_first_reception_name",
+                        "chief_navigator_menelaus_first_reception_red_carpet")),
+                route + " must rejoin the original first-contact reception choices");
+        check(!f.global.getBoolean(INTRO) && !MenelausTrial.isAccepted()
+                        && f.dismissals == 0 && f.directoryOpens == 0,
+                route + " must keep first contact open without accepting a Labor");
+    }
+
+    /** Every shuttle reply must stop at an explicit guard order before disembarking. */
+    private static void verifyFirstContactGuardOrders() throws Exception {
+        String prefix = "chief_navigator_menelaus_first_sinni_";
+        String[][] routes = {
+            {prefix + "stay", prefix + "stay_no"},
+            {prefix + "stay", prefix + "stay_insubordination"},
+            {prefix + "assume"},
+            {prefix + "ready"}
+        };
+        for (boolean saraDead : List.of(false, true)) {
+            String suffix = saraDead ? "_yvan" : "";
+            for (String[] route : routes) {
+                Fixture f = new Fixture();
+                f.global.set("$chief_navigator_sara_dead", saraDead);
+                f.fire("ChiefNavigatorFobIthaca");
+                f.choose("chief_navigator_menelaus_first_shuttle_continue");
+                f.choose("chief_navigator_auto_page_chief_navigator_menelaus_first_shuttle_continue_2");
+                check(f.options.keySet().equals(Set.of(prefix + "stay", prefix + "assume", prefix + "ready")),
+                        "All three authored shuttle replies must remain available");
+                for (String choice : route) f.choose(choice);
+                verifyGuardAssignment(f, saraDead, prefix + "insists_go" + suffix,
+                        Arrays.toString(route) + " (saraDead=" + saraDead + ")");
+            }
+
+            // Old saved dialogs may still retain the removed request choice.
+            // Dispatch that saved choice through the same native selector.
+            Fixture legacy = new Fixture();
+            legacy.global.set("$chief_navigator_sara_dead", saraDead);
+            legacy.install();
+            legacy.options.put(prefix + "request", "Ask Sinni to stay in the shuttle.");
+            legacy.choose(prefix + "request");
+            verifyGuardAssignment(legacy, saraDead, prefix + "request_go" + suffix,
+                    "Legacy request (saraDead=" + saraDead + ")");
+        }
+        System.out.println("Guard orders verified for all four shuttle routes and the legacy request, with Sara alive or dead.");
     }
 
     private static void verifyEarlyWallPriority() throws Exception {
@@ -873,6 +945,99 @@ public final class MenelausFlowRegression {
             }
         }
         return result.toString();
+    }
+
+    /** Walk all selectable first-contact paths using the installed native rules dispatcher. */
+    private static void verifyFirstContactTraversal() throws Exception {
+        Deque<Fixture> queue = new ArrayDeque<>();
+        for (boolean saraDead : List.of(false, true)) {
+            Fixture opening = new Fixture();
+            opening.global.set("$chief_navigator_sara_dead", saraDead);
+            opening.fire("ChiefNavigatorFobIthaca");
+            queue.addLast(opening);
+        }
+        Set<String> seen = new HashSet<>(), selected = new HashSet<>();
+        Set<Boolean> completedSaraStates = new HashSet<>();
+        while (!queue.isEmpty()) {
+            Fixture current = queue.removeFirst();
+            if (!seen.add(fingerprint(current))) continue;
+            check(seen.size() < 2000, "First-contact routes must remain bounded");
+            current.install();
+            check(!current.options.isEmpty(),
+                    "Every intermediate first-contact state must expose a usable continuation");
+            check(!current.global.getBoolean(INTRO) && !MenelausTrial.isAccepted(),
+                    "Only the terminal Continue may finish first contact, and it must not accept a Labor");
+            check(!current.options.containsKey("chief_navigator_menelaus_first_need")
+                            && !current.options.containsKey("chief_navigator_menelaus_first_sinni_request")
+                            && !current.options.containsKey("chief_navigator_menelaus_first_quiet_watch")
+                            && !current.options.containsKey("chief_navigator_menelaus_first_onslaught_3"),
+                    "Removed choices must not reappear in the authored introduction");
+            if (current.options.containsKey("chief_navigator_menelaus_first_losing")) {
+                check(current.options.size() == 1,
+                        "The strategic display must require the losing/Gautama explanation");
+            }
+            if (current.options.containsKey("chief_navigator_menelaus_first_reception_name")) {
+                check(current.options.get("chief_navigator_menelaus_first_reception_name")
+                                .equals("\"Captain Avery Kestrel.\""),
+                        "Reception must render the live player's full name after initializing its native memory tokens: "
+                                + current.options.get("chief_navigator_menelaus_first_reception_name"));
+            }
+            if (current.options.containsKey("chief_navigator_menelaus_first_need_accept_direct")) {
+                String transcript = String.join("\n", current.history);
+                int gautama = transcript.indexOf("For two hundred and forty-six cycles");
+                int cryo = transcript.indexOf("reactivated Task Force Spartan from cryosuspension");
+                int offer = transcript.indexOf("These are my Labors.");
+                check(gautama >= 0 && cryo > gautama && offer > cryo,
+                        "Every offer/accept path must first explain Gautama and Spartan cryosuspension");
+            }
+            for (String choice : current.options.keySet()) {
+                Fixture next = fork(current);
+                next.history.addAll(current.history);
+                next.choose(choice);
+                selected.add(choice);
+                if (choice.equals("chief_navigator_menelaus_first_finish")) {
+                    check(next.global.getBoolean(INTRO)
+                                    && next.global.getBoolean("$chief_navigator_menelaus_intro_shown_v1")
+                                    && next.global.getExpire(INTRO) == -1f
+                                    && !MenelausTrial.isAccepted()
+                                    && next.plugin instanceof FobIthacaStationInteraction,
+                            "The terminal Continue durably completes the introduction and opens the station without accepting Labor I");
+                    completedSaraStates.add(next.global.getBoolean("$chief_navigator_sara_dead"));
+                    String transcript = String.join("\n", next.history);
+                    if (next.global.getBoolean("$chief_navigator_sara_dead")) {
+                        check(!transcript.contains("Sara rises and checks her sidearm.")
+                                        && !transcript.contains("Sara's pistol clears its holster"),
+                                "Sara must not act in any post-Kshaya first-contact branch");
+                        check(transcript.contains("Yvan rises and checks his sidearm"),
+                                "Yvan must escort the player when Sara is dead");
+                    } else {
+                        check(transcript.contains("Sara rises and checks her sidearm."),
+                                "Sara's living first-contact branch must retain her escort exchange");
+                    }
+                } else {
+                    check(!next.global.getBoolean(INTRO) && !MenelausTrial.isAccepted(),
+                            "Intermediate first-contact choices must not commit quest progression: " + choice);
+                    check(next.dismissals == 0 && next.directoryOpens == 0,
+                            "First contact must remain open until its station handoff: " + choice);
+                    queue.addLast(next);
+                }
+            }
+        }
+        check(completedSaraStates.equals(Set.of(false, true)),
+                "First contact must finish with either Sara continuity state");
+        check(selected.containsAll(Set.of(
+                        "chief_navigator_menelaus_first_sinni_stay",
+                        "chief_navigator_menelaus_first_sinni_assume",
+                        "chief_navigator_menelaus_first_sinni_ready",
+                        "chief_navigator_menelaus_first_losing",
+                        "chief_navigator_menelaus_first_need_mercenary",
+                        "chief_navigator_menelaus_first_need_authority",
+                        "chief_navigator_menelaus_first_need_refuse",
+                        "chief_navigator_menelaus_first_need_return",
+                        "chief_navigator_menelaus_first_finish")),
+                "Traversal must exercise every opening, mandatory explanation, offer follow-up, and station handoff");
+        System.out.println("First contact traversed " + seen.size() + " native dialogue states and "
+                + selected.size() + " distinct choices, including both Sara continuity states.");
     }
 
     /** Explore every authored selectable route, including question and service loops. */
@@ -935,6 +1100,24 @@ public final class MenelausFlowRegression {
                 return Color.WHITE;
             }));
             initializeExpressions(); readRules();
+            if (Arrays.asList(args).contains("--first-contact-guards")) {
+                verifyFirstContactGuardOrders();
+                System.out.println("PASS: every shuttle path requires the correct living guard's explicit assignment.");
+                return;
+            }
+            if (Arrays.asList(args).contains("--first-contact")) {
+                verifyFirstContactGuardOrders();
+                verifyFirstContactTraversal();
+                verifyUnifiedHelenTopic();
+                verifyDurableIntroAndBriefings();
+                verifyAcceptedLegacyContactWithoutMarker();
+                verifyNestedOptionGroups();
+                System.out.println("PASS: first-contact native routing, bodyguard continuity, durable completion, and legacy contact access ("
+                        + pagesVisited + " authored rules executed).");
+                return;
+            }
+            verifyFirstContactGuardOrders();
+            verifyFirstContactTraversal();
             verifyMenuVisibility(); verifyContactEntryAndReports(); verifyUnifiedHelenTopic();
             verifyUpgradeLedgerHighlights();
             verifyVossAftermathHighlight();

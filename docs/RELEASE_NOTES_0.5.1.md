@@ -118,6 +118,31 @@ The approach was tested in game. The update preserves existing quest progress
 and the current Ashen Verge system name. It retains the earlier 0.5.1 hotfixes
 and the original `v0.5.1` tag. Restart Starsector after updating.
 
+## October 26, 2026 Menelaus and Derelict hotfix
+
+- Revise Menelaus's first contact and Labor I briefing. The green skill-reward
+  explanation appears once in the main briefing and contains two sentences.
+- Keep the Ithaca approach separate from Menelaus's introduction: contact the
+  central module after the approach to begin first contact.
+- Require an explicit order for Sara to guard Sinni on every shuttle branch,
+  with Yvan taking that role when Sara has died.
+- Accepting Labor I now grants the vanilla Automated Ships skill outright,
+  or one free skill point if already owned. This replaces the custom per-ship
+  authorization reward; normal automated fleet limits apply.
+- Already accepted Labor I? Select **Discuss the Labors** with Menelaus to
+  claim the new reward. Each campaign receives it only once.
+- New drone patrols and combat screens use small stock Derelict groups.
+  Roaming packs contain three or four frigates/destroyers; Ashen patrols no
+  longer expand into nine-ship Guard armadas after the Labors.
+- Retain the Combat Guard ship data and existing saved ships, fleet rosters
+  and losses. This hotfix does not convert or replenish saved fleets.
+- Fix the duplicate hyperspace-exit option at the Odyssey fringe when the
+  two duplicate endpoints share the same native orbit provenance.
+
+The download includes a matching compiled jar and all earlier 0.5.1 hotfixes.
+The original `v0.5.1` tag remains unchanged. Replace the previous mod folder
+and restart Starsector after updating.
+
 ## Requirements
 
 - Starsector 0.98a

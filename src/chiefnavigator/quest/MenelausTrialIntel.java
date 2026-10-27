@@ -209,12 +209,13 @@ public final class MenelausTrialIntel extends BaseIntelPlugin {
         } else if (laborStage == MenelausTrial.LABOR_MOTHERSHIPS) {
             info.addPara("Menelaus has opened the first Labor and uploaded the "
                     + "coordinates of four sealed Guard Motherships. Break each "
-                    + "command partition and recover its guard flotillas. His "
-                    + "Domain-Security IFF Transponder also authorizes command "
-                    + "of recovered Domain derelict drones without Automated "
-                    + "Ships expertise. After reporting the Labor, you can "
-                    + "spend one story point to recruit a random drone from "
-                    + "a friendly patrol.", 10f);
+                    + "command partition, then return to Menelaus. "
+                    + "Accepting this Labor grants the Automated Ships skill, "
+                    + "or one skill point if you already have it, as a one-time "
+                    + "reward. Normal automated ship limits apply. "
+                    + "Reporting the Labor activates friendly drone patrols "
+                    + "that assist against hostile fleets. Disabled hostile "
+                    + "drones remain recoverable through normal battle salvage.", 10f);
         } else if (laborStage == MenelausTrial.LABOR_SENSOR) {
             info.addPara("Menelaus has opened the fourth Labor: reach the Mara "
                     + "Observation Array in Devoured Reach without an aware "

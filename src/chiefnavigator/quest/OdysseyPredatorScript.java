@@ -392,20 +392,20 @@ public final class OdysseyPredatorScript implements EveryFrameScript {
 
     private static final String[][] ROGUE_DERELICT_LOADOUTS = {
         {
-            "chief_navigator_combat_guard_rampart_Standard",
-            "chief_navigator_combat_guard_defender_PD",
-            "chief_navigator_combat_guard_picket_Assault"
+            "berserker_Assault",
+            "defender_PD",
+            "picket_Assault"
         },
         {
-            "chief_navigator_combat_guard_bastillon_Standard",
-            "chief_navigator_combat_guard_sentry_FS",
-            "chief_navigator_combat_guard_warden_Defense"
+            "bastillon_Standard",
+            "sentry_FS",
+            "warden_Defense"
         },
         {
-            "chief_navigator_combat_guard_berserker_Assault",
-            "chief_navigator_combat_guard_rampart_Standard",
-            "chief_navigator_combat_guard_defender_PD",
-            "chief_navigator_combat_guard_picket_Assault"
+            "warden_Defense",
+            "defender_PD",
+            "sentry_FS",
+            "picket_Assault"
         }
     };
 
@@ -1014,10 +1014,10 @@ public final class OdysseyPredatorScript implements EveryFrameScript {
     private static void spawnRogueDerelictFleet(
             StarSystemAPI system, int index) {
         CampaignFleetAPI fleet = Global.getFactory().createEmptyFleet(
-                IthacaSectionEncounter.COMBAT_GUARD_FACTION_ID,
-                "Rogue Combat Guard Flotilla", true);
+                Factions.DERELICT,
+                "Derelict Drone Flotilla", true);
         fleet.setId(ROGUE_DERELICT_PREFIX + index);
-        fleet.setName("Rogue Combat Guard Flotilla");
+        fleet.setName("Derelict Drone Flotilla");
         fleet.setNoFactionInName(true);
         fleet.setTransponderOn(false);
         fleet.getMemoryWithoutUpdate().set(ROGUE_DERELICT_MARKER, true);
@@ -1043,9 +1043,8 @@ public final class OdysseyPredatorScript implements EveryFrameScript {
     private static void configureRogueDerelictFleet(
             CampaignFleetAPI fleet, StarSystemAPI system) {
         if (TroyArrivalScript.isFleetBusyForMutation(fleet)) return;
-        fleet.setFaction(IthacaSectionEncounter.COMBAT_GUARD_FACTION_ID, true);
-        fleet.setName("Rogue Combat Guard Flotilla");
-        MenelausTrial.convertFleetToCombatGuard(fleet);
+        // Faction, name and members belong to the saved encounter. Only new
+        // fleets use the stock Derelict roster; maintenance never converts it.
         int index = getRogueDerelictIndex(fleet);
         boolean arrivalProtected = isTroyArrivalProtected(system);
         if (arrivalProtected) {

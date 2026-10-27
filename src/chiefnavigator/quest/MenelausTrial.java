@@ -12,7 +12,6 @@ import com.fs.starfarer.api.campaign.TextPanelAPI;
 import com.fs.starfarer.api.characters.FullName;
 import com.fs.starfarer.api.characters.ImportantPeopleAPI;
 import com.fs.starfarer.api.characters.PersonAPI;
-import com.fs.starfarer.api.combat.ShipVariantAPI;
 import com.fs.starfarer.api.fleet.FleetMemberAPI;
 import com.fs.starfarer.api.fleet.FleetMemberType;
 import com.fs.starfarer.api.impl.campaign.ids.Commodities;
@@ -142,38 +141,27 @@ public final class MenelausTrial {
         {-4700f, 300f}
     };
     private static final String[][] ROAMER_LOADOUTS = {
-        {"chief_navigator_combat_guard_rampart_Standard", "chief_navigator_combat_guard_defender_PD", "chief_navigator_combat_guard_picket_Assault"},
-        {"chief_navigator_combat_guard_bastillon_Standard", "chief_navigator_combat_guard_sentry_FS", "chief_navigator_combat_guard_warden_Defense"},
-        {"chief_navigator_combat_guard_rampart_Standard", "chief_navigator_combat_guard_defender_PD", "chief_navigator_combat_guard_defender_PD"},
-        {"chief_navigator_combat_guard_berserker_Assault", "chief_navigator_combat_guard_picket_Assault", "chief_navigator_combat_guard_sentry_FS"},
-        {"chief_navigator_combat_guard_bastillon_Standard", "chief_navigator_combat_guard_warden_Defense", "chief_navigator_combat_guard_warden_Defense"},
-        {"chief_navigator_combat_guard_rampart_Standard", "chief_navigator_combat_guard_sentry_FS", "chief_navigator_combat_guard_picket_Assault"},
-        {"chief_navigator_combat_guard_bastillon_Standard", "chief_navigator_combat_guard_defender_PD", "chief_navigator_combat_guard_picket_Assault"},
-        {"chief_navigator_combat_guard_berserker_Assault", "chief_navigator_combat_guard_sentry_FS", "chief_navigator_combat_guard_sentry_FS"},
-        {"chief_navigator_combat_guard_rampart_Standard", "chief_navigator_combat_guard_warden_Defense", "chief_navigator_combat_guard_defender_PD"},
-        {"chief_navigator_combat_guard_bastillon_Standard", "chief_navigator_combat_guard_picket_Assault", "chief_navigator_combat_guard_picket_Assault"}
+        {"defender_PD", "sentry_FS", "picket_Assault"},
+        {"bastillon_Standard", "sentry_FS", "warden_Defense"},
+        {"warden_Defense", "defender_PD", "defender_PD"},
+        {"berserker_Assault", "picket_Assault", "sentry_FS"},
+        {"bastillon_Standard", "warden_Defense", "warden_Defense"},
+        {"defender_PD", "sentry_FS", "picket_Assault"},
+        {"bastillon_Standard", "defender_PD", "picket_Assault"},
+        {"berserker_Assault", "sentry_FS", "sentry_FS"},
+        {"picket_Assault", "warden_Defense", "defender_PD"},
+        {"bastillon_Standard", "picket_Assault", "picket_Assault"}
     };
     private static final String[] FRIENDLY_VARIANTS = {
-        "chief_navigator_combat_guard_rampart_Standard",
-        "chief_navigator_combat_guard_defender_PD",
-        "chief_navigator_combat_guard_picket_Assault",
-        "chief_navigator_combat_guard_sentry_FS",
-        "chief_navigator_combat_guard_warden_Defense"
+        "berserker_Assault",
+        "defender_PD",
+        "picket_Assault",
+        "sentry_FS",
+        "warden_Defense"
     };
     private static final float[][] ASHEN_ROAMER_OFFSETS = {
         {8000f, 3800f}, {0f, 6500f}, {-7000f, 4200f},
         {-7500f, -3500f}, {0f, -6500f}, {8500f, -3600f}
-    };
-    private static final String[] ASHEN_ROAMER_VARIANTS = {
-        "chief_navigator_combat_guard_rampart_Standard",
-        "chief_navigator_combat_guard_bastillon_Standard",
-        "chief_navigator_combat_guard_berserker_Assault",
-        "chief_navigator_combat_guard_defender_PD",
-        "chief_navigator_combat_guard_picket_Assault",
-        "chief_navigator_combat_guard_sentry_FS",
-        "chief_navigator_combat_guard_warden_Defense",
-        "chief_navigator_combat_guard_defender_PD",
-        "chief_navigator_combat_guard_picket_Assault"
     };
 
     private MenelausTrial() { }
@@ -688,7 +676,7 @@ public final class MenelausTrial {
                 : "Sealed Domain Mothership ") + MOTHERSHIP_NAMES[index];
     }
 
-    /** Creates a vanilla mothership battle with the authored Guard escorts. */
+    /** Creates a vanilla mothership battle with a small stock drone screen. */
     public static CampaignFleetAPI createMothershipCombatProxy(
             SectorEntityToken poi) {
         if (!canAssaultMothership(poi)
@@ -719,17 +707,14 @@ public final class MenelausTrial {
         }
 
         CampaignFleetAPI fleet = createFleet(
-                IthacaSectionEncounter.COMBAT_GUARD_FACTION_ID,
+                Factions.DERELICT,
                 proxyId,
                 getMothershipDisplayName(poi) + " Defense",
                 new String[] {
                     VANILLA_MOTHERSHIP_VARIANT,
-                    "chief_navigator_combat_guard_warden_Defense",
-                    "chief_navigator_combat_guard_warden_Defense",
-                    "chief_navigator_combat_guard_defender_PD",
-                    "chief_navigator_combat_guard_defender_PD",
-                    "chief_navigator_combat_guard_picket_Assault",
-                    "chief_navigator_combat_guard_sentry_FS"
+                    "warden_Defense",
+                    "defender_PD",
+                    "sentry_FS"
                 });
         configureHostileFleet(fleet);
         fleet.getMemoryWithoutUpdate().set(
@@ -877,7 +862,7 @@ public final class MenelausTrial {
         return OdysseyExpanseSystem.getFobIthaca();
     }
 
-    /** Builds the post-Labors difficulty spike in Ashen Verge once. */
+    /** Completes the historical post-Labors latch without enlarging patrols. */
     public static void ensurePostTrialConsequences() {
         if (!isComplete() || Global.getSector() == null) return;
         if (memory().getBoolean(ASHEN_ESCALATED)) return;
@@ -892,7 +877,7 @@ public final class MenelausTrial {
         if (complete) memory().set(ASHEN_ESCALATED, true);
     }
 
-    /** Creates the ordinary packs which later grow into full armadas. */
+    /** Creates small stock Derelict packs once, preserving saved populations. */
     private static void ensureAshenRoamingPresence() {
         StarSystemAPI ashen = OdysseyExpanseSystem.findSystemById(
                 OdysseyExpanseSystem.ASHEN_VERGE_ID);
@@ -1060,7 +1045,6 @@ public final class MenelausTrial {
                     || TroyArrivalScript.isFleetBusyForMutation(fleet)) {
                 return;
             }
-            fleet.setName("Unmoored Combat Guard Pack");
             configureHostileFleet(fleet);
             return;
         }
@@ -1070,7 +1054,7 @@ public final class MenelausTrial {
         CampaignFleetAPI fleet = createFleet(
                 Factions.DERELICT,
                 ROAMER_PREFIX + index,
-                "Unmoored Combat Guard Pack",
+                "Derelict Drone Pack",
                 ROAMER_LOADOUTS[index]);
         configureHostileFleet(fleet);
         system.addEntity(fleet);
@@ -1121,14 +1105,11 @@ public final class MenelausTrial {
                 memory().set(spawnKey, true);
                 return true;
             }
-            String[] loadout = escalated
-                    ? ASHEN_ROAMER_VARIANTS
-                    : ROAMER_LOADOUTS[index % ROAMER_LOADOUTS.length];
+            String[] loadout = ROAMER_LOADOUTS[index % ROAMER_LOADOUTS.length];
             fleet = createFleet(
-                    Factions.PLAYER,
+                    IthacaSectionEncounter.COMBAT_GUARD_FACTION_ID,
                     id,
-                    escalated ? "Ascendant Combat Guard Armada"
-                            : "Ashen Verge Combat Guard Pack",
+                    "Ashen Verge Drone Patrol",
                     loadout);
             system.addEntity(fleet);
             fleet.setLocation(
@@ -1151,16 +1132,8 @@ public final class MenelausTrial {
         if (TroyArrivalScript.isFleetBusyForMutation(fleet)) return false;
 
         if (escalated) {
-            // Grow the same persistent patrol from three hulls to nine.
-            int next = fleet.getFleetData().getMembersListCopy().size();
-            while (next < ASHEN_ROAMER_VARIANTS.length) {
-                addMember(fleet, ASHEN_ROAMER_VARIANTS[next]);
-                next++;
-            }
-            fleet.setName("Ascendant Combat Guard Armada");
+            // Retain old progression keys, but never grow or refill a roster.
             memory().set(ASHEN_ROAMER_ESCALATED_PREFIX + index, true);
-        } else {
-            fleet.setName("Ashen Verge Combat Guard Pack");
         }
         fleet.getFleetData().setSyncNeeded();
         fleet.getFleetData().syncIfNeeded();
@@ -1169,13 +1142,12 @@ public final class MenelausTrial {
             fleet.addAssignment(
                     com.fs.starfarer.api.campaign.FleetAssignment.PATROL_SYSTEM,
                     system.getCenter(), 1000000f,
-                    escalated ? "roaming Ashen Verge in force"
-                            : "roaming Ashen Verge");
+                    "roaming Ashen Verge");
         }
         return true;
     }
 
-    /** Each restored mothership releases two finite, recruitable drone patrols. */
+    /** Each restored mothership releases two finite, friendly drone patrols. */
     private static void ensureFriendlyArmy(
             StarSystemAPI system, int desiredCount) {
         SectorEntityToken wall = system.getEntityById(
@@ -1207,8 +1179,6 @@ public final class MenelausTrial {
             }
             if (fleet != null && !fleet.isEmpty()) {
                 memory().set(FRIENDLY_SPAWNED_PREFIX + i, true);
-                fleet.setName(MOTHERSHIP_NAMES[i / 2]
-                        + " Guard Patrol " + (i % 2 + 1));
                 configureFriendlyFleet(fleet, system);
                 continue;
             }
@@ -1225,7 +1195,7 @@ public final class MenelausTrial {
             fleet = createFleet(
                     IthacaSectionEncounter.COMBAT_GUARD_FACTION_ID,
                     FRIENDLY_PREFIX + i,
-                    MOTHERSHIP_NAMES[i / 2] + " Guard Patrol "
+                    MOTHERSHIP_NAMES[i / 2] + " Drone Patrol "
                             + (i % 2 + 1),
                     loadout);
             system.addEntity(fleet);
@@ -1294,67 +1264,9 @@ public final class MenelausTrial {
         member.getRepairTracker().setCR(member.getRepairTracker().getMaxCR());
     }
 
-    /** Migrates authored stock Derelict members to their Combat Guard skins. */
-    static boolean convertFleetToCombatGuard(CampaignFleetAPI fleet) {
-        if (fleet == null) return false;
-        boolean changed = false;
-        for (FleetMemberAPI member
-                : fleet.getFleetData().getMembersListCopy()) {
-            String replacementId = getCombatGuardVariantId(member);
-            if (replacementId == null) continue;
-            ShipVariantAPI replacement = Global.getSettings().getVariant(
-                    replacementId);
-            if (replacement == null) continue;
-            float cr = member.getRepairTracker().getCR();
-            member.setVariant(replacement.clone(), false, true);
-            member.getRepairTracker().setCR(Math.min(
-                    cr, member.getRepairTracker().getMaxCR()));
-            changed = true;
-        }
-        if (changed) {
-            fleet.getFleetData().setSyncNeeded();
-            fleet.getFleetData().syncIfNeeded();
-        }
-        return changed;
-    }
-
-    private static String getCombatGuardVariantId(FleetMemberAPI member) {
-        if (member == null || member.getVariant() == null) return null;
-        String variantId = member.getVariant().getHullVariantId();
-        if (variantId != null
-                && variantId.startsWith("chief_navigator_combat_guard_")) {
-            return null;
-        }
-        String hullId = member.getHullId();
-        if ("rampart".equals(hullId)) {
-            return "chief_navigator_combat_guard_rampart_Standard";
-        }
-        if ("bastillon".equals(hullId)) {
-            return "chief_navigator_combat_guard_bastillon_Standard";
-        }
-        if ("berserker".equals(hullId)) {
-            return "chief_navigator_combat_guard_berserker_Assault";
-        }
-        if ("defender".equals(hullId)) {
-            return "chief_navigator_combat_guard_defender_PD";
-        }
-        if ("picket".equals(hullId)) {
-            return "chief_navigator_combat_guard_picket_Assault";
-        }
-        if ("sentry".equals(hullId)) {
-            return "chief_navigator_combat_guard_sentry_FS";
-        }
-        if ("warden".equals(hullId)) {
-            return "chief_navigator_combat_guard_warden_Defense";
-        }
-        return null;
-    }
-
     private static void configureHostileFleet(CampaignFleetAPI fleet) {
         // These packs never accepted Menelaus's restored command partition.
         // Vanilla Derelict and Domain Combat Guard are mutually hostile.
-        fleet.setFaction(Factions.DERELICT, true);
-        convertFleetToCombatGuard(fleet);
         fleet.setNoAutoDespawn(true);
         fleet.setAbortDespawn(true);
         fleet.getMemoryWithoutUpdate().set(
@@ -1372,8 +1284,6 @@ public final class MenelausTrial {
     private static void configureFriendlyFleet(
             CampaignFleetAPI fleet,
             StarSystemAPI system) {
-        fleet.setFaction(IthacaSectionEncounter.COMBAT_GUARD_FACTION_ID, true);
-        convertFleetToCombatGuard(fleet);
         fleet.setNoAutoDespawn(true);
         fleet.setAbortDespawn(true);
         fleet.getMemoryWithoutUpdate().set(
@@ -1413,8 +1323,6 @@ public final class MenelausTrial {
 
     /** Keeps Ashen Verge's autonomous Derelicts on the player's side. */
     private static void configureAshenAlliedFleet(CampaignFleetAPI fleet) {
-        fleet.setFaction(IthacaSectionEncounter.COMBAT_GUARD_FACTION_ID, true);
-        convertFleetToCombatGuard(fleet);
         fleet.setNoAutoDespawn(true);
         fleet.setAbortDespawn(true);
         fleet.getMemoryWithoutUpdate().set(

@@ -4,11 +4,14 @@ import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.FactoryAPI;
 import com.fs.starfarer.api.SettingsAPI;
 import com.fs.starfarer.api.campaign.CampaignFleetAPI;
+import com.fs.starfarer.api.campaign.CharacterDataAPI;
 import com.fs.starfarer.api.campaign.FleetDataAPI;
 import com.fs.starfarer.api.campaign.InteractionDialogAPI;
+import com.fs.starfarer.api.campaign.InteractionDialogPlugin;
 import com.fs.starfarer.api.campaign.OptionPanelAPI;
 import com.fs.starfarer.api.campaign.SectorAPI;
 import com.fs.starfarer.api.campaign.SectorEntityToken;
+import com.fs.starfarer.api.campaign.StarSystemAPI;
 import com.fs.starfarer.api.campaign.TextPanelAPI;
 import com.fs.starfarer.api.campaign.VisualPanelAPI;
 import com.fs.starfarer.api.campaign.rules.MemKeys;
@@ -181,8 +184,8 @@ public final class FobIthacaApproachRegression {
         check(complete != null && complete.optString("conditions").isBlank()
                         && complete.optString("text").isBlank()
                         && complete.optString("options").isBlank()
-                        && complete.optString("script").equals("FireAll ChiefNavigatorFobIthaca"),
-                "Final completion must retain its existing full Menelaus introduction handoff");
+                        && complete.optString("script").equals("DismissDialog"),
+                "Final completion must close the approach until the player contacts Ithaca's central module");
         check(visited.size() + 1 == runtime.size(),
                 "No retired or unreachable approach pages may remain");
         check(ink.contains("+ [\"They're losing.\"] -> END"),
@@ -228,6 +231,20 @@ public final class FobIthacaApproachRegression {
                 }
                 return null;
             });
+            SectorEntityToken station = mock(SectorEntityToken.class, (name, args) -> {
+                if (name.equals("getId")) return IthacaSectionEncounter.FOB_ENTITY_ID;
+                if (name.equals("getCustomEntityType")) return "chief_navigator_fob_ithaca_campaign";
+                if (name.equals("getMemory") || name.equals("getMemoryWithoutUpdate")) return memory;
+                return null;
+            });
+            StarSystemAPI system = mock(StarSystemAPI.class, (name, args) -> {
+                if (name.equals("getOptionalUniqueId")) return OdysseyExpanseSystem.ASHEN_VERGE_ID;
+                if (name.equals("getMemoryWithoutUpdate")) return memory;
+                if (name.equals("getEntityById") && station.getId().equals(args[0])) return station;
+                return null;
+            });
+            SectorEntityToken[] interactionTarget = {null};
+            InteractionDialogPlugin[] currentPlugin = {null};
             PersonAPI player = mock(PersonAPI.class, (name, args) -> null);
             PersonAPI sinni = mock(PersonAPI.class, (name, args) -> {
                 if (name.equals("getId")) return SinniContact.PERSON_ID;
@@ -282,6 +299,16 @@ public final class FobIthacaApproachRegression {
                 return null;
             });
             InteractionDialogAPI dialog = mock(InteractionDialogAPI.class, (name, args) -> {
+                if (name.equals("getInteractionTarget")) return interactionTarget[0];
+                if (name.equals("setInteractionTarget")) {
+                    interactionTarget[0] = (SectorEntityToken) args[0];
+                    events.add("target:Ithaca");
+                }
+                if (name.equals("getPlugin")) return currentPlugin[0];
+                if (name.equals("setPlugin")) {
+                    currentPlugin[0] = (InteractionDialogPlugin) args[0];
+                    events.add("nativeOwner");
+                }
                 if (name.equals("getVisualPanel")) return visual;
                 if (name.equals("getOptionPanel")) return optionPanel;
                 if (name.equals("getTextPanel")) return text;
@@ -308,8 +335,11 @@ public final class FobIthacaApproachRegression {
             Global.setSettings(mock(SettingsAPI.class, (name, args) ->
                     name.equals("getColor") ? Color.WHITE : null));
             Global.setSector(mock(SectorAPI.class, (name, args) -> {
-                if (name.equals("getMemoryWithoutUpdate")
+                if (name.equals("getMemory") || name.equals("getMemoryWithoutUpdate")
                         || name.equals("getPlayerMemoryWithoutUpdate")) return memory;
+                if (name.equals("getCharacterData")) return mock(CharacterDataAPI.class,
+                        (method, values) -> method.equals("getMemory") ? memory : null);
+                if (name.equals("getStarSystems")) return List.of(system);
                 if (name.equals("getPlayerPerson")) return player;
                 if (name.equals("getImportantPeople")) return people;
                 if (name.equals("getRules")) return rules;
@@ -354,7 +384,10 @@ public final class FobIthacaApproachRegression {
                             && events.indexOf("echo:complete") < events.indexOf("complete")
                             && events.indexOf("complete") < events.indexOf(
                                     "rule:ChiefNavigatorFobIthacaApproach_complete"),
-                    "The final spoken choice must echo, persist completion, then open Menelaus");
+                    "The final spoken choice must echo and persist completion before dispatching the closing rule");
+            check(!events.contains("target:Ithaca") && !events.contains("nativeOwner")
+                            && currentPlugin[0] == null,
+                    "Approach completion must not retarget Ithaca or open Menelaus's introduction");
         } finally {
             Global.setSector(previousSector);
             Global.setFactory(previousFactory);

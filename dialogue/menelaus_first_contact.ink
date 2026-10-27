@@ -3,40 +3,34 @@
 // data/campaign/rules.csv under ChiefNavigatorMenelausFirst*.
 
 VAR player_title = "Captain"
+VAR player_name = "Ang"
 VAR sara_dead = false
 
 === fob_ithaca_shuttle ===
 
 Your command shuttle leaves your flagship under Spartan escort.
 
-The central module of FOB Ithaca grows until it fills every viewport, a vast sea of black against black, its bulk swallowing up the stars in the background.
+The central module of FOB Ithaca grows until it fills every viewport, a vast sea of black against black, its bulk swallowing up the stars in the background. Up close, the central module stops resembling a station. Armor cliffs rise for kilometers. Docking apertures large enough to dock the Domain Navy’s largest warships, barely visible without their lights on, nestle between batteries large enough to engage capital ships.
 
-Up close, the central module stops resembling a station. Armor cliffs rise for kilometers. Docking apertures glow between batteries large enough to engage capital ships.
-
-Maintenance drones move across the surface in endless streams. Some are little larger than a person. Others haul armor plates larger than your shuttle. A team of them, illuminated only by sparks in the night, are repairing a tear so large in the module you could fly a Wolf through it.
-
-+ [Continue.]
+Maintenance drones move across the surface in endless streams. Some are little larger than a person. Others haul armor plates larger than your shuttle. A team of them works by the light of its own welding sparks, repairing a tear in the module large enough to fly a cruiser through.
 
 A transmission crackles through the cabin speakers.
 
-"Inbound shuttle, maintain present vector. Berth assignment transmitted."
+"Inbound shuttle, this is West Ithaca Naval Control, maintain present vector. You're cleared through the inner defense perimeter."
 
-Your pilot acknowledges and banks toward a docking aperture opening in Ithaca's black armor. The maneuvering thrusters pulse beneath your feet, and then the walls swallow you.
+Your pilot acknowledges and banks toward a docking aperture opening in Ithaca's armor. The maneuvering thrusters pulse beneath your feet, and then the walls swallow you. You feel the characteristic downward lurch of artificial gravity as your ship crosses the berth threshold.
 
-Stars disappear behind the shuttle. Guidance lamps streak past the windows as you descend through layer after layer of the macrocomplex.
+Stars disappear behind the shuttle. Guidance lamps streak past the windows as you descend through layer after layer of the macrocomplex. There is a heavy jolt as docking clamps seize the shuttle. The engines spool down, their vibration fading from the deck beneath your boots.
 
-There is a heavy jolt as docking clamps seize the shuttle. The engines spool down, their vibration fading from the deck beneath your boots.
-
-For the first time since entering Ashen Verge, everything is still.
+For the first time since entering the Ashen Verge system, everything is still.
 
 You unfasten your restraints. Your bodyguards do the same.
 
 Across the cabin, Sinni is already standing.
 
-* ["Stay in the shuttle, Sinni. Coming here is dangerous enough."] -> fob_ithaca_sinni_stay
+* ["Stay in the shuttle. Coming here is dangerous enough."] -> fob_ithaca_sinni_stay
 * ["I assume you're coming."] -> fob_ithaca_sinni_assume
 * ["Ready?"] -> fob_ithaca_sinni_ready
-
 
 === fob_ithaca_sinni_stay ===
 
@@ -44,24 +38,16 @@ Across the cabin, Sinni is already standing.
 
 You stop.
 
-Sinni rises from her seat.
-
-She simply said no.
-
 * ["No?"] -> fob_ithaca_sinni_insists
-* ["Huh. That sounded like insubordination."] -> fob_ithaca_sinni_insists
-
+* ["That sounded like insubordination."] -> fob_ithaca_sinni_insists
 
 === fob_ithaca_sinni_assume ===
 
 "Yes."
 
-Immediate.
+Sinni straightens her sleeves.
 
-Sinni rises and straightens her sleeves.
-
--> fob_ithaca_sinni_go
-
+-> fob_ithaca_sinni_guard
 
 === fob_ithaca_sinni_ready ===
 
@@ -69,8 +55,7 @@ Sinni rises and straightens her sleeves.
 
 Sinni is already standing, apparently more ready than you are.
 
--> fob_ithaca_sinni_go
-
+-> fob_ithaca_sinni_guard
 
 === fob_ithaca_sinni_insists ===
 
@@ -86,17 +71,15 @@ The look in her eyes is serious.
 
 "I am going with you."
 
-There is no anger, no pleading, no compromise.
+-> fob_ithaca_sinni_guard
 
-Just Sinni.
+=== fob_ithaca_sinni_guard ===
 
-* ["Was that a request?"] -> fob_ithaca_sinni_request
 { sara_dead:
     * ["Okay. Yvan. Try to keep our Chief Nav alive."] -> fob_ithaca_sinni_go
 - else:
     * ["Okay. Sara. Try to keep our Chief Nav alive."] -> fob_ithaca_sinni_go
 }
-
 
 === fob_ithaca_sinni_request ===
 
@@ -112,76 +95,57 @@ A beat.
     * ["Okay. Sara, respectfully don't leave Sinni out of your sight."] -> fob_ithaca_sinni_go
 }
 
-
 === fob_ithaca_sinni_go ===
 
 { sara_dead:
-    Yvan rises and checks his sidearm, then inclines his head.
+    Yvan rises and checks his sidearm, then nods.
 
-    "Understood."
+    "Understood. Nav, stay close at all times."
+
+    Your nav clasps her hands together and bows.
+
+    "Thank you, sergeant."
 - else:
     Sara rises and checks her sidearm.
 
-    "Got it. I'll make sure our Chief Navigator doesn't discover any exciting new ways to get shot."
+    "Roger. Hey nav, try not to discover any exciting new ways to die."
 
-    Sinni gives her a flat look.
+    "I don't plan to." Sinni gives her a flat look.
 
-    "I don't intend to."
-
-    "That's what makes them exciting."
+    "So sayeth your gravestone."
 }
 
-The outer hatch unlocks with a heavy thump as pressure equalizes, then retracts into the shuttle wall.
+The outer hatch unlocks with a heavy thump as pressure equalizes, then retracts into the shuttle wall. Three Spartans are waiting on the other side: two armed marines and an officer carrying a battered data slate.
 
-Three Spartans are waiting on the other side: two armed marines and an officer carrying a battered data slate. There is no honor guard, no ceremony.
+The officer looks first at you. It is the same Spartan officer who intercepted you outside the ring.
 
-The officer looks first at you, then at Sinni.
+"You're the commanding officer?"
 
-"Captain. Chief Navigator."
++ ["{player_title} {player_name}."] -> reception
++ ["I was expecting a red carpet."] -> reception
 
-Sinni inclines her head.
+=== reception ===
 
-"Correct."
-
-"Follow me."
+"Commodore Aias Kleon." The officer snaps off a quick salute. "Commanding officer of Task Force Spartan."
 
 He turns without another word.
 
 Beyond him, the docking gallery is enormous and mostly empty. Automated tugs move fuel and ammunition between the few occupied berths while repair drones crawl over damaged hulls and disappear into open maintenance shafts.
 
-There are people here, but not many. A pilot helps guide cargo into storage. An officer with lieutenant's bars is elbow-deep in an open maintenance panel. Two marines carry ration crates down a service corridor.
-
-Nobody seems particularly interested in the fleet that just arrived from beyond their sky. Everyone is working.
+There are people here, but not many. A pilot helps guide cargo into storage. An officer with lieutenant's bars is elbow-deep in an open maintenance panel. Two marines carry ration crates down a service corridor. Nobody seems particularly interested in the fleet that just arrived from beyond their sky. Everyone is busy.
 
 Your escort leads you toward a waiting monorail.
 
--> fob_ithaca_monorail
+The monorail pulls away from the docks. For a while, Ithaca almost resembles a conventional military station. Workshops, barracks, medical compartments, and storage galleries slide past the windows. A mess hall has perhaps a dozen people inside.
 
+But the same pattern repeats everywhere: too much space, too few people. A pilot walks past carrying a diagnostic unit. A marine pushes a supply cart. An officer in engineering coveralls is walking out of a hydroponics bay, covered in dirt and fertilizer.
 
-=== fob_ithaca_monorail ===
-
-The monorail pulls away from the docks.
-
-For a while, Ithaca almost resembles a conventional military station. Workshops, barracks, medical compartments, and storage galleries slide past the windows. A mess hall has perhaps a dozen people inside.
-
-But the same pattern follows you everywhere: too much station, too few people.
-
-A pilot walks past carrying a diagnostic unit. A marine pushes a supply cart. An officer in engineering coveralls has half her body buried in an open maintenance panel.
-
-Nobody here seems to have only one job.
-
-Then the lights outside stop.
-
-Blackness swallows the windows—not space, but structure.
-
-The monorail races through an entire district with its lights turned off. Habitation towers, transit platforms, workshops, and warehouses loom beyond the glass, visible only when the train's running lights sweep across them.
+Then the lights outside stop. The monorail races through an entire district with its lights turned off. Habitation towers, transit platforms, workshops, and warehouses loom beyond the glass, visible only when the train's running lights sweep across them.
 
 Something moves below. Then another. Soon you make out hundreds of maintenance drones crawling through the darkness, opening access panels, replacing conduits, and tending machinery no human being is there to see.
 
 * ["Power failure?"] -> fob_ithaca_quiet
 * ["What's out there?"] -> fob_ithaca_quiet
-* [Keep watching.] -> fob_ithaca_quiet
-
 
 === fob_ithaca_quiet ===
 
@@ -189,21 +153,19 @@ Something moves below. Then another. Soon you make out hundreds of maintenance d
 
 * ["Quiet district?"] -> fob_ithaca_quiet_2
 
-
 === fob_ithaca_quiet_2 ===
 
 "No permanent personnel assignment. Life support is reduced to maintenance levels."
 
-He gestures toward the dark city outside.
+Kleon gestures toward the dark city outside.
 
-"Strategos maintains pressure integrity, transit, structural systems, and essential fabrication. The drones handle the rest."
+"The Strategos maintains pressure integrity, transit, structural systems, and essential fabrication. Drones handle the rest."
 
 * ["How much of Ithaca is like this?"] -> fob_ithaca_quiet_3
 
-
 === fob_ithaca_quiet_3 ===
 
-"Ninety-two percent."
+"Ninety-eight percent."
 
 You look back through the window.
 
@@ -211,75 +173,44 @@ Entire districts pass in darkness, swaths of metal complexes larger than most se
 
 Sinni approaches the rail window, her reflection hanging over the black glass.
 
-Before she can react, her reflection vanishes as something immense passes over the monorail.
-
-At first, you mistake it for part of Ithaca's superstructure. Then welding sparks flare across its underside.
+Before she can react, her reflection vanishes as something immense passes over the monorail. At first, you mistake it for part of Ithaca's superstructure. Then welding sparks flare across its underside.
 
 * ["What is that?"] -> fob_ithaca_onslaught
 * [Look up.] -> fob_ithaca_onslaught
-
 
 === fob_ithaca_onslaught ===
 
 A prow emerges from the darkness, followed by meters of armor and then the unmistakable silhouette of an Onslaught.
 
-The battleship hangs above the transit line, pristine and completely unpainted, its unfinished hull suspended between rows of nanoforges. There are no work lamps, no scaffolds, no human beings.
+The battleship hangs above the transit line, pristine and completely unpainted, its unfinished hull suspended between rows of nanoforges. A slab of armor slides from one of the forge arrays, still glowing faintly from manufacture. Tug drones seize it and carry it across the cavern, where other machines catch the plate against the Onslaught's flank.
 
-A slab of armor slides from one of the forge arrays, still glowing faintly from manufacture. Tug drones seize it and carry it across the cavern, where other machines catch the plate against the Onslaught's flank.
-
-A moment later, welding arcs flash through the dark. For an instant, the entire battleship is visible before darkness swallows it again.
-
-Another armor plate emerges from the nanoforges.
+A moment later, welding arcs flash through the dark. For an instant, the entire battleship is visible before darkness swallows it again. Another armor plate emerges from the nanoforges.
 
 * ["They're building an Onslaught."] -> fob_ithaca_onslaught_2
 
-
 === fob_ithaca_onslaught_2 ===
 
-"Construction allocation SPN-17," the Spartan officer says, checking his slate. "Scheduled completion in twenty-three days."
-
-* ["Twenty-three days?"] -> fob_ithaca_onslaught_3
-
-
-=== fob_ithaca_onslaught_3 ===
-
-"Assuming no further loss of industrial capacity."
+"Construction allocation SPN-17. To be christened 'The Scythian'," the Spartan officer says, checking his slate. "Scheduled completion in a year."
 
 He goes back to his slate.
 
--> fob_ithaca_after_onslaught
-
-
-=== fob_ithaca_after_onslaught ===
-
-The Onslaught vanishes behind you, though its welding flashes remain visible in the distance for several seconds.
-
-Sinni watches until the last one disappears.
-
-"Two hundred years," she murmurs.
-
-You glance toward her.
-
-Another dark habitation block slides past the window.
-
-The monorail begins to slow as light returns beyond the windows. Ahead, a fortified transit platform emerges from the darkness.
+The Onslaught vanishes behind you, though its welding flashes remain visible in the distance for several seconds. Another dark habitation block slides past the window. The monorail begins to slow as light returns beyond the windows. Ahead, a fortified transit platform emerges from the darkness.
 
 Your escort stands.
 
-"We have arrived."
+"We're here."
 
 -> fob_ithaca_strategos_approach
 
-
 === fob_ithaca_strategos_approach ===
 
-The platform opens directly into a military complex.
+The platform opens directly into a lounge complex. Simple reception, but accommodating enough. There are a few sofas, and an empty reception desk. You even pass by what looked like an unmanned cafe.
 
 Your escort leads you and your retinue through three security checkpoints before you reach a pair of tall black doors at the end of the corridor.
 
 There is no office number or command insignia, only a single word written above them in old Domain script.
 
-**STRATEGOS**
+**STRATEGOS - ORION KNOT SECTOR**
 
 The Spartan officer stops.
 
@@ -289,12 +220,9 @@ The doors open.
 
 * [Enter.] -> menelaus_holodeck
 
-
 === menelaus_holodeck ===
 
-The room beyond is circular, windowless, and completely empty.
-
-No desk. No command staff. No tactical table. You catch your bodyguards thumbing their weapons nervously.
+The room beyond is circular, windowless, and completely empty. You catch your bodyguards thumbing their weapons nervously.
 
 Actually, why didn't your escorts confiscate them?
 
@@ -302,7 +230,9 @@ Sinni looks around.
 
 "It's a holodeck."
 
-Stars hang overhead and beneath your feet. Ithaca's orbital ring curves through the chamber while the central module hangs at its heart. Fleet positions begin appearing around it, followed by defense networks, supply routes, industrial output, power flow, and casualty estimates.
+Lights shine from below.
+
+Stars shimmer into existence, hanging overhead and rising from beneath your feet. Ithaca's orbital ring curves through the chamber while the central module hangs at its heart. Fleet positions begin appearing around it, followed by defense networks, supply routes, industrial output, power flow, and casualty estimates. Behind your head, the Ashen Verge star fills the room with a warm, ambient light.
 
 Thousands of streams of information fold through one another faster than you can follow.
 
@@ -312,31 +242,22 @@ A humanoid face assembled from overlapping geometric planes slowly begins render
 
 The features are almost human.
 
-A model of a Corinthian helm has been worked into the avatar, its cheek guards and brow breaking apart into the same layered, crystalline geometry. A broad transverse crest stretches across the crown. Beneath it, the face seems less sculpted than calculated into existence. Plates of light shift by fractions of a degree as you look at him, suggesting cheekbones, a mouth, the bridge of a nose.
+A Corinthian helm crowns the avatar, its cheek guards and brow formed from the same layered, crystalline geometry. A broad transverse crest stretches across the crown. Beneath it, the face seems less sculpted than calculated into existence. Plates of light shift by fractions of a degree as you look at him, suggesting cheekbones, a mouth, the bridge of a nose.
 
-Only the eyes remain completely stable.
+Only the eyes remain completely stable. They are a shocking blue-white.
 
-One burns a shocking blue, the other white.
+You have the strange sensation that you are not standing in a room with Menelaus, but inside something that has chosen to give you its attention.
 
-The machine's presence is overwhelming. The avatar practically unmakes you with its gaze. You have the strange sensation that you are not standing in a room containing Menelaus, but inside something that has chosen to give you its attention.
-
-Like standing before a god.
-
-His gaze settles on you.
+Its gaze settles on you.
 
 "{player_title}."
 
-Its voice is thunderous, calm, and unmistakably human.
+Its voice is thunderous. Supernatural. Yet unmistakably human.
 
-"I am Menelaus, Domain Intelligence Nexus VG1239-GH1729."
-
-The geometry of his face shifts almost imperceptibly.
-
-"I have held the office of Strategos of the Orion Knot Theater for the last two hundred and eighty-six cycles."
+"I am Menelaus, Domain Intelligence Nexus VG1239331775." The geometry of his face shifts almost imperceptibly. "I have held the office of Strategos of the Orion Knot Theater for the last two hundred and eighty-six cycles."
 
 * ["Strategos Menelaus."] -> menelaus_first_business
-* ["I wasn't expecting... this."] -> menelaus_unexpected
-
+* ["I wasn't expecting this."] -> menelaus_unexpected
 
 === menelaus_unexpected ===
 
@@ -349,7 +270,6 @@ Menelaus regards you for another moment.
 * ["Ludd help us. You're an abomination."] -> menelaus_3
 * ["Strategos, then."] -> menelaus_first_business
 
-
 === menelaus_1 ===
 
 "Yes."
@@ -358,33 +278,28 @@ The answer comes without hesitation.
 
 "I am classified as an 'Alpha'-level artificial intelligence. Issued at Jupiter Station by the Amystris lab."
 
-A constellation of blue-white geometry turns slowly behind him.
+The constellations of the surrounding stars turn slowly behind him.
 
 * ["Strategos, then."] -> menelaus_first_business
 * ["Ludd help us. You're an abomination."] -> menelaus_3
 
-
 === menelaus_3 ===
 
-The avatar's visage darkens. Literally.
+The avatar's visage visibly darkens.
 
-"You will address me as STRATEGOS, as befits my station."
+"You will address me as 'STRATEGOS', as befits my station."
 
-The avatar looms overhead, not by stepping forward, but by simply growing.
-
-Wordlessly, Sinni reaches out and grabs your hand.
-
-The face of Menelaus expands until those impossible eyes hang above you like stars. The holodeck darkens around him, leaving the blue-white architecture of his form burning against the void.
+The avatar looms overhead by simply growing. The face of Menelaus expands until those impossible eyes hang above you like stars. The holodeck darkens around him, leaving the blue-white architecture of his form burning against the void.
 
 { sara_dead:
     Several of your bodyguards recoil.
 - else:
-    Several of your bodyguards recoil. Sara's pistol clears its holster, but Yvan catches her wrist and slaps the weapon back down before she can level it.
+    Several of your bodyguards recoil. Sara's pistol clears its holster, but Yvan catches her wrist and yanks the weapon back down before she can level it.
 
-    As if that toy would be of any use here.
+    That was the right call. As if that toy would be of any use here.
 }
 
-Menelaus lets the moment stretch, allowing you and your retinue to quail beneath his wrath.
+The moment stretches.
 
 "Are we understood?" he asks.
 
@@ -392,25 +307,21 @@ Menelaus lets the moment stretch, allowing you and your retinue to quail beneath
 * ["Apologies. Point taken."] -> hmm
 * [Say nothing.] -> hmm
 
-
 === hmm ===
 
 "Onto my request."
 
 -> menelaus_first_business
 
-
 === menelaus_first_business ===
 
 "I am in need of your assistance."
 
-The words are almost absurd coming from something that fills the room like a god.
+The words are almost absurd coming from something this powerful.
 
-Menelaus raises one hand, and Ithaca contracts beneath you. The orbital ring becomes a thin circle of light. The central module shrinks with it, followed by the moons, planets, and finally the whole of Ashen Verge.
+Menelaus raises a digital hand, and Ithaca contracts beneath you. The orbital ring becomes a thin circle of light. The central module shrinks with it, followed by the moons, planets, and finally the whole of Ashen Verge.
 
-Then red begins to spread across the system.
-
-Hundreds of Threat contacts populate the map. Some are marked as destroyed. Others pulse steadily at the edges of Spartan patrol zones, while entire regions of the system are shaded in warning colors.
+Then red begins to spread across the system. Hundreds of Threat contacts populate the map. Some are marked as destroyed. Others pulse steadily at the edges of Spartan patrol zones, while entire regions of the system are shaded in warning colors.
 
 The wound you saw in Ithaca's orbital ring glows brightest of all.
 
@@ -422,12 +333,9 @@ A number appears beside the ring and begins counting downward.
 
 -> menelaus_status_menu
 
-
 === menelaus_status_menu ===
 
 * ["You're losing."] -> menelaus_losing
-+ ["What do you need from me?"] -> menelaus_need
-
 
 === menelaus_losing ===
 
@@ -437,81 +345,64 @@ Menelaus brings up the schematics of a ship.
 
 "For two hundred and forty-six cycles, we maintained our position with minimal losses. Until the arrival of this."
 
-The vessel rotates slowly between you.
+The vessel rotates slowly between you. Menelaus narrows his eyes.
 
-Menelaus narrows his eyes.
-
-"We have designated it 'Gautama.' A vector of the same entities responsible for the megadeath incident at Hipparcos during the third cycle of the 204th Assembly."
+"We have designated it 'Gautama.' A singularity of the same entities responsible for the megadeath incident at Hipparcos during the third cycle of the 204th Assembly."
 
 The image of Ithaca appears beside it.
 
-"This... thing penetrated our defenses and sheared an entire module from the orbital defense ring."
+"This abomination penetrated our defenses and sheared an entire module from the orbital defense ring."
 
-+ ["We saw it. The Drifting Wall module in the Alpha Odyssey sector. That was from here."] -> menelaus_losing_2
-
++ ["The Drifting Wall module in the Alpha Odyssey sector was from here."] -> menelaus_losing_2
 
 === menelaus_losing_2 ===
 
 Menelaus lowers his helm.
 
-Was that shame?
-
 "It is my greatest failure."
 
 A series of cryogenic vaults illuminate across the macrocomplex.
 
-"It was because of Gautama that I reactivated Task Force Spartan from cryosuspension. They have shored up the defenses as best they can. For now."
-
-+ [Continue.] -> menelaus_status_menu
-
-
-=== menelaus_need ===
+"It was because of Gautama that I reactivated Task Force Spartan from cryosuspension. They have shored up the defenses as best they can."
 
 Menelaus dismisses the tactical display.
 
-"I need you to act as an independent roaming force."
+"I cannot spare any more of them. I need you to act as an independent roaming force."
 
-The map of Ashen Verge changes around him. Spartan formations collapse back toward Ithaca, their patrol routes clustering tightly around the surviving defensive perimeter.
-
-"Task Force Spartan cannot be everywhere. Every ship I send beyond the defense area weakens Ithaca, and every casualty costs me personnel I cannot replace."
+The map of Ashen Verge changes around him. Spartan formations collapse back toward Ithaca, their patrol routes clustering tightly around the surviving defensive perimeter. Distant points illuminate across the theater: wrecks, Threat concentrations, abandoned installations, lost supply depots. Places far beyond the reach of the Spartan pickets.
 
 His gaze settles on you.
-
-"You suffer from neither limitation."
-
-Distant points illuminate across the theater: wrecks, Threat concentrations, abandoned installations, lost supply depots. Places far beyond the reach of the Spartan pickets.
 
 "I have objectives throughout the Orion Knot which must be completed, and no force I can presently spare to complete them."
 
 Menelaus raises one hand.
 
-"I call them my Labors."
+"These are my Labors."
 
 The word hangs in the holodeck with more ceremony than anything else he has said.
 
-"Undertake them at your discretion. Destroy what threatens this theater. Recover what has been lost. Restore what can still be restored. And where circumstances demand judgment, exercise yours."
+"Undertake them. Destroy what threatens this theater. Recover what has been lost. Restore what once was broken. And where circumstances demand judgment, exercise yours."
 
 A series of Domain seals appear around him.
 
-"Accomplish my Labors, and by the authority vested in me by the Domain of Man, I will compensate you accordingly."
+"Accomplish my Labors, and by the authority vested in me by the Domain of Man, as the highest authority of the Orion Knot Sector, I will compensate you accordingly."
 
 Ship schematics, weapons inventories, industrial stockpiles, and ancient Domain credentials flicker into existence around him.
 
-"Materiel. Ships. Access to Ithaca's arsenals and fabrication capacity. Salvage rights. Requisition authority. Military clearances."
-
-Menelaus lowers his hand.
-
-"Authority, where I possess the right to grant it."
+"Materiel. Ships. Access to Ithaca's arsenals and fabrication capacity. Salvage rights. Requisition authority. Military clearances. Authority, where I possess the right to grant it."
 
 A pause.
 
 "And wealth enough that I doubt you will find the arrangement unrewarding."
 
+-> menelaus_need_menu
+
+=== menelaus_need_menu ===
+
 * ["You're hiring me as a mercenary."] -> menelaus_need_mercenary
 * ["You can actually grant Domain authority?"] -> menelaus_need_authority
 * ["And if I don't want to work for you?"] -> menelaus_need_refuse
 * ["Understood. Show me the Labors."] -> menelaus_need_accept
-
 
 === menelaus_need_mercenary ===
 
@@ -522,7 +413,6 @@ There is the faintest shift in the geometry of his face.
 "I prefer 'independent auxiliary.'"
 
 -> menelaus_need_return
-
 
 === menelaus_need_authority ===
 
@@ -538,16 +428,15 @@ His gaze hardens.
 
 -> menelaus_need_return
 
-
 === menelaus_need_refuse ===
 
 "Then you will refuse."
 
-Menelaus says it without anger.
+Menelaus says it plainly.
 
-"I have neither the personnel nor the inclination to compel you."
+"I have neither the cause nor inclination to compel you."
 
-A pause.
+Another pause.
 
 "Although I suspect you did not cross the Persean Abyss merely to turn around."
 
@@ -557,12 +446,10 @@ She nods.
 
 -> menelaus_need_return
 
-
 === menelaus_need_return ===
 
 * ["Understood. Show me the Labors."] -> menelaus_need_accept
-+ [Continue.] -> menelaus_status_menu
-
++ [Continue.] -> menelaus_need_menu
 
 === menelaus_need_accept ===
 

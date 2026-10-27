@@ -11,13 +11,13 @@ For once, the battered helm turns sharply.
 
 “Unexpected. Their destruction propagated the authentication farther than seizure would have.”
 
-New contacts spill from each restored hull: two Guard patrols per mothership, spreading out along independent routes through the system.
+New contacts spill from each restored hull: two derelict drone patrols per mothership, spreading out along independent routes through the system.
 
-“The restored Guard recognizes you. You may approach its patrols and authorize the transfer of a drone to your fleet. The unmoored packs remain severed from Ithaca and will engage my patrols on contact.”
+“The restored Guard recognizes you. Its drone patrols will assist you against hostile fleets. You may recover disabled hostile drones through ordinary battle salvage. The unmoored packs remain severed from Ithaca and will engage my patrols on contact.”
 
 “Labor I is complete.”
 
-You can command recovered FOB Ithaca drones without the Automated Ships skill.
+Your first-Labor reward was the Automated Ships skill, or one skill point if you already had it. Normal automated ship limits apply.
 
 - [Continue.] -> END
 

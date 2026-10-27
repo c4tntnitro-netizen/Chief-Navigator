@@ -87,9 +87,10 @@ public final class DialoguePortraitCoverageRegression {
         Map<String, String> expected = Map.ofEntries(
                 Map.entry("chiefNavigatorMenelausFirstShuttleContinue", "show sinni player"),
                 Map.entry("chiefNavigatorMenelausFirstSinniGo", "show sinni sara player"),
-                Map.entry("chiefNavigatorMenelausFirstSinniGoPage2", "show sinni player"),
+                Map.entry("chiefNavigatorMenelausFirstSinniGoWithoutSara", "show sinni player"),
                 Map.entry("chiefNavigatorMenelausFirstHolodeck", "show sinni player"),
                 Map.entry("chiefNavigatorMenelausFirstAbomination", "show menelaus sinni sara"),
+                Map.entry("chiefNavigatorMenelausFirstAbominationWithoutSara", "show menelaus sinni"),
                 Map.entry("chiefNavigatorMenelausFirstBusiness", "show menelaus sinni"),
                 Map.entry("chiefNavigatorVossRankContinuePage9", "show menelaus voss aias sinni sara"),
                 Map.entry("chiefNavigatorVossRankContinuePage10", "show menelaus voss aias sinni"),
@@ -166,8 +167,10 @@ public final class DialoguePortraitCoverageRegression {
         defaultCasts();
         check(rows.get("chiefNavigatorMenelausFirstHolodeckPage2").get(3).isEmpty()
                         && rows.get("chiefNavigatorMenelausFirstHolodeckPage3").get(3)
+                                .isEmpty()
+                        && rows.get("chiefNavigatorMenelausFirstHolodeckReveal").get(3)
                                 .equals("ChiefNavigatorMenelausCMD init")
-                        && rows.get("chiefNavigatorMenelausFirstHolodeckPage3").get(4)
+                        && rows.get("chiefNavigatorMenelausFirstHolodeckReveal").get(4)
                                 .startsWith("The features are almost human."),
                 "Menelaus must first appear on the almost-human reveal page, not the empty chamber");
         check(rows.get("chiefNavigatorAviciHabitatRescueLight").get(3).replace("\r\n", "\n").equals(
