@@ -9,6 +9,7 @@ import java.awt.Color;
 import java.lang.reflect.Proxy;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -41,6 +42,11 @@ public final class MenelausDialogueReadRegression {
     static final String COLLAPSE = "menelaus_labor_one_collapse";
     static final String HELEN = "menelaus_labor_one_helen";
     static final String CONTINUE = "auto_page_chief_navigator_menelaus_labor_one_collapse_2";
+    static final String NAVIGATION_LABEL = "^(Back\\.|Leave\\.|Request free repairs\\.|\"Nothing for now\\.\""
+            + "|Accept the final Labor\\.|Begin the final Labor\\.|Follow Captain Kleon\\."
+            + "|Leave Menelaus.*|Leave them with Helen.*"
+            + "|Deliver and install all recovered Ithaca wall upgrades\\."
+            + "|\"I accept\\.\"|\"Understood\\.\"|\"That.s enough for now\\.\"|Enter\\.)$";
 
     static final class Fixture {
         final Map<String, Object> flags = new HashMap<>();
@@ -90,11 +96,7 @@ public final class MenelausDialogueReadRegression {
                 String[] parts = option.split(":", 3);
                 String label = parts[2];
                 if (label.equals("Continue.")) continuations.add(parts[1].substring(PREFIX.length()));
-                else if (!label.matches("^(Back\\.|Leave\\.|Request free repairs\\.|\"Nothing for now\\.\""
-                        + "|Accept the final Labor\\.|Begin the final Labor\\.|Follow Captain Kleon\\."
-                        + "|Leave Menelaus.*|Leave them with Helen.*"
-                        + "|Deliver and install all recovered Ithaca wall upgrades\\."
-                        + "|\"I accept\\.\"|\"Understood\\.\"|\"That.s enough for now\\.\"|Enter\\.)$")) {
+                else if (!label.matches(NAVIGATION_LABEL)) {
                     expected.add(parts[1].substring(PREFIX.length()));
                 }
             }
@@ -111,6 +113,73 @@ public final class MenelausDialogueReadRegression {
             String source = Files.readString(Path.of("src/chiefnavigator/quest/" + shell + ".java"));
             check(source.contains("readState.afterPage(dialog, memoryMap.get(MemKeys.GLOBAL), optionData);"),
                     "Both owned contact shells must finish read tracking after successful dispatch");
+        }
+    }
+
+    static boolean firstContactSuffix(String suffix) {
+        return suffix.startsWith("menelaus_first_")
+                || suffix.startsWith("auto_page_chief_navigator_menelaus_first_");
+    }
+
+    static Set<String> firstContactOnly(Set<String> catalog) {
+        Set<String> result = new HashSet<>();
+        for (String suffix : catalog) {
+            if (firstContactSuffix(suffix)) result.add(suffix);
+        }
+        return result;
+    }
+
+    static void firstContactCatalogCoverage() throws Exception {
+        Map<String, List<String>> rules = DialoguePortraitCoverageRegression.readRules(
+                Files.readString(Path.of("data/campaign/rules.csv")));
+        Set<String> topics = new HashSet<>(), continuations = new HashSet<>();
+        for (List<String> row : rules.values()) {
+            if (!row.get(0).matches("chiefNavigator(Menelaus|FobIthaca).*")) continue;
+            if (row.get(0).matches("chiefNavigatorFobIthaca(Approach|Station).*")) continue;
+            for (String option : row.get(5).split("\\R")) {
+                if (option.isBlank()) continue;
+                String[] parts = option.split(":", 3);
+                String suffix = parts[1].substring(PREFIX.length());
+                if (!firstContactSuffix(suffix)) continue;
+                if (parts[2].equals("Continue.")) continuations.add(suffix);
+                else if (!parts[2].matches(NAVIGATION_LABEL)) topics.add(suffix);
+            }
+        }
+        check(topics.equals(firstContactOnly(MenelausDialogueReadState.TOPICS)),
+                "First-contact topics must match the actual authored choices, without retired options");
+        check(continuations.equals(firstContactOnly(MenelausDialogueReadState.CONTINUATIONS)),
+                "First-contact continuations must match every current authored Continue page");
+    }
+
+    static void firstContactReadHistory() {
+        String topic = "menelaus_first_reception_name";
+        String other = "menelaus_first_reception_red_carpet";
+        String surviving = "menelaus_first_quiet_power";
+        Fixture saved = new Fixture();
+        saved.flags.put(HISTORY + surviving, true);
+        saved.page(surviving, topic);
+        new MenelausDialogueReadState().afterPage(saved.dialog, saved.memory, null);
+        check(saved.writes == 0 && Color.CYAN.equals(saved.color(surviving))
+                        && Color.YELLOW.equals(saved.color(topic)),
+                "Surviving first-contact IDs must reuse their durable keys without migrations");
+        for (String continuation : firstContactOnly(MenelausDialogueReadState.CONTINUATIONS)) {
+            Fixture f = new Fixture();
+            MenelausDialogueReadState state = new MenelausDialogueReadState();
+            f.page(continuation);
+            state.afterPage(f.dialog, f.memory, PREFIX + topic);
+            check(f.writes == 0, "First-contact Continue must defer completion: " + continuation);
+            state.afterPage(f.dialog, f.memory, PREFIX + continuation);
+            check(f.writes == 0, "Intermediate first-contact pages must remain pending: " + continuation);
+            f.page(other);
+            state.afterPage(f.dialog, f.memory, PREFIX + continuation);
+            check(f.writes == 1 && Boolean.TRUE.equals(f.flags.get(HISTORY + topic))
+                            && Color.YELLOW.equals(f.color(other)),
+                    "Reaching a choice marks only the selected first-contact answer read");
+            f.page(topic, other);
+            new MenelausDialogueReadState().afterPage(f.dialog, f.memory, null);
+            check(f.writes == 1 && Color.CYAN.equals(f.color(topic))
+                            && Color.YELLOW.equals(f.color(other)),
+                    "New reception choices must retain independent read history after reopening");
         }
     }
 
@@ -200,6 +269,14 @@ public final class MenelausDialogueReadRegression {
             return null;
         }));
         try {
+            if (Arrays.asList(args).contains("--first-contact-catalog")) {
+                firstContactCatalogCoverage();
+                firstContactReadHistory();
+                completionAndReload();
+                abandonedAnswer();
+                System.out.println("PASS: first-contact authored topics/continuations, pending answers, durable keys and independent reception read history.");
+                return;
+            }
             authoringCoverage();
             completionAndReload();
             abandonedAnswer();
