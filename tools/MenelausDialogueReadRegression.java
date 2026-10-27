@@ -183,6 +183,67 @@ public final class MenelausDialogueReadRegression {
         }
     }
 
+    static boolean laborTwoSuffix(String suffix) {
+        return suffix.startsWith("menelaus_labor_two_")
+                || suffix.startsWith("auto_page_chief_navigator_menelaus_labor_two_")
+                || suffix.startsWith("auto_page_chief_navigator_fob_ithaca_research_briefing_");
+    }
+
+    static Set<String> laborTwoOnly(Set<String> catalog) {
+        Set<String> result = new HashSet<>();
+        for (String suffix : catalog) {
+            if (laborTwoSuffix(suffix)) result.add(suffix);
+        }
+        return result;
+    }
+
+    static void laborTwoCatalogCoverage() throws Exception {
+        Map<String, List<String>> rules = DialoguePortraitCoverageRegression.readRules(
+                Files.readString(Path.of("data/campaign/rules.csv")));
+        Set<String> topics = new HashSet<>(), continuations = new HashSet<>();
+        for (List<String> row : rules.values()) {
+            for (String option : row.get(5).split("\\R")) {
+                if (option.isBlank()) continue;
+                String[] parts = option.split(":", 3);
+                if (!parts[1].startsWith(PREFIX)) continue;
+                String suffix = parts[1].substring(PREFIX.length());
+                if (!laborTwoSuffix(suffix)) continue;
+                if (parts[2].equals("Continue.")) continuations.add(suffix);
+                else if (!parts[2].matches(NAVIGATION_LABEL)) topics.add(suffix);
+            }
+        }
+        check(topics.equals(laborTwoOnly(MenelausDialogueReadState.TOPICS)),
+                "Labor-II topics must match the authored choices and preserve surviving IDs");
+        check(continuations.equals(laborTwoOnly(MenelausDialogueReadState.CONTINUATIONS)),
+                "Every Labor-II Continue page must defer read completion");
+    }
+
+    static void laborTwoReadHistory() {
+        String topic = "menelaus_labor_two_cryo";
+        String other = "menelaus_labor_two_helen";
+        for (String continuation : laborTwoOnly(MenelausDialogueReadState.CONTINUATIONS)) {
+            Fixture f = new Fixture();
+            MenelausDialogueReadState state = new MenelausDialogueReadState();
+            f.page(continuation);
+            state.afterPage(f.dialog, f.memory, PREFIX + topic);
+            check(f.writes == 0, "A Labor-II answer stays pending at " + continuation);
+            f.page(topic, other);
+            state.afterPage(f.dialog, f.memory, PREFIX + continuation);
+            check(f.writes == 1 && Color.CYAN.equals(f.color(topic))
+                            && Color.YELLOW.equals(f.color(other)),
+                    "Only the completed Labor-II topic becomes read after " + continuation);
+            new MenelausDialogueReadState().afterPage(f.dialog, f.memory, null);
+            check(f.writes == 1 && Color.CYAN.equals(f.color(topic)),
+                    "Labor-II read history survives reopening without changing quest flags");
+        }
+        Fixture saved = new Fixture();
+        saved.flags.put(HISTORY + topic, true);
+        saved.page(topic, other);
+        new MenelausDialogueReadState().afterPage(saved.dialog, saved.memory, null);
+        check(saved.writes == 0 && Color.CYAN.equals(saved.color(topic)),
+                "Existing Labor-II durable read keys remain valid after the rewrite");
+    }
+
     static void completionAndReload() {
         Fixture f = new Fixture();
         MenelausDialogueReadState state = new MenelausDialogueReadState();
@@ -269,6 +330,12 @@ public final class MenelausDialogueReadRegression {
             return null;
         }));
         try {
+            if (Arrays.asList(args).contains("--labor-two-catalog")) {
+                laborTwoCatalogCoverage();
+                laborTwoReadHistory();
+                System.out.println("PASS: Labor-II authored topics, all Continue pages, durable read history and independent topic styling.");
+                return;
+            }
             if (Arrays.asList(args).contains("--first-contact-catalog")) {
                 firstContactCatalogCoverage();
                 firstContactReadHistory();

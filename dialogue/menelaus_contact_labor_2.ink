@@ -1,12 +1,16 @@
+// Authoring mirror only. Runtime prose, choices, state and services live in data/campaign/rules.csv.
+// The initial briefing is shown until its explicit Understood acknowledgement.
+VAR labor_2_briefed = false
+
 -> menelaus_contact_labor_2_active
 
 === menelaus_contact_labor_2_active ===
 
-Ashen Verge unfolds around Menelaus.
+The Lacedaemon System unfolds around Menelaus.
 
-The four Drone Motherships in the Odyssey Expanse now burn blue on the strategic display, moving along new patrol routes through the system.
+The four drone motherships in the Odyssey Expanse now burn blue on the strategic display, moving along new patrol routes through the system.
 
-“Your first Labor was successful. The motherships have accepted Ithaca authority, and their subordinate drones are returning to coordinated operation.”
+“Your first Labor was successful. The motherships have accepted Ithaca authority, and their subordinate drones are returning to strategic operations.”
 
 Menelaus inclines his helm.
 
@@ -22,7 +26,11 @@ The display expands, resolving a scattered network of old Domain research statio
 
 Schematics begin appearing beside them.
 
-“Many of those packages should still exist. I want them recovered.”
+“Many of those packages should still exist. Recover them.”
+
+-> menelaus_labor_2_briefing_menu
+
+=== menelaus_labor_2_briefing_menu ===
 
 * [“All of them?”] -> menelaus_labor_2_all
 * [“What exactly am I looking for?”] -> menelaus_labor_2_what
@@ -30,13 +38,13 @@ Schematics begin appearing beside them.
 
 === menelaus_labor_2_all ===
 
-“Every recoverable package.”
+“At least four. As many as possible.”
 
 The stations blink one after another across the map.
 
 “Some will have been damaged beyond use. Others may no longer be accessible. I leave that judgment to you.”
 
--> menelaus_contact_labor_2_active
+-> menelaus_labor_2_briefing_menu
 
 === menelaus_labor_2_what ===
 
@@ -46,9 +54,11 @@ Several examples rotate beside him.
 
 “Bring anything intact back to Ithaca. I will determine what can still be integrated into our systems.”
 
--> menelaus_contact_labor_2_active
+-> menelaus_labor_2_briefing_menu
 
 === menelaus_labor_2_accept ===
+
+~ labor_2_briefed = true
 
 “Good.”
 
@@ -60,11 +70,11 @@ Menelaus dismisses the schematics.
 
 “That is your second Labor.”
 
-+ [“I accept.”] -> menelaus_contact_labor_2_menu
++ [Continue.] -> menelaus_contact_labor_2_menu
 
 === menelaus_contact_labor_2_menu ===
 
-Ashen Verge returns around Menelaus.
+Lacedaemon returns around Menelaus.
 
 “What do you require?”
 
@@ -72,17 +82,17 @@ Ashen Verge returns around Menelaus.
 * [“What happened after the Fourteenth left Ithaca?”] -> menelaus_collapse_2
 * [“Why was Task Force Spartan placed in cryosuspension?”] -> menelaus_spartan_cryo
 * [Have Sinni ask more about Helen Argyros.] -> menelaus_helen_2
-+ [Review Ithaca defense upgrades.] -> menelaus_contact_labor_2_menu
-+ [Request free repairs.] -> menelaus_contact_labor_2_menu
++ [Review Ithaca defense upgrades.] -> menelaus_labor_2_service_return
++ [Request free repairs.] -> menelaus_labor_2_repair
 + [“Nothing for now.”] -> menelaus_contact_leave
 
 === menelaus_contact_labor_2_status ===
 
-Ashen Verge unfolds around Menelaus.
+Lacedaemon unfolds around Menelaus.
 
 The research stations burn across the strategic display.
 
-“Recover the surviving upgrade packages and bring them to Ithaca. Four must be installed in the defense wall to complete your second Labor.”
+“Recover the surviving upgrade packages and bring them to Ithaca. Four must be integrated into our defense matrix to complete your second Labor.”
 
 -> menelaus_contact_labor_2_menu
 
@@ -92,41 +102,41 @@ The modern theater fades.
 
 FOB Ithaca appears as it was immediately after the Collapse, the orbital ring still whole and the Fourteenth Battlegroup pulling away into hyperspace.
 
-“For some time, we assumed the separation would be temporary.”
+“When Battlegroup XIV departed, those of us who remained at Ithaca expected the separation to be temporary. Task Force Spartan would hold this Thermopylae as a bridge force until Battlegroup VI arrived. By our last reports, they were only a short ring jump away.”
 
 The Fourteenth disappears from the display. Supply routes vanish after it, then communication relays, then the last distant Domain transponders.
 
-“Eventually, it became clear that no relief force was coming.”
+“After a decade, it became clear. No relief force from Battlegroup VI or the Domain Heartland would ever come. We were on our own.”
 
 The surviving Spartan ships contract toward Ithaca.
 
-“We reduced the inhabited footprint of the macrocomplex, mothballed what infrastructure we could afford to lose, and transferred as much maintenance as possible to autonomous systems.”
+“We reduced the inhabited footprint of the macrocomplex, mothballed infrastructure we could no longer afford to operate, and transferred as much maintenance as possible to autonomous systems.”
 
 Darkness spreads across the ring, swallowing district after district.
 
 “The first quiet districts.”
 
-Menelaus watches the old Ithaca disappear into shadow.
+Entire divisions of Task Force Spartan turn grey on the display.
 
-“We prepared to wait.”
+"The first cryosuspension rotations."
 
-His gaze lingers on the display.
+Menelaus watches the old Ithaca disappear into shadow. His gaze lingers on the display.
 
-“We did not yet understand how long.”
+“We held our ground and waited.”
 
 -> menelaus_contact_labor_2_menu
 
 === menelaus_spartan_cryo ===
 
-“Because human beings are hard to replace.”
+“Because they are my charge. An irreplaceable treasure of the Domain.”
 
 The answer comes immediately.
 
-“Task Force Spartan represented a finite resource. Keeping its personnel awake through decades in which no human judgment was required would have consumed that resource for no strategic purpose.”
+“Task Force Spartan represented a finite resource. Keeping the entire force awake through decades in which only a skeleton watch was necessary would have consumed that which could never be recovered.”
 
 Cryogenic vaults illuminate throughout Ithaca. Most of the Spartan roster fades into blue while a much smaller watch remains active.
 
-“We therefore maintained a rotating cadre and placed the remainder in cryosuspension. Some slept for years. Others for decades.”
+“We therefore maintained a rotating cadre and placed the remainder in cryosuspension. Some slept for years. Most for decades.”
 
 The vaults begin opening one by one.
 
@@ -144,13 +154,13 @@ The image shifts to the damaged ring.
 
 Menelaus lowers his helm, seemingly deep in thought.
 
-“We have not yet ascertained how it manages to ‘reincarnate’ over and over again, seemingly across great distances and in apparent violation of the conservation of mass.”
+“I have not yet ascertained how Gautama manages to ‘reincarnate’ over and over again, sometimes across vast distances, with no apparent source for the additional mass.”
 
 Images begin appearing around him.
 
-Gautama burning beneath the guns of a Spartan battlegroup.
+Gautama burning under the guns of a Spartan battlegroup. A dozen destroyed Spartan ships drift around it.
 
-Gautama broken apart against the orbital ring.
+Gautama broken apart against the orbital ring. The massive naval lasers scorched great wounds onto its back.
 
 Gautama reduced to an expanding cloud of debris.
 
@@ -158,11 +168,9 @@ Then another image.
 
 The same ship.
 
-Whole.
+Over and over again.
 
-Elsewhere.
-
-“Each destruction is genuine. We have recovered wreckage. Accounted for mass. Observed complete loss of function.”
+“Each destruction is genuine. We have recovered wreckage, accounted for mass and observed complete loss of function.”
 
 Another record appears.
 
@@ -174,13 +182,13 @@ Another record appears.
 
 === menelaus_gautama_many ===
 
-“That has been ruled out.”
+“Not in the conventional sense.”
 
 Menelaus brings several recordings side by side.
 
-“Damage patterns persist between appearances. Adaptations persist. Behavioral responses persist.”
+“Damage patterns persist. Adaptations persist. Behavioral responses persist.”
 
-A scar across Gautama's hull appears in one recording, then again decades later.
+A scar across Gautama's hull appears in one recording, then again decades later. So does the crater left by a missile barrage.
 
 “Whatever returns remembers being destroyed.”
 
@@ -188,7 +196,7 @@ A scar across Gautama's hull appears in one recording, then again decades later.
 
 === menelaus_gautama_destroy ===
 
-“Yes.”
+“It buys us time.”
 
 Menelaus looks back toward the damaged ring.
 
@@ -202,7 +210,7 @@ Menelaus looks back toward the damaged ring.
 
 A map of the Odyssey Sector appears, marked with Gautama's known appearances.
 
-“No transit signature has ever been detected. No corresponding movement of mass. In several cases, the interval between confirmed destruction and reappearance would make conventional travel impossible.”
+“No transit signature has ever been detected. No corresponding movement of mass. In several cases, the interval between confirmed destruction and reappearance should make conventional travel impossible.”
 
 Menelaus dismisses the map.
 
@@ -218,7 +226,7 @@ The records disappear.
 
 Menelaus's helm rises.
 
-“When it returns, Task Force Spartan will wake.”
+“When it returns, Task Force Spartan will face it.”
 
 A pause.
 
@@ -256,7 +264,7 @@ Her name is there.
 
 “Yes.”
 
-Sinni's eyes move down the document. Suddenly, she looks up.
+Sinni's eyes move down the document. A transfer authorization bears Menelaus's Domain designation. She looks up.
 
 “You put her on the manifest.”
 
@@ -277,7 +285,7 @@ Menelaus brings up the Fourteenth's navigation roster. Several names are marked 
 
 Helen's record moves onto the manifest.
 
-“She was one of the finest navigators available.”
+“She was one of the finest navigators available. So she left.”
 
 Sinni studies him.
 
@@ -293,13 +301,9 @@ Sinni studies him.
 
 A battered navigation roster appears beside Helen's record.
 
-“Several of its senior officers were dead or missing. Helen was among the best remaining.”
+“Several of its senior navigators were dead or missing. Helen was among the best.”
 
 Sinni watches him carefully.
-
-“And that was why you sent her?”
-
-Menelaus is silent for a moment.
 
 -> menelaus_helen_2_end
 
@@ -315,11 +319,19 @@ This time, the answer does not come immediately.
 
 “No.”
 
-Sinni goes still while Menelaus dismisses the records.
+Sinni goes still while Menelaus dismisses the records. Her expression tightens, but she does not press him.
 
-Sinni's expression tightens, but she does not press him.
+-> menelaus_contact_labor_2_menu
 
-“Understood.”
+=== menelaus_labor_2_service_return ===
+
+// Runtime opens the existing defense-upgrade ledger; Back returns to this live Labor hub.
+-> menelaus_contact_labor_2_menu
+
+=== menelaus_labor_2_repair ===
+
+// Runtime invokes ChiefNavigatorMenelausCMD repair before returning to the hub.
+FOB Ithaca's automated gantries restore your fleet's hulls and armor, then cycle every ship to maximum combat readiness. No payment is requested.
 
 -> menelaus_contact_labor_2_menu
 
@@ -327,9 +339,7 @@ Sinni's expression tightens, but she does not press him.
 
 “Very well.”
 
-Menelaus inclines his helm.
-
-The stars around you begin to dim as the holodeck releases its hold on the room.
+Menelaus inclines his helm. The stars around you begin to dim as the holodeck releases its hold on the room.
 
 “Attend to your Labor.”
 
@@ -337,8 +347,6 @@ His blue-white eyes remain on you for a moment longer.
 
 “I will be here when you return.”
 
-The avatar dissolves into geometric light.
-
-A second later, the holodeck is only a room again.
+The avatar dissolves into geometric light. A second later, the holodeck is only a room again.
 
 -> END

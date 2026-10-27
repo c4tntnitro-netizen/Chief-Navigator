@@ -2171,17 +2171,17 @@ FireAll ChiefNavigatorMenelausLaborThreeHubOptions","Ashen Verge returns around 
 ""What do you require?""",,Reusable Menelaus hub while Labor III remains active.
 chiefNavigatorFobIthacaResearchBriefing,ChiefNavigatorFobIthaca,"!ChiefNavigatorMenelausCMD stage early_wall
 ChiefNavigatorMenelausCMD stage research
-!$global.chief_navigator_menelaus_labor_two_briefed",ChiefNavigatorMenelausCMD init,"Ashen Verge unfolds around Menelaus.
+!$global.chief_navigator_menelaus_labor_two_briefed",ChiefNavigatorMenelausCMD init,"The Lacedaemon System unfolds around Menelaus.
 
-The four Drone Motherships in the Odyssey Expanse now burn blue on the strategic display, moving along new patrol routes through the system.
+The four drone motherships in the Odyssey Expanse now burn blue on the strategic display, moving along new patrol routes through the system.
 
-""Your first Labor was successful. The motherships have accepted Ithaca authority, and their subordinate drones are returning to coordinated operation.""
+""Your first Labor was successful. The motherships have accepted Ithaca authority, and their subordinate drones are returning to strategic operations.""
 
 Menelaus inclines his helm.
 
 ""Well done.""
 
-Several new points illuminate across the Odyssey Sector.",0:chief_navigator_auto_page_chief_navigator_fob_ithaca_research_briefing_2:Continue.,Opens the authored Labor II briefing before its explicit acknowledgement. Auto-paged 1/2.
+Several new points illuminate across the Odyssey Sector.",0:chief_navigator_auto_page_chief_navigator_fob_ithaca_research_briefing_2:Continue.,Opens the revised Labor II briefing before its explicit Understood acknowledgement. Auto-paged 1/2.
 chiefNavigatorFobIthacaResearchBriefingPage2,DialogOptionSelected,$option == chief_navigator_auto_page_chief_navigator_fob_ithaca_research_briefing_2,FireAll ChiefNavigatorMenelausLaborTwoBriefingOptions,"""Your second Labor concerns these installations.""
 
 The display expands, resolving a scattered network of old Domain research stations. Some orbit inhabited worlds. Others drift alone in systems long abandoned.
@@ -2190,11 +2190,11 @@ The display expands, resolving a scattered network of old Domain research statio
 
 Schematics begin appearing beside them.
 
-""Many of those packages should still exist. I want them recovered.""",,Automatic runtime continuation 2/2 for chiefNavigatorFobIthacaResearchBriefing.
+""Many of those packages should still exist. Recover them.""",,Automatic runtime continuation 2/2 for chiefNavigatorFobIthacaResearchBriefing.
 chiefNavigatorFobIthacaResearchMenu,ChiefNavigatorFobIthaca,"!ChiefNavigatorMenelausCMD stage early_wall
 ChiefNavigatorMenelausCMD stage research
 $global.chief_navigator_menelaus_labor_two_briefed","ChiefNavigatorMenelausCMD init
-FireAll ChiefNavigatorMenelausLaborTwoHubOptions","Ashen Verge returns around Menelaus.
+FireAll ChiefNavigatorMenelausLaborTwoHubOptions","Lacedaemon returns around Menelaus.
 
 ""What do you require?""",,Reusable Menelaus hub while Labor II remains active.
 chiefNavigatorFobIthacaMotherships,ChiefNavigatorFobIthaca,"!ChiefNavigatorMenelausCMD stage early_wall
@@ -2372,9 +2372,9 @@ chiefNavigatorMenelausLaborOneRepair,DialogOptionSelected,$option == chief_navig
 FireAll ChiefNavigatorMenelausLaborOneHub","FOB Ithaca's automated gantries restore your fleet's hulls and armor, then cycle every ship to maximum combat readiness. No payment is requested.",,Repairs the fleet and returns to the reusable Labor-I hub.
 chiefNavigatorMenelausLaborTwoBriefingAllOption,ChiefNavigatorMenelausLaborTwoBriefingOptions,!$chiefNavigatorMenelausL2AskedAll,,,"0:chief_navigator_menelaus_labor_two_all:""All of them?""",One-shot question in the Labor II briefing.
 chiefNavigatorMenelausLaborTwoBriefingWhatOption,ChiefNavigatorMenelausLaborTwoBriefingOptions,!$chiefNavigatorMenelausL2AskedWhat,,,"10:chief_navigator_menelaus_labor_two_what:""What exactly am I looking for?""",One-shot question in the Labor II briefing.
-chiefNavigatorMenelausLaborTwoBriefingAcceptOption,ChiefNavigatorMenelausLaborTwoBriefingOptions,,,,"100:chief_navigator_menelaus_labor_two_understood:""Understood.""",Advances the Labor II briefing to its explicit acknowledgement.
+chiefNavigatorMenelausLaborTwoBriefingAcceptOption,ChiefNavigatorMenelausLaborTwoBriefingOptions,,,,"100:chief_navigator_menelaus_labor_two_understood:""Understood.""",Understood explicitly acknowledges Labor II before the authored Continue to its hub.
 chiefNavigatorMenelausLaborTwoAll,DialogOptionSelected,$option == chief_navigator_menelaus_labor_two_all,"$chiefNavigatorMenelausL2AskedAll = true 0
-FireAll ChiefNavigatorMenelausLaborTwoBriefingOptions","""Every recoverable package.""
+FireAll ChiefNavigatorMenelausLaborTwoBriefingOptions","""At least four. As many as possible.""
 
 The stations blink one after another across the map.
 
@@ -2385,7 +2385,7 @@ FireAll ChiefNavigatorMenelausLaborTwoBriefingOptions","""Upgrade modules, desig
 Several examples rotate beside him.
 
 ""Bring anything intact back to Ithaca. I will determine what can still be integrated into our systems.""",,Answers the package question and returns to the remaining briefing choices.
-chiefNavigatorMenelausLaborTwoUnderstood,DialogOptionSelected,$option == chief_navigator_menelaus_labor_two_understood,,"""Good.""
+chiefNavigatorMenelausLaborTwoUnderstood,DialogOptionSelected,$option == chief_navigator_menelaus_labor_two_understood,$global.chief_navigator_menelaus_labor_two_briefed = true,"""Good.""
 
 The research stations are added to your map.
 
@@ -2393,10 +2393,10 @@ The research stations are added to your map.
 
 Menelaus dismisses the schematics.
 
-""That is your second Labor.""","0:chief_navigator_menelaus_labor_two_accept:""I accept.""",Final acknowledgement before entering the reusable Labor II menu.
+""That is your second Labor.""",0:chief_navigator_menelaus_labor_two_accept:Continue.,Acknowledges Labor II immediately; Continue retains the legacy acceptance ID and opens the reusable hub.
 chiefNavigatorMenelausLaborTwoAccept,DialogOptionSelected,$option == chief_navigator_menelaus_labor_two_accept,"$global.chief_navigator_menelaus_labor_two_briefed = true
-FireAll ChiefNavigatorMenelausLaborTwoHub",,,Records the briefing and opens the reusable Labor II menu.
-chiefNavigatorMenelausLaborTwoHub,ChiefNavigatorMenelausLaborTwoHub,,FireAll ChiefNavigatorMenelausLaborTwoHubOptions,"Ashen Verge returns around Menelaus.
+FireAll ChiefNavigatorMenelausLaborTwoHub",,,Idempotent continuation and legacy acceptance handler; retains the existing durable briefing flag and opens the Labor II hub.
+chiefNavigatorMenelausLaborTwoHub,ChiefNavigatorMenelausLaborTwoHub,,FireAll ChiefNavigatorMenelausLaborTwoHubOptions,"Lacedaemon returns around Menelaus.
 
 ""What do you require?""",,Returns to the reusable Labor II dialogue hub.
 chiefNavigatorMenelausLaborTwoHubLabor,ChiefNavigatorMenelausLaborTwoHubOptions,,,,"0:chief_navigator_menelaus_labor_two_active:""About my current Labor.""",Persistent Labor II topic.
@@ -2406,118 +2406,113 @@ chiefNavigatorMenelausLaborTwoHubHelen,ChiefNavigatorMenelausLaborTwoHubOptions,
 chiefNavigatorMenelausLaborTwoHubServices,ChiefNavigatorMenelausLaborTwoHubOptions,,,,"80:chief_navigator_fob_ithaca_upgrades:Review Ithaca defense upgrades.
 95:chief_navigator_menelaus_labor_two_repair:Request free repairs.
 100:chief_navigator_menelaus_labor_two_leave:""Nothing for now.""",Keeps Menelaus-specific upgrades repairs and Labor-II dialogue inside his contact.
-chiefNavigatorMenelausLaborTwoActive,DialogOptionSelected,$option == chief_navigator_menelaus_labor_two_active,FireAll ChiefNavigatorMenelausLaborTwoHub,"Ashen Verge unfolds around Menelaus.
+chiefNavigatorMenelausLaborTwoActive,DialogOptionSelected,$option == chief_navigator_menelaus_labor_two_active,FireAll ChiefNavigatorMenelausLaborTwoHub,"Lacedaemon unfolds around Menelaus.
 
 The research stations burn across the strategic display.
 
-""Recover the surviving upgrade packages and bring them to Ithaca. Four must be installed in the defense wall to complete your second Labor.""
+""Recover the surviving upgrade packages and bring them to Ithaca. Four must be integrated into our defense matrix to complete your second Labor.""
 
 Required upgrades installed: $chiefNavigatorResearchInstalled of $chiefNavigatorResearchTarget. Research stations salvaged: $chiefNavigatorResearchResearched of $chiefNavigatorResearchStationTotal. All six distinct components remain tracked in Menelaus's defense-upgrade ledger; the final two are optional.",,Shows the live Labor II objective and returns to the hub.
 chiefNavigatorMenelausLaborTwoCollapse,DialogOptionSelected,$option == chief_navigator_menelaus_labor_two_collapse,,"The modern theater fades.
 
 FOB Ithaca appears as it was immediately after the Collapse, the orbital ring still whole and the Fourteenth Battlegroup pulling away into hyperspace.
 
-""For some time, we assumed the separation would be temporary.""
+""When Battlegroup XIV departed, those of us who remained at Ithaca expected the separation to be temporary. Task Force Spartan would hold this Thermopylae as a bridge force until Battlegroup VI arrived. By our last reports, they were only a short ring jump away.""
 
-The Fourteenth disappears from the display. Supply routes vanish after it, then communication relays, then the last distant Domain transponders.
+The Fourteenth disappears from the display. Supply routes vanish after it, then communication relays, then the last distant Domain transponders.",0:chief_navigator_auto_page_chief_navigator_menelaus_labor_two_collapse_2:Continue.,Explains Ithaca waiting for Battlegroup VI and the first cryosuspension rotations. Auto-paged 1/3.
+chiefNavigatorMenelausLaborTwoCollapsePage2,DialogOptionSelected,$option == chief_navigator_auto_page_chief_navigator_menelaus_labor_two_collapse_2,,"""After a decade, it became clear. No relief force from Battlegroup VI or the Domain Heartland would ever come. We were on our own.""
 
-""Eventually, it became clear that no relief force was coming.""
+The surviving Spartan ships contract toward Ithaca.
 
-The surviving Spartan ships contract toward Ithaca.",0:chief_navigator_auto_page_chief_navigator_menelaus_labor_two_collapse_2:Continue.,Explains Ithaca's contraction after the Fourteenth departed. Auto-paged 1/3.
-chiefNavigatorMenelausLaborTwoCollapsePage2,DialogOptionSelected,$option == chief_navigator_auto_page_chief_navigator_menelaus_labor_two_collapse_2,,"""We reduced the inhabited footprint of the macrocomplex, mothballed what infrastructure we could afford to lose, and transferred as much maintenance as possible to autonomous systems.""
+""We reduced the inhabited footprint of the macrocomplex, mothballed infrastructure we could no longer afford to operate, and transferred as much maintenance as possible to autonomous systems.""
 
 Darkness spreads across the ring, swallowing district after district.
 
-""The first quiet districts.""
-
-Menelaus watches the old Ithaca disappear into shadow.
-
-""We prepared to wait.""
-
-His gaze lingers on the display.",0:chief_navigator_auto_page_chief_navigator_menelaus_labor_two_collapse_3:Continue.,Automatic runtime continuation 2/3 for chiefNavigatorMenelausLaborTwoCollapse.
+""The first quiet districts.""",0:chief_navigator_auto_page_chief_navigator_menelaus_labor_two_collapse_3:Continue.,Automatic runtime continuation 2/3 for chiefNavigatorMenelausLaborTwoCollapse.
 chiefNavigatorMenelausLaborTwoCollapsePage3,DialogOptionSelected,$option == chief_navigator_auto_page_chief_navigator_menelaus_labor_two_collapse_3,"$chiefNavigatorMenelausL2AskedCollapse = true 0
-FireAll ChiefNavigatorMenelausLaborTwoHub","""We did not yet understand how long.""",,Automatic runtime continuation 3/3 for chiefNavigatorMenelausLaborTwoCollapse.
-chiefNavigatorMenelausLaborTwoCryo,DialogOptionSelected,$option == chief_navigator_menelaus_labor_two_cryo,,"""Because human beings are hard to replace.""
+FireAll ChiefNavigatorMenelausLaborTwoHub","Entire divisions of Task Force Spartan turn grey on the display.
+
+""The first cryosuspension rotations.""
+
+Menelaus watches the old Ithaca disappear into shadow. His gaze lingers on the display.
+
+""We held our ground and waited.""",,Automatic runtime continuation 3/3 for chiefNavigatorMenelausLaborTwoCollapse.
+chiefNavigatorMenelausLaborTwoCryo,DialogOptionSelected,$option == chief_navigator_menelaus_labor_two_cryo,,"""Because they are my charge. An irreplaceable treasure of the Domain.""
 
 The answer comes immediately.
 
-""Task Force Spartan represented a finite resource. Keeping its personnel awake through decades in which no human judgment was required would have consumed that resource for no strategic purpose.""
+""Task Force Spartan represented a finite resource. Keeping the entire force awake through decades in which only a skeleton watch was necessary would have consumed that which could never be recovered.""
 
 Cryogenic vaults illuminate throughout Ithaca. Most of the Spartan roster fades into blue while a much smaller watch remains active.
 
-""We therefore maintained a rotating cadre and placed the remainder in cryosuspension. Some slept for years. Others for decades.""
-
-The vaults begin opening one by one.
+""We therefore maintained a rotating cadre and placed the remainder in cryosuspension. Some slept for years. Most for decades.""",0:chief_navigator_auto_page_chief_navigator_menelaus_labor_two_cryo_2:Continue.,Explains the preserved Spartan personnel and opens the Gautama question. Auto-paged 1/2.
+chiefNavigatorMenelausLaborTwoCryoPage2,DialogOptionSelected,$option == chief_navigator_auto_page_chief_navigator_menelaus_labor_two_cryo_2,,"The vaults begin opening one by one.
 
 ""They were awakened when circumstances required them.""
 
 The image shifts to the damaged ring.
 
-""That Threat Singularity required all of them.""","0:chief_navigator_menelaus_labor_two_gautama:""Gautama.""",Opens the Gautama explanation from the Spartan cryosuspension topic.
+""That Threat Singularity required all of them.""","0:chief_navigator_menelaus_labor_two_gautama:""Gautama.""",Automatic runtime continuation 2/2 for chiefNavigatorMenelausLaborTwoCryo.
 chiefNavigatorMenelausLaborTwoCryoGautama,DialogOptionSelected,$option == chief_navigator_menelaus_labor_two_gautama,,"""Yes.""
 
 Menelaus lowers his helm, seemingly deep in thought.
 
-""We have not yet ascertained how it manages to 'reincarnate' over and over again, seemingly across great distances and in apparent violation of the conservation of mass.""
+""I have not yet ascertained how Gautama manages to 'reincarnate' over and over again, sometimes across vast distances, with no apparent source for the additional mass.""
 
 Images begin appearing around him.
 
-Gautama burning beneath the guns of a Spartan battlegroup.
+Gautama burning under the guns of a Spartan battlegroup. A dozen destroyed Spartan ships drift around it.",0:chief_navigator_auto_page_chief_navigator_menelaus_labor_two_cryo_gautama_2:Continue.,Explains genuine repeated destruction and opens the three Gautama responses. Auto-paged 1/3.
+chiefNavigatorMenelausLaborTwoCryoGautamaPage2,DialogOptionSelected,$option == chief_navigator_auto_page_chief_navigator_menelaus_labor_two_cryo_gautama_2,,"Gautama broken apart against the orbital ring. The massive naval lasers scorched great wounds onto its back.
 
-Gautama broken apart against the orbital ring.
+Gautama reduced to an expanding cloud of debris.
 
-Gautama reduced to an expanding cloud of debris.",0:chief_navigator_auto_page_chief_navigator_menelaus_labor_two_cryo_gautama_2:Continue.,Explains Gautama's repeated destruction and opens the response choices. Auto-paged 1/2.
-chiefNavigatorMenelausLaborTwoCryoGautamaPage2,DialogOptionSelected,$option == chief_navigator_auto_page_chief_navigator_menelaus_labor_two_cryo_gautama_2,FireAll ChiefNavigatorMenelausLaborTwoGautamaOptions,"Then another image.
+Then another image.
 
 The same ship.
 
-Whole.
-
-Elsewhere.
-
-""Each destruction is genuine. We have recovered wreckage. Accounted for mass. Observed complete loss of function.""
+Over and over again.",0:chief_navigator_auto_page_chief_navigator_menelaus_labor_two_cryo_gautama_3:Continue.,Automatic runtime continuation 2/3 for chiefNavigatorMenelausLaborTwoCryoGautama.
+chiefNavigatorMenelausLaborTwoCryoGautamaPage3,DialogOptionSelected,$option == chief_navigator_auto_page_chief_navigator_menelaus_labor_two_cryo_gautama_3,FireAll ChiefNavigatorMenelausLaborTwoGautamaOptions,"""Each destruction is genuine. We have recovered wreckage, accounted for mass and observed complete loss of function.""
 
 Another record appears.
 
-""And yet, eventually, Gautama returns.""",,Automatic runtime continuation 2/2 for chiefNavigatorMenelausLaborTwoCryoGautama.
+""And yet, eventually, Gautama returns.""",,Automatic runtime continuation 3/3 for chiefNavigatorMenelausLaborTwoCryoGautama.
 chiefNavigatorMenelausLaborTwoGautamaManyOption,ChiefNavigatorMenelausLaborTwoGautamaOptions,,,,"0:chief_navigator_menelaus_labor_two_gautama_many:""Could there be more than one?""",First unique Gautama theory.
 chiefNavigatorMenelausLaborTwoGautamaTransferOption,ChiefNavigatorMenelausLaborTwoGautamaOptions,,,,"10:chief_navigator_menelaus_labor_two_gautama_transfer:""Teleportation? Some kind of transfer?""",Second unique Gautama theory.
 chiefNavigatorMenelausLaborTwoGautamaDestroyOption,ChiefNavigatorMenelausLaborTwoGautamaOptions,,,,"20:chief_navigator_menelaus_labor_two_gautama_destroy:""So destroying it doesn't accomplish anything.""",Third unique Gautama response.
-chiefNavigatorMenelausLaborTwoGautamaMany,DialogOptionSelected,$option == chief_navigator_menelaus_labor_two_gautama_many,FireAll ChiefNavigatorMenelausLaborTwoGautamaEnd,"""That has been ruled out.""
+chiefNavigatorMenelausLaborTwoGautamaMany,DialogOptionSelected,$option == chief_navigator_menelaus_labor_two_gautama_many,FireAll ChiefNavigatorMenelausLaborTwoGautamaEnd,"""Not in the conventional sense.""
 
 Menelaus brings several recordings side by side.
 
-""Damage patterns persist between appearances. Adaptations persist. Behavioral responses persist.""
+""Damage patterns persist. Adaptations persist. Behavioral responses persist.""
 
-A scar across Gautama's hull appears in one recording, then again decades later.
+A scar across Gautama's hull appears in one recording, then again decades later. So does the crater left by a missile barrage.
 
 ""Whatever returns remembers being destroyed.""",,Answers the multiple-Gautama theory before the common conclusion.
 chiefNavigatorMenelausLaborTwoGautamaTransfer,DialogOptionSelected,$option == chief_navigator_menelaus_labor_two_gautama_transfer,FireAll ChiefNavigatorMenelausLaborTwoGautamaEnd,"""I have considered both.""
 
 A map of the Odyssey Sector appears, marked with Gautama's known appearances.
 
-""No transit signature has ever been detected. No corresponding movement of mass. In several cases, the interval between confirmed destruction and reappearance would make conventional travel impossible.""
+""No transit signature has ever been detected. No corresponding movement of mass. In several cases, the interval between confirmed destruction and reappearance should make conventional travel impossible.""
 
 Menelaus dismisses the map.
 
 ""I have insufficient evidence to name the mechanism.""",,Answers the transfer theory before the common conclusion.
-chiefNavigatorMenelausLaborTwoGautamaDestroy,DialogOptionSelected,$option == chief_navigator_menelaus_labor_two_gautama_destroy,FireAll ChiefNavigatorMenelausLaborTwoGautamaEnd,"""Yes.""
+chiefNavigatorMenelausLaborTwoGautamaDestroy,DialogOptionSelected,$option == chief_navigator_menelaus_labor_two_gautama_destroy,FireAll ChiefNavigatorMenelausLaborTwoGautamaEnd,"""It buys us time.""
 
 Menelaus looks back toward the damaged ring.
 
 ""You may challenge it if you wish. But for now, it is a Sisyphean task.""",,Answers the futility observation before the common conclusion.
-chiefNavigatorMenelausLaborTwoGautamaEnd,ChiefNavigatorMenelausLaborTwoGautamaEnd,,"$chiefNavigatorMenelausL2AskedCryo = true 0
-FireAll ChiefNavigatorMenelausLaborTwoHub","The records disappear.
+chiefNavigatorMenelausLaborTwoGautamaEnd,ChiefNavigatorMenelausLaborTwoGautamaEnd,,,"The records disappear.
 
-""Gautama remains the principal strategic threat to FOB Ithaca.""
+""Gautama remains the principal strategic threat to FOB Ithaca.""",0:chief_navigator_auto_page_chief_navigator_menelaus_labor_two_gautama_end_2:Continue.,Common Gautama conclusion; postpones the asked marker and hub until its final page. Auto-paged 1/2.
+chiefNavigatorMenelausLaborTwoGautamaEndPage2,DialogOptionSelected,$option == chief_navigator_auto_page_chief_navigator_menelaus_labor_two_gautama_end_2,"$chiefNavigatorMenelausL2AskedCryo = true 0
+FireAll ChiefNavigatorMenelausLaborTwoHub","Menelaus's helm rises.
 
-Menelaus's helm rises.
-
-""When it returns, Task Force Spartan will wake.""
+""When it returns, Task Force Spartan will face it.""
 
 A pause.
 
-""Every one of them.""",,Common Gautama conclusion returning to the Labor II hub.
+""Every one of them.""",,Automatic runtime continuation 2/2 for chiefNavigatorMenelausLaborTwoGautamaEnd.
 chiefNavigatorMenelausLaborTwoHelen,DialogOptionSelected,$option == chief_navigator_menelaus_labor_two_helen,,"Sinni steps forward.
 
 ""Strategos.""
@@ -2532,7 +2527,7 @@ Her personnel record appears between them, followed by another document.
 
 XIV BATTLEGROUP — DEPARTURE MANIFEST
 
-Sinni leans closer.",0:chief_navigator_auto_page_chief_navigator_menelaus_labor_two_helen_2:Continue.,Opens the second Helen conversation. Auto-paged 1/3.
+Sinni leans closer.",0:chief_navigator_auto_page_chief_navigator_menelaus_labor_two_helen_2:Continue.,Opens the revised second Helen conversation and her transfer authorization. Auto-paged 1/3.
 chiefNavigatorMenelausLaborTwoHelenPage2,DialogOptionSelected,$option == chief_navigator_auto_page_chief_navigator_menelaus_labor_two_helen_2,,"Helen Argyros.
 
 Her name is there.
@@ -2545,24 +2540,20 @@ Her name is there.
 
 ""Yes.""
 
-Sinni's eyes move down the document. Suddenly, she looks up.
+Sinni's eyes move down the document. A transfer authorization bears Menelaus's Domain designation. She looks up.",0:chief_navigator_auto_page_chief_navigator_menelaus_labor_two_helen_3:Continue.,Automatic runtime continuation 2/3 for chiefNavigatorMenelausLaborTwoHelen.
+chiefNavigatorMenelausLaborTwoHelenPage3,DialogOptionSelected,$option == chief_navigator_auto_page_chief_navigator_menelaus_labor_two_helen_3,FireAll ChiefNavigatorMenelausLaborTwoHelenOptions,"""You put her on the manifest.""
 
-""You put her on the manifest.""",0:chief_navigator_auto_page_chief_navigator_menelaus_labor_two_helen_3:Continue.,Automatic runtime continuation 2/3 for chiefNavigatorMenelausLaborTwoHelen.
-chiefNavigatorMenelausLaborTwoHelenPage3,DialogOptionSelected,$option == chief_navigator_auto_page_chief_navigator_menelaus_labor_two_helen_3,FireAll ChiefNavigatorMenelausLaborTwoHelenOptions,"""...Yes.""",,Automatic runtime continuation 3/3 for chiefNavigatorMenelausLaborTwoHelen.
+""...Yes.""",,Automatic runtime continuation 3/3 for chiefNavigatorMenelausLaborTwoHelen.
 chiefNavigatorMenelausLaborTwoHelenWhyOption,ChiefNavigatorMenelausLaborTwoHelenOptions,,,,"0:chief_navigator_menelaus_labor_two_helen_why:""Why?""",First unique route through Helen's departure.
 chiefNavigatorMenelausLaborTwoHelenSinniOption,ChiefNavigatorMenelausLaborTwoHelenOptions,,,,10:chief_navigator_menelaus_labor_two_helen_sinni:Let Sinni continue.,Second unique route through Helen's departure.
 chiefNavigatorMenelausLaborTwoHelenWhy,DialogOptionSelected,$option == chief_navigator_menelaus_labor_two_helen_why,FireAll ChiefNavigatorMenelausLaborTwoHelenEnd,"""The Fourteenth required an experienced navigator.""
 
 A battered navigation roster appears beside Helen's record.
 
-""Several of its senior officers were dead or missing. Helen was among the best remaining.""
+""Several of its senior navigators were dead or missing. Helen was among the best.""
 
-Sinni watches him carefully.
-
-""And that was why you sent her?""
-
-Menelaus is silent for a moment.",,First Helen route before the common conclusion.
-chiefNavigatorMenelausLaborTwoHelenSinni,DialogOptionSelected,$option == chief_navigator_menelaus_labor_two_helen_sinni,FireAll ChiefNavigatorMenelausLaborTwoHelenEnd,"""Why?""
+Sinni watches him carefully.",,First Helen route before the common conclusion.
+chiefNavigatorMenelausLaborTwoHelenSinni,DialogOptionSelected,$option == chief_navigator_menelaus_labor_two_helen_sinni,,"""Why?""
 
 Sinni's voice is quiet.
 
@@ -2570,36 +2561,28 @@ Menelaus brings up the Fourteenth's navigation roster. Several names are marked 
 
 ""The Battlegroup had lost several of its senior navigators during the first days of the Collapse. The route to the Persean Sector was uncertain, supplies were limited, and a navigational error could have destroyed what remained of the Fourteenth.""
 
-Helen's record moves onto the manifest.
-
-""She was one of the finest navigators available.""
+Helen's record moves onto the manifest.",0:chief_navigator_auto_page_chief_navigator_menelaus_labor_two_helen_sinni_2:Continue.,"Sinni asks why Helen left, then joins the shared conclusion. Auto-paged 1/2."
+chiefNavigatorMenelausLaborTwoHelenSinniPage2,DialogOptionSelected,$option == chief_navigator_auto_page_chief_navigator_menelaus_labor_two_helen_sinni_2,FireAll ChiefNavigatorMenelausLaborTwoHelenEnd,"""She was one of the finest navigators available. So she left.""
 
 Sinni studies him.
 
 ""So you chose her.""
 
-""I did.""",,Second Helen route before the common conclusion.
-chiefNavigatorMenelausLaborTwoHelenEnd,ChiefNavigatorMenelausLaborTwoHelenEnd,,"$chiefNavigatorMenelausL2AskedHelen = true 0
-FireAll ChiefNavigatorMenelausLaborTwoHub","Helen's record remains suspended between them.
+""I did.""",,Automatic runtime continuation 2/2 for chiefNavigatorMenelausLaborTwoHelenSinni.
+chiefNavigatorMenelausLaborTwoHelenEnd,ChiefNavigatorMenelausLaborTwoHelenEnd,,,"Helen's record remains suspended between them.
 
 Sinni looks from the manifest to Menelaus.
 
-""Was that the only reason?""
-
-This time, the answer does not come immediately.
+""Was that the only reason?""",0:chief_navigator_auto_page_chief_navigator_menelaus_labor_two_helen_end_2:Continue.,Common Helen conclusion; postpones the asked marker and hub until its final page. Auto-paged 1/2.
+chiefNavigatorMenelausLaborTwoHelenEndPage2,DialogOptionSelected,$option == chief_navigator_auto_page_chief_navigator_menelaus_labor_two_helen_end_2,"$chiefNavigatorMenelausL2AskedHelen = true 0
+FireAll ChiefNavigatorMenelausLaborTwoHub","This time, the answer does not come immediately.
 
 ""No.""
 
-Sinni goes still while Menelaus dismisses the records.
-
-Sinni's expression tightens, but she does not press him.
-
-""Understood.""",,Common conclusion to the second Helen conversation.
+Sinni goes still while Menelaus dismisses the records. Her expression tightens, but she does not press him.",,Automatic runtime continuation 2/2 for chiefNavigatorMenelausLaborTwoHelenEnd.
 chiefNavigatorMenelausLaborTwoLeave,DialogOptionSelected,$option == chief_navigator_menelaus_labor_two_leave,ChiefNavigatorMenelausCMD endContact,"""Very well.""
 
-Menelaus inclines his helm.
-
-The stars around you begin to dim as the holodeck releases its hold on the room.
+Menelaus inclines his helm. The stars around you begin to dim as the holodeck releases its hold on the room.
 
 ""Attend to your Labor.""
 
@@ -2607,9 +2590,7 @@ His blue-white eyes remain on you for a moment longer.
 
 ""I will be here when you return.""
 
-The avatar dissolves into geometric light.
-
-A second later, the holodeck is only a room again.",,Authored leave response for the Labor II hub.
+The avatar dissolves into geometric light. A second later, the holodeck is only a room again.",,Authored leave response for the Labor II hub.
 chiefNavigatorMenelausLaborTwoRepair,DialogOptionSelected,$option == chief_navigator_menelaus_labor_two_repair,"ChiefNavigatorMenelausCMD repair
 FireAll ChiefNavigatorMenelausLaborTwoHub","FOB Ithaca's automated gantries restore your fleet's hulls and armor, then cycle every ship to maximum combat readiness. No payment is requested.",,Repairs the fleet and returns to the reusable Labor II hub.
 chiefNavigatorMenelausLaborThreeBriefingCaptureOption,ChiefNavigatorMenelausLaborThreeBriefingOptions,!$chiefNavigatorMenelausL3AskedCapture,,,"0:chief_navigator_menelaus_labor_three_capture:""You want me to capture that thing?""",One-shot capture question in the Labor III briefing.
