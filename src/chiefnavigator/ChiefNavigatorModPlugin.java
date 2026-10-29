@@ -140,6 +140,7 @@ public final class ChiefNavigatorModPlugin extends BaseModPlugin {
             TroyArrivalScript.ensureWaypointTroyExists();
             OdysseyExpanseSystem.ensureExists();
         }
+        OdysseyExpanseSystem.reconcileRandomMissionTags();
         TroyArrivalScript.repairWaypointTroyMapAnchor();
         AviciHabitatEncounter.reconcileSaraDeathFlag();
         OdysseyExpanseSystem.repairClusterJumpPointSpacing();

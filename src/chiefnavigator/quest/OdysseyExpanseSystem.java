@@ -744,6 +744,14 @@ public final class OdysseyExpanseSystem {
         return false;
     }
 
+    /** Excludes saved Orion systems from native random missions without rebuilding them. */
+    public static void reconcileRandomMissionTags() {
+        if (Global.getSector() == null) return;
+        for (StarSystemAPI system : Global.getSector().getStarSystems()) {
+            if (isInside(system)) system.addTag(Tags.THEME_HIDDEN);
+        }
+    }
+
     private static StarSystemAPI createGeneratedNebula() {
         CustomConstellationParams params =
                 new CustomConstellationParams(StarAge.OLD);
@@ -3976,7 +3984,7 @@ public final class OdysseyExpanseSystem {
     }
 
     private static void applyClusterTags(StarSystemAPI system) {
-        system.removeTag(Tags.THEME_HIDDEN);
+        system.addTag(Tags.THEME_HIDDEN);
         system.addTag(Tags.THEME_SPECIAL);
         system.addTag(Tags.THEME_UNSAFE);
         system.removeTag(Tags.SYSTEM_ABYSSAL);
