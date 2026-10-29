@@ -12,6 +12,9 @@ import com.fs.starfarer.api.campaign.rules.*;
 import com.fs.starfarer.api.characters.FullName;
 import com.fs.starfarer.api.characters.ImportantPeopleAPI;
 import com.fs.starfarer.api.characters.PersonAPI;
+import com.fs.starfarer.api.fleet.FleetMemberAPI;
+import com.fs.starfarer.api.fleet.FleetMemberStatusAPI;
+import com.fs.starfarer.api.fleet.RepairTrackerAPI;
 import com.fs.starfarer.api.impl.campaign.rulecmd.FireAll;
 import com.fs.starfarer.api.impl.campaign.rulecmd.FireBest;
 import com.fs.starfarer.api.impl.campaign.rulecmd.SetTextHighlightColors;
@@ -211,6 +214,8 @@ public final class MenelausFlowRegression {
         int dismissals, directoryOpens;
         int availableComponents;
         int availableMask = -1;
+        int componentRemovals;
+        final List<FleetMemberAPI> playerMembers = new ArrayList<>();
         String[] textHighlights = new String[0];
         Color[] textHighlightColors = new Color[0];
         InteractionDialogPlugin plugin;
@@ -322,13 +327,18 @@ public final class MenelausFlowRegression {
                 return null;
             });
             CargoAPI cargo = mock(CargoAPI.class, (name, args) -> {
-                if (!name.equals("getQuantity")) return null;
-                if (availableMask < 0) return availableComponents > 0 ? 1f : 0f;
+                if (!name.equals("getQuantity") && !name.equals("removeItems")) return null;
+                if (availableMask < 0) return name.equals("getQuantity")
+                        ? (availableComponents > 0 ? 1f : 0f) : false;
                 int index = Arrays.asList(IthacaResearchUpgrades.COMPONENT_IDS)
                         .indexOf(((SpecialItemData) args[1]).getId());
-                return index >= 0 && (availableMask & (1 << index)) != 0 ? 1f : 0f;
+                boolean present = index >= 0 && (availableMask & (1 << index)) != 0;
+                if (name.equals("getQuantity")) return present ? 1f : 0f;
+                if (present) { availableMask &= ~(1 << index); componentRemovals++; }
+                return present;
             });
-            FleetDataAPI data = mock(FleetDataAPI.class, (name, args) -> name.equals("getMembersListCopy") ? List.of() : null);
+            FleetDataAPI data = mock(FleetDataAPI.class, (name, args) -> name.equals("getMembersListCopy")
+                    ? List.copyOf(playerMembers) : null);
             CampaignFleetAPI fleet = mock(CampaignFleetAPI.class, (name, args) -> {
                 if (name.equals("getLocation")) return new Vector2f();
                 if (name.equals("getMemoryWithoutUpdate")) return global;
@@ -779,8 +789,8 @@ public final class MenelausFlowRegression {
     private static void verifyInterruptedTopics() throws Exception {
         String[][] topics = {
             {"chiefNavigatorMenelausLaborTwoCollapse", "chiefNavigatorMenelausLaborTwoCollapsePage3", "$chiefNavigatorMenelausL2AskedCollapse"},
-            {"chiefNavigatorMenelausLaborTwoCryo", "chiefNavigatorMenelausLaborTwoGautamaEnd", "$chiefNavigatorMenelausL2AskedCryo"},
-            {"chiefNavigatorMenelausLaborTwoHelen", "chiefNavigatorMenelausLaborTwoHelenEnd", "$chiefNavigatorMenelausL2AskedHelen"},
+            {"chiefNavigatorMenelausLaborTwoCryo", "chiefNavigatorMenelausLaborTwoGautamaEndPage2", "$chiefNavigatorMenelausL2AskedCryo"},
+            {"chiefNavigatorMenelausLaborTwoHelen", "chiefNavigatorMenelausLaborTwoHelenEndPage2", "$chiefNavigatorMenelausL2AskedHelen"},
             {"chiefNavigatorMenelausLaborThreeHistory", "chiefNavigatorMenelausLaborThreeHistoryPage3", "$chiefNavigatorMenelausL3AskedHistory"},
             {"chiefNavigatorMenelausLaborThreeHelen", "chiefNavigatorMenelausLaborThreeHelenEnd", "$chiefNavigatorMenelausL3AskedHelen"},
             {"chiefNavigatorMenelausLaborFourPackage", "chiefNavigatorMenelausLaborFourDetected", "$chiefNavigatorMenelausL4AskedPackage"},
@@ -1089,6 +1099,194 @@ public final class MenelausFlowRegression {
         System.out.println("Traversed " + seen.size() + " authored dialogue states and " + selected.size() + " distinct choices.");
     }
 
+    private static final String LABOR_TWO_BRIEFED =
+            "$chief_navigator_menelaus_labor_two_briefed";
+    private static final String LABOR_TWO_PREFIX = "chief_navigator_menelaus_labor_two_";
+
+    private static void laborTwoAutoPages(Fixture f) {
+        Set<String> visited = new HashSet<>();
+        while (f.options.size() == 1) {
+            String choice = f.options.keySet().iterator().next();
+            if (!choice.startsWith("chief_navigator_auto_page_")) return;
+            check(visited.add(choice) && visited.size() < 20,
+                    "Labor II pagination must terminate without repeating a page");
+            f.choose(choice);
+        }
+    }
+
+    private static Fixture laborTwoContact(boolean briefed) throws Exception {
+        Fixture f = new Fixture();
+        f.stage(MenelausTrial.LABOR_RESEARCH, false, briefed);
+        f.plugin = new FobIthacaContactInteraction(f.person);
+        f.fire("ChiefNavigatorFobIthaca");
+        laborTwoAutoPages(f);
+        return f;
+    }
+
+    private static void laborTwoHub(Fixture f) {
+        check(f.options.keySet().containsAll(Set.of(LABOR_TWO_PREFIX + "active", UPGRADE,
+                        LABOR_TWO_PREFIX + "repair", LABOR_TWO_PREFIX + "leave")),
+                "Every Labor II branch must return to its operational hub: " + f.options);
+        check(!f.options.containsKey(LABOR_TWO_PREFIX + "understood")
+                        && !f.options.containsKey(LABOR_TWO_PREFIX + "accept"),
+                "The active hub must not replay briefing acknowledgement");
+        check(f.global.getBoolean(LABOR_TWO_BRIEFED),
+                "The active Labor II hub must preserve explicit acknowledgement");
+    }
+
+    private static long laborTwoIntroCount(Fixture f) {
+        return f.history.stream().filter(text -> text.contains("Your first Labor was successful.")).count();
+    }
+
+    private static void verifyLaborTwoDialogue() throws Exception {
+        for (List<String> questionOrder : List.of(List.of("all", "what"), List.of("what", "all"))) {
+            Fixture f = laborTwoContact(false);
+            check(laborTwoIntroCount(f) == 1 && !f.global.getBoolean(LABOR_TWO_BRIEFED)
+                            && !f.options.containsKey(UPGRADE),
+                    "Reading the opening must not acknowledge Labor II or expose upgrades");
+            for (String topic : questionOrder) {
+                f.choose(LABOR_TWO_PREFIX + topic);
+                laborTwoAutoPages(f);
+                check(f.options.containsKey(LABOR_TWO_PREFIX + "understood")
+                                && !f.options.containsKey(LABOR_TWO_PREFIX + topic)
+                                && laborTwoIntroCount(f) == 1
+                                && !f.global.getBoolean(LABOR_TWO_BRIEFED),
+                        "Briefing questions return only remaining choices without replaying intro");
+            }
+            f.choose(LABOR_TWO_PREFIX + "understood");
+            check(f.global.getBoolean(LABOR_TWO_BRIEFED)
+                            && f.global.getExpire(LABOR_TWO_BRIEFED) == -1f,
+                    "Understood must durably acknowledge the Labor before its closing Continue");
+            check(f.options.keySet().equals(Set.of(LABOR_TWO_PREFIX + "accept"))
+                            && f.options.get(LABOR_TWO_PREFIX + "accept").equals("Continue."),
+                    "The final briefing response keeps one ordinary Continue");
+            f.settle();
+            Fixture interrupted = new Fixture();
+            copyMemory(f.global, interrupted.global);
+            interrupted.fire("ChiefNavigatorFobIthaca");
+            laborTwoHub(interrupted);
+            check(laborTwoIntroCount(interrupted) == 0,
+                    "Reopening after Understood skips the completed introduction even before Continue");
+            f.install();
+            f.choose(LABOR_TWO_PREFIX + "accept");
+            laborTwoHub(f);
+            check(laborTwoIntroCount(f) == 1, "Closing Continue must not replay the introduction");
+            f.choose(LABOR_TWO_PREFIX + "active");
+            laborTwoAutoPages(f);
+            laborTwoHub(f);
+            check(laborTwoIntroCount(f) == 1,
+                    "Status returns to the hub without replaying the accepted briefing");
+        }
+
+        for (String response : List.of("many", "transfer", "destroy")) {
+            Fixture f = laborTwoContact(true);
+            f.choose(LABOR_TWO_PREFIX + "cryo");
+            laborTwoAutoPages(f);
+            check(!f.local.getBoolean("$chiefNavigatorMenelausL2AskedCryo"),
+                    "An interrupted cryosuspension exchange must remain available");
+            f.choose(LABOR_TWO_PREFIX + "gautama");
+            laborTwoAutoPages(f);
+            check(f.options.keySet().equals(Set.of(LABOR_TWO_PREFIX + "gautama_many",
+                            LABOR_TWO_PREFIX + "gautama_transfer", LABOR_TWO_PREFIX + "gautama_destroy")),
+                    "All three authored Gautama answers must remain available");
+            f.choose(LABOR_TWO_PREFIX + "gautama_" + response);
+            laborTwoAutoPages(f);
+            laborTwoHub(f);
+            check(f.local.getBoolean("$chiefNavigatorMenelausL2AskedCryo")
+                            && !f.options.containsKey(LABOR_TWO_PREFIX + "cryo")
+                            && laborTwoIntroCount(f) == 0,
+                    "Each Gautama answer completes its topic and returns to the existing hub");
+        }
+        for (String response : List.of("why", "sinni")) {
+            Fixture f = laborTwoContact(true);
+            f.choose(LABOR_TWO_PREFIX + "helen");
+            laborTwoAutoPages(f);
+            check(!f.local.getBoolean("$chiefNavigatorMenelausL2AskedHelen")
+                            && f.options.keySet().equals(Set.of(LABOR_TWO_PREFIX + "helen_why",
+                                    LABOR_TWO_PREFIX + "helen_sinni")),
+                    "Helen's two answers must be available before completion");
+            f.choose(LABOR_TWO_PREFIX + "helen_" + response);
+            laborTwoAutoPages(f);
+            laborTwoHub(f);
+            check(f.local.getBoolean("$chiefNavigatorMenelausL2AskedHelen")
+                            && !f.options.containsKey(LABOR_TWO_PREFIX + "helen")
+                            && laborTwoIntroCount(f) == 0,
+                    "Both Helen answers complete their topic and return to the existing hub");
+        }
+        Fixture history = laborTwoContact(true);
+        history.choose(LABOR_TWO_PREFIX + "collapse");
+        laborTwoAutoPages(history);
+        laborTwoHub(history);
+        check(history.local.getBoolean("$chiefNavigatorMenelausL2AskedCollapse")
+                        && !history.options.containsKey(LABOR_TWO_PREFIX + "collapse"),
+                "Collapse history completes through its authored pagination");
+        history.settle();
+        Fixture revisit = new Fixture();
+        copyMemory(history.global, revisit.global);
+        revisit.fire("ChiefNavigatorFobIthaca");
+        laborTwoHub(revisit);
+        check(laborTwoIntroCount(revisit) == 0
+                        && revisit.options.containsKey(LABOR_TWO_PREFIX + "collapse"),
+                "New contact preserves acceptance while making optional local topics available again");
+
+        Fixture services = laborTwoContact(true);
+        int[] repairs = {0};
+        float[] cr = {.15f};
+        FleetMemberStatusAPI status = mock(FleetMemberStatusAPI.class, (name, values) -> {
+            if (name.equals("repairFully")) repairs[0]++;
+            return null;
+        });
+        RepairTrackerAPI repair = mock(RepairTrackerAPI.class, (name, values) -> {
+            if (name.equals("getCR")) return cr[0];
+            if (name.equals("getMaxCR")) return .7f;
+            if (name.equals("setCR")) cr[0] = (float) values[0];
+            return null;
+        });
+        services.playerMembers.add(mock(FleetMemberAPI.class, (name, values) ->
+                name.equals("getStatus") ? status : name.equals("getRepairTracker") ? repair : null));
+        services.choose(LABOR_TWO_PREFIX + "repair");
+        laborTwoHub(services);
+        check(repairs[0] == 1 && cr[0] == .7f,
+                "The hub repair option must execute native repair and restore maximum CR");
+        services.choose(UPGRADE);
+        check(services.options.containsKey("chief_navigator_fob_ithaca_upgrades_back")
+                        && !services.options.containsKey("chief_navigator_fob_ithaca_upgrades_install"),
+                "An empty ledger must keep Back without offering nonexistent cargo");
+        services.choose("chief_navigator_fob_ithaca_upgrades_back");
+        laborTwoHub(services);
+        check(MenelausTrial.getResearchObjectiveTarget() == 4,
+                "The dialogue revision must preserve the four-distinct-upgrade objective");
+        for (int component = 0; component < 4; component++) {
+            services.availableMask = 1 << component;
+            services.choose(UPGRADE);
+            services.choose("chief_navigator_fob_ithaca_upgrades_install");
+            check(services.componentRemovals == component + 1 && services.availableMask == 0
+                            && MenelausTrial.getResearchObjectiveProgress() == component + 1,
+                    "Each physical component must be consumed once and count as a distinct installation");
+            check(!services.options.containsKey("chief_navigator_fob_ithaca_upgrades_install"),
+                    "An installed component cannot be installed repeatedly");
+            services.choose("chief_navigator_fob_ithaca_upgrades_back");
+            if (component < 3) laborTwoHub(services);
+            if (component == 0) {
+                services.availableMask = 1;
+                services.choose(UPGRADE);
+                check(!services.options.containsKey("chief_navigator_fob_ithaca_upgrades_install")
+                                && MenelausTrial.getResearchObjectiveProgress() == 1
+                                && services.componentRemovals == 1 && services.availableMask == 1,
+                        "A duplicate of an installed component must not be consumed or count again");
+                services.choose("chief_navigator_fob_ithaca_upgrades_back");
+                laborTwoHub(services);
+            }
+        }
+        check(services.options.containsKey("chief_navigator_menelaus_report_research")
+                        && !MenelausTrial.isLaborReported(MenelausTrial.LABOR_RESEARCH),
+                "Fourth installation opens the existing report without auto-committing completion");
+        Fixture leaving = laborTwoContact(true);
+        leaving.choose(LABOR_TWO_PREFIX + "leave");
+        check(leaving.directoryOpens == 1 && leaving.dismissals == 0,
+                "Labor II Leave must return the owned contact to Ithaca's native directory");
+    }
+
     public static void main(String[] args) throws Exception {
         SectorAPI oldSector = Global.getSector(); FactoryAPI oldFactory = Global.getFactory();
         SettingsAPI oldSettings = Global.getSettings();
@@ -1100,6 +1298,12 @@ public final class MenelausFlowRegression {
                 return Color.WHITE;
             }));
             initializeExpressions(); readRules();
+            if (Arrays.asList(args).contains("--labor-two")) {
+                verifyLaborTwoDialogue();
+                System.out.println("PASS: native Labor II acknowledgement, all optional branches, services, four distinct installations, revisits and directory return ("
+                        + pagesVisited + " authored rules executed).");
+                return;
+            }
             if (Arrays.asList(args).contains("--first-contact-guards")) {
                 verifyFirstContactGuardOrders();
                 System.out.println("PASS: every shuttle path requires the correct living guard's explicit assignment.");
