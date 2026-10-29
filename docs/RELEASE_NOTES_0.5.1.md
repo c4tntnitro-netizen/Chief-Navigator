@@ -143,6 +143,17 @@ The download includes a matching compiled jar and all earlier 0.5.1 hotfixes.
 The original `v0.5.1` tag remains unchanged. Replace the previous mod folder
 and restart Starsector after updating.
 
+## October 29, 2026 contact bounty hotfix
+
+- Prevent new contact Derelict bounties from targeting the distant Orion Knot
+  systems. All six systems are excluded from native random mission generation.
+- Apply the exclusion when existing campaigns load, as well as to new campaigns.
+  Preserve saved worlds, quest progress, map markers and jump routes.
+- Bounties generated before this update keep their original destinations.
+
+Replace the previous mod folder and restart Starsector after updating. This
+hotfix retains all earlier changes in the 0.5.1 download and its original tag.
+
 ## Requirements
 
 - Starsector 0.98a

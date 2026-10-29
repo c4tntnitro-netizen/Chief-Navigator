@@ -180,6 +180,12 @@ public final class CampaignLifecycleRegression {
                         && !existingSavePath.contains(odysseyCreation),
                 "Already initialized saves must omit static world recreation");
 
+        check(existingSavePath.contains(
+                        "OdysseyExpanseSystem.reconcileRandomMissionTags();"),
+                "Existing saves must receive native mission exclusion tags without world recreation");
+        check(!load.contains("OrionKnotDerelictBounty.install("),
+                "Load must preserve native bounty creators when exclusion uses system tags");
+
         String[] forbiddenOnLoad = {
             "cleanupLegacyPrototypeContent(",
             "retireTaskForceSpartanEncounter(",
