@@ -166,6 +166,18 @@ This is a weapon-data hotfix. Weapon statistics, station loadouts and the
 compiled jar are unchanged. Existing cargo copies are not removed. Replace
 the previous mod folder and restart Starsector after updating.
 
+## October 30, 2026 naval-gun damage flash hotfix
+
+- Fix the oversized, prolonged explosion flashes around disabled Colossal
+  Naval Turrets on the Ithaca/Wall defenses.
+- Keep the original full-size turret artwork, rotation, charge glow and hulk
+  visuals while bounding the native weapon-damage effects.
+- Preserve weapon damage, targeting, health, repair behavior and station
+  loadouts. The mining loot exclusions from the earlier hotfix remain included.
+
+The fix was tested in combat. Replace the previous mod folder and restart
+Starsector after updating. The original v0.5.1 tag is preserved.
+
 ## Requirements
 
 - Starsector 0.98a
