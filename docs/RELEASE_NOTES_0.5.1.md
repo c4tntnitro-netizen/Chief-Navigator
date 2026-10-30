@@ -154,6 +154,18 @@ and restart Starsector after updating.
 Replace the previous mod folder and restart Starsector after updating. This
 hotfix retains all earlier changes in the 0.5.1 download and its original tag.
 
+## October 30, 2026 mining loot hotfix
+
+- Prevent the Colossal Naval Turret and other internal Ithaca/Wall guns from
+  appearing in Nexerelin mining caches by adding the native restricted tag.
+- Cover all seven operational station guns and five destroyed fixtures.
+- Verify that Budai's two custom guns and the mountable Heavy Adjudicator
+  reward remain excluded from random mining finds.
+
+This is a weapon-data hotfix. Weapon statistics, station loadouts and the
+compiled jar are unchanged. Existing cargo copies are not removed. Replace
+the previous mod folder and restart Starsector after updating.
+
 ## Requirements
 
 - Starsector 0.98a
