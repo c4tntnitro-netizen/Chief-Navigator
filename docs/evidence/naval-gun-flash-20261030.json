@@ -1,0 +1,18 @@
+{
+  "actual_beam_constructor": "A.oOoO bytecode757-776: primary spritefield294 height *1.25; under spritefield289 separate",
+  "control_count_explanation": "Native target=5+random*(5/3), integer counter loops while below float target; ceil yieldsatmost7,not6",
+  "control_deterministic_flash_count_upper_bound": 7,
+  "control_disable_parameter": 5,
+  "control_maximum_outer_diameter": 20,
+  "control_primary_height": 4,
+  "four_pixel_sample": "primaryHeight=4.0, nativeBurstParameter=5.0, actualNativeFlashes=7, completedSeconds=1.0500001, maximumCapturedGlow=20.0, capturedDrawCalls=42",
+  "limits": "Separate audit proves beam-constructor formula; this probe executes native burst and health behavior, not a full combatreproduction or reportertrigger",
+  "method": "Actual installed String$Oo constructor/advance/render; capture-only Sprite subclass; noGL",
+  "native_health": "Actual native health constructor invoked twice: LARGE +20x health gives16000; entirefloathealth/repair state equal and zero sprite reads for bothdimensions",
+  "original_disable_parameter": 1450,
+  "original_maximum_outer_diameter": 5800,
+  "original_primary_height": 1160,
+  "original_sample": "primaryHeight=1160.0, nativeBurstParameter=1450.0, actualNativeFlashes=7, completedSeconds=0.95, maximumCapturedGlow=5800.0, capturedDrawCalls=42",
+  "persistent_visual_size": "Actual A.String constructor187-238 separately caches max(10,max(primaryWidth,primaryHeight)/7); original165.714,4pxcontrol10",
+  "plain_under_sprite_fix": "Rejected by real native render helper: fixed slot/hullangle -37 instead of turned turretangle70"
+}
