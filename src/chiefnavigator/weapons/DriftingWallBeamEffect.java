@@ -66,6 +66,7 @@ public final class DriftingWallBeamEffect implements EveryFrameWeaponEffectPlugi
                 }
             }
             states.put(weapon, state);
+            ColossalNavalTurretRenderer.install(engine, weapon);
             logInitialization(weapon, state);
         }
 
