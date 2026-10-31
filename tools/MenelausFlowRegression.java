@@ -12,6 +12,7 @@ import com.fs.starfarer.api.campaign.rules.*;
 import com.fs.starfarer.api.characters.FullName;
 import com.fs.starfarer.api.characters.ImportantPeopleAPI;
 import com.fs.starfarer.api.characters.PersonAPI;
+import com.fs.starfarer.api.fleet.FleetMemberAPI;
 import com.fs.starfarer.api.impl.campaign.rulecmd.FireAll;
 import com.fs.starfarer.api.impl.campaign.rulecmd.FireBest;
 import com.fs.starfarer.api.impl.campaign.rulecmd.SetTextHighlightColors;
@@ -88,7 +89,7 @@ public final class MenelausFlowRegression {
     }
 
     /** Native expression's static package inventory needs a headless settings document. */
-    private static void initializeExpressions() throws Exception {
+    static void initializeExpressions() throws Exception {
         JSONObject settings = new JSONObject().put("ruleCommandPackages", new JSONArray()
                 .put("com.fs.starfarer.api.impl.campaign.rulecmd").put("data.campaign.rulecmd"));
         Class<?> nativeSettings = Class.forName("com.fs.starfarer.settings.StarfarerSettings");
@@ -178,7 +179,7 @@ public final class MenelausFlowRegression {
         }
     }
 
-    private static void readRules() throws Exception {
+    static void readRules() throws Exception {
         String csv = Files.readString(Path.of("data/campaign/rules.csv"), StandardCharsets.UTF_8);
         List<String> row = new ArrayList<>();
         StringBuilder cell = new StringBuilder();
@@ -200,7 +201,7 @@ public final class MenelausFlowRegression {
         check(!quoted && row.isEmpty(), "Authored rules must end with balanced CSV fields");
     }
 
-    private static final class Fixture {
+    static final class Fixture {
         final Memory global = new Memory(), local = new Memory(), entity = new Memory();
         final Map<String, MemoryAPI> scope = new LinkedHashMap<>();
         final Map<String, Memory> castMemory = new LinkedHashMap<>();
@@ -211,6 +212,7 @@ public final class MenelausFlowRegression {
         int dismissals, directoryOpens;
         int availableComponents;
         int availableMask = -1;
+        final List<FleetMemberAPI> playerMembers = new ArrayList<>();
         String[] textHighlights = new String[0];
         Color[] textHighlightColors = new Color[0];
         InteractionDialogPlugin plugin;
@@ -328,7 +330,7 @@ public final class MenelausFlowRegression {
                         .indexOf(((SpecialItemData) args[1]).getId());
                 return index >= 0 && (availableMask & (1 << index)) != 0 ? 1f : 0f;
             });
-            FleetDataAPI data = mock(FleetDataAPI.class, (name, args) -> name.equals("getMembersListCopy") ? List.of() : null);
+            FleetDataAPI data = mock(FleetDataAPI.class, (name, args) -> name.equals("getMembersListCopy") ? List.copyOf(playerMembers) : null);
             CampaignFleetAPI fleet = mock(CampaignFleetAPI.class, (name, args) -> {
                 if (name.equals("getLocation")) return new Vector2f();
                 if (name.equals("getMemoryWithoutUpdate")) return global;
@@ -778,7 +780,7 @@ public final class MenelausFlowRegression {
             {"chiefNavigatorMenelausLaborTwoCollapse", "chiefNavigatorMenelausLaborTwoCollapsePage3", "$chiefNavigatorMenelausL2AskedCollapse"},
             {"chiefNavigatorMenelausLaborTwoCryo", "chiefNavigatorMenelausLaborTwoGautamaEnd", "$chiefNavigatorMenelausL2AskedCryo"},
             {"chiefNavigatorMenelausLaborTwoHelen", "chiefNavigatorMenelausLaborTwoHelenEnd", "$chiefNavigatorMenelausL2AskedHelen"},
-            {"chiefNavigatorMenelausLaborThreeHistory", "chiefNavigatorMenelausLaborThreeHistoryPage3", "$chiefNavigatorMenelausL3AskedHistory"},
+            {"chiefNavigatorMenelausLaborThreeHistory", "chiefNavigatorMenelausLaborThreeHistoryPage4", "$chiefNavigatorMenelausL3AskedHistory"},
             {"chiefNavigatorMenelausLaborThreeHelen", "chiefNavigatorMenelausLaborThreeHelenEnd", "$chiefNavigatorMenelausL3AskedHelen"},
             {"chiefNavigatorMenelausLaborFourPackage", "chiefNavigatorMenelausLaborFourDetected", "$chiefNavigatorMenelausL4AskedPackage"},
             {"chiefNavigatorMenelausLaborFourReach", "chiefNavigatorMenelausLaborFourReachPage4", "$chiefNavigatorMenelausL4AskedReach"},

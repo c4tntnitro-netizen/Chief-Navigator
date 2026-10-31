@@ -196,6 +196,12 @@ public final class OdysseyExpanseSystem {
             "chief_navigator_silent_wake_research_";
     private static final String ASHEN_VERGE_RESEARCH_PREFIX =
             "chief_navigator_ashen_verge_research_";
+    public static final String AVICI_RESEARCH_STATION_ID =
+            "chief_navigator_avici_research_0";
+    private static final String AVICI_RESEARCH_REVEAL_ATTEMPTED =
+            "$chief_navigator_avici_research_reveal_attempted_v1";
+    private static final String AVICI_RESEARCH_PLANET_ID =
+            MESSINA_ID + "_world_sanghata";
     private static final String SILENT_WAKE_FLOW_TYPE =
             "chief_navigator_silent_wake_flow";
     private static final String SILENT_WAKE_FLOW_ID =
@@ -1637,6 +1643,69 @@ public final class OdysseyExpanseSystem {
                 GENERATED_RESEARCH_CORE_LOOT, true);
     }
 
+    /**
+     * Introduces the final station as a one-time research discovery. This is
+     * deliberately separate from world generation and never repairs missing
+     * serialized stations, worlds, or previously attempted discoveries.
+     */
+    public static void introduceAviciResearchStation() {
+        if (Global.getSector() == null
+                || !IthacaResearchUpgrades.hasRecoveredAllOriginalComponents()) {
+            return;
+        }
+        MemoryAPI memory = Global.getSector().getMemoryWithoutUpdate();
+        if (memory.getBoolean(AVICI_RESEARCH_REVEAL_ATTEMPTED)) return;
+        // Commit before any factory call, including failures and ID collisions.
+        memory.set(AVICI_RESEARCH_REVEAL_ATTEMPTED, true);
+        if (isResearchStationSalvaged(AVICI_RESEARCH_STATION_ID)) return;
+        StarSystemAPI avici = findSystem(MESSINA_ID);
+        if (avici == null || hasAviciResearchStationClaim(avici)) return;
+        SectorEntityToken planet = avici.getEntityById(AVICI_RESEARCH_PLANET_ID);
+        if (!(planet instanceof PlanetAPI)
+                || planet.getContainingLocation() != avici) return;
+
+        SectorEntityToken station = BaseThemeGenerator.addSalvageEntity(
+                avici, Entities.STATION_RESEARCH_REMNANT, Factions.NEUTRAL);
+        if (station == null) return;
+        station.setId(AVICI_RESEARCH_STATION_ID);
+        station.setName("Derelict Research Station");
+        station.getMemoryWithoutUpdate().set(RESEARCH_STATION_MARKER, true);
+        station.setCircularOrbit(planet, 45f, 1200f, 95f);
+        station.setFacing(45f);
+        markResearchStationOnSystemMap(station);
+        stripResearchStationAICoreLoot(station);
+        CargoAPI componentLoot = Global.getFactory().createCargo(true);
+        componentLoot.addSpecial(new SpecialItemData(
+                IthacaResearchUpgrades.COMPONENT_IDS[6], null), 1f);
+        BaseSalvageSpecial.addExtraSalvage(station, componentLoot);
+        memory.set(RESEARCH_COMPONENT_PROVISIONED_PREFIX
+                + AVICI_RESEARCH_STATION_ID, true);
+        if (Global.getSector().getCampaignUI() != null) {
+            Global.getSector().getCampaignUI().addMessage(
+                    "Research station located in Sanghata orbit, Avici.");
+        }
+    }
+
+    /** A claimed ID in any saved location is authoritative, even if foreign. */
+    private static boolean hasAviciResearchStationClaim(StarSystemAPI avici) {
+        if (avici.getEntityById(AVICI_RESEARCH_STATION_ID) != null) return true;
+        List<LocationAPI> locations = new ArrayList<LocationAPI>();
+        if (Global.getSector().getHyperspace() != null) {
+            locations.add(Global.getSector().getHyperspace());
+        }
+        if (Global.getSector().getAllLocations() != null) {
+            locations.addAll(Global.getSector().getAllLocations());
+        }
+        if (Global.getSector().getStarSystems() != null) {
+            locations.addAll(Global.getSector().getStarSystems());
+        }
+        for (LocationAPI location : locations) {
+            if (location != null && location.getEntityById(
+                    AVICI_RESEARCH_STATION_ID) != null) return true;
+        }
+        return false;
+    }
+
     /** Keeps every live research POI named and visible on the Tab map. */
     private static void markResearchStationOnSystemMap(
             SectorEntityToken station) {
@@ -1731,7 +1800,8 @@ public final class OdysseyExpanseSystem {
                 || isResearchStationId(
                         id,
                         ASHEN_VERGE_RESEARCH_PREFIX,
-                        ASHEN_VERGE_RESEARCH_STATIONS.length);
+                        ASHEN_VERGE_RESEARCH_STATIONS.length)
+                || AVICI_RESEARCH_STATION_ID.equals(id);
     }
 
     private static boolean isResearchStationId(
@@ -1743,11 +1813,18 @@ public final class OdysseyExpanseSystem {
         return false;
     }
 
-    /** True only for one of the six authored Odyssey research stations. */
+    /** True only for an authored Odyssey research station of its native type. */
     public static boolean isOwnedResearchStation(SectorEntityToken station) {
-        return station != null && isResearchStationId(station.getId())
-                && Entities.STATION_RESEARCH_REMNANT.equals(
-                        station.getCustomEntityType());
+        if (station == null || !isResearchStationId(station.getId())
+                || !Entities.STATION_RESEARCH_REMNANT.equals(
+                        station.getCustomEntityType())) return false;
+        if (!AVICI_RESEARCH_STATION_ID.equals(station.getId())) return true;
+        return station.getMemoryWithoutUpdate() != null
+                && station.getMemoryWithoutUpdate().getBoolean(
+                        RESEARCH_STATION_MARKER)
+                && station.getContainingLocation() instanceof StarSystemAPI
+                && isOwnedSystem((StarSystemAPI) station.getContainingLocation(),
+                        MESSINA_ID);
     }
 
     private static boolean isResearchStationSalvaged(String id) {
@@ -1832,7 +1909,7 @@ public final class OdysseyExpanseSystem {
     public static int getResearchStationTotal() {
         return EXPANSE_RESEARCH_STATIONS.length
                 + SILENT_WAKE_RESEARCH_STATIONS.length
-                + ASHEN_VERGE_RESEARCH_STATIONS.length;
+                + ASHEN_VERGE_RESEARCH_STATIONS.length + 1;
     }
 
     /**
@@ -1851,7 +1928,8 @@ public final class OdysseyExpanseSystem {
                 + countResearchedStations(
                         findSystemById(ASHEN_VERGE_ID),
                         ASHEN_VERGE_RESEARCH_PREFIX,
-                        ASHEN_VERGE_RESEARCH_STATIONS.length);
+                        ASHEN_VERGE_RESEARCH_STATIONS.length)
+                + (isResearchStationSalvaged(AVICI_RESEARCH_STATION_ID) ? 1 : 0);
     }
 
     /** Remaining station tokens, permanently marked on their system maps. */
@@ -1872,6 +1950,13 @@ public final class OdysseyExpanseSystem {
                 findSystemById(ASHEN_VERGE_ID),
                 ASHEN_VERGE_RESEARCH_PREFIX,
                 ASHEN_VERGE_RESEARCH_STATIONS.length);
+        StarSystemAPI avici = findSystemById(MESSINA_ID);
+        if (avici != null && !isResearchStationSalvaged(
+                AVICI_RESEARCH_STATION_ID)) {
+            SectorEntityToken station = avici.getEntityById(
+                    AVICI_RESEARCH_STATION_ID);
+            if (isOwnedResearchStation(station)) result.add(station);
+        }
         return result;
     }
 

@@ -49,6 +49,25 @@ public class WallResearchRegression {
         });
     }
     public static void main(String[] args) throws Exception {
+        check(IthacaResearchUpgrades.COMPONENT_IDS.length == 7
+                        && IthacaResearchUpgrades.COMPONENT_NAMES.length == 7
+                        && IthacaResearchUpgrades.ABYSSAL_LENS == 64
+                        && IthacaResearchUpgrades.ORIGINAL_UPGRADES == 63
+                        && IthacaResearchUpgrades.ALL_UPGRADES == 127,
+                "The seventh upgrade must extend the original six independent bits without renumbering them");
+        String[] originalComponents = {
+            "chief_navigator_ithaca_macroservos", "chief_navigator_ithaca_naval_cycler",
+            "chief_navigator_ithaca_arc_projector", "chief_navigator_ithaca_intercept_matrix",
+            "chief_navigator_ithaca_munitions_compiler", "chief_navigator_ithaca_autoloader_core"
+        };
+        check(Arrays.equals(originalComponents,
+                        Arrays.copyOf(IthacaResearchUpgrades.COMPONENT_IDS, 6))
+                        && "chief_navigator_ithaca_abyssal_lens".equals(
+                                IthacaResearchUpgrades.COMPONENT_IDS[6])
+                        && "Abyssal Focusing Lens".equals(IthacaResearchUpgrades.COMPONENT_NAMES[6])
+                        && "Sanghata orbit, Avici".equals(
+                                IthacaResearchUpgrades.COMPONENT_STATION_LOCATIONS[6]),
+                "Original recovery identities stay stable and the lens has its own seventh source");
         check(IthacaResearchUpgrades.COMPONENT_IDS.length
                         == IthacaResearchUpgrades.COMPONENT_STATION_LOCATIONS.length,
                 "Every Ithaca upgrade must name its source station");
@@ -154,6 +173,18 @@ public class WallResearchRegression {
                 IthacaResearchUpgrades.ALL_UPGRADES, 0,
                 new Vector2f())) == IthacaResearchUpgrades.ALL_UPGRADES,
                 "Spartan station parent must inherit Ithaca research");
+        for (String hull : new String[] {ithaca, "chief_navigator_ithaca_naval_mount",
+                "chief_navigator_spartan_battlestation"}) {
+            check(IthacaResearchUpgrades.getMask(ship(hull,
+                            IthacaResearchUpgrades.ABYSSAL_LENS, 0, new Vector2f()))
+                            == IthacaResearchUpgrades.ABYSSAL_LENS,
+                    "The lens remains independent of the first six upgrades on eligible hull: " + hull);
+        }
+        for (String hull : new String[] {"chief_navigator_drifting_wall_base", "unrelated_hull"}) {
+            check(IthacaResearchUpgrades.getMask(ship(hull,
+                            IthacaResearchUpgrades.ABYSSAL_LENS, 1, new Vector2f())) == 0,
+                    "The lens must not strengthen unrelated or hostile Wall hulls: " + hull);
+        }
 
         for (int upgrades : new int[] {
                 0,

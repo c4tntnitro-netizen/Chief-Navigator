@@ -255,7 +255,7 @@ public final class MenelausTrialIntel extends BaseIntelPlugin {
                     + "installations are complete.",
                     10f, Misc.getTextColor(), Misc.getHighlightColor(),
                     recovered);
-            info.addPara("The six independent components provide: quadruple "
+            info.addPara("The six original components provide: quadruple "
                     + "naval-turret traverse, 40%% naval-beam cooldowns, "
                     + "shield-respecting beam EMP arcs, six fixed 54-round "
                     + "Cloudswarm PD launchers, guided Atropos conversion for the "
@@ -266,6 +266,12 @@ public final class MenelausTrialIntel extends BaseIntelPlugin {
                     + "in FOB Ithaca's defense wall. His contact menu tracks "
                     + "installed, recovered, and missing parts.",
                     10f);
+            info.addPara("Recovering all six original components reveals a "
+                    + "seventh research station in Avici. Its Abyssal Focusing "
+                    + "Lens gives Ithaca's naval beams a teal fringe at the "
+                    + "muzzle that transitions to red by the midpoint, preserves "
+                    + "their white cores, and adds the rift explosions produced "
+                    + "by an Abyssal Glare.", 10f);
             info.addPara("If Isa Leicester has ever joined the officer "
                     + "roster, her fire-control package permanently gives "
                     + "Ithaca's naval beams +50%% shield damage and a single "

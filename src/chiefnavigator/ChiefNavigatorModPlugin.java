@@ -30,6 +30,7 @@ import com.fs.starfarer.api.impl.campaign.ids.Factions;
 import chiefnavigator.quest.SinniBarEvent;
 import chiefnavigator.quest.SinniBarEventAvailabilityScript;
 import chiefnavigator.quest.AviciHabitatEncounter;
+import chiefnavigator.quest.AviciResearchStationScript;
 import chiefnavigator.quest.AviciDwellerPopulation;
 import chiefnavigator.quest.SinniContact;
 import chiefnavigator.quest.SinniEventideIntel;
@@ -160,6 +161,7 @@ public final class ChiefNavigatorModPlugin extends BaseModPlugin {
         Global.getSector().removeTransientScriptsOfClass(
                 OdysseyPredatorScript.class);
         Global.getSector().addTransientScript(new OdysseyPredatorScript());
+        AviciResearchStationScript.install();
         AviciDwellerPopulation.install();
         Global.getSector().removeTransientScriptsOfClass(
                 OdysseyStrandedFleetsScript.class);
