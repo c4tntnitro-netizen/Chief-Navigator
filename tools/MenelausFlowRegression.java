@@ -791,7 +791,7 @@ public final class MenelausFlowRegression {
             {"chiefNavigatorMenelausLaborTwoCollapse", "chiefNavigatorMenelausLaborTwoCollapsePage3", "$chiefNavigatorMenelausL2AskedCollapse"},
             {"chiefNavigatorMenelausLaborTwoCryo", "chiefNavigatorMenelausLaborTwoGautamaEndPage2", "$chiefNavigatorMenelausL2AskedCryo"},
             {"chiefNavigatorMenelausLaborTwoHelen", "chiefNavigatorMenelausLaborTwoHelenEndPage2", "$chiefNavigatorMenelausL2AskedHelen"},
-            {"chiefNavigatorMenelausLaborThreeHistory", "chiefNavigatorMenelausLaborThreeHistoryPage3", "$chiefNavigatorMenelausL3AskedHistory"},
+            {"chiefNavigatorMenelausLaborThreeHistory", "chiefNavigatorMenelausLaborThreeHistoryPage4", "$chiefNavigatorMenelausL3AskedHistory"},
             {"chiefNavigatorMenelausLaborThreeHelen", "chiefNavigatorMenelausLaborThreeHelenEnd", "$chiefNavigatorMenelausL3AskedHelen"},
             {"chiefNavigatorMenelausLaborFourPackage", "chiefNavigatorMenelausLaborFourDetected", "$chiefNavigatorMenelausL4AskedPackage"},
             {"chiefNavigatorMenelausLaborFourReach", "chiefNavigatorMenelausLaborFourReachPage4", "$chiefNavigatorMenelausL4AskedReach"},

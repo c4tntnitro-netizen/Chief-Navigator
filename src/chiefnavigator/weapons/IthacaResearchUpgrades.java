@@ -12,6 +12,8 @@ public final class IthacaResearchUpgrades {
             "chief_navigator_ithaca_research_component_mask";
     private static final String UNLOCKED_MASK_KEY =
             "$chief_navigator_ithaca_research_component_mask_v1";
+    private static final String RECOVERED_MASK_KEY =
+            "$chief_navigator_ithaca_research_components_recovered_v1";
     private static final String CONSUMABLE_MIGRATION_KEY =
             "$chief_navigator_ithaca_research_consumables_migrated_v2";
     private static final String NAVAL_MOUNT_HULL_ID =
@@ -33,7 +35,9 @@ public final class IthacaResearchUpgrades {
     public static final int INTERCEPT_MATRIX = 1 << 3;
     public static final int MUNITIONS_COMPILER = 1 << 4;
     public static final int AUTOLOADER_CORE = 1 << 5;
-    public static final int ALL_UPGRADES = (1 << 6) - 1;
+    public static final int ABYSSAL_LENS = 1 << 6;
+    public static final int ORIGINAL_UPGRADES = (1 << 6) - 1;
+    public static final int ALL_UPGRADES = ORIGINAL_UPGRADES | ABYSSAL_LENS;
     public static final float NAVAL_TURN_RATE_MULTIPLIER = 4f;
     public static final float NAVAL_CYCLE_MULTIPLIER = 0.4f;
     public static final float MISSILE_CYCLE_MULTIPLIER = 0.4f;
@@ -44,7 +48,8 @@ public final class IthacaResearchUpgrades {
         "chief_navigator_ithaca_arc_projector",
         "chief_navigator_ithaca_intercept_matrix",
         "chief_navigator_ithaca_munitions_compiler",
-        "chief_navigator_ithaca_autoloader_core"
+        "chief_navigator_ithaca_autoloader_core",
+        "chief_navigator_ithaca_abyssal_lens"
     };
 
     public static final String[] COMPONENT_NAMES = {
@@ -53,7 +58,8 @@ public final class IthacaResearchUpgrades {
         "Caged-Arc Projector",
         "Interception Command Matrix",
         "Siege Munitions Compiler",
-        "Fortress Autoloader Core"
+        "Fortress Autoloader Core",
+        "Abyssal Focusing Lens"
     };
 
     /** Menelaus's exact recovery lead for each component's fixed station. */
@@ -63,7 +69,8 @@ public final class IthacaResearchUpgrades {
         "Undertow orbit, Sanzu",
         "Cairn orbit, Sanzu",
         "Scamander orbit, Ashen Verge",
-        "Simois orbit, Ashen Verge"
+        "Simois orbit, Ashen Verge",
+        "Sanghata orbit, Avici"
     };
 
     private IthacaResearchUpgrades() { }
@@ -123,7 +130,37 @@ public final class IthacaResearchUpgrades {
     public static int captureRecoveredComponents() {
         if (Global.getSector() == null) return 0;
         migrateLegacyUnlocks();
-        return getStoredMask();
+        int mask = getStoredMask();
+        recordRecoveredComponents(mask);
+        return mask;
+    }
+
+    /** Actual recovered cargo and installed parts reveal the final research site. */
+    public static boolean hasRecoveredAllOriginalComponents() {
+        if (Global.getSector() == null) return false;
+        captureRecoveredComponents();
+        return (Global.getSector().getMemoryWithoutUpdate().getInt(
+                RECOVERED_MASK_KEY) & ORIGINAL_UPGRADES) == ORIGINAL_UPGRADES;
+    }
+
+    private static void recordRecoveredComponents(int installedMask) {
+        int previous = Global.getSector().getMemoryWithoutUpdate().getInt(
+                RECOVERED_MASK_KEY);
+        int recovered = previous | installedMask;
+        if (Global.getSector().getPlayerFleet() != null) {
+            CargoAPI cargo = Global.getSector().getPlayerFleet().getCargo();
+            for (int index = 0; index < COMPONENT_IDS.length; index++) {
+                SpecialItemData item = new SpecialItemData(COMPONENT_IDS[index], null);
+                if (cargo.getQuantity(CargoAPI.CargoItemType.SPECIAL, item) >= 1f) {
+                    recovered |= 1 << index;
+                }
+            }
+        }
+        recovered &= ALL_UPGRADES;
+        if (recovered != previous) {
+            Global.getSector().getMemoryWithoutUpdate().set(
+                    RECOVERED_MASK_KEY, recovered);
+        }
     }
 
     /** Consumes and permanently installs every recovered, uninstalled part. */
@@ -132,8 +169,7 @@ public final class IthacaResearchUpgrades {
                 || Global.getSector().getPlayerFleet() == null) {
             return 0;
         }
-        migrateLegacyUnlocks();
-        int mask = getStoredMask();
+        int mask = captureRecoveredComponents();
         CargoAPI cargo = Global.getSector().getPlayerFleet().getCargo();
         int installed = 0;
         for (int index = 0; index < COMPONENT_IDS.length; index++) {
@@ -180,7 +216,7 @@ public final class IthacaResearchUpgrades {
         return getAvailableCount() > 0;
     }
 
-    /** Exact Menelaus-facing state for all six independently installed parts. */
+    /** Exact Menelaus-facing state for all independently installed parts. */
     public static String getUpgradeLedger() {
         int mask = getInstalledMask();
         CargoAPI cargo = Global.getSector() == null
@@ -201,7 +237,9 @@ public final class IthacaResearchUpgrades {
                 ledger.append("Recovered - awaiting installation");
             } else {
                 ledger.append("Not recovered\n  Station: ")
-                        .append(COMPONENT_STATION_LOCATIONS[index]);
+                        .append(index == 6 && !hasRecoveredAllOriginalComponents()
+                                ? "Revealed after recovering the six original components"
+                                : COMPONENT_STATION_LOCATIONS[index]);
             }
         }
         return ledger.toString();

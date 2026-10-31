@@ -2143,32 +2143,29 @@ $global.chief_navigator_menelaus_intro_shown_v2 = true
 ChiefNavigatorMenelausCMD finishIntro",,,Commits the one-time station introduction and opens FOB Ithaca's station interface.
 chiefNavigatorFobIthacaWallBriefing,ChiefNavigatorFobIthaca,"!ChiefNavigatorMenelausCMD stage early_wall
 ChiefNavigatorMenelausCMD stage wall
-!$global.chief_navigator_menelaus_labor_three_briefed",ChiefNavigatorMenelausCMD init,"Ashen Verge unfolds around Menelaus.
+!$global.chief_navigator_menelaus_labor_three_briefed",ChiefNavigatorMenelausCMD init,"Ashen Verge unfolds around Menelaus. The research packages recovered during your second Labor appear alongside a schematic of Ithaca, their installation markers lighting up in sequence before the display folds them away.
 
-The recovered research packages from your second Labor rotate briefly around him before disappearing into Ithaca's systems.
+""Your second Labor has borne fruit. Several of the recovered modules have already been integrated into the macrocomplex, and I estimate that their combined effect has increased Ithaca's force-projection capability by at least eighty percent.""
 
-""Your second Labor has borne fruit. Several of the recovered modules have already been integrated into the macrocomplex.""
+The display shifts to the Odyssey Expanse, where a single enormous contact hangs amid the amber clouds of the nebula.
 
-The display shifts to the Odyssey Expanse.
+The Drifting Wall.",0:chief_navigator_auto_page_chief_navigator_fob_ithaca_wall_briefing_2:Continue.,Opens the revised Labor III briefing before explicit acceptance. Auto-paged 1/3.
+chiefNavigatorFobIthacaWallBriefingPage2,DialogOptionSelected,$option == chief_navigator_auto_page_chief_navigator_fob_ithaca_wall_briefing_2,,"""Now we may correct an older failure.""
 
-A vast contact appears within the amber nebula.
+Menelaus enlarges the severed Ring Defense module. Its hull still bears the damage inflicted when it was torn from Ithaca, but some of its naval batteries remain powered, and the autonomous systems governing them continue to operate after decades adrift.
 
-The Drifting Wall.
+""Structurally, the Drifting Wall remains viable. For decades, its guns have continued to engage the Starving Threat wherever their vessels entered weapons range, and I believe the losses they have inflicted go some way toward explaining why the Odyssey Expanse remains relatively free of their incursions.""",0:chief_navigator_auto_page_chief_navigator_fob_ithaca_wall_briefing_3:Continue.,Automatic runtime continuation 2/3 for chiefNavigatorFobIthacaWallBriefing.
+chiefNavigatorFobIthacaWallBriefingPage3,DialogOptionSelected,$option == chief_navigator_auto_page_chief_navigator_fob_ithaca_wall_briefing_3,FireAll ChiefNavigatorMenelausLaborThreeBriefingOptions,"Menelaus brings up the module's defensive coverage, and a series of firing arcs spreads across the surrounding nebula.
 
-""Now we may correct an older failure.""",0:chief_navigator_auto_page_chief_navigator_fob_ithaca_wall_briefing_2:Continue.,Opens the authored Labor III briefing before its explicit acceptance. Auto-paged 1/2.
-chiefNavigatorFobIthacaWallBriefingPage2,DialogOptionSelected,$option == chief_navigator_auto_page_chief_navigator_fob_ithaca_wall_briefing_2,FireAll ChiefNavigatorMenelausLaborThreeBriefingOptions,"Menelaus enlarges the wrecked Ring Defense module. Even separated from Ithaca, its batteries and autonomous systems still burn with power.
+""In that respect, the Wall still serves the purpose for which it was built. Unfortunately, its command architecture no longer recognizes Ithaca's authority, and its weapons make no distinction between our vessels and those of the enemy.""
 
-""The Drifting Wall remains structurally viable. For decades, its mounted defenses cut a wide swath through the Starving Threat. I believe it is for this reason the Odyssey Expanse remains largely free of the Threat menace. Its command architecture, however, no longer recognizes Ithaca authority.""
+The immense module remains suspended between you.
 
-A series of targeting lines spread from the module across the Odyssey Expanse.
-
-""We shall take it back.""",,Automatic runtime continuation 2/2 for chiefNavigatorFobIthacaWallBriefing.
+""We will take it back.""",,Automatic runtime continuation 3/3 for chiefNavigatorFobIthacaWallBriefing.
 chiefNavigatorFobIthacaWallMenu,ChiefNavigatorFobIthaca,"!ChiefNavigatorMenelausCMD stage early_wall
 ChiefNavigatorMenelausCMD stage wall
 $global.chief_navigator_menelaus_labor_three_briefed","ChiefNavigatorMenelausCMD init
-FireAll ChiefNavigatorMenelausLaborThreeHubOptions","Ashen Verge returns around Menelaus.
-
-""What do you require?""",,Reusable Menelaus hub while Labor III remains active.
+FireAll ChiefNavigatorMenelausLaborThreeHubOptions","""What do you require?""",,Reusable Menelaus hub while Labor III remains active.
 chiefNavigatorFobIthacaResearchBriefing,ChiefNavigatorFobIthaca,"!ChiefNavigatorMenelausCMD stage early_wall
 ChiefNavigatorMenelausCMD stage research
 !$global.chief_navigator_menelaus_labor_two_briefed",ChiefNavigatorMenelausCMD init,"The Lacedaemon System unfolds around Menelaus.
@@ -2412,7 +2409,7 @@ The research stations burn across the strategic display.
 
 ""Recover the surviving upgrade packages and bring them to Ithaca. Four must be integrated into our defense matrix to complete your second Labor.""
 
-Required upgrades installed: $chiefNavigatorResearchInstalled of $chiefNavigatorResearchTarget. Research stations salvaged: $chiefNavigatorResearchResearched of $chiefNavigatorResearchStationTotal. All six distinct components remain tracked in Menelaus's defense-upgrade ledger; the final two are optional.",,Shows the live Labor II objective and returns to the hub.
+Required upgrades installed: $chiefNavigatorResearchInstalled of $chiefNavigatorResearchTarget. Research stations salvaged: $chiefNavigatorResearchResearched of $chiefNavigatorResearchStationTotal. All seven components remain tracked in Menelaus's defense-upgrade ledger. Upgrades beyond the required four are optional.",,Shows the live Labor II objective and returns to the hub.
 chiefNavigatorMenelausLaborTwoCollapse,DialogOptionSelected,$option == chief_navigator_menelaus_labor_two_collapse,,"The modern theater fades.
 
 FOB Ithaca appears as it was immediately after the Collapse, the orbital ring still whole and the Fourteenth Battlegroup pulling away into hyperspace.
@@ -2595,42 +2592,42 @@ chiefNavigatorMenelausLaborTwoRepair,DialogOptionSelected,$option == chief_navig
 FireAll ChiefNavigatorMenelausLaborTwoHub","FOB Ithaca's automated gantries restore your fleet's hulls and armor, then cycle every ship to maximum combat readiness. No payment is requested.",,Repairs the fleet and returns to the reusable Labor II hub.
 chiefNavigatorMenelausLaborThreeBriefingCaptureOption,ChiefNavigatorMenelausLaborThreeBriefingOptions,!$chiefNavigatorMenelausL3AskedCapture,,,"0:chief_navigator_menelaus_labor_three_capture:""You want me to capture that thing?""",One-shot capture question in the Labor III briefing.
 chiefNavigatorMenelausLaborThreeBriefingDisableOption,ChiefNavigatorMenelausLaborThreeBriefingOptions,!$chiefNavigatorMenelausL3AskedDisable,,,"10:chief_navigator_menelaus_labor_three_disable:""How am I supposed to disable it without destroying it?""",One-shot reactor question in the Labor III briefing.
-chiefNavigatorMenelausLaborThreeBriefingAcceptOption,ChiefNavigatorMenelausLaborThreeBriefingOptions,,,,"100:chief_navigator_menelaus_labor_three_understood:""Understood.""",Advances the Labor III briefing to explicit acceptance.
-chiefNavigatorMenelausLaborThreeCapture,DialogOptionSelected,$option == chief_navigator_menelaus_labor_three_capture,"$chiefNavigatorMenelausL3AskedCapture = true 0
+chiefNavigatorMenelausLaborThreeBriefingAcceptOption,ChiefNavigatorMenelausLaborThreeBriefingOptions,,,,"100:chief_navigator_menelaus_labor_three_understood:""I accept.""",Explicitly accepts the Labor III briefing.
+chiefNavigatorMenelausLaborThreeCapture,DialogOptionSelected,$option == chief_navigator_menelaus_labor_three_capture,"$chiefNavigatorMenelausL3AskedCapture = true
 FireAll ChiefNavigatorMenelausLaborThreeBriefingOptions","""Yes.""
 
-Menelaus seems almost surprised that the answer requires elaboration.
+Menelaus rotates the image of the Wall, bringing its immense naval batteries into view.
 
-""That module was built to defend Forward Operating Base Ithaca. By itself, it far outstrips the power projection of even the largest battlestations in your sector.""
+""That module was built to defend Forward Operating Base Ithaca against attacks by entire fleets. Even separated from the ring, its surviving batteries possess more firepower than any battlestation in the Persean Sector, and it has spent decades holding the Starving Threat at bay.""
 
-He gestures toward the Wall.
+He gestures toward the surrounding nebula, where the Wall's defensive coverage extends across the approaches to the Odyssey Expanse.
 
-""Disable it. My IFF key will handle the rest.""",,Answers the capture question and returns to the remaining briefing choices.
-chiefNavigatorMenelausLaborThreeDisable,DialogOptionSelected,$option == chief_navigator_menelaus_labor_three_disable,"$chiefNavigatorMenelausL3AskedDisable = true 0
-FireAll ChiefNavigatorMenelausLaborThreeBriefingOptions","A schematic of the Drifting Wall unfolds around you.
+""Once we restore its command authority, those defenses will be ours again. More importantly for your purposes, the module can serve as a fortified base of operations for your fleet, allowing you to maintain a permanent presence in the Expanse without having to return to Ithaca after every sortie.""",,Revised authored Labor III capture answer.
+chiefNavigatorMenelausLaborThreeDisable,DialogOptionSelected,$option == chief_navigator_menelaus_labor_three_disable,,"A schematic of the Drifting Wall unfolds around you, revealing the immense armor surrounding its batteries and command systems.
 
-Several points along its immense frame illuminate.
+""An assault against the Wall's primary defenses would be prohibitively costly, and destroying the module would defeat the purpose of recovering it. Fortunately, there is another approach.""
 
-""The vast bulk of the macrocomplex is impregnable, but the flux megareactor in the back is not.""
+The schematic rotates, highlighting a reactor assembly near the aft section of the module.",0:chief_navigator_auto_page_chief_navigator_menelaus_labor_three_disable_2:Continue.,Revised authored Labor III disable answer. Auto-paged 1/3.
+chiefNavigatorMenelausLaborThreeDisablePage2,DialogOptionSelected,$option == chief_navigator_auto_page_chief_navigator_menelaus_labor_three_disable_2,,"""The aft flux megareactor is considerably less protected than the rest of the installation. Disabling it will force the Wall to initiate an emergency power cycle, and during the subsequent restart, my security injection will have an opportunity to access its command partition and restore Ithaca's authorization credentials.""
 
-The Wall's command partition appears beside the reactor schematic.
+The reactor schematic gives way to a diagram of the Wall's command network, with several systems highlighted in red.
 
-""Shut down the reactor, and the Drifting Wall will power cycle, giving my security injection the opportunity to update its IFF databases and restore connection with FOB Ithaca.""
+""Once the transfer is complete, its IFF registry will recognize your fleet as friendly and the module will return to our control. Your task will be to keep the area secure until that process has finished.""",0:chief_navigator_auto_page_chief_navigator_menelaus_labor_three_disable_3:Continue.,Automatic runtime continuation 2/3 for chiefNavigatorMenelausLaborThreeDisable.
+chiefNavigatorMenelausLaborThreeDisablePage3,DialogOptionSelected,$option == chief_navigator_auto_page_chief_navigator_menelaus_labor_three_disable_3,"$chiefNavigatorMenelausL3AskedDisable = true
+FireAll ChiefNavigatorMenelausLaborThreeBriefingOptions","Menelaus regards the Wall for a moment.
 
-Menelaus looks directly at you.
-
-""The Wall is more valuable intact. Spare no materiel to take back our home.""",,Explains the reactor objective and returns to the remaining briefing choices.
-chiefNavigatorMenelausLaborThreeUnderstood,DialogOptionSelected,$option == chief_navigator_menelaus_labor_three_understood,,"""Good.""
+""Auxiliary, spare no materiel to take back our home.""",,Automatic runtime continuation 3/3 for chiefNavigatorMenelausLaborThreeDisable.
+chiefNavigatorMenelausLaborThreeUnderstood,DialogOptionSelected,$option == chief_navigator_menelaus_labor_three_understood,$global.chief_navigator_menelaus_labor_three_briefed = true,"""Good.""
 
 The Drifting Wall is marked on your map.
 
-""Disable its reactor. Hold the area until the security injection completes the transfer.""
+""Disable its reactor and hold the area until my security injection completes the transfer. The module must remain intact.""
 
 The enormous contact turns gold.
 
-""Return my wall to me, and I shall reward you in kind.""","0:chief_navigator_menelaus_labor_three_accept:""I accept.""",Final acknowledgement before entering the reusable Labor III menu.
+""Return my wall to me, and I shall reward you in kind.""",0:chief_navigator_menelaus_labor_three_accept:Continue.,Explicit I accept commits the durable briefing marker immediately.
 chiefNavigatorMenelausLaborThreeAccept,DialogOptionSelected,$option == chief_navigator_menelaus_labor_three_accept,"$global.chief_navigator_menelaus_labor_three_briefed = true
-FireAll ChiefNavigatorMenelausLaborThreeHub",,,Records the briefing and opens the reusable Labor III menu.
+FireAll ChiefNavigatorMenelausLaborThreeHub",,,Returns to the Labor III hub; retains the idempotent legacy acceptance handler.
 chiefNavigatorMenelausLaborThreeHub,ChiefNavigatorMenelausLaborThreeHub,,FireAll ChiefNavigatorMenelausLaborThreeHubOptions,"""What do you require?""",,Returns to the reusable Labor III dialogue hub.
 chiefNavigatorMenelausLaborThreeHubLabor,ChiefNavigatorMenelausLaborThreeHubOptions,,,,"0:chief_navigator_menelaus_labor_three_active:""About my current Labor.""",Persistent Labor III topic.
 chiefNavigatorMenelausLaborThreeHubHistory,ChiefNavigatorMenelausLaborThreeHubOptions,!$chiefNavigatorMenelausL3AskedHistory,,,"10:chief_navigator_menelaus_labor_three_history:""What happened to the Drifting Wall when Gautama attacked?""",One-shot Drifting Wall history question.
@@ -2640,71 +2637,62 @@ chiefNavigatorMenelausLaborThreeHubServices,ChiefNavigatorMenelausLaborThreeHubO
 100:chief_navigator_menelaus_labor_three_leave:""Nothing for now.""",Keeps Menelaus-specific upgrades repairs and Labor-III dialogue inside his contact.
 chiefNavigatorMenelausLaborThreeActive,DialogOptionSelected,$option == chief_navigator_menelaus_labor_three_active,FireAll ChiefNavigatorMenelausLaborThreeHub,"The Drifting Wall burns gold over the Odyssey Expanse.
 
-""Disable its rear flux megareactor. Preserve the station and hold the area while the security injection restores its Ithaca IFF.""
+""Disable its aft flux megareactor, preserve the module, and hold the area while my security injection restores Ithaca's command authority and IFF registry.""
 
-The Drifting Wall is $chiefNavigatorWallStatus.",,Shows the live Labor III objective and returns to the hub.
-chiefNavigatorMenelausLaborThreeHistory,DialogOptionSelected,$option == chief_navigator_menelaus_labor_three_history,,"The intact orbital ring appears around Menelaus.
+The Drifting Wall is $chiefNavigatorWallStatus.",,Revised objective reminder with the existing live Wall status.
+chiefNavigatorMenelausLaborThreeHistory,DialogOptionSelected,$option == chief_navigator_menelaus_labor_three_history,,"The intact orbital ring appears around Menelaus, its immense circumference still unbroken as the first waves of Threat contacts close on its western defenses.
 
-Then Gautama arrives.
+""The Wall was once designated Ring Defense Module West. During the Starving Threat's first successful penetration of Ithaca, it absorbed the primary assault against the orbital ring.""",0:chief_navigator_auto_page_chief_navigator_menelaus_labor_three_history_2:Continue.,Revised authored Labor III history answer. Auto-paged 1/4.
+chiefNavigatorMenelausLaborThreeHistoryPage2,DialogOptionSelected,$option == chief_navigator_auto_page_chief_navigator_menelaus_labor_three_history_2,,"The display draws closer, resolving swarms of Threat vessels so numerous that they nearly conceal the module beneath their formations. Its massive naval anti-ship lasers sweep across the attackers, tearing apart Threat units in brilliant arcs, but every gap in the flood of burning debris is filled by a fresh hull almost at once. Live Threat vessels mix with wreckage until it becomes impossible to tell which is tumbling and which is still firing.
 
-""The Wall was once designated Ring Defense Module West.""
+Weapons fire fills the holodeck as the assault continues. Through the mass of smaller hulls, a much larger shadow begins to emerge, moving toward the junction between Module West and the rest of the ring.
 
-The Threat Singularity strikes the outer defenses. Weapons fire fills the holodeck.
+Gautama.",0:chief_navigator_auto_page_chief_navigator_menelaus_labor_three_history_3:Continue.,Automatic runtime continuation 2/4 for chiefNavigatorMenelausLaborThreeHistory.
+chiefNavigatorMenelausLaborThreeHistoryPage3,DialogOptionSelected,$option == chief_navigator_auto_page_chief_navigator_menelaus_labor_three_history_3,,"A succession of structural failures races along the connection, and the enormous module shears away from Ithaca, severing transit lines and venting atmosphere as it begins to tumble through the surrounding wreckage.
 
-""During the Starving Threat's first successful penetration of Ithaca, Module West absorbed the primary impact of its assault fleet.""",0:chief_navigator_auto_page_chief_navigator_menelaus_labor_three_history_2:Continue.,Explains how Ring Defense Module West became the Drifting Wall. Auto-paged 1/3.
-chiefNavigatorMenelausLaborThreeHistoryPage2,DialogOptionSelected,$option == chief_navigator_auto_page_chief_navigator_menelaus_labor_three_history_2,,"You see a simulation of what happened. Threat assault swarms are so dense, they nearly obscure the entire module. Through them, the massive Naval Anti-Ship Lasers of the once-Ring Defense West tear great glowing arcs, shattering Line Units and Fabricators in a single swipe.
+The surviving Threat swarms withdraw, leaving Ring Defense West to drift farther and farther from the macrocomplex, trailing fire and debris before disappearing into the stars and dark.
 
-Then, you see it. A massive shadow within the scourge of Threat swarms. The section tears free.
+""I lost contact with it shortly afterward.""
 
-And then the swarm retreats. And right behind it...
+The display jumps forward. The module reappears in the Odyssey Expanse.
 
-Ring Defense West tumbles away from the macrocomplex, trailing fire, debris, and atmosphere before disappearing into the dark.
+""The fact that it survived was fortunate.""",0:chief_navigator_auto_page_chief_navigator_menelaus_labor_three_history_4:Continue.,Automatic runtime continuation 3/4 for chiefNavigatorMenelausLaborThreeHistory.
+chiefNavigatorMenelausLaborThreeHistoryPage4,DialogOptionSelected,$option == chief_navigator_auto_page_chief_navigator_menelaus_labor_three_history_4,"$chiefNavigatorMenelausL3AskedHistory = true
+FireAll ChiefNavigatorMenelausLaborThreeHub","It rotates in the night.
 
-""I lost contact with it shortly afterward.""",0:chief_navigator_auto_page_chief_navigator_menelaus_labor_three_history_3:Continue.,Automatic runtime continuation 2/3 for chiefNavigatorMenelausLaborThreeHistory.
-chiefNavigatorMenelausLaborThreeHistoryPage3,DialogOptionSelected,$option == chief_navigator_auto_page_chief_navigator_menelaus_labor_three_history_3,"$chiefNavigatorMenelausL3AskedHistory = true 0
-FireAll ChiefNavigatorMenelausLaborThreeHub","The display jumps forward.
+""Take it back.""",,Automatic runtime continuation 4/4 for chiefNavigatorMenelausLaborThreeHistory.
+chiefNavigatorMenelausLaborThreeHelen,DialogOptionSelected,$option == chief_navigator_menelaus_labor_three_helen,,"Sinni steps forward, folding her hands into her sleeves as Menelaus turns toward her.
 
-The module reappears in the Odyssey Expanse.
+""Lord Strategos.""
 
-""The fact that it survived was fortunate.""
-
-Menelaus's eyes narrow.
-
-""The fact that it now fires upon both friend and foe is less so.""",,Automatic runtime continuation 3/3 for chiefNavigatorMenelausLaborThreeHistory.
-chiefNavigatorMenelausLaborThreeHelen,DialogOptionSelected,$option == chief_navigator_menelaus_labor_three_helen,,"Sinni steps forward.
-
-""Strategos.""
-
-Menelaus turns toward her.
-
-""You said Helen's ability was not the only reason you placed her on the Fourteenth's manifest.""
+""You said Helen's ability as a navigator was not the only reason you placed her on the Fourteenth's manifest.""
 
 ""Correct.""
 
-Sinni folds her hands into her sleeves.
+""Then why?""",0:chief_navigator_auto_page_chief_navigator_menelaus_labor_three_helen_2:Continue.,Revised Helen exchange; motto responses precede the closeness choices. Auto-paged 1/5.
+chiefNavigatorMenelausLaborThreeHelenPage2,DialogOptionSelected,$option == chief_navigator_auto_page_chief_navigator_menelaus_labor_three_helen_2,,"Menelaus does not answer immediately. Helen's service record appears between them once more.
 
-""Then why?""
+""When the ring network failed, Battlegroup VI was just a few jumps away. Grand Navarch Kali Molina and her flag staff had every reason to believe that communications would eventually be restored, and the Fourteenth remained at Ithaca for some time in expectation of relief.""",0:chief_navigator_auto_page_chief_navigator_menelaus_labor_three_helen_3:Continue.,Automatic runtime continuation 2/5 for chiefNavigatorMenelausLaborThreeHelen.
+chiefNavigatorMenelausLaborThreeHelenPage3,DialogOptionSelected,$option == chief_navigator_auto_page_chief_navigator_menelaus_labor_three_helen_3,,"""My own assessment was less optimistic. The telemetry available to me suggested a catastrophe extending far beyond the Orion Knot, and by the time the Fourteenth departed, I had concluded that relief from Battlegroup VI was unlikely to arrive.""
 
-For once, Menelaus does not answer immediately.",0:chief_navigator_auto_page_chief_navigator_menelaus_labor_three_helen_2:Continue.,Opens the third Helen conversation. Auto-paged 1/3.
-chiefNavigatorMenelausLaborThreeHelenPage2,DialogOptionSelected,$option == chief_navigator_auto_page_chief_navigator_menelaus_labor_three_helen_2,,"Helen's service record appears between them again.
+Sinni looks up from the record.
 
-""I... predicted well in advance the eventual death of all of the macrocomplex. So did the rest of Task Force Spartan. I was willing to die with my new comrades.""
+""Did you tell the Grand Navarch?""",0:chief_navigator_auto_page_chief_navigator_menelaus_labor_three_helen_4:Continue.,Automatic runtime continuation 3/5 for chiefNavigatorMenelausLaborThreeHelen.
+chiefNavigatorMenelausLaborThreeHelenPage4,DialogOptionSelected,$option == chief_navigator_auto_page_chief_navigator_menelaus_labor_three_helen_4,,"""I provided her with the available telemetry, but not my conclusions. My projections indicated that disclosing the probable loss of Battlegroup VI would have increased the likelihood of the Grand Navarch delaying the Fourteenth's departure, or diverting ships toward a search operation I had little reason to believe would succeed.""
 
-Sinni's eyes lift from the record.
+Menelaus regards Sinni for a moment.
 
-""All except for her,"" Sinni finishes.
+""Between truthfulness and survival, I judged that preserving the Battlegroup took precedence.""",0:chief_navigator_auto_page_chief_navigator_menelaus_labor_three_helen_5:Continue.,Automatic runtime continuation 4/5 for chiefNavigatorMenelausLaborThreeHelen.
+chiefNavigatorMenelausLaborThreeHelenPage5,DialogOptionSelected,$option == chief_navigator_auto_page_chief_navigator_menelaus_labor_three_helen_5,,"""That decision did not alter my own obligation. Task Force Spartan had been ordered to remain at Ithaca, and I intended to share their fate, whatever that might be.""
 
-Menelaus continues.
+""Helen too?""
 
-""Helen had been ordered to remain with Task Force Spartan. She understood what that meant. So did I.""
-
-""But you used it for her.""",0:chief_navigator_auto_page_chief_navigator_menelaus_labor_three_helen_3:Continue.,Automatic runtime continuation 2/3 for chiefNavigatorMenelausLaborThreeHelen.
-chiefNavigatorMenelausLaborThreeHelenPage3,DialogOptionSelected,$option == chief_navigator_auto_page_chief_navigator_menelaus_labor_three_helen_3,FireAll ChiefNavigatorMenelausLaborThreeHelenOptions,"""Yes.""
-
-Sinni studies him carefully.",,Automatic runtime continuation 3/3 for chiefNavigatorMenelausLaborThreeHelen.
+""Yes. Helen had been ordered to remain with us as well, and she would have done so. She would have served with us, fought with us, and, if it came to that, died with us. Molon Labe.""","0:chief_navigator_menelaus_labor_three_helen_motto_ask:""That motto. What does it mean?""
+10:chief_navigator_menelaus_labor_three_helen_motto_know:""'Come and take them,' right?""
+20:chief_navigator_menelaus_labor_three_helen_motto_continue:Let Sinni continue.",Automatic runtime continuation 5/5 for chiefNavigatorMenelausLaborThreeHelen.
 chiefNavigatorMenelausLaborThreeHelenCloseOption,ChiefNavigatorMenelausLaborThreeHelenOptions,,,,"0:chief_navigator_menelaus_labor_three_helen_close:""How close were you?""",First route through the third Helen conversation.
 chiefNavigatorMenelausLaborThreeHelenSinniOption,ChiefNavigatorMenelausLaborThreeHelenOptions,,,,10:chief_navigator_menelaus_labor_three_helen_sinni:Let Sinni continue.,Second route through the third Helen conversation.
-chiefNavigatorMenelausLaborThreeHelenClose,DialogOptionSelected,$option == chief_navigator_menelaus_labor_three_helen_close,FireAll ChiefNavigatorMenelausLaborThreeHelenEnd,"""Very.""
+chiefNavigatorMenelausLaborThreeHelenClose,DialogOptionSelected,$option == chief_navigator_menelaus_labor_three_helen_close,,"""Very.""
 
 The answer is immediate.
 
@@ -2712,16 +2700,15 @@ Menelaus looks toward Helen's record.
 
 ""She argued with me frequently. Without permission.""
 
-Sinni tilts her head.
+""She was difficult,"" Sinni says, tilting her head.
 
-""She was difficult.""
-
-""Extremely."" A beat from the Alpha AI. ""I valued that.""",,First Helen route before the common conclusion.
-chiefNavigatorMenelausLaborThreeHelenSinni,DialogOptionSelected,$option == chief_navigator_menelaus_labor_three_helen_sinni,FireAll ChiefNavigatorMenelausLaborThreeHelenEnd,"Sinni looks back at Helen's image.
+""Extremely,"" Menelaus agrees. ""I came to value that.""",0:chief_navigator_auto_page_chief_navigator_menelaus_labor_three_helen_close_2:Continue.,"First Helen route, paged before the common ending to keep the combined native page within budget."
+chiefNavigatorMenelausLaborThreeHelenClosePage2,DialogOptionSelected,$option == chief_navigator_auto_page_chief_navigator_menelaus_labor_three_helen_close_2,FireAll ChiefNavigatorMenelausLaborThreeHelenEnd,,,Runtime continuation into the shared Helen conclusion.
+chiefNavigatorMenelausLaborThreeHelenSinni,DialogOptionSelected,$option == chief_navigator_menelaus_labor_three_helen_sinni,,"Sinni looks back at Helen's photograph.
 
 ""What was she to you?""
 
-Menelaus's blue-white eyes remain fixed on the old photograph.
+Menelaus's blue-white eyes remain fixed on the old image.
 
 ""My friend.""
 
@@ -2729,16 +2716,13 @@ A pause.
 
 ""My confidante.""
 
-The geometry of his face shifts almost imperceptibly.
+""Most Domain officers came to me with orders, requests, or problems requiring an answer. Helen would sometimes seek me out when she had none of those things in mind, and we would talk nonetheless. Those conversations held no significance for me at the time.""
 
-""One of very few people who addressed me... as a person before addressing me as an artificial intelligence.""
+Menelaus regards the photograph.
 
-Sinni looks at him.
-
-""That mattered to you.""
-
-""Yes.""",,Second Helen route before the common conclusion.
-chiefNavigatorMenelausLaborThreeHelenEnd,ChiefNavigatorMenelausLaborThreeHelenEnd,,"$chiefNavigatorMenelausL3AskedHelen = true 0
+""It was only much later that I understood what those moments meant. I did not yet possess the capability.""","0:chief_navigator_menelaus_labor_three_helen_capability:""'Capability'? What does that mean?""
+10:chief_navigator_menelaus_labor_three_helen_rest:Let the matter rest.",Authored confidante exchange with optional capability follow-up.
+chiefNavigatorMenelausLaborThreeHelenEnd,ChiefNavigatorMenelausLaborThreeHelenEnd,,"$chiefNavigatorMenelausL3AskedHelen = true
 FireAll ChiefNavigatorMenelausLaborThreeHub","Sinni is quiet for a moment.
 
 Then she asks:
@@ -2747,16 +2731,28 @@ Then she asks:
 
 Menelaus looks at her.
 
-""Not entirely.""
+""No.""
 
 Sinni waits.
 
 He offers nothing more.",,Common conclusion to the third Helen conversation.
-chiefNavigatorMenelausLaborThreeLeave,DialogOptionSelected,$option == chief_navigator_menelaus_labor_three_leave,ChiefNavigatorMenelausCMD endContact,"""Very well.""
+chiefNavigatorMenelausLaborThreeHelenMottoAsk,DialogOptionSelected,$option == chief_navigator_menelaus_labor_three_helen_motto_ask,FireAll ChiefNavigatorMenelausLaborThreeHelenMottoEnd,"""Come and take them,"" Menelaus replies. ""The answer given to the Persians when they demanded the Spartans surrender their weapons. It has served as the motto of Task Force Spartan since its founding.""",,Authored motto response leading into the shared Helen question.
+chiefNavigatorMenelausLaborThreeHelenMottoKnow,DialogOptionSelected,$option == chief_navigator_menelaus_labor_three_helen_motto_know,FireAll ChiefNavigatorMenelausLaborThreeHelenMottoEnd,"""Correct. An ancient declaration of defiance, made in the expectation that those who spoke it would not survive the battle.""",,Authored motto response leading into the shared Helen question.
+chiefNavigatorMenelausLaborThreeHelenMottoContinue,DialogOptionSelected,$option == chief_navigator_menelaus_labor_three_helen_motto_continue,FireAll ChiefNavigatorMenelausLaborThreeHelenMottoEnd,,,Distinct option alias for letting Sinni continue without asking about the motto.
+chiefNavigatorMenelausLaborThreeHelenMottoEnd,ChiefNavigatorMenelausLaborThreeHelenMottoEnd,,FireAll ChiefNavigatorMenelausLaborThreeHelenOptions,"Sinni looks back at Helen's record.
 
-Menelaus inclines his helm.
+""So you arranged for her transfer.""
 
-""Return my wall to me.""",,Authored leave response for the Labor III hub.
+""I did.""
+
+Sinni studies him carefully.",,Shared transition from all three motto routes to the closeness choices.
+chiefNavigatorMenelausLaborThreeHelenCapability,DialogOptionSelected,$option == chief_navigator_menelaus_labor_three_helen_capability,FireAll ChiefNavigatorMenelausLaborThreeHelenEnd,"""Not now,"" Menelaus replies.
+
+His attention returns to Helen's photograph.
+
+You look between Sinni and Menelaus, but neither of you presses the matter further.",,Optional capability question before the shared Helen ending.
+chiefNavigatorMenelausLaborThreeHelenRest,DialogOptionSelected,$option == chief_navigator_menelaus_labor_three_helen_rest,FireAll ChiefNavigatorMenelausLaborThreeHelenEnd,,,Distinct alias for letting the matter rest before the shared Helen ending.
+chiefNavigatorMenelausLaborThreeLeave,DialogOptionSelected,$option == chief_navigator_menelaus_labor_three_leave,ChiefNavigatorMenelausCMD endContact,,,Returns to the native directory through the existing endContact handler.
 chiefNavigatorMenelausLaborThreeRepair,DialogOptionSelected,$option == chief_navigator_menelaus_labor_three_repair,"ChiefNavigatorMenelausCMD repair
 FireAll ChiefNavigatorMenelausLaborThreeHub","FOB Ithaca's automated gantries restore your fleet's hulls and armor, then cycle every ship to maximum combat readiness. No payment is requested.",,Repairs the fleet and returns to the reusable Labor III hub.
 chiefNavigatorFobIthacaSensorBriefing,ChiefNavigatorFobIthaca,"!ChiefNavigatorMenelausCMD stage early_wall

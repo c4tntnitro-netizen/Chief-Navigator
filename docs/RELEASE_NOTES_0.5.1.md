@@ -178,6 +178,23 @@ the previous mod folder and restart Starsector after updating.
 The fix was tested in combat. Replace the previous mod folder and restart
 Starsector after updating. The original v0.5.1 tag is preserved.
 
+## October 30, 2026 Abyssal Lens and Labor III update
+
+- Recover all six original Ithaca defense components to reveal a seventh
+  research station in Sanghata orbit, Avici. Bring its Abyssal Focusing Lens
+  to Menelaus to install it; Labor II still requires four distinct upgrades.
+- Lens-upgraded naval beams begin teal and blend into red by their midpoint,
+  retaining their white core and the native Abyssal Glare rift explosions.
+- Revise Menelaus's Labor III briefing, Drifting Wall history and Helen
+  exchange, including the motto responses and optional capability question.
+- Preserve existing quest progress, component identities and station salvage
+  history. The additional station is a one-time discovery.
+
+The beam appearance was tested in combat. The reported layering of naval
+turrets beneath missile housings and Cloudswarm launchers remains pending.
+Replace the previous mod folder and restart Starsector after updating.
+The original v0.5.1 tag is preserved.
+
 ## Requirements
 
 - Starsector 0.98a

@@ -3,65 +3,72 @@
 
 === menelaus_contact_labor_3_active ===
 
-Ashen Verge unfolds around Menelaus.
+Ashen Verge unfolds around Menelaus. The research packages recovered during your second Labor appear alongside a schematic of Ithaca, their installation markers lighting up in sequence before the display folds them away.
 
-The recovered research packages from your second Labor rotate briefly around him before disappearing into Ithaca's systems.
+"Your second Labor has borne fruit. Several of the recovered modules have already been integrated into the macrocomplex, and I estimate that their combined effect has increased Ithaca's force-projection capability by at least eighty percent."
 
-"Your second Labor has borne fruit. Several of the recovered modules have already been integrated into the macrocomplex."
-
-The display shifts to the Odyssey Expanse.
-
-A vast contact appears within the amber nebula.
+The display shifts to the Odyssey Expanse, where a single enormous contact hangs amid the amber clouds of the nebula.
 
 The Drifting Wall.
 
 "Now we may correct an older failure."
 
-Menelaus enlarges the wrecked Ring Defense module. Even separated from Ithaca, its batteries and autonomous systems still burn with power.
+Menelaus enlarges the severed Ring Defense module. Its hull still bears the damage inflicted when it was torn from Ithaca, but some of its naval batteries remain powered, and the autonomous systems governing them continue to operate after decades adrift.
 
-"The Drifting Wall remains structurally viable. For decades, its mounted defenses cut a wide swath through the Starving Threat. I believe it is for this reason the Odyssey Expanse remains largely free of the Threat menace. Its command architecture, however, no longer recognizes Ithaca authority."
+"Structurally, the Drifting Wall remains viable. For decades, its guns have continued to engage the Starving Threat wherever their vessels entered weapons range, and I believe the losses they have inflicted go some way toward explaining why the Odyssey Expanse remains relatively free of their incursions."
 
-A series of targeting lines spread from the module across the Odyssey Expanse.
+Menelaus brings up the module's defensive coverage, and a series of firing arcs spreads across the surrounding nebula.
 
-"We shall take it back."
+"In that respect, the Wall still serves the purpose for which it was built. Unfortunately, its command architecture no longer recognizes Ithaca's authority, and its weapons make no distinction between our vessels and those of the enemy."
+
+The immense module remains suspended between you.
+
+"We will take it back."
+
+-> menelaus_labor_3_briefing_menu
+
+
+=== menelaus_labor_3_briefing_menu ===
 
 * ["You want me to capture that thing?"] -> menelaus_labor_3_capture
 * ["How am I supposed to disable it without destroying it?"] -> menelaus_labor_3_disable
-+ ["Understood."] -> menelaus_labor_3_accept
++ ["I accept."] -> menelaus_labor_3_accept
 
 
 === menelaus_labor_3_capture ===
 
 "Yes."
 
-Menelaus seems almost surprised that the answer requires elaboration.
+Menelaus rotates the image of the Wall, bringing its immense naval batteries into view.
 
-"That module was built to defend Forward Operating Base Ithaca. By itself, it far outstrips the power projection of even the largest battlestations in your sector."
+"That module was built to defend Forward Operating Base Ithaca against attacks by entire fleets. Even separated from the ring, its surviving batteries possess more firepower than any battlestation in the Persean Sector, and it has spent decades holding the Starving Threat at bay."
 
-He gestures toward the Wall.
+He gestures toward the surrounding nebula, where the Wall's defensive coverage extends across the approaches to the Odyssey Expanse.
 
-"Disable it. My IFF key will handle the rest."
+"Once we restore its command authority, those defenses will be ours again. More importantly for your purposes, the module can serve as a fortified base of operations for your fleet, allowing you to maintain a permanent presence in the Expanse without having to return to Ithaca after every sortie."
 
--> menelaus_contact_labor_3_active
+-> menelaus_labor_3_briefing_menu
 
 
 === menelaus_labor_3_disable ===
 
-A schematic of the Drifting Wall unfolds around you.
+A schematic of the Drifting Wall unfolds around you, revealing the immense armor surrounding its batteries and command systems.
 
-Several points along its immense frame illuminate.
+"An assault against the Wall's primary defenses would be prohibitively costly, and destroying the module would defeat the purpose of recovering it. Fortunately, there is another approach."
 
-"The vast bulk of the macrocomplex is impregnable, but the flux megareactor in the back is not."
+The schematic rotates, highlighting a reactor assembly near the aft section of the module.
 
-The Wall's command partition appears beside the reactor schematic.
+"The aft flux megareactor is considerably less protected than the rest of the installation. Disabling it will force the Wall to initiate an emergency power cycle, and during the subsequent restart, my security injection will have an opportunity to access its command partition and restore Ithaca's authorization credentials."
 
-"Shut down the reactor, and the Drifting Wall will power cycle, giving my security injection the opportunity to update its IFF databases and restore connection with FOB Ithaca."
+The reactor schematic gives way to a diagram of the Wall's command network, with several systems highlighted in red.
 
-Menelaus looks directly at you.
+"Once the transfer is complete, its IFF registry will recognize your fleet as friendly and the module will return to our control. Your task will be to keep the area secure until that process has finished."
 
-"The Wall is more valuable intact. Spare no materiel to take back our home."
+Menelaus regards the Wall for a moment.
 
--> menelaus_contact_labor_3_active
+"Auxiliary, spare no materiel to take back our home."
+
+-> menelaus_labor_3_briefing_menu
 
 
 === menelaus_labor_3_accept ===
@@ -70,13 +77,13 @@ Menelaus looks directly at you.
 
 The Drifting Wall is marked on your map.
 
-"Disable its reactor. Hold the area until the security injection completes the transfer."
+"Disable its reactor and hold the area until my security injection completes the transfer. The module must remain intact."
 
 The enormous contact turns gold.
 
 "Return my wall to me, and I shall reward you in kind."
 
-+ ["I accept."] -> menelaus_contact_labor_3_menu
++ [Continue.] -> menelaus_contact_labor_3_menu
 
 
 === menelaus_contact_labor_3_menu ===
@@ -86,100 +93,123 @@ The enormous contact turns gold.
 + ["About my current Labor."] -> menelaus_contact_labor_3_status
 * ["What happened to the Drifting Wall when Gautama attacked?"] -> menelaus_drifting_wall_history
 * [Have Sinni ask more about Helen Argyros.] -> menelaus_helen_3
-+ ["Nothing for now."] -> menelaus_contact_leave
++ [Review Ithaca defense upgrades.] -> menelaus_upgrade_ledger
++ [Request free repairs.] -> menelaus_labor_3_repair
++ ["Nothing for now."] -> END
 
 
 === menelaus_contact_labor_3_status ===
 
 The Drifting Wall burns gold over the Odyssey Expanse.
 
-"Disable its rear flux megareactor. Preserve the station and hold the area while the security injection restores its Ithaca IFF."
+"Disable its aft flux megareactor, preserve the module, and hold the area while my security injection restores Ithaca's command authority and IFF registry."
+
+The Drifting Wall is $chiefNavigatorWallStatus.
 
 -> menelaus_contact_labor_3_menu
 
 
 === menelaus_drifting_wall_history ===
 
-The intact orbital ring appears around Menelaus.
+The intact orbital ring appears around Menelaus, its immense circumference still unbroken as the first waves of Threat contacts close on its western defenses.
 
-Then Gautama arrives.
+"The Wall was once designated Ring Defense Module West. During the Starving Threat's first successful penetration of Ithaca, it absorbed the primary assault against the orbital ring."
 
-"The Wall was once designated Ring Defense Module West."
+The display draws closer, resolving swarms of Threat vessels so numerous that they nearly conceal the module beneath their formations. Its massive naval anti-ship lasers sweep across the attackers, tearing apart Threat units in brilliant arcs, but every gap in the flood of burning debris is filled by a fresh hull almost at once. Live Threat vessels mix with wreckage until it becomes impossible to tell which is tumbling and which is still firing.
 
-The Threat Singularity strikes the outer defenses. Weapons fire fills the holodeck.
+Weapons fire fills the holodeck as the assault continues. Through the mass of smaller hulls, a much larger shadow begins to emerge, moving toward the junction between Module West and the rest of the ring.
 
-"During the Starving Threat's first successful penetration of Ithaca, Module West absorbed the primary impact of its assault fleet."
+Gautama.
 
-You see a simulation of what happened. Threat assault swarms are so dense, they nearly obscure the entire module. Through them, the massive Naval Anti-Ship Lasers of the once-Ring Defense West tear great glowing arcs, shattering Line Units and Fabricators in a single swipe.
+A succession of structural failures races along the connection, and the enormous module shears away from Ithaca, severing transit lines and venting atmosphere as it begins to tumble through the surrounding wreckage.
 
-Then, you see it. A massive shadow within the scourge of Threat swarms. The section tears free.
-
-And then the swarm retreats. And right behind it...
-
-Ring Defense West tumbles away from the macrocomplex, trailing fire, debris, and atmosphere before disappearing into the dark.
+The surviving Threat swarms withdraw, leaving Ring Defense West to drift farther and farther from the macrocomplex, trailing fire and debris before disappearing into the stars and dark.
 
 "I lost contact with it shortly afterward."
 
-The display jumps forward.
-
-The module reappears in the Odyssey Expanse.
+The display jumps forward. The module reappears in the Odyssey Expanse.
 
 "The fact that it survived was fortunate."
 
-Menelaus's eyes narrow.
+It rotates in the night.
 
-"The fact that it now fires upon both friend and foe is less so."
+"Take it back."
 
 -> menelaus_contact_labor_3_menu
 
 
 === menelaus_helen_3 ===
 
-Sinni steps forward.
+Sinni steps forward, folding her hands into her sleeves as Menelaus turns toward her.
 
-"Strategos."
+"Lord Strategos."
 
-Menelaus turns toward her.
-
-"You said Helen's ability was not the only reason you placed her on the Fourteenth's manifest."
+"You said Helen's ability as a navigator was not the only reason you placed her on the Fourteenth's manifest."
 
 "Correct."
 
-Sinni folds her hands into her sleeves.
-
 "Then why?"
 
-For once, Menelaus does not answer immediately.
+Menelaus does not answer immediately. Helen's service record appears between them once more.
 
-Helen's service record appears between them again.
+"When the ring network failed, Battlegroup VI was just a few jumps away. Grand Navarch Kali Molina and her flag staff had every reason to believe that communications would eventually be restored, and the Fourteenth remained at Ithaca for some time in expectation of relief."
 
-"I... predicted well in advance the eventual death of all of the macrocomplex. So did the rest of Task Force Spartan. I was willing to die with my new comrades."
+"My own assessment was less optimistic. The telemetry available to me suggested a catastrophe extending far beyond the Orion Knot, and by the time the Fourteenth departed, I had concluded that relief from Battlegroup VI was unlikely to arrive."
 
-Sinni's eyes lift from the record.
+Sinni looks up from the record.
 
-"All except for her," Sinni finishes.
+"Did you tell the Grand Navarch?"
 
-Menelaus continues.
+"I provided her with the available telemetry, but not my conclusions. My projections indicated that disclosing the probable loss of Battlegroup VI would have increased the likelihood of the Grand Navarch delaying the Fourteenth's departure, or diverting ships toward a search operation I had little reason to believe would succeed."
 
-"Helen had been ordered to remain with Task Force Spartan. She understood what that meant. So did I."
+Menelaus regards Sinni for a moment.
 
-"But you used it for her."
+"Between truthfulness and survival, I judged that preserving the Battlegroup took precedence."
 
-"Yes."
+"That decision did not alter my own obligation. Task Force Spartan had been ordered to remain at Ithaca, and I intended to share their fate, whatever that might be."
+
+"Helen too?"
+
+"Yes. Helen had been ordered to remain with us as well, and she would have done so. She would have served with us, fought with us, and, if it came to that, died with us. Molon Labe."
+
+* ["That motto. What does it mean?"] -> menelaus_helen_3_motto_ask
+* ["'Come and take them,' right?"] -> menelaus_helen_3_motto_know
++ [Let Sinni continue.] -> menelaus_helen_3_motto_end
+
+=== menelaus_helen_3_motto_ask ===
+
+"Come and take them," Menelaus replies. "The answer given to the Persians when they demanded the Spartans surrender their weapons. It has served as the motto of Task Force Spartan since its founding."
+
+-> menelaus_helen_3_motto_end
+
+
+=== menelaus_helen_3_motto_know ===
+
+"Correct. An ancient declaration of defiance, made in the expectation that those who spoke it would not survive the battle."
+
+-> menelaus_helen_3_motto_end
+
+
+=== menelaus_helen_3_motto_end ===
+
+Sinni looks back at Helen's record.
+
+"So you arranged for her transfer."
+
+"I did."
 
 Sinni studies him carefully.
 
 * ["How close were you?"] -> menelaus_helen_3_close
 * [Let Sinni continue.] -> menelaus_helen_3_sinni
 
-
 === menelaus_helen_3_sinni ===
 
-Sinni looks back at Helen's image.
+Sinni looks back at Helen's photograph.
 
 "What was she to you?"
 
-Menelaus's blue-white eyes remain fixed on the old photograph.
+Menelaus's blue-white eyes remain fixed on the old image.
 
 "My friend."
 
@@ -187,18 +217,24 @@ A pause.
 
 "My confidante."
 
-The geometry of his face shifts almost imperceptibly.
+"Most Domain officers came to me with orders, requests, or problems requiring an answer. Helen would sometimes seek me out when she had none of those things in mind, and we would talk nonetheless. Those conversations held no significance for me at the time."
 
-"One of very few people who addressed me... as a person before addressing me as an artificial intelligence."
+Menelaus regards the photograph.
 
-Sinni looks at him.
+"It was only much later that I understood what those moments meant. I did not yet possess the capability."
 
-"That mattered to you."
++ ["'Capability'? What does that mean?"] -> menelaus_helen_3_capability
++ [Let the matter rest.] -> menelaus_helen_3_end
 
-"Yes."
+=== menelaus_helen_3_capability ===
+
+"Not now," Menelaus replies.
+
+His attention returns to Helen's photograph.
+
+You look between Sinni and Menelaus, but neither of you presses the matter further.
 
 -> menelaus_helen_3_end
-
 
 === menelaus_helen_3_close ===
 
@@ -210,11 +246,9 @@ Menelaus looks toward Helen's record.
 
 "She argued with me frequently. Without permission."
 
-Sinni tilts her head.
+"She was difficult," Sinni says, tilting her head.
 
-"She was difficult."
-
-"Extremely." A beat from the Alpha AI. "I valued that."
+"Extremely," Menelaus agrees. "I came to value that."
 
 -> menelaus_helen_3_end
 
@@ -229,10 +263,21 @@ Then she asks:
 
 Menelaus looks at her.
 
-"Not entirely."
+"No."
 
 Sinni waits.
 
 He offers nothing more.
+
+-> menelaus_contact_labor_3_menu
+
+=== menelaus_upgrade_ledger ===
+
+// The native upgrade ledger returns to the current Labor through its existing dispatcher.
+-> END
+
+=== menelaus_labor_3_repair ===
+
+FOB Ithaca's automated gantries restore your fleet's hulls and armor, then cycle every ship to maximum combat readiness. No payment is requested.
 
 -> menelaus_contact_labor_3_menu
