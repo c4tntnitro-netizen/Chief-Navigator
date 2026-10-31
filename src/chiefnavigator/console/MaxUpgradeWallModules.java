@@ -23,13 +23,9 @@ public final class MaxUpgradeWallModules implements BaseCommand {
             return CommandResult.ERROR;
         }
 
-        Console.showMessage("All six Ithaca research components are now "
-                + "enabled: naval turrets gain quadruple traverse, naval "
-                + "beams and missile batteries use 40% cycle times, beam "
-                + "EMP arcs and fixed 108-round Cloudswarm PD launchers "
-                + "activate, and every battery "
-                + "uses Hammer torpedoes. Research-station and Labor progress "
-                + "were not changed.");
+        Console.showMessage("All seven Ithaca research upgrades are enabled "
+                + "for combat, including the Abyssal Focusing Lens. Component "
+                + "recovery and Labor progress were not changed.");
         return CommandResult.SUCCESS;
     }
 }

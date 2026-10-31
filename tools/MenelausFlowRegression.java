@@ -12,6 +12,7 @@ import com.fs.starfarer.api.campaign.rules.*;
 import com.fs.starfarer.api.characters.FullName;
 import com.fs.starfarer.api.characters.ImportantPeopleAPI;
 import com.fs.starfarer.api.characters.PersonAPI;
+import com.fs.starfarer.api.fleet.FleetMemberAPI;
 import com.fs.starfarer.api.impl.campaign.rulecmd.FireAll;
 import com.fs.starfarer.api.impl.campaign.rulecmd.FireBest;
 import com.fs.starfarer.api.impl.campaign.rulecmd.SetTextHighlightColors;
@@ -211,6 +212,7 @@ public final class MenelausFlowRegression {
         int dismissals, directoryOpens;
         int availableComponents;
         int availableMask = -1;
+        final List<FleetMemberAPI> playerMembers = new ArrayList<>();
         String[] textHighlights = new String[0];
         Color[] textHighlightColors = new Color[0];
         InteractionDialogPlugin plugin;
@@ -328,7 +330,7 @@ public final class MenelausFlowRegression {
                         .indexOf(((SpecialItemData) args[1]).getId());
                 return index >= 0 && (availableMask & (1 << index)) != 0 ? 1f : 0f;
             });
-            FleetDataAPI data = mock(FleetDataAPI.class, (name, args) -> name.equals("getMembersListCopy") ? List.of() : null);
+            FleetDataAPI data = mock(FleetDataAPI.class, (name, args) -> name.equals("getMembersListCopy") ? List.copyOf(playerMembers) : null);
             CampaignFleetAPI fleet = mock(CampaignFleetAPI.class, (name, args) -> {
                 if (name.equals("getLocation")) return new Vector2f();
                 if (name.equals("getMemoryWithoutUpdate")) return global;
@@ -781,7 +783,7 @@ public final class MenelausFlowRegression {
             {"chiefNavigatorMenelausLaborTwoCollapse", "chiefNavigatorMenelausLaborTwoCollapsePage3", "$chiefNavigatorMenelausL2AskedCollapse"},
             {"chiefNavigatorMenelausLaborTwoCryo", "chiefNavigatorMenelausLaborTwoGautamaEnd", "$chiefNavigatorMenelausL2AskedCryo"},
             {"chiefNavigatorMenelausLaborTwoHelen", "chiefNavigatorMenelausLaborTwoHelenEnd", "$chiefNavigatorMenelausL2AskedHelen"},
-            {"chiefNavigatorMenelausLaborThreeHistory", "chiefNavigatorMenelausLaborThreeHistoryPage3", "$chiefNavigatorMenelausL3AskedHistory"},
+            {"chiefNavigatorMenelausLaborThreeHistory", "chiefNavigatorMenelausLaborThreeHistoryPage4", "$chiefNavigatorMenelausL3AskedHistory"},
             {"chiefNavigatorMenelausLaborThreeHelen", "chiefNavigatorMenelausLaborThreeHelenEnd", "$chiefNavigatorMenelausL3AskedHelen"},
             {"chiefNavigatorMenelausLaborFourPackage", "chiefNavigatorMenelausLaborFourDetected", "$chiefNavigatorMenelausL4AskedPackage"},
             {"chiefNavigatorMenelausLaborFourReach", "chiefNavigatorMenelausLaborFourReachPage4", "$chiefNavigatorMenelausL4AskedReach"},
