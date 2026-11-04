@@ -202,7 +202,7 @@ At the navigation hub, Sinni reaches for the controls again. Her hands are still
 
 She pauses. And then she fixes your next navigation destination.
 
-Forward Operating Base Ithaca. Ashen Verge system.
+Forward Operating Base Ithaca. Lacedaemon system.
 
 A forgotten remnant of the mighty 14th Battlegroup. There, the Battlegroup should have abandoned countless ships, vast stores of supplies, and more. All yours for the taking.",100:sinni_alpha_odyssey_map_notice:Continue.,Revised Waypoint Troy expedition dialogue.
 chiefNavigatorSinniAlphaOdysseyMapNotice,ChiefNavigatorSinniVignette_sinni_alpha_odyssey_map_notice,,"SetTextHighlightColors hColor
@@ -1506,7 +1506,7 @@ chiefNavigatorSinniVignetteAcceptLastRequest,ChiefNavigatorSinniVignette_accept_
 chiefNavigatorSinniVignetteDeferLastRequest,ChiefNavigatorSinniVignette_defer_last_request,,DismissDialog,,,Runtime leaves ONE MORE HORIZON unaccepted and retains the resolved coordinates.
 chiefNavigatorSinniVignetteCompleteOneMoreHorizon,ChiefNavigatorSinniVignette_complete_one_more_horizon,,DismissDialog,,,Runtime completes ONE MORE HORIZON and removes its waypoint.
 
-chiefNavigatorFobIthacaApproachOpening,ChiefNavigatorFobIthacaApproach_opening,,,"The orbital ring comes into view. At this distance, it is nothing more than a vast black dash carved across the night sky. Several of your bridge crew swear at the sight. It is larger than most planets in the Persean Sector. The corpse of a colossus hanging in the twilight nebula of Ashen Verge.","0:reveal:""Nav. Half-speed approach.""",One-time FOB Ithaca approach scene.
+chiefNavigatorFobIthacaApproachOpening,ChiefNavigatorFobIthacaApproach_opening,,,"The orbital ring comes into view. At this distance, it is nothing more than a vast black dash carved across the night sky. Several of your bridge crew swear at the sight. It is larger than most planets in the Persean Sector. The corpse of a colossus hanging in the twilight nebula of Lacedaemon.","0:reveal:""Nav. Half-speed approach.""",One-time FOB Ithaca approach scene.
 chiefNavigatorFobIthacaApproachReveal,ChiefNavigatorFobIthacaApproach_reveal,,,"""Aye, $chiefNavigatorFobIthacaPlayerTitle.""
 
 The macrobase continues to grow in your bridge opticals.
@@ -1763,7 +1763,7 @@ chiefNavigatorMenelausFirstShuttleContinue,DialogOptionSelected,$option == chief
 Your pilot acknowledges and banks toward a docking aperture opening in Ithaca's armor. The maneuvering thrusters pulse beneath your feet, and then the walls swallow you. You feel the characteristic downward lurch of artificial gravity as your ship crosses the berth threshold.",0:chief_navigator_auto_page_chief_navigator_menelaus_first_shuttle_continue_2:Continue.,Full Menelaus first contact: ShuttleContinue. Auto-paged 1/2.
 chiefNavigatorMenelausFirstShuttleContinuePage2,DialogOptionSelected,$option == chief_navigator_auto_page_chief_navigator_menelaus_first_shuttle_continue_2,,"Stars disappear behind the shuttle. Guidance lamps streak past the windows as you descend through layer after layer of the macrocomplex. There is a heavy jolt as docking clamps seize the shuttle. The engines spool down, their vibration fading from the deck beneath your boots.
 
-For the first time since entering the Ashen Verge system, everything is still.
+For the first time since entering the Lacedaemon system, everything is still.
 
 You unfasten your restraints. Your bodyguards do the same.
 
@@ -1904,7 +1904,7 @@ Sinni looks around.
 ""It's a holodeck.""
 
 Lights shine from below.",0:chief_navigator_auto_page_chief_navigator_menelaus_first_holodeck_2:Continue.,Full Menelaus first contact: Holodeck. Auto-paged 1/3.
-chiefNavigatorMenelausFirstHolodeckPage2,DialogOptionSelected,$option == chief_navigator_auto_page_chief_navigator_menelaus_first_holodeck_2,,"Stars shimmer into existence, hanging overhead and rising from beneath your feet. Ithaca's orbital ring curves through the chamber while the central module hangs at its heart. Fleet positions begin appearing around it, followed by defense networks, supply routes, industrial output, power flow, and casualty estimates. Behind your head, the Ashen Verge star fills the room with a warm, ambient light.
+chiefNavigatorMenelausFirstHolodeckPage2,DialogOptionSelected,$option == chief_navigator_auto_page_chief_navigator_menelaus_first_holodeck_2,,"Stars shimmer into existence, hanging overhead and rising from beneath your feet. Ithaca's orbital ring curves through the chamber while the central module hangs at its heart. Fleet positions begin appearing around it, followed by defense networks, supply routes, industrial output, power flow, and casualty estimates. Behind your head, the Lacedaemon star fills the room with a warm, ambient light.
 
 Thousands of streams of information fold through one another faster than you can follow.
 
@@ -3584,44 +3584,38 @@ chiefNavigatorVossRefuseOptioncannot_pay,ChiefNavigatorVossRefuseOptions,,,,"10:
 chiefNavigatorVossRefuseOptionhostile_defiance,ChiefNavigatorVossRefuseOptions,,,,"20:chief_navigator_voss_hostile_defiance:""Then come and take them.""",Revised Voss patrol dialogue.
 chiefNavigatorHegemonyIthacaArrival,ChiefNavigatorHegemonyIthacaArrival,,ChiefNavigatorMenelausCMD showVoss,"When you arrive at Menelaus's ""office,"" you find him already holding an audience.
 
-The Hegemony.
+A squad of Hegemony marines stands nearby, fully equipped in powered armor and boarding gear. The soldiers crowd the space before Menelaus's projection, their rifles knocking against one another whenever someone shifts position, while their heavy boots have left bright scuff marks across the holodeck floor.
 
-The expedition that followed you.
+Among the marines, a man paces the holodeck. You recognize him almost immediately. The gaunt face. The trademark ushanka. Admiral Voss, hero of the Relief of Raesvelg, where he commanded the Hegemony force that finally scattered the Tri-Tachyon blockade during the Second AI War.
 
-You recognize the man pacing across the holodeck. The gaunt face. The trademark ushanka. Some hero admiral of Raesvelg.
+He commanded the official Hegemony expedition to Ithaca. And his face betrays what their journey cost.",0:chief_navigator_auto_page_chief_navigator_hegemony_ithaca_arrival_2:Continue.,"Voss confrontation: manually reviewed dramatic beats and comfortable reading lengths; approved wording, choices and callbacks preserved."
+chiefNavigatorHegemonyIthacaArrivalPage2,DialogOptionSelected,$option == chief_navigator_auto_page_chief_navigator_hegemony_ithaca_arrival_2,,"His uniform is still immaculate where the journey has spared it, but there is no hiding the exhaustion beneath it. His cheeks are hollow, his eyes bloodshot, and a fresh burn runs from his collar to the edge of his jaw.
 
-How did he get here?",0:chief_navigator_auto_page_chief_navigator_hegemony_ithaca_arrival_2:Continue.,Voss enters Menelaus's office as the direct continuation of the Labor III report. Auto-paged 1/12.
-chiefNavigatorHegemonyIthacaArrivalPage2,DialogOptionSelected,$option == chief_navigator_auto_page_chief_navigator_hegemony_ithaca_arrival_2,,"When you get close enough for a good look, his face betrays the answer.
-
-He looks as though the Abyss has been chewing on him for weeks.
-
-His uniform is still immaculate where it can be, but there is no hiding the exhaustion underneath it. His cheeks are beyond hollow, near skeletal. His eyes are bloodshot. A fresh burn runs from his collar to the edge of his jaw.",0:chief_navigator_auto_page_chief_navigator_hegemony_ithaca_arrival_3:Continue.,Automatic runtime continuation 2/12 for chiefNavigatorHegemonyIthacaArrival.
-chiefNavigatorHegemonyIthacaArrivalPage3,DialogOptionSelected,$option == chief_navigator_auto_page_chief_navigator_hegemony_ithaca_arrival_3,,"Behind him stands a full squad of Hegemony marines. They do not look much better. Their exposed skin is raw and reddened, especially around the eyes and hands. It looks like the radiation shielding from their drive bubble was failing.
+The marines around him do not look much better. With their visors down you can see the skin of their face is raw and reddened, especially around the eyes. It looks like the radiation shielding from their drive bubble had failed.
 
 Whatever route they took through the Abyss, it was not Sinni's.
 
-Voss stands beneath the enormous avatar of Menelaus and barely looks up.
+Voss stands beneath the enormous avatar of Menelaus, but does not look up.
 
-""Then I'll ask this! Which of you commands Task Force Spartan?!""",0:chief_navigator_auto_page_chief_navigator_hegemony_ithaca_arrival_4:Continue.,Automatic runtime continuation 3/12 for chiefNavigatorHegemonyIthacaArrival.
-chiefNavigatorHegemonyIthacaArrivalPage4,DialogOptionSelected,$option == chief_navigator_auto_page_chief_navigator_hegemony_ithaca_arrival_4,,"A Spartan officer standing off to the side answers.
+""Then I'll ask this! Who commands Task Force Spartan?!""",0:chief_navigator_auto_page_chief_navigator_hegemony_ithaca_arrival_4:Continue.,"Voss confrontation: manually reviewed dramatic beats and comfortable reading lengths; approved wording, choices and callbacks preserved."
+chiefNavigatorHegemonyIthacaArrivalPage4,DialogOptionSelected,$option == chief_navigator_auto_page_chief_navigator_hegemony_ithaca_arrival_4,,"Commodore Kleon standing off to the side answers, hands clasped behind his back.
 
-""You've been given our answer, sir. But I am the commanding officer of our detachment.""
-
-He folds his arms behind his back.
+""You've been informed, Admiral. The Strategos holds theater command and under his authority, I command Task Force Spartan.""
 
 Voss wheels toward him.
 
 ""Name and rank.""
 
-""Captain Aias Kleon.""
+""Aias Kleon, Commodore of the 6th Special Operations Task Force, Fourteenth Battlegroup.""
 
-Voss barely waits for him to finish.",0:chief_navigator_auto_page_chief_navigator_hegemony_ithaca_arrival_5:Continue.,Automatic runtime continuation 4/12 for chiefNavigatorHegemonyIthacaArrival.
-chiefNavigatorHegemonyIthacaArrivalPage5,DialogOptionSelected,$option == chief_navigator_auto_page_chief_navigator_hegemony_ithaca_arrival_5,,"""Admiral Voss. Fourteenth Battlegroup Navy. DOMAIN Navy. Then for the last time, by authority of High Hegemon Daud, I am assuming operational command of all surviving Domain military assets in this theater.""
+Voss barely waits for him to finish.
 
-""Your ships will be transferred to my expeditionary command. My fleet requires immediate replenishment of fuel, supplies, replacement crew, and ordnance. Your repair facilities and nanoforges will be placed at our disposal.""
+""Admiral Voss. Fourteenth Battlegroup Navy. Domain Navy. By authority of High Hegemon Baikal Daud, I am assuming operational command of all surviving Domain military assets in this theater.""",0:chief_navigator_auto_page_chief_navigator_hegemony_ithaca_arrival_5:Continue.,"Voss confrontation: manually reviewed dramatic beats and comfortable reading lengths; approved wording, choices and callbacks preserved."
+chiefNavigatorHegemonyIthacaArrivalPage5,DialogOptionSelected,$option == chief_navigator_auto_page_chief_navigator_hegemony_ithaca_arrival_5,,"""Your ships will be transferred to my expeditionary command. You will provide replenishment of fuel, supplies, replacement crew, and ordnance. Your repair facilities and nanoforges will be placed at our disposal.""
 
-Voss keeps his eyes on the Spartan officer. The man does not move.",0:chief_navigator_auto_page_chief_navigator_hegemony_ithaca_arrival_6:Continue.,Automatic runtime continuation 5/12 for chiefNavigatorHegemonyIthacaArrival.
-chiefNavigatorHegemonyIthacaArrivalPage6,DialogOptionSelected,$option == chief_navigator_auto_page_chief_navigator_hegemony_ithaca_arrival_6,,"""Did you hear me, 'Captain'?""
+Voss keeps his eyes on the Spartan officer. The man does not move.
+
+""Did you hear me, 'Commodore'?""
 
 ""Yes, Admiral.""
 
@@ -3629,166 +3623,95 @@ chiefNavigatorHegemonyIthacaArrivalPage6,DialogOptionSelected,$option == chief_n
 
 ""No, sir.""
 
-Voss stares at him.
+The admiral exhales sharply through his teeth, his jaw clenching and unclenching as he struggles to contain his rage.
 
 ""What did you say?""
 
-""I said, 'No, sir.' Sir.""",0:chief_navigator_auto_page_chief_navigator_hegemony_ithaca_arrival_7:Continue.,Automatic runtime continuation 6/12 for chiefNavigatorHegemonyIthacaArrival.
-chiefNavigatorHegemonyIthacaArrivalPage7,DialogOptionSelected,$option == chief_navigator_auto_page_chief_navigator_hegemony_ithaca_arrival_7,,"The Spartan officer glances toward Menelaus.
+""I said, 'No, sir.' Sir.""",0:chief_navigator_auto_page_chief_navigator_hegemony_ithaca_arrival_6:Continue.,"Voss confrontation: manually reviewed dramatic beats and comfortable reading lengths; approved wording, choices and callbacks preserved."
+chiefNavigatorHegemonyIthacaArrivalPage6,DialogOptionSelected,$option == chief_navigator_auto_page_chief_navigator_hegemony_ithaca_arrival_6,,"Admiral Voss makes a short step towards Kleon, but then Menelaus finally moves. A Domain command hierarchy unfolds across the holodeck.
 
-""Strategos Menelaus is the commanding officer here.""
-
-For the first time, Voss looks directly at the Alpha-level intelligence towering over him.
-
-His eyes narrow.
-
-""That thing?""
-
-Menelaus says nothing.
-
-Voss turns back to the Spartan.",0:chief_navigator_auto_page_chief_navigator_hegemony_ithaca_arrival_8:Continue.,Automatic runtime continuation 7/12 for chiefNavigatorHegemonyIthacaArrival.
-chiefNavigatorHegemonyIthacaArrivalPage8,DialogOptionSelected,$option == chief_navigator_auto_page_chief_navigator_hegemony_ithaca_arrival_8,,"""Centuries of isolation have addled your brain, soldier. I could have sworn you said you're subordinate to this... machine.""
-
-The Spartan officer's expression hardens. More than usual.
-
-""Yes, sir.""
-
-Voss takes a step toward him.
-
-""I am a rear admiral of the Hegemony Navy.""
-
-""Yes, sir.""",0:chief_navigator_auto_page_chief_navigator_hegemony_ithaca_arrival_9:Continue.,Automatic runtime continuation 8/12 for chiefNavigatorHegemonyIthacaArrival.
-chiefNavigatorHegemonyIthacaArrivalPage9,DialogOptionSelected,$option == chief_navigator_auto_page_chief_navigator_hegemony_ithaca_arrival_9,,"""The Hegemony is the lawful successor to the Domain military authority in the Persean Sector."" Voss narrows his eyes. ""So follow orders, Captain. Or I'll have you shot.""
-
-""No, sir.""
-
-Voss's eye twitches.
-
-Menelaus finally moves.
-
-A Domain command hierarchy unfolds across the holodeck.",0:chief_navigator_auto_page_chief_navigator_hegemony_ithaca_arrival_10:Continue.,Automatic runtime continuation 9/12 for chiefNavigatorHegemonyIthacaArrival.
-chiefNavigatorHegemonyIthacaArrivalPage10,DialogOptionSelected,$option == chief_navigator_auto_page_chief_navigator_hegemony_ithaca_arrival_10,,"Voss's credentials resolve within it.
+Voss's credentials resolve within it.
 
 Rear Admiral, XIV Battlegroup Navy. Fleet command authority.
-
-Then Menelaus's office appears.
-
-STRATEGOS — ORION KNOT THEATER.
 
 The hierarchy expands upward.
 
 And upward.
 
-And upward.",0:chief_navigator_auto_page_chief_navigator_hegemony_ithaca_arrival_11:Continue.,Automatic runtime continuation 10/12 for chiefNavigatorHegemonyIthacaArrival.
-chiefNavigatorHegemonyIthacaArrivalPage11,DialogOptionSelected,$option == chief_navigator_auto_page_chief_navigator_hegemony_ithaca_arrival_11,,"The distance between Voss and Menelaus is almost comical.
+And upward.
+
+Until another designation finally appears.
+
+Strategos, FOB Ithaca Command, Orion Knot Theater.",0:chief_navigator_auto_page_chief_navigator_hegemony_ithaca_arrival_11:Continue.,"Voss confrontation: manually reviewed dramatic beats and comfortable reading lengths; approved wording, choices and callbacks preserved."
+chiefNavigatorHegemonyIthacaArrivalPage11,DialogOptionSelected,$option == chief_navigator_auto_page_chief_navigator_hegemony_ithaca_arrival_11,,"The distance between Voss and Menelaus is vast.
 
 ""Under Domain authority,"" Menelaus's voice booms through the holodeck. Even Voss and his marines flinch a little. ""Your commission is thirteen levels subordinate to mine.""
 
-Menelaus's station shines next to a number of portraits in the double digits. You catch a glimpse of Baikal Daud as one of Menelaus's peers.
+Menelaus's station shines next to a number of portraits in the low double digits. You catch a glimpse of Baikal Daud as one of Menelaus's peers.
 
-Huh.",0:chief_navigator_auto_page_chief_navigator_hegemony_ithaca_arrival_12:Continue.,Automatic runtime continuation 11/12 for chiefNavigatorHegemonyIthacaArrival.
-chiefNavigatorHegemonyIthacaArrivalPage12,DialogOptionSelected,$option == chief_navigator_auto_page_chief_navigator_hegemony_ithaca_arrival_12,,"When did Menelaus get a hold of that updated data?
+When did Menelaus get a hold of that updated data?
 
 Voss's face tightens.
 
-The man is trembling with anger, but he still refuses to look directly at Menelaus's projection.
+The man is trembling with anger, but he still refuses to look at Menelaus's projection.
 
-Menelaus watches him.","0:chief_navigator_voss_rank_salute:""You salute the rank, not the AI, Admiral Voss.""
+Menelaus watches him.","0:chief_navigator_voss_rank_salute:""You salute the rank, not the AI, Admiral.""
 10:chief_navigator_voss_rank_charge:""Menelaus is in charge here.""
-20:chief_navigator_voss_rank_boss:""Just quit while you're ahead, Voss Boss.""",Automatic runtime continuation 12/12 for chiefNavigatorHegemonyIthacaArrival.
+20:chief_navigator_voss_rank_boss:Stay silent.","Voss confrontation: manually reviewed dramatic beats and comfortable reading lengths; approved wording, choices and callbacks preserved."
 chiefNavigatorVossRankSalute,DialogOptionSelected,$option == chief_navigator_voss_rank_salute,FireBest ChiefNavigatorVossRecognition,"Voss shoots you a glare.
 
 Only now does he seem to notice that you have entered.
 
-His gaze moves from you to your bodyguards, then to Sinni.",,First player interjection before Voss recognizes the expedition.
+His gaze moves from you to your bodyguards, then to Sinni.",,"Voss confrontation: manually reviewed dramatic beats and comfortable reading lengths; approved wording, choices and callbacks preserved."
 chiefNavigatorVossRankCharge,DialogOptionSelected,$option == chief_navigator_voss_rank_charge,FireBest ChiefNavigatorVossRecognition,"Voss shoots you a glare.
 
 Only now does he seem to notice that you have entered.
 
-His gaze moves from you to your bodyguards, then to Sinni.",,Second player interjection before Voss recognizes the expedition.
+His gaze moves from you to your bodyguards, then to Sinni.",,"Voss confrontation: manually reviewed dramatic beats and comfortable reading lengths; approved wording, choices and callbacks preserved."
 chiefNavigatorVossRankBoss,DialogOptionSelected,$option == chief_navigator_voss_rank_boss,FireBest ChiefNavigatorVossRecognition,"Voss shoots you a glare.
 
 Only now does he seem to notice that you have entered.
 
-His gaze moves from you to your bodyguards, then to Sinni.",,Third player interjection before Voss recognizes the expedition.
+His gaze moves from you to your bodyguards, then to Sinni.",,"Voss confrontation: manually reviewed dramatic beats and comfortable reading lengths; approved wording, choices and callbacks preserved."
 chiefNavigatorVossRecognitionFriendly,ChiefNavigatorVossRecognition,ChiefNavigatorMenelausCMD vossReputation friendly,,"""You.""
 
 None of the fury leaves his expression.
 
-""Of course you're here. Always sniffing around for more vainglory.""
+""Of course you're here. Always sniffing around for more glory.""
 
-""Answer me this, Golden Boy,"" Voss snarls. ""How did you beat us here?""","0:chief_navigator_voss_nav_better:""Better navigator.""
+""Answer me this, Golden Child,"" Voss snarls. ""How did you beat us here?""","0:chief_navigator_voss_nav_better:""Better navigator.""
 10:chief_navigator_voss_nav_safer:""We found a safer route.""
-20:chief_navigator_voss_nav_skill:""Skill issue.""",Friendly-Hegemony recognition variant above +50 relations.
+20:chief_navigator_voss_nav_skill:""Skill.""","Voss confrontation: manually reviewed dramatic beats and comfortable reading lengths; approved wording, choices and callbacks preserved."
 chiefNavigatorVossRecognitionHostile,ChiefNavigatorVossRecognition,ChiefNavigatorMenelausCMD vossReputation hostile,,"""You. I know you,"" Voss breathes, his lips curling back.
 
-His hand immediately drops toward his sidearm.
+His hand immediately drops toward his sidearm and his marines behind him tense with him.
 
-Half the marines behind him tense with him.
+""For treason against the Domain of Man, I should have you shot where you stand.""
 
-""I should have you shot where you stand.""
-
-Your bodyguards shift.
-
-So too do his marines.
+Your bodyguards shift. So too do his marines.
 
 ""Answer me this, scum,"" Voss snarls. ""How did you beat us here?""","0:chief_navigator_voss_nav_better:""Better navigator.""
 10:chief_navigator_voss_nav_safer:""We found a safer route.""
-20:chief_navigator_voss_nav_skill:""Skill issue.""",Hostile-Hegemony recognition variant below -50 relations.
+20:chief_navigator_voss_nav_skill:""Skill.""","Voss confrontation: manually reviewed dramatic beats and comfortable reading lengths; approved wording, choices and callbacks preserved."
 chiefNavigatorVossRecognitionNeutral,ChiefNavigatorVossRecognition,ChiefNavigatorMenelausCMD vossReputation neutral,,"Confusion flashes across his exhausted face.
 
 ""And who the fuck are you?""
 
-One of his aides leans toward him and murmurs something.
+One of his aides leans toward him and murmurs something. Voss's eyes sharpen.
 
-Voss's eyes sharpen.
-
-""You're the expedition that beat us here.""
-
-He looks at Sinni.
-
-Then at you.
-
-""Answer me this, scum,"" Voss snarls. ""How did you beat us here?""","0:chief_navigator_voss_nav_better:""Better navigator.""
+""You're the expedition that beat us here. Answer me this,"" Voss snarls. ""How did you beat us here?""","0:chief_navigator_voss_nav_better:""Better navigator.""
 10:chief_navigator_voss_nav_safer:""We found a safer route.""
-20:chief_navigator_voss_nav_skill:""Skill issue.""",Neutral-Hegemony recognition variant from -50 through +50 relations.
-chiefNavigatorVossNavBetter,DialogOptionSelected,$option == chief_navigator_voss_nav_better,FireAll ChiefNavigatorVossRankContinue,"Voss's stare shifts to Sinni.
+20:chief_navigator_voss_nav_skill:""Skill.""","Voss confrontation: manually reviewed dramatic beats and comfortable reading lengths; approved wording, choices and callbacks preserved."
+chiefNavigatorVossNavBetter,DialogOptionSelected,$option == chief_navigator_voss_nav_better,FireAll ChiefNavigatorVossRankContinue,"Voss's stare shifts to Sinni. She meets his gaze. For a few seconds, he says nothing, but his mouth twists. The admiral turns back toward the Spartan officer.",,"Voss confrontation: manually reviewed dramatic beats and comfortable reading lengths; approved wording, choices and callbacks preserved."
+chiefNavigatorVossNavSafer,DialogOptionSelected,$option == chief_navigator_voss_nav_safer,FireAll ChiefNavigatorVossRankContinue,"Voss's stare shifts to Sinni. She meets his gaze. For a few seconds, he says nothing, but his mouth twists. The admiral turns back toward the Spartan officer.",,"Voss confrontation: manually reviewed dramatic beats and comfortable reading lengths; approved wording, choices and callbacks preserved."
+chiefNavigatorVossNavSkill,DialogOptionSelected,$option == chief_navigator_voss_nav_skill,FireAll ChiefNavigatorVossRankContinue,"Voss's stare shifts to Sinni. She meets his gaze. For a few seconds, he says nothing, but his mouth twists. The admiral turns back toward the Spartan officer.",,"Voss confrontation: manually reviewed dramatic beats and comfortable reading lengths; approved wording, choices and callbacks preserved."
+chiefNavigatorVossRankContinue,ChiefNavigatorVossRankContinue,,,"""I see. If that machine has compromised the command hierarchy, we'll deal with the threat.""
 
-She meets it without expression.
+Voss points at Menelaus without looking at him.
 
-For a few seconds, he says nothing.
+""This facility has Alpha-level containment protocols, yes? Explosive failsafes. Core isolation charges. Whatever the Domain of Man installed in case one of these machines went rogue.""
 
-Then his mouth twists.
-
-He turns back toward the Spartan officer.",,First route to the common confrontation.
-chiefNavigatorVossNavSafer,DialogOptionSelected,$option == chief_navigator_voss_nav_safer,FireAll ChiefNavigatorVossRankContinue,"Voss's stare shifts to Sinni.
-
-She meets it without expression.
-
-For a few seconds, he says nothing.
-
-Then his mouth twists.
-
-He turns back toward the Spartan officer.",,Second route to the common confrontation.
-chiefNavigatorVossNavSkill,DialogOptionSelected,$option == chief_navigator_voss_nav_skill,FireAll ChiefNavigatorVossRankContinue,"Voss's stare shifts to Sinni.
-
-She meets it without expression.
-
-For a few seconds, he says nothing.
-
-Then his mouth twists.
-
-He turns back toward the Spartan officer.",,Third route to the common confrontation.
-chiefNavigatorVossRankContinue,ChiefNavigatorVossRankContinue,,,"Voss turns back toward Captain Kleon.
-
-""I see. If the machine has compromised the command hierarchy, we'll deal with the machine.""
-
-Kleon's eyes narrow.
-
-Voss points up at Menelaus without looking at him.
-
-""This facility has Alpha-level containment protocols, yes? Explosive failsafes. Core isolation charges. Whatever the Domain installed in case one of these things went rogue.""",0:chief_navigator_auto_page_chief_navigator_voss_rank_continue_2:Continue.,Menelaus rejects Voss's attempted seizure and offers aid to the battered expedition. Auto-paged 1/10.
-chiefNavigatorVossRankContinuePage2,DialogOptionSelected,$option == chief_navigator_auto_page_chief_navigator_voss_rank_continue_2,,"Captain Aias says nothing.
+Commodore Aias says nothing.
 
 ""Do they exist?""
 
@@ -3796,58 +3719,36 @@ chiefNavigatorVossRankContinuePage2,DialogOptionSelected,$option == chief_naviga
 
 ""Activate them.""
 
-""No, sir.""
+""No, sir.""",0:chief_navigator_auto_page_chief_navigator_voss_rank_continue_3:Continue.,"Voss confrontation: manually reviewed dramatic beats and comfortable reading lengths; approved wording, choices and callbacks preserved."
+chiefNavigatorVossRankContinuePage3,DialogOptionSelected,$option == chief_navigator_auto_page_chief_navigator_voss_rank_continue_3,,"""That... is a direct order."" Voss's face goes pale. ""This is a lawful command to protect a Domain installation from a rogue AI.""
 
-""That... is a direct order."" Voss's face goes red. ""This is a lawful order to protect the Domain from a rogue AI.""",0:chief_navigator_auto_page_chief_navigator_voss_rank_continue_3:Continue.,Automatic runtime continuation 2/10 for chiefNavigatorVossRankContinue.
-chiefNavigatorVossRankContinuePage3,DialogOptionSelected,$option == chief_navigator_auto_page_chief_navigator_voss_rank_continue_3,,"""I decline this order to frag my superior. Sir.""
+""I decline this order to frag my superior. Sir.""
 
-Aias's expression does not change.
+Aias's expression does not change. Voss stares at him. For a moment, the admiral looks like he might actually strike him. Then he gives a short, rough laugh.
 
-Voss stares at him.
+""Two hundred years.""
 
-For a moment, Voss looks like he might actually strike him.
+He turns slowly, taking in the holodeck. The Spartan officers. The impossible blue-white avatar towering over them.
 
-Then he laughs.
-
-A short, ugly sound.
-
-""Two hundred years.""",0:chief_navigator_auto_page_chief_navigator_voss_rank_continue_4:Continue.,Automatic runtime continuation 3/10 for chiefNavigatorVossRankContinue.
-chiefNavigatorVossRankContinuePage4,DialogOptionSelected,$option == chief_navigator_auto_page_chief_navigator_voss_rank_continue_4,,"He turns slowly, taking in the holodeck. The Spartan officers. The impossible blue-white avatar towering over them.
-
-""Two hundred years alone with this thing, and it has all of you calling it your superior.""
-
-Menelaus remains silent.
-
-Voss finally looks directly at him.
+""Two hundred years alone with this thing, and it has all of you calling it your superior.""",0:chief_navigator_auto_page_chief_navigator_voss_rank_continue_5:Continue.,"Voss confrontation: manually reviewed dramatic beats and comfortable reading lengths; approved wording, choices and callbacks preserved."
+chiefNavigatorVossRankContinuePage5,DialogOptionSelected,$option == chief_navigator_auto_page_chief_navigator_voss_rank_continue_5,,"Menelaus remains silent. Voss finally looks directly at him. A single accusatory finger rises and fixes itself on the Strategos.
 
 ""You are code.""
 
-The tactical displays freeze.",0:chief_navigator_auto_page_chief_navigator_voss_rank_continue_5:Continue.,Automatic runtime continuation 4/10 for chiefNavigatorVossRankContinue.
-chiefNavigatorVossRankContinuePage5,DialogOptionSelected,$option == chief_navigator_auto_page_chief_navigator_voss_rank_continue_5,,"""A list of instructions, deluded into thinking itself humanity's equal.""
+The tactical displays freeze.
+
+""A list of instructions, deluded into thinking itself humanity's equal.""
 
 Voss scoffs, turning around in the holodeck. He snaps his fingers at his bodyguards.
 
-""Send word back to the fleet. Deploy all of our marines. We're seizing this macrocomplex from a rogue AI.""
+""Send word back to the fleet. Deploy boarding ops Alpha, Gamma, Espilon. We're seizing this macrocomplex from a rogue AI.""
 
-Blue-white light begins to bleed out from behind Menelaus's face.
+Blue-white light begins to bleed out from behind Menelaus's face. In that light's wake, silence.
 
-Silence.",0:chief_navigator_auto_page_chief_navigator_voss_rank_continue_6:Continue.,Automatic runtime continuation 5/10 for chiefNavigatorVossRankContinue.
-chiefNavigatorVossRankContinuePage6,DialogOptionSelected,$option == chief_navigator_auto_page_chief_navigator_voss_rank_continue_6,,"Not just from the people in the room.
+Not just from the people in the room. The hum of the working station beneath your feet is gone. For one moment, the entire macrocomplex seems to be listening.
 
-The hum beneath your feet is gone.
-
-The ventilation.
-
-The machinery.
-
-For one impossible moment, the entire macrocomplex seems to be listening.
-
-Menelaus looks down at Voss.",0:chief_navigator_auto_page_chief_navigator_voss_rank_continue_7:Continue.,Automatic runtime continuation 6/10 for chiefNavigatorVossRankContinue.
-chiefNavigatorVossRankContinuePage7,DialogOptionSelected,$option == chief_navigator_auto_page_chief_navigator_voss_rank_continue_7,,"The gaunt man turns back toward the avatar, and for the first time, fear shows on his face.
-
-Voss's marines raise their weapons.
-
-You never hear the firearms go off.
+The great corinthian helm looks down at Voss.",0:chief_navigator_auto_page_chief_navigator_voss_rank_continue_7:Continue.,"Voss confrontation: manually reviewed dramatic beats and comfortable reading lengths; approved wording, choices and callbacks preserved."
+chiefNavigatorVossRankContinuePage7,DialogOptionSelected,$option == chief_navigator_auto_page_chief_navigator_voss_rank_continue_7,,"The gaunt man turns back toward the avatar, and for the first time, fear shows on his face. Voss's marines raise their weapons. You never hear the firearms go off.
 
 ""I...""
 
@@ -3855,52 +3756,67 @@ The word comes from his avatar.
 
 ""...AM...""
 
-Then from the walls.",0:chief_navigator_auto_page_chief_navigator_voss_rank_continue_8:Continue.,Automatic runtime continuation 7/10 for chiefNavigatorVossRankContinue.
-chiefNavigatorVossRankContinuePage8,DialogOptionSelected,$option == chief_navigator_auto_page_chief_navigator_voss_rank_continue_8,,"""...HUMAN.""
+Then from the walls.
+
+""...HUMAN.""
 
 FOB Ithaca convulses.
 
 The holodeck flashes blue-white. Somewhere beyond the chamber, blast doors slam shut in sequence. The floor shakes beneath your feet as reactors surge and defense systems across the macrocomplex briefly come alive.
 
-Voss stumbles backward.
+Voss stumbles while his marines fall.
 
-The hum of Ithaca returns beneath your feet.",0:chief_navigator_auto_page_chief_navigator_voss_rank_continue_9:Continue.,Automatic runtime continuation 8/10 for chiefNavigatorVossRankContinue.
+The hum of Ithaca returns beneath your feet.",0:chief_navigator_auto_page_chief_navigator_voss_rank_continue_9:Continue.,"Voss confrontation: manually reviewed dramatic beats and comfortable reading lengths; approved wording, choices and callbacks preserved."
 chiefNavigatorVossRankContinuePage9,DialogOptionSelected,"$option == chief_navigator_auto_page_chief_navigator_voss_rank_continue_9
-!$global.chief_navigator_sara_dead",ChiefNavigatorPeopleCMD show menelaus voss aias sinni sara,"The Spartans managed to subdue Voss' marines with frightening speed. Before they can recover, Aias and the other Spartan officers calmly strip the weapons from their hands.
+!$global.chief_navigator_sara_dead",ChiefNavigatorPeopleCMD show menelaus voss aias sinni sara,"Voss alone remains standing.
+
+Before the fallen Hegemony marines can recover their footing, the Spartans are among them. Kleon and his officers calmly relieve them of their weapons.
 
 ""Aw, man,"" you hear Sara mutter from behind your back, followed by the click of her gun going back into its holster.
 
 ""Your request to assume command is denied, Rear Admiral Voss,"" Menelaus thunders.
 
-Voss opens his mouth, but no words come out.",0:chief_navigator_auto_page_chief_navigator_voss_rank_continue_10:Continue.,Automatic runtime continuation 9/10 for chiefNavigatorVossRankContinue.
-chiefNavigatorVossRankContinuePage9WithoutSara,DialogOptionSelected,"$option == chief_navigator_auto_page_chief_navigator_voss_rank_continue_9
-$global.chief_navigator_sara_dead",,"The Spartans managed to subdue Voss' marines with frightening speed. Before they can recover, Aias and the other Spartan officers calmly strip the weapons from their hands.
+Voss holds Menelaus's gaze without answering.
 
-""Your request to assume command is denied, Rear Admiral Voss,"" Menelaus thunders.
-
-Voss opens his mouth, but no words come out.",0:chief_navigator_auto_page_chief_navigator_voss_rank_continue_10:Continue.,Post-Kshaya continuation of the Voss confrontation without Sara.
-chiefNavigatorVossRankContinuePage10,DialogOptionSelected,$option == chief_navigator_auto_page_chief_navigator_voss_rank_continue_10,ChiefNavigatorPeopleCMD show menelaus voss aias sinni,"Menelaus continues instead.
-
-""Your wounded will receive medical treatment, and those too weak for travel will remain under our care. Your ships will be repaired. Your crews will be fed and provisioned.""
+""Your wounded will receive medical treatment, those too weak for travel will remain under our care. Your ships will be repaired. Your crews will be fed and provisioned.""
 
 A pause.
 
 ""Do you accept, Rear Admiral?""
 
 Voss's jaw works.","0:chief_navigator_voss_defeated_heard:""You heard the Strategos.""
-10:chief_navigator_voss_defeated_food:""Maybe take the free food and call it a win.""
-20:chief_navigator_voss_defeated_silent:Say nothing.",Automatic runtime continuation 10/10 for chiefNavigatorVossRankContinue.
+10:chief_navigator_voss_defeated_food:""Take the free supplies and call it a win.""
+20:chief_navigator_voss_defeated_silent:Say nothing.","Voss confrontation: manually reviewed dramatic beats and comfortable reading lengths; approved wording, choices and callbacks preserved."
+chiefNavigatorVossRankContinuePage9WithoutSara,DialogOptionSelected,"$option == chief_navigator_auto_page_chief_navigator_voss_rank_continue_9
+$global.chief_navigator_sara_dead",ChiefNavigatorPeopleCMD show menelaus voss aias sinni,"Voss alone remains standing.
+
+Before the fallen Hegemony marines can recover their footing, the Spartans are among them. Kleon and his officers calmly relieve them of their weapons.
+
+""Your request to assume command is denied, Rear Admiral Voss,"" Menelaus thunders.
+
+Voss holds Menelaus's gaze without answering.
+
+""Your wounded will receive medical treatment, those too weak for travel will remain under our care. Your ships will be repaired. Your crews will be fed and provisioned.""
+
+A pause.
+
+""Do you accept, Rear Admiral?""
+
+Voss's jaw works.","0:chief_navigator_voss_defeated_heard:""You heard the Strategos.""
+10:chief_navigator_voss_defeated_food:""Take the free supplies and call it a win.""
+20:chief_navigator_voss_defeated_silent:Say nothing.","Voss confrontation: manually reviewed dramatic beats and comfortable reading lengths; approved wording, choices and callbacks preserved."
 chiefNavigatorVossDefeatedHeard,DialogOptionSelected,$option == chief_navigator_voss_defeated_heard,FireAll ChiefNavigatorVossAftermath,,,First route to the Voss aftermath.
 chiefNavigatorVossDefeatedFood,DialogOptionSelected,$option == chief_navigator_voss_defeated_food,FireAll ChiefNavigatorVossAftermath,,,Second route to the Voss aftermath.
 chiefNavigatorVossDefeatedSilent,DialogOptionSelected,$option == chief_navigator_voss_defeated_silent,FireAll ChiefNavigatorVossAftermath,,,Silent route to the Voss aftermath.
-chiefNavigatorVossAftermath,ChiefNavigatorVossAftermath,,"SetTextHighlightColors hColor
-SetTextHighlights ""Voss withdraws to a make-shift Forward Operating Base in the Alpha Odyssey Sector.""","At last, Voss forces the word through clenched teeth.
+chiefNavigatorVossAftermath,ChiefNavigatorVossAftermath,,"ChiefNavigatorPeopleCMD show menelaus voss aias sinni
+SetTextHighlightColors hColor
+SetTextHighlights ""Voss withdraws to a make-shift Forward Operating Base in the Alpha Odyssey Sector.""","At last, Voss forces his words through clenched teeth.
 
-""Yes.""
+""Let's go.""
 
 His marines are returned without their weapons. The expedition accepts Ithaca's food, fuel, medical aid, and repairs under Spartan guns.
 
-Voss withdraws to a make-shift Forward Operating Base in the Alpha Odyssey Sector. He does not attempt to cross Spartan's firing line again. Instead, he turns to requisitions and patrols that make every passage through the region a negotiation at gunpoint.",0:chief_navigator_hegemony_ithaca_continue:Continue.,Voss accepts Menelaus's terms and withdraws before Labor IV; his withdrawal line is highlighted yellow.
+Voss withdraws to a make-shift Forward Operating Base in the Alpha Odyssey Sector. He does not attempt to cross Spartan's firing line again. Instead, he turns to requisitions and patrols that make every passage through the region a negotiation at gunpoint.",0:chief_navigator_hegemony_ithaca_continue:Continue.,"Voss confrontation: manually reviewed dramatic beats and comfortable reading lengths; approved wording, choices and callbacks preserved."
 chiefNavigatorHegemonyIthacaContinue,DialogOptionSelected,$option == chief_navigator_hegemony_ithaca_continue,"ChiefNavigatorMenelausCMD hideVoss
 FireAll ChiefNavigatorFobIthaca","Menelaus, for once, apologizes.
 

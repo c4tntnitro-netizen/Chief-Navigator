@@ -114,7 +114,7 @@ At the navigation hub, Sinni reaches for the controls again. Her hands are still
 
 She pauses. And then she fixes your next navigation destination.
 
-Forward Operating Base Ithaca. Ashen Verge system.
+Forward Operating Base Ithaca. Lacedaemon system.
 
 A forgotten remnant of the mighty 14th Battlegroup. There, the Battlegroup should have abandoned countless ships, vast stores of supplies, and more. All yours for the taking.
 

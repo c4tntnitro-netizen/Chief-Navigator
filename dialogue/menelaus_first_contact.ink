@@ -22,7 +22,7 @@ Your pilot acknowledges and banks toward a docking aperture opening in Ithaca's 
 
 Stars disappear behind the shuttle. Guidance lamps streak past the windows as you descend through layer after layer of the macrocomplex. There is a heavy jolt as docking clamps seize the shuttle. The engines spool down, their vibration fading from the deck beneath your boots.
 
-For the first time since entering the Ashen Verge system, everything is still.
+For the first time since entering the Lacedaemon system, everything is still.
 
 You unfasten your restraints. Your bodyguards do the same.
 
@@ -232,7 +232,7 @@ Sinni looks around.
 
 Lights shine from below.
 
-Stars shimmer into existence, hanging overhead and rising from beneath your feet. Ithaca's orbital ring curves through the chamber while the central module hangs at its heart. Fleet positions begin appearing around it, followed by defense networks, supply routes, industrial output, power flow, and casualty estimates. Behind your head, the Ashen Verge star fills the room with a warm, ambient light.
+Stars shimmer into existence, hanging overhead and rising from beneath your feet. Ithaca's orbital ring curves through the chamber while the central module hangs at its heart. Fleet positions begin appearing around it, followed by defense networks, supply routes, industrial output, power flow, and casualty estimates. Behind your head, the Lacedaemon star fills the room with a warm, ambient light.
 
 Thousands of streams of information fold through one another faster than you can follow.
 

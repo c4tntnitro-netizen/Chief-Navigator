@@ -83,6 +83,7 @@ public final class DialoguePortraitCoverageRegression {
     }
 
     public static void main(String[] args) throws Exception {
+        boolean vossOnly = java.util.Arrays.asList(args).contains("--voss");
         Map<String, List<String>> rows = readRules(read("data/campaign/rules.csv"));
         Map<String, String> expected = Map.ofEntries(
                 Map.entry("chiefNavigatorMenelausFirstShuttleContinue", "show sinni player"),
@@ -93,7 +94,8 @@ public final class DialoguePortraitCoverageRegression {
                 Map.entry("chiefNavigatorMenelausFirstAbominationWithoutSara", "show menelaus sinni"),
                 Map.entry("chiefNavigatorMenelausFirstBusiness", "show menelaus sinni"),
                 Map.entry("chiefNavigatorVossRankContinuePage9", "show menelaus voss aias sinni sara"),
-                Map.entry("chiefNavigatorVossRankContinuePage10", "show menelaus voss aias sinni"),
+                Map.entry("chiefNavigatorVossRankContinuePage9WithoutSara", "show menelaus voss aias sinni"),
+                Map.entry("chiefNavigatorVossAftermath", "show menelaus voss aias sinni"),
                 Map.entry("chiefNavigatorLeagueRescueRecoverWithSaraPage3",
                         "illustrated chief_navigator_persean_survivors_aftermath sara"),
                 Map.entry("chiefNavigatorAviciHabitatLightPage4", "show sara"),
@@ -123,9 +125,17 @@ public final class DialoguePortraitCoverageRegression {
                         "illustrated chief_navigator_alpha_odyssey_arrival"),
                 Map.entry("chiefNavigatorLabor5EndingWakingPage4",
                         "illustrated chief_navigator_sinni_ending"));
+        if (vossOnly) {
+            expected = expected.entrySet().stream().filter(entry ->
+                    entry.getKey().startsWith("chiefNavigatorVossRankContinue")
+                            || entry.getKey().equals("chiefNavigatorVossAftermath"))
+                    .collect(java.util.stream.Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+        }
         Set<String> actual = new HashSet<>();
         Set<String> roles = Set.of("menelaus", "sinni", "aias", "voss", "player", "contact", "sara");
         for (List<String> row : rows.values()) {
+            if (vossOnly && !row.get(0).startsWith("chiefNavigatorVossRankContinue")
+                    && !row.get(0).equals("chiefNavigatorVossAftermath")) continue;
             int assignments = 0;
             for (String line : row.get(3).split("\\R")) {
                 if (!line.startsWith("ChiefNavigatorPeopleCMD ")) continue;
@@ -158,6 +168,11 @@ public final class DialoguePortraitCoverageRegression {
             check(assignments <= 1, "A page must not repeatedly replace its own portrait cast: " + row.get(0));
         }
         check(actual.equals(expected.keySet()), "All targeted speaker gaps must have explicit cast assignments");
+        if (vossOnly) {
+            defaultCasts();
+            System.out.println("Voss portrait coverage passed: living/dead Sara casts, aftermath restoration, conference setup and closing restoration.");
+            return;
+        }
         check(rows.get("chiefNavigatorMenelausFirstLosing").get(3).equals(
                         "ChiefNavigatorMenelausCMD showGautama"),
                 "The existing Gautama ship visual must remain intact before portraits resume");

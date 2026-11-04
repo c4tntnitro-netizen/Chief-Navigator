@@ -215,6 +215,7 @@ public final class MenelausFlowRegression {
         int availableComponents;
         int availableMask = -1;
         int componentRemovals;
+        float hegemonyRelationship;
         final List<FleetMemberAPI> playerMembers = new ArrayList<>();
         String[] textHighlights = new String[0];
         Color[] textHighlightColors = new Color[0];
@@ -395,7 +396,8 @@ public final class MenelausFlowRegression {
                 if (name.equals("getMemoryWithoutUpdate") || name.equals("getPlayerMemoryWithoutUpdate")) return global;
                 if (name.equals("getPlayerFleet")) return fleet;
                 if (name.equals("getPlayerPerson")) return player;
-                if (name.equals("getPlayerFaction")) return mock(FactionAPI.class, (method, values) -> null);
+                if (name.equals("getPlayerFaction")) return mock(FactionAPI.class, (method, values) ->
+                        method.equals("getRelationship") ? hegemonyRelationship : null);
                 if (name.equals("getImportantPeople")) return people;
                 if (name.equals("getStarSystems") || name.equals("getAllLocations")) return List.of();
                 if (name.equals("getIntelManager")) return manager;
@@ -596,6 +598,114 @@ public final class MenelausFlowRegression {
         check(Files.readString(Path.of("dialogue/voss_ithaca_confrontation.ink"),
                         StandardCharsets.UTF_8).contains(withdrawal),
                 "Keep the confrontation Ink excerpt synchronized");
+    }
+
+    private static void continueVossTo(Fixture f, String target, Set<String> visited,
+            String... expectedChoices) {
+        int index = 0;
+        while (!f.options.containsKey(target)) {
+            check(index < expectedChoices.length, "Voss must retain the reviewed Continue boundaries before " + target);
+            check(f.options.size() == 1, "Intermediate Voss pages must offer one Continue: " + f.options);
+            String next = f.options.keySet().iterator().next();
+            check(next.equals(expectedChoices[index++]),
+                    "Voss must follow the reviewed Continue sequence: " + next);
+            f.choose(next);
+            for (String id : f.applied) {
+                check(visited.add(id), "Voss pagination must not repeat a rule: " + id);
+            }
+        }
+        check(index == expectedChoices.length, "Voss must not skip a reviewed Continue boundary before " + target);
+    }
+
+    private static void verifyVossConfrontation() throws Exception {
+        String[] rankChoices = {"salute", "charge", "boss"};
+        String[] navigationChoices = {"better", "safer", "skill"};
+        String[] defeatedChoices = {"heard", "food", "silent"};
+        String[] branches = {"Hostile", "Neutral", "Friendly"};
+        float[] relationships = {-0.75f, 0f, 0.75f};
+        int paths = 0;
+        for (int reputation = 0; reputation < branches.length; reputation++) {
+            for (boolean saraDead : List.of(false, true)) {
+                for (String rank : rankChoices) {
+                    for (String navigation : navigationChoices) {
+                        for (String defeated : defeatedChoices) {
+                            Fixture f = new Fixture();
+                            f.hegemonyRelationship = relationships[reputation];
+                            f.global.set("$chief_navigator_sara_dead", saraDead);
+                            f.stage(MenelausTrial.LABOR_WALL, true, false);
+                            f.fire("ChiefNavigatorFobIthaca");
+                            check(f.applied.contains("chiefNavigatorFobIthacaWallReport")
+                                            && f.applied.contains("chiefNavigatorHegemonyIthacaArrival")
+                                            && f.global.getBoolean(REPORTED + "iii_reported_v1"),
+                                    "Completing Labor III must commit its report and enter Voss's confrontation");
+                            check(f.global.getBoolean("$chief_navigator_hegemony_ithaca_command_scene_shown"),
+                                    "Opening the inline confrontation must suppress fallback replay");
+                            Set<String> visited = new HashSet<>(f.applied);
+                            continueVossTo(f, "chief_navigator_voss_rank_salute", visited,
+                                    "chief_navigator_auto_page_chief_navigator_hegemony_ithaca_arrival_2",
+                                    "chief_navigator_auto_page_chief_navigator_hegemony_ithaca_arrival_4",
+                                    "chief_navigator_auto_page_chief_navigator_hegemony_ithaca_arrival_5",
+                                    "chief_navigator_auto_page_chief_navigator_hegemony_ithaca_arrival_6",
+                                    "chief_navigator_auto_page_chief_navigator_hegemony_ithaca_arrival_11");
+                            check(f.options.keySet().equals(Set.of(
+                                            "chief_navigator_voss_rank_salute", "chief_navigator_voss_rank_charge",
+                                            "chief_navigator_voss_rank_boss")),
+                                    "The final hierarchy page must offer exactly the three authored responses");
+                            f.choose("chief_navigator_voss_rank_" + rank);
+                            String recognition = "chiefNavigatorVossRecognition" + branches[reputation];
+                            check(f.applied.contains(recognition)
+                                            && f.applied.stream().filter(id -> id.startsWith(
+                                                    "chiefNavigatorVossRecognition")).count() == 1,
+                                    "Every rank response must render exactly the current reputation branch");
+                            check(f.options.keySet().equals(Set.of(
+                                            "chief_navigator_voss_nav_better", "chief_navigator_voss_nav_safer",
+                                            "chief_navigator_voss_nav_skill")),
+                                    "All reputation branches must offer the three distinct navigation aliases");
+                            visited.addAll(f.applied);
+                            f.choose("chief_navigator_voss_nav_" + navigation);
+                            visited.addAll(f.applied);
+                            continueVossTo(f, "chief_navigator_voss_defeated_heard", visited,
+                                    "chief_navigator_auto_page_chief_navigator_voss_rank_continue_3",
+                                    "chief_navigator_auto_page_chief_navigator_voss_rank_continue_5",
+                                    "chief_navigator_auto_page_chief_navigator_voss_rank_continue_7",
+                                    "chief_navigator_auto_page_chief_navigator_voss_rank_continue_9");
+                            check(visited.contains("chiefNavigatorVossRankContinuePage9") == !saraDead
+                                            && visited.contains("chiefNavigatorVossRankContinuePage9WithoutSara") == saraDead,
+                                    "Exactly the Sara page matching her durable survival state must execute");
+                            String transcript = String.join("\n", f.history);
+                            check(transcript.contains("you hear Sara mutter") == !saraDead,
+                                    "Sara's aside must appear only while she is alive");
+                            check(transcript.contains("\"...HUMAN.\"")
+                                            && transcript.indexOf("\"...HUMAN.\"")
+                                                    < transcript.indexOf("Your request to assume command is denied"),
+                                    "Menelaus's declaration must precede his denial and relief offer");
+                            check(f.options.keySet().equals(Set.of(
+                                            "chief_navigator_voss_defeated_heard", "chief_navigator_voss_defeated_food",
+                                            "chief_navigator_voss_defeated_silent")),
+                                    "The relief offer must wait for one of its three authored responses");
+                            f.choose("chief_navigator_voss_defeated_" + defeated);
+                            check(f.applied.contains("chiefNavigatorVossAftermath")
+                                            && f.options.keySet().equals(Set.of("chief_navigator_hegemony_ithaca_continue")),
+                                    "Every defeated response must converge on the aftermath's Continue");
+                            f.choose("chief_navigator_hegemony_ithaca_continue");
+                            check(f.applied.contains("chiefNavigatorHegemonyIthacaContinue")
+                                            && f.applied.contains("chiefNavigatorFobIthacaSensorBriefing"),
+                                    "Closing Voss must execute the apology and resume the unbriefed Labor IV");
+                            check(f.history.stream().filter(text -> text.contains(
+                                            "Menelaus, for once, apologizes.")).count() == 1,
+                                    "The apology must appear exactly once on closing the confrontation");
+                            check(f.global.getBoolean(REPORTED + "iii_reported_v1")
+                                            && !f.global.getBoolean(REPORTED + "iv_reported_v1")
+                                            && f.global.getBoolean("$chief_navigator_sara_dead") == saraDead,
+                                    "The confrontation must preserve Labor III completion, Labor IV progress and Sara's state");
+                            paths++;
+                        }
+                    }
+                }
+            }
+        }
+        check(paths == 162, "Exercise every reputation, Sara and response combination");
+        verifyVossAftermathHighlight();
     }
 
     private static void verifySinniIdentityRoutes() throws Exception {
@@ -1298,6 +1408,12 @@ public final class MenelausFlowRegression {
                 return Color.WHITE;
             }));
             initializeExpressions(); readRules();
+            if (Arrays.asList(args).contains("--voss")) {
+                verifyVossConfrontation();
+                System.out.println("PASS: 162 native Voss paths across reputation, Sara continuity and all response aliases; Labor III entry, pagination, aftermath highlight and Labor IV handoff ("
+                        + pagesVisited + " authored rules executed).");
+                return;
+            }
             if (Arrays.asList(args).contains("--labor-two")) {
                 verifyLaborTwoDialogue();
                 System.out.println("PASS: native Labor II acknowledgement, all optional branches, services, four distinct installations, revisits and directory return ("

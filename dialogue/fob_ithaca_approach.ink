@@ -5,7 +5,7 @@ VAR player_title = "Captain"
 
 === opening ===
 
-The orbital ring comes into view. At this distance, it is nothing more than a vast black dash carved across the night sky. Several of your bridge crew swear at the sight. It is larger than most planets in the Persean Sector. The corpse of a colossus hanging in the twilight nebula of Ashen Verge.
+The orbital ring comes into view. At this distance, it is nothing more than a vast black dash carved across the night sky. Several of your bridge crew swear at the sight. It is larger than most planets in the Persean Sector. The corpse of a colossus hanging in the twilight nebula of Lacedaemon.
 
 + [“Nav. Half-speed approach.”] -> reveal
 

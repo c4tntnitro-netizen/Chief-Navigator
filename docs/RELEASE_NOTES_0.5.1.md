@@ -219,3 +219,12 @@ The ZIP includes the compiled jar and required runtime assets. Use the named
 release ZIP for installation. Its internal manifest records the exact build
 commit and individual file checksums; a SHA-256 checksum is supplied alongside
 the download.
+
+## November 3, 2026 writing revision
+
+- Replaced Voss's Ithaca confrontation with the revised scene and reviewed Continue breaks. Connected exchanges and Menelaus's declaration stay together.
+- Preserved all reputation branches, Sara's survival gate, portraits, player-choice routing, and the Labor III/IV handoff.
+- Updated four narrative references to Lacedaemon, matching the already revised Labor II wording. This is a prose change; map labels and system IDs retain their existing names.
+- The revised Voss scene was confirmed working in game. Native dialogue traversal checks cover all 162 reputation, Sara, and response combinations.
+
+This revision changes writing and its presentation only. It also includes six existing Labor II read-marker corrections already present on main; only MenelausDialogueReadState.class differs from the previous download. All other compiled classes, gameplay source/data, dependencies, research upgrades, enemies, and the original release tag are unchanged.

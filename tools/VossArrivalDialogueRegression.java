@@ -70,7 +70,7 @@ public final class VossArrivalDialogueRegression {
                     "Interjection must use exclusive recognition dispatch: " + interjection);
         }
         String[] branches = {"Friendly", "Hostile", "Neutral"};
-        String[] signatures = {"Golden Boy", "I should have you shot where you stand.",
+        String[] signatures = {"Golden Child", "I should have you shot where you stand.",
                 "And who the fuck are you?"};
         for (int i = 0; i < branches.length; i++) {
             String id = "chiefNavigatorVossRecognition" + branches[i];
@@ -147,12 +147,12 @@ public final class VossArrivalDialogueRegression {
                         + "ChiefNavigatorMenelausCMD report wall\n"
                         + "FireAll ChiefNavigatorHegemonyIthacaArrival",
                 "Labor III report must commit silently and launch Voss's arrival");
-        contains(scene, "Captain Aias Kleon",
+        contains(scene, "Aias Kleon, Commodore of the 6th Special Operations Task Force, Fourteenth Battlegroup.",
                 "Spartan's commanding officer must identify himself");
         contains(scene, "thirteen levels subordinate",
                 "Menelaus must display the Domain command hierarchy");
         contains(scene, "chief_navigator_voss_rank_boss",
-                "The Voss Boss response must remain selectable");
+                "The silent rank response must retain its existing option ID");
         contains(scene, "chiefNavigatorVossRecognitionFriendly",
                 "Friendly Hegemony recognition variant must exist");
         contains(scene, "chiefNavigatorVossRecognitionHostile",
@@ -160,7 +160,7 @@ public final class VossArrivalDialogueRegression {
         contains(scene, "chiefNavigatorVossRecognitionNeutral",
                 "Neutral Hegemony recognition variant must exist");
         contains(scene, "chief_navigator_voss_nav_skill",
-                "Skill-issue response must remain selectable");
+                "The Skill response must retain its existing option ID");
         contains(scene, "I decline this order to frag my superior",
                 "Aias must reject the containment order");
         contains(scene, "\"\"...HUMAN.\"\"",
