@@ -42,7 +42,7 @@ public final class ColossalNavalTurretRenderer
     private ColossalNavalTurretRenderer(
             CombatEngineAPI engine, WeaponAPI weapon, SpriteAPI artwork,
             SpriteAPI combatUnder, Registry registry) {
-        super(CombatEngineLayers.PHASED_SHIPS_LAYER);
+        super(CombatEngineLayers.ABOVE_SHIPS_LAYER);
         this.engine = engine;
         this.weapon = weapon;
         this.ship = weapon.getShip();
@@ -128,7 +128,7 @@ public final class ColossalNavalTurretRenderer
 
     @Override
     public void render(CombatEngineLayers layer, ViewportAPI viewport) {
-        if (layer != CombatEngineLayers.PHASED_SHIPS_LAYER || viewport == null
+        if (layer != CombatEngineLayers.ABOVE_SHIPS_LAYER || viewport == null
                 || isExpired() || ship.isDoNotRender() || ship.isDoNotRenderWeapons()) return;
         SpriteAPI nativeSprite = weapon.getSprite();
         if (nativeSprite == null) return;

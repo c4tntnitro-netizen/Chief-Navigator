@@ -5319,3 +5319,5 @@ chiefNavigatorBudaiSalvageExtractChief,ChiefNavigatorBudaiSalvage_extract_salvag
 
 A single modularized Heavy Adjudicator is transferred to the fleet's weapon stores. Its improvised mounting frame is jerry-rigged to fit standard large ballistic hardpoints.",0:complete:Continue.,Awards exactly one mountable Heavy Adjudicator without Isa's assistance.
 chiefNavigatorBudaiSalvageComplete,ChiefNavigatorBudaiSalvage_complete,,DismissDialog,,,Closes the one-time post-Budai salvage scene.
+
+chiefNavigatorHegemonyBaseDenied,ChiefNavigatorHegemonyBaseDenied,,ShowDefaultVisual,"The Hegemony Expeditionary Fleet denies your ship entry to its forward base.","0:leave:Leave.",Occupied expedition base placeholder.

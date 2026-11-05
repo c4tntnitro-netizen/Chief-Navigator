@@ -360,3 +360,5 @@
 
 
 
+
+- November 5, 2026: user confirmed CN-022 naval turret layering and CN-025 hidden Hegemony Expeditionary Fleet fixed in game and authorized release publication. Scoped 0.5.1 update includes both fixes and occupied-base entry denial.

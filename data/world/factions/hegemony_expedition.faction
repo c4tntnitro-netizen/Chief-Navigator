@@ -1,5 +1,6 @@
 {
 	id:"chief_navigator_hegemony_expedition",
+	"showInIntelTab":false,
 	"color":[245,150,30,255],
 	"displayName":"Hegemony Expeditionary Fleet",
 	"displayNameWithArticle":"the Hegemony Expeditionary Fleet",

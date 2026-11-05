@@ -1,3 +1,11 @@
+## November 5, 2026 confirmed fixes
+
+- Naval turrets now render above missile boxes and Cloudswarm launcher housings (CN-022).
+- The Hegemony Expeditionary Fleet is hidden from faction Intel (CN-025).
+- Its occupied forward base denies your ship entry with a placeholder message; the abandoned station keeps its existing interaction.
+
+Player confirmed CN-022 and the hidden-faction fixes in game. Focused renderer and native CSV checks pass. Other release content and the original v0.5.1 tag are preserved.
+
 # Chief Navigator 0.5.1
 
 Chief Navigator can now be enabled in an existing Starsector campaign.

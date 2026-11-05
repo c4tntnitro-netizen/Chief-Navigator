@@ -182,6 +182,15 @@ public final class TreadmillCampaignPlugin extends BaseCampaignPlugin {
                             "ChiefNavigatorDevouredRing"),
                     PickPriority.HIGHEST);
         }
+        if (target != null
+                && OdysseyExpanseSystem.HEGEMONY_FOB_ID.equals(target.getId())
+                && target.getMemoryWithoutUpdate().getBoolean(
+                        "$chief_navigator_hegemony_fob_restored")) {
+            return new PluginPick<InteractionDialogPlugin>(
+                    new RuleBasedInteractionDialogPluginImpl(
+                            "ChiefNavigatorHegemonyBaseDenied"),
+                    PickPriority.HIGHEST);
+        }
         if (OdysseyExpanseSystem.isDomainDerelictBattlestation(target)) {
             return new PluginPick<InteractionDialogPlugin>(
                     new RuleBasedInteractionDialogPluginImpl(

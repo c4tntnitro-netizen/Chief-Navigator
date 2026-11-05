@@ -202,10 +202,10 @@ public final class ColossalNavalTurretRendererRegression {
         int initialResources = resources.size();
         CombatLayeredRenderingPlugin renderer = fixture.install();
         Sprite art = resources.get(initialResources);
-        check(renderer.getActiveLayers().equals(EnumSet.of(CombatEngineLayers.PHASED_SHIPS_LAYER)),
-                "Opaque art must precede native station weapons and glow");
-        check(CombatEngineLayers.PHASED_SHIPS_LAYER.ordinal() + 1
-                == CombatEngineLayers.STATION_WEAPONS_LAYER.ordinal(), "Native layer adjacency changed");
+        check(renderer.getActiveLayers().equals(EnumSet.of(CombatEngineLayers.ABOVE_SHIPS_LAYER)),
+                "Naval artwork must cover station launcher housings");
+        check(CombatEngineLayers.ABOVE_SHIPS_LAYER.ordinal()
+                > CombatEngineLayers.STATION_WEAPONS_LAYER.ordinal(), "Native layer adjacency changed");
         check(renderer.getRenderRadius() >= 1160f, "Culling must include the full original sprite");
         number(art.width, 420f, "Original art width");
         number(art.height, 1160f, "Original art height");
@@ -218,7 +218,7 @@ public final class ColossalNavalTurretRendererRegression {
                 "Repeated installation must not allocate or register again");
         for (float angle : new float[]{0f, 90f, 180f, 270f, 37f}) {
             fixture.angle = angle;
-            renderer.render(CombatEngineLayers.PHASED_SHIPS_LAYER, viewport(0.5f));
+            renderer.render(CombatEngineLayers.ABOVE_SHIPS_LAYER, viewport(0.5f));
             number(art.angle, angle - 90f, "Native orientation correction");
             Vector2f pivot = art.worldPixel(210f, 580f);
             number(pivot.x, fixture.location.x, "Turret pivot world X");
@@ -244,33 +244,33 @@ public final class ColossalNavalTurretRendererRegression {
         Sprite art = resources.get(resources.size() - 1);
         number(art.centerY, 290f, "Hardpoint quarter-height pivot");
         fixture.angle = 90f;
-        renderer.render(CombatEngineLayers.PHASED_SHIPS_LAYER, viewport(1f));
+        renderer.render(CombatEngineLayers.ABOVE_SHIPS_LAYER, viewport(1f));
         Vector2f top = art.worldPixel(210f, 1160f);
         number(top.x, 100f, "Hardpoint barrel X");
         number(top.y, 1070f, "Hardpoint barrel offset preserved");
         fixture.angle = 180f;
-        renderer.render(CombatEngineLayers.PHASED_SHIPS_LAYER, viewport(1f));
+        renderer.render(CombatEngineLayers.ABOVE_SHIPS_LAYER, viewport(1f));
         top = art.worldPixel(210f, 1160f);
         number(top.x, -770f, "Hardpoint rotated barrel offset X");
         number(top.y, 200f, "Hardpoint rotated barrel offset Y");
         int before = art.renders;
         renderer.render(CombatEngineLayers.STATION_WEAPONS_LAYER, viewport(1f));
         fixture.doNotRender = true;
-        renderer.render(CombatEngineLayers.PHASED_SHIPS_LAYER, viewport(1f));
+        renderer.render(CombatEngineLayers.ABOVE_SHIPS_LAYER, viewport(1f));
         fixture.doNotRender = false;
         fixture.doNotRenderWeapons = true;
-        renderer.render(CombatEngineLayers.PHASED_SHIPS_LAYER, viewport(1f));
+        renderer.render(CombatEngineLayers.ABOVE_SHIPS_LAYER, viewport(1f));
         fixture.doNotRenderWeapons = false;
-        renderer.render(CombatEngineLayers.PHASED_SHIPS_LAYER, viewport(0f));
+        renderer.render(CombatEngineLayers.ABOVE_SHIPS_LAYER, viewport(0f));
         check(art.renders == before, "Suppression flags, wrong layer and zero alpha must hide art");
         fixture.hulk = true;
         renderer.advance(1f);
-        renderer.render(CombatEngineLayers.PHASED_SHIPS_LAYER, viewport(1f));
+        renderer.render(CombatEngineLayers.ABOVE_SHIPS_LAYER, viewport(1f));
         check(!renderer.isExpired() && art.renders == before + 1,
                 "A hulk retains its artwork while the entity remains in play");
         fixture.inPlay = false;
         renderer.advance(1f);
-        renderer.render(CombatEngineLayers.PHASED_SHIPS_LAYER, viewport(1f));
+        renderer.render(CombatEngineLayers.ABOVE_SHIPS_LAYER, viewport(1f));
         check(renderer.isExpired() && fixture.under.color.equals(fixture.originalUnder),
                 "Removal expires the renderer and restores its under-sprite");
     }
