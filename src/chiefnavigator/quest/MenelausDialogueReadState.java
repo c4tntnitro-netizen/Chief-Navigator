@@ -77,7 +77,6 @@ public final class MenelausDialogueReadState {
             "menelaus_labor_five_hostswarms",
             "menelaus_labor_five_line",
             "menelaus_labor_four_active",
-            "menelaus_labor_four_detected",
             "menelaus_labor_four_helen",
             "menelaus_labor_four_helen_press",
             "menelaus_labor_four_helen_sinni",
@@ -89,7 +88,6 @@ public final class MenelausDialogueReadState {
             "menelaus_labor_four_sinni_why",
             "menelaus_labor_four_starving",
             "menelaus_labor_four_threat",
-            "menelaus_labor_four_war",
             "menelaus_labor_one",
             "menelaus_labor_one_collapse",
             "menelaus_labor_one_drone",
@@ -121,7 +119,8 @@ public final class MenelausDialogueReadState {
             "menelaus_labor_two_helen",
             "menelaus_labor_two_helen_sinni",
             "menelaus_labor_two_helen_why",
-            "menelaus_labor_two_what");
+            "menelaus_labor_two_what",
+            "auto_page_chief_navigator_menelaus_labor_four_helen_2");
     static final Set<String> CONTINUATIONS = Set.of(
             "auto_page_chief_navigator_fob_ithaca_debrief_2",
             "auto_page_chief_navigator_fob_ithaca_debrief_3",
@@ -161,16 +160,8 @@ public final class MenelausDialogueReadState {
             "auto_page_chief_navigator_menelaus_labor_five_field_briefing_2",
             "auto_page_chief_navigator_menelaus_labor_five_hostswarms_2",
             "auto_page_chief_navigator_menelaus_labor_five_hostswarms_3",
-            "auto_page_chief_navigator_menelaus_labor_four_helen_2",
-            "auto_page_chief_navigator_menelaus_labor_four_helen_3",
             "auto_page_chief_navigator_menelaus_labor_four_reach_2",
             "auto_page_chief_navigator_menelaus_labor_four_reach_3",
-            "auto_page_chief_navigator_menelaus_labor_four_reach_4",
-            "auto_page_chief_navigator_menelaus_labor_four_sinni_choice_2",
-            "auto_page_chief_navigator_menelaus_labor_four_sinni_choice_3",
-            "auto_page_chief_navigator_menelaus_labor_four_sinni_why_3",
-            "auto_page_chief_navigator_menelaus_labor_four_understood_2",
-            "auto_page_chief_navigator_menelaus_labor_four_understood_3",
             "auto_page_chief_navigator_menelaus_labor_one_briefing_2",
             "auto_page_chief_navigator_menelaus_labor_one_briefing_3",
             "auto_page_chief_navigator_menelaus_labor_one_collapse_2",
@@ -202,7 +193,11 @@ public final class MenelausDialogueReadState {
             "menelaus_labor_two_accept",
             "menelaus_report_motherships",
             "menelaus_report_research",
-            "menelaus_report_sensor");
+            "menelaus_report_sensor",
+            "auto_page_chief_navigator_fob_ithaca_sensor_briefing_2",
+            "auto_page_chief_navigator_fob_ithaca_sensor_briefing_3",
+            "auto_page_chief_navigator_menelaus_labor_four_threat_2",
+            "auto_page_chief_navigator_menelaus_labor_four_threat_3");
 
     private final Set<String> pending = new LinkedHashSet<String>();
 

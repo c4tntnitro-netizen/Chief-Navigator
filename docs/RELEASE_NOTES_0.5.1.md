@@ -1,3 +1,11 @@
+## November 7, 2026 Labor IV dialogue update
+
+- Revise Menelaus's fourth-Labor briefing, Sinni exchange, system and Threat history, Helen conversation, and departure.
+- Correct dialogue paragraph formatting and menu returns.
+- Keep unread highlighting aligned with the revised questions and Continue pages.
+
+Tested in game. Native CSV loading, dialogue parity, pagination and conversation routing checks pass. Replace the previous mod folder and restart Starsector after updating.
+
 ## November 5, 2026 confirmed fixes
 
 - Naval turrets now render above missile boxes and Cloudswarm launcher housings (CN-022).

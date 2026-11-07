@@ -709,39 +709,7 @@ public final class MenelausFlowRegression {
     }
 
     private static void verifySinniIdentityRoutes() throws Exception {
-        for (boolean why : List.of(false, true)) {
-            for (String decision : List.of("refuse", "choice")) {
-                Fixture f = new Fixture();
-                f.stage(MenelausTrial.LABOR_SENSOR, false, false);
-                // A prior interrupted/reopened exchange must not hide the line.
-                f.local.set("$chiefNavigatorMenelausL4SinniHelenStated", true);
-                f.fire("ChiefNavigatorFobIthaca");
-                f.choose("chief_navigator_menelaus_labor_four_understood");
-                f.choose("chief_navigator_auto_page_chief_navigator_menelaus_labor_four_understood_2");
-                f.choose("chief_navigator_auto_page_chief_navigator_menelaus_labor_four_understood_3");
-                check(!f.local.getBoolean("$chiefNavigatorMenelausL4SinniHelenStated"),
-                        "A fresh initial Sinni decision resets only its presentation context");
-                if (why) {
-                    f.choose("chief_navigator_menelaus_labor_four_sinni_why");
-                    f.choose("chief_navigator_auto_page_chief_navigator_menelaus_labor_four_sinni_why_2");
-                    f.choose("chief_navigator_auto_page_chief_navigator_menelaus_labor_four_sinni_why_3");
-                }
-                f.choose("chief_navigator_menelaus_labor_four_sinni_" + decision);
-                if (decision.equals("choice")) {
-                    f.choose("chief_navigator_auto_page_chief_navigator_menelaus_labor_four_sinni_choice_2");
-                    f.choose("chief_navigator_auto_page_chief_navigator_menelaus_labor_four_sinni_choice_3");
-                }
-                String transcript = String.join("\n", f.history);
-                check(transcript.split("I am not Helen", -1).length == 2,
-                        "Every complete route must contain exactly one Sinni declaration: " + why + "/" + decision);
-                check(f.options.containsKey("chief_navigator_menelaus_labor_four_accept")
-                                && !f.global.getBoolean("$chief_navigator_menelaus_labor_four_briefed"),
-                        "The edited exchange must retain explicit Labor-IV acceptance");
-                f.choose("chief_navigator_menelaus_labor_four_accept");
-                check(f.global.getBoolean("$chief_navigator_menelaus_labor_four_briefed"),
-                        "All four route combinations must still reach the reusable Labor-IV menu");
-            }
-        }
+        LaborFourNativeRegression.verify();
     }
 
     private static void verifyOptionalVictoryExplanation() throws Exception {
@@ -903,8 +871,7 @@ public final class MenelausFlowRegression {
             {"chiefNavigatorMenelausLaborTwoHelen", "chiefNavigatorMenelausLaborTwoHelenEndPage2", "$chiefNavigatorMenelausL2AskedHelen"},
             {"chiefNavigatorMenelausLaborThreeHistory", "chiefNavigatorMenelausLaborThreeHistoryPage4", "$chiefNavigatorMenelausL3AskedHistory"},
             {"chiefNavigatorMenelausLaborThreeHelen", "chiefNavigatorMenelausLaborThreeHelenEnd", "$chiefNavigatorMenelausL3AskedHelen"},
-            {"chiefNavigatorMenelausLaborFourPackage", "chiefNavigatorMenelausLaborFourDetected", "$chiefNavigatorMenelausL4AskedPackage"},
-            {"chiefNavigatorMenelausLaborFourReach", "chiefNavigatorMenelausLaborFourReachPage4", "$chiefNavigatorMenelausL4AskedReach"},
+            {"chiefNavigatorMenelausLaborFourReach", "chiefNavigatorMenelausLaborFourReachPage3", "$chiefNavigatorMenelausL4AskedReach"},
             {"chiefNavigatorMenelausLaborFourThreat", "chiefNavigatorMenelausLaborFourStarving", "$chiefNavigatorMenelausL4AskedThreat"},
             {"chiefNavigatorMenelausLaborFourHelen", "chiefNavigatorMenelausLaborFourHelenEnd", "$chiefNavigatorMenelausL4AskedHelen"}
         };
