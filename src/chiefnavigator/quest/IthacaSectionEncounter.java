@@ -773,8 +773,7 @@ public final class IthacaSectionEncounter {
                 MemFlags.FLEET_IGNORES_OTHER_FLEETS);
         fleet.getMemoryWithoutUpdate().unset(
                 MemFlags.FLEET_IGNORED_BY_OTHER_FLEETS);
-        fleet.getMemoryWithoutUpdate().set(
-                MemFlags.MEMORY_KEY_NO_REP_IMPACT, true);
+        TaskForceSpartanFaction.configureFriendlyDefender(fleet);
         fleet.getMemoryWithoutUpdate().set(
                 MemFlags.MEMORY_KEY_NO_SHIP_RECOVERY, true);
     }

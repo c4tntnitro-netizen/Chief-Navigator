@@ -21,12 +21,6 @@ public final class IthacaSupportInteraction extends FleetInteractionDialogPlugin
         super(supportConfig(ambush, starvingThreat));
     }
 
-    @Override
-    public void init(InteractionDialogAPI dialog) {
-        FinalLaborBattleJoin.withPermission(dialog.getInteractionTarget(),
-                () -> super.init(dialog));
-    }
-
     private static FIDConfig supportConfig(
             boolean ambush, boolean starvingThreat) {
         FIDConfig config = starvingThreat
@@ -110,14 +104,12 @@ public final class IthacaSupportInteraction extends FleetInteractionDialogPlugin
 
     @Override
     public void optionSelected(String optionText, Object optionData) {
-        FinalLaborBattleJoin.withPermission(dialog.getInteractionTarget(), () -> {
-            super.optionSelected(optionText, optionData);
-            // Opening an ongoing battle's preview is not consent to fight. Let
-            // native JOIN admit the player before sending the Wall detachment.
-            if (optionData == OptionId.JOIN_ONGOING_BATTLE && joinedBattle) {
-                pullInWallDetachment();
-            }
-        });
+        super.optionSelected(optionText, optionData);
+        // Opening an ongoing battle's preview is not consent to fight. Let
+        // native JOIN admit the player before sending the Wall detachment.
+        if (optionData == OptionId.JOIN_ONGOING_BATTLE && joinedBattle) {
+            pullInWallDetachment();
+        }
     }
 
     private void pullInWallDetachment() {

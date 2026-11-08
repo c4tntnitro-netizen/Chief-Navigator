@@ -2257,8 +2257,7 @@ public final class OdysseyExpanseSystem {
         station.removeTag(Tags.NON_CLICKABLE);
         station.addTag(Tags.STATION);
         station.getMemoryWithoutUpdate().set(MemFlags.STATION_FLEET, true);
-        station.getMemoryWithoutUpdate().set(
-                MemFlags.MEMORY_KEY_NO_REP_IMPACT, true);
+        TaskForceSpartanFaction.configureFriendlyDefender(station);
         station.getMemoryWithoutUpdate().set(
                 MemFlags.MEMORY_KEY_NO_SHIP_RECOVERY, true);
         station.getMemoryWithoutUpdate().unset(
@@ -2642,8 +2641,7 @@ public final class OdysseyExpanseSystem {
                 MemFlags.FLEET_IGNORES_OTHER_FLEETS);
         guard.getMemoryWithoutUpdate().unset(
                 MemFlags.FLEET_IGNORED_BY_OTHER_FLEETS);
-        guard.getMemoryWithoutUpdate().set(
-                MemFlags.MEMORY_KEY_NO_REP_IMPACT, true);
+        TaskForceSpartanFaction.configureFriendlyDefender(guard);
         guard.getMemoryWithoutUpdate().set(
                 MemFlags.MEMORY_KEY_NO_SHIP_RECOVERY, true);
     }

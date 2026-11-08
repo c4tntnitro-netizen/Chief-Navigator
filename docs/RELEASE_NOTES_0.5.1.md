@@ -1,3 +1,12 @@
+## November 8, 2026 Ithaca friendship and IFF fix
+
+- Ithaca defenders permanently recognize the player, including with the transponder off.
+- Preserve their native friendly battle eligibility so players can join while the Breach Defense Station is alive.
+- Apply the same identity settings to existing saved defenders without changing their ships or ongoing battles.
+- Remove the temporary IFF join-permission workaround and custom side-selection fallback.
+
+Java 17 native battle, recognition, and encounter-menu checks pass. Restart Starsector after installing this update.
+
 ## November 7, 2026 Labor IV dialogue update
 
 - Revise Menelaus's fourth-Labor briefing, Sinni exchange, system and Threat history, Helen conversation, and departure.
