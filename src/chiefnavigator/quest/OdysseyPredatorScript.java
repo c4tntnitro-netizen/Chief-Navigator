@@ -215,7 +215,7 @@ public final class OdysseyPredatorScript implements EveryFrameScript {
     // their Third Strike roster, retaining roughly the same deployment cost.
     private static final int[] SCYLLA_STRIKE_COUNTS = {1, 9, 1, 2, 1, 3};
     private static final int[] SIREN_STRIKE_COUNTS = {1, 1, 2, 8, 2, 10};
-    private static final int[] CYCLOPS_STRIKE_COUNTS = {9, 1, 2, 2, 2, 4};
+    private static final int[] CYCLOPS_STRIKE_COUNTS = {5, 1, 2, 2, 2, 4};
     private static final String[] STARVING_ROLE_HULLS = {
         "chief_navigator_starving_fabricator_unit",
         "chief_navigator_starving_hive_unit",

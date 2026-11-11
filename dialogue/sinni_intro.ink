@@ -3,6 +3,7 @@
 // Runtime side effects are marked with tags and implemented by
 // ChiefNavigatorSinniIntroCMD.
 
+VAR encountered_dwellers = false // Runtime: $player.encounteredDweller, matching Zunya's dialogue.
 VAR player_is_male = true
 VAR player_name = "Ang"
 VAR player_title = "Captain"
@@ -80,7 +81,7 @@ The woman cocks her head.
 Her eyes light up.
 
 "What things?"
-+ ["These creatures. Made of pure energy. Hostile."] -> dwellers
++ {encountered_dwellers} ["These creatures. Made of pure energy. Hostile."] -> dwellers
 + ["These machines. Called 'Threat'. It's some kind of artificial, self-replicating swarm."] -> threat
 
 === dwellers ===

@@ -1,3 +1,17 @@
+## November 11, 2026 Sinni and Ithaca update
+
+- Sinni recognizes the completed Ithaca gate scan and recommends Captain Aias Kleon until both post-Labor hunts are complete.
+- Add a direct Ithaca Janus Gate destination to other scanned gates, retaining normal Janus access and fuel costs.
+- Require an integrated Janus Device, the Onslaught Mk.I sensor unlock and 700-point Hyperspace Topography completion before Sinni's recruitment offer.
+- Start newly created Sinni at level 2 with Adept of the Stars and Adept of the Waves and a level-8 cap. Preserve existing saved character progression.
+- Buff Waves to +50% maneuverability and +70/+40/+30/+25 flat speed by hull size. Keep its elite +15 speed and zero-flux effect.
+- Move Stars' 15% damage reduction to its normal tier; elite grants +1 charge, +25% system regeneration/range and -33% cooldown.
+- Show the Shrouded answer in Sinni's introduction only after the native Dweller-encounter flag, matching Zunya.
+- Change Kleon's greeting to "Molon Labe, Captain. Speak freely."
+- Reduce newly created Cyclops Strike fleets from nine Fabricators to five; preserve existing fleets.
+
+Player confirmed the local changes in game. Native Java 17 regression, dialogue loader, package and exclusion checks are recorded with this update. SEP development enemies and escorts are excluded; this remains the continuous 0.5.1 release.
+
 ## November 8, 2026 Ithaca friendship and IFF fix
 
 - Ithaca defenders permanently recognize the player, including with the transponder off.

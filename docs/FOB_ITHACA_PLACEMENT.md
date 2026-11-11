@@ -153,8 +153,9 @@ The perimeter invasions retain their existing targets: **Scylla Strike**
 attacks north with a Hive-majority mixed roster, **Siren Strike** attacks
 south with Skirmish scouts and Line units, and **Cyclops Strike** attacks
 east with a Fabricator-heavy mixed roster. All six Starving roles remain
-represented, and their deployment costs stay approximately equal to the
-previous Third Strike. These compositions apply when fleets are created;
+represented. Scylla and Siren retain approximately the previous Third Strike
+deployment cost; Cyclops has five Fabricators (16 hulls, 214 DP). These
+compositions apply when fleets are created;
 upkeep never replenishes casualties or rewrites a surviving saved roster.
 
 Their flagship campaign sprites are overridden with `graphics/fx/empty.png`

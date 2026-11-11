@@ -8,6 +8,7 @@ import com.fs.starfarer.api.campaign.LocationAPI;
 import com.fs.starfarer.api.campaign.SectorEntityToken;
 import com.fs.starfarer.api.campaign.StarSystemAPI;
 import com.fs.starfarer.api.campaign.econ.MarketAPI;
+import com.fs.starfarer.api.impl.campaign.GateEntityPlugin;
 import java.util.List;
 import org.lwjgl.util.vector.Vector2f;
 
@@ -171,6 +172,21 @@ public final class SinniNavigationGuidance {
             target = ashen == null ? target : ashen.getEntityById(
                     OdysseyExpanseSystem.FOB_ITHACA_GATE_ID);
             if (!OdysseyExpanseSystem.isFobIthacaGate(target)) target = null;
+            if (target != null && GateEntityPlugin.isScanned(target)) {
+                if (PostLaborHuntIntel.isAvailable(PostLaborHuntIntel.Target.BUDAI)
+                        || PostLaborHuntIntel.isAvailable(PostLaborHuntIntel.Target.UNGAIKYO)) {
+                    target = OdysseyExpanseSystem.getFobIthaca();
+                    return finish(withSystem("Captain Aias Kleon at FOB Ithaca", target),
+                            appendAdvice("Ithaca's Janus Gate has been scanned. "
+                                    + "Speak to Captain Aias Kleon in FOB Ithaca's "
+                                    + "comm directory about the unfinished hunts.",
+                                    currentOptionalWallAdvice()), target);
+                }
+                return new Guidance("Open exploration", appendAdvice(
+                        "Ithaca's Janus Gate has been scanned. The Labors "
+                                + "are complete; choose your next destination.",
+                        currentOptionalWallAdvice()), "", null);
+            }
             destination = withSystem("Ithaca Janus Gate", target);
             objective = "The gate cordon is open. Scan Ithaca's Janus Gate "
                     + "when you are ready to continue.";

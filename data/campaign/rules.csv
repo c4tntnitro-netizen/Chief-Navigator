@@ -41,10 +41,11 @@ chiefNavigatorSinniAbyss,ChiefNavigatorSinniIntro_abyss,,,"""Yes.""
 The woman cocks her head.
 
 ""You've been?""","0:chief_navigator_sinni_monsters:""There are... 'things' out there.""",
-chiefNavigatorSinniMonsters,ChiefNavigatorSinniIntro_monsters,,,"Her eyes light up.
+chiefNavigatorSinniMonsters,ChiefNavigatorSinniIntro_monsters,,FireAll ChiefNavigatorSinniIntro_monsterOptions,"Her eyes light up.
 
-""What things?""","0:chief_navigator_sinni_dwellers:""These creatures. Made of pure energy. Hostile.""
-10:chief_navigator_sinni_threat:""These machines. Called 'Threat'. It's some kind of artificial, self-replicating swarm.""",
+""What things?""",,Populates the encounter-dependent Dweller answer alongside the Threat answer.
+chiefNavigatorSinniMonstersDwellerOption,ChiefNavigatorSinniIntro_monsterOptions,$player.encounteredDweller,,,"0:chief_navigator_sinni_dwellers:""These creatures. Made of pure energy. Hostile.""",Uses the same native player-memory encounter flag as Zunya's Dweller answer.
+chiefNavigatorSinniMonstersThreatOption,ChiefNavigatorSinniIntro_monsterOptions,,,,"10:chief_navigator_sinni_threat:""These machines. Called 'Threat'. It's some kind of artificial, self-replicating swarm.""",Threat answer remains available independently of the Dweller encounter flag.
 chiefNavigatorSinniDwellers,ChiefNavigatorSinniIntro_dwellers,,,"She looks at you.
 
 ""Creatures? Alive?""","0:chief_navigator_sinni_endgame:""Absolutely.""",
@@ -3741,7 +3742,7 @@ ChiefNavigatorMenelausCMD introduced",,,10:chief_navigator_ithaca_menelaus_labor
 chiefNavigatorIthacaMenelausLabors,DialogOptionSelected,$option == chief_navigator_ithaca_menelaus_labors,FireAll ChiefNavigatorFobIthaca,,,Routes Menelaus's contact into the current briefing report or reusable Labor hub.
 chiefNavigatorIthacaSpartanGreeting,PickGreeting,$chief_navigator_ithaca_spartan_captain_contact score:1000,FireAll PopulateOptions,"Captain Aias Kleon returns your salute from Task Force Spartan's command deck.
 
-""Strategos Menelaus holds Ithaca. Spartan holds the line. Speak freely, Captain.""",,Spartan captain comm-directory greeting.
+""Molon Labe, Captain. Speak freely.""",,Spartan captain comm-directory greeting.
 chiefNavigatorIthacaHuntBudaiOption,PopulateOptions,"$chief_navigator_ithaca_spartan_captain_contact
 ChiefNavigatorPostLaborHuntCMD budaiAvailable",,,"10:chief_navigator_ithaca_hunt_budai:""Where can I find Budai?""",Post-Labor V Budai hunt location question for Captain Kleon.
 chiefNavigatorIthacaHuntUngaikyoOption,PopulateOptions,"$chief_navigator_ithaca_spartan_captain_contact
@@ -4258,6 +4259,9 @@ ChiefNavigatorMenelausCMD stage complete
 !$gateScanned
 !$global.canScanGates",,,0:gateScan:Scan the Gate.,Menelaus's authorization exposes vanilla gate scanning even if the player has not separately unlocked generic gate scans.
 chiefNavigatorIthacaGateLeave,DialogOptionSelected,$option == chief_navigator_ithaca_gate_leave,DismissDialog,,,Leaves the sealed Ithaca gate without exposing a scan option.
+chiefNavigatorIthacaGateTravelOption,PopulateGateOptions,ChiefNavigatorIthacaGateCMD canTravel,,,17:chief_navigator_travel_ithaca_gate:Travel to Ithaca Janus Gate.,Direct off-map destination after the final Labor debrief and an actual Ithaca gate scan; the command checks native gate access and coexists with vanilla and other mod destinations.
+chiefNavigatorIthacaGateTravelDescription,PopulateGateOptions,ChiefNavigatorIthacaGateCMD canTravel,ChiefNavigatorIthacaGateCMD highlight,,,Shows the native fuel cost and disables travel when fuel is insufficient.
+chiefNavigatorIthacaGateTravelSelected,DialogOptionSelected,$option == chief_navigator_travel_ithaca_gate,ChiefNavigatorIthacaGateCMD traverse,,,Revalidates the destination and fuel before native gate transit and listener notification.
 chiefNavigatorRestoredMothership,ChiefNavigatorSealedMothership,ChiefNavigatorMothershipCMD stage friendly,ChiefNavigatorMothershipCMD init,"The $entityName holds position where its predecessor was destroyed. Freshly knitted armor still shows seams around the rebuilt work-bays, but its command partition answers Menelaus's IFF without hesitation.
 
 Derelict drone patrols cycle through its bays and spread out through the system. Farther out, unmoored drones answer with hostile challenge codes.",100:chief_navigator_mothership_leave:Leave.,Restored post-report Guard Mothership under Menelaus's friendly IFF.

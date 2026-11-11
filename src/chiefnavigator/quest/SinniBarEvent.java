@@ -10,9 +10,11 @@ import com.fs.starfarer.api.campaign.rules.Option;
 import com.fs.starfarer.api.campaign.rules.RuleAPI;
 import com.fs.starfarer.api.campaign.rules.RulesAPI;
 import com.fs.starfarer.api.characters.FullName;
+import com.fs.starfarer.api.impl.campaign.GateEntityPlugin;
 import com.fs.starfarer.api.impl.campaign.intel.bar.events.BarEventManager;
 import com.fs.starfarer.api.impl.campaign.intel.bar.events.BaseBarEvent;
 import com.fs.starfarer.api.impl.campaign.rulecmd.FireBest;
+import com.fs.starfarer.api.impl.combat.threat.DisposableThreatFleetManager;
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
@@ -59,10 +61,17 @@ public final class SinniBarEvent extends BaseBarEvent {
     }
 
     public static boolean isEligible() {
-        return Global.getSector() != null
-                && !Global.getSector().getMemoryWithoutUpdate().getBoolean(STARTED)
+        if (Global.getSector() == null) return false;
+        MemoryAPI playerMemory = Global.getSector().getPlayerMemoryWithoutUpdate();
+        return !Global.getSector().getMemoryWithoutUpdate().getBoolean(STARTED)
                 && !Global.getSector().getMemoryWithoutUpdate()
                         .getBoolean(LEGACY_DECLINE_TIMEOUT)
+                // JanusDevicePlugin sets this on integration; carrying the item is insufficient.
+                && Global.getSector().getMemoryWithoutUpdate()
+                        .getBoolean(GateEntityPlugin.PLAYER_CAN_USE_GATES)
+                // Vanilla mk1_explore7 grants THREAT visibility in $player memory.
+                && playerMemory != null
+                && playerMemory.getBoolean(DisposableThreatFleetManager.SENSOR_MODS_KEY)
                 && SinniHyperspaceTopographyEventIntel.hasCompletedVanillaTree();
     }
 
