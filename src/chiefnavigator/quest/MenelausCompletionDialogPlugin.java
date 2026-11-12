@@ -7,6 +7,7 @@ import com.fs.starfarer.api.campaign.InteractionDialogAPI;
 import com.fs.starfarer.api.campaign.SectorAPI;
 import com.fs.starfarer.api.campaign.rules.MemKeys;
 import com.fs.starfarer.api.campaign.rules.MemoryAPI;
+import com.fs.starfarer.api.characters.PersonAPI;
 import com.fs.starfarer.api.combat.EngagementResultAPI;
 import com.fs.starfarer.api.graphics.SpriteAPI;
 import com.fs.starfarer.api.ui.PositionAPI;
@@ -29,6 +30,8 @@ public final class MenelausCompletionDialogPlugin
             "ChiefNavigatorLabor5Ending_";
     private static final String PLAYER_TITLE =
             "$chiefNavigatorLabor5PlayerTitle";
+    private static final String PLAYER_PRONOUN =
+            "$chiefNavigatorLabor5PlayerPronoun";
     private static final float ILLUSTRATION_WIDTH = 480f;
     private static final float ILLUSTRATION_HEIGHT = 300f;
 
@@ -99,6 +102,10 @@ public final class MenelausCompletionDialogPlugin
         memoryMap.put(MemKeys.GLOBAL, global);
         MemoryAPI local = Global.getFactory().createMemory();
         local.set(PLAYER_TITLE, "Captain");
+        PersonAPI player = sector.getPlayerPerson();
+        local.set(PLAYER_PRONOUN,
+                player != null && "she".equalsIgnoreCase(player.getHeOrShe())
+                        ? "She" : "He");
         memoryMap.put(MemKeys.LOCAL, local);
         if (sector.getPlayerFleet() != null) {
             memoryMap.put(

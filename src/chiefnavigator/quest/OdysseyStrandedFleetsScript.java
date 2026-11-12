@@ -407,13 +407,13 @@ public final class OdysseyStrandedFleetsScript implements EveryFrameScript {
                     fleet,
                     FleetAssignment.INTERCEPT,
                     player,
-                    "intercepting intruders in Silent Wake");
+                    "intercepting your fleet");
         } else {
             ensureHegemonyAssignment(
                     fleet,
                     FleetAssignment.PATROL_SYSTEM,
                     silentWake.getCenter(),
-                    "holding damaged formation in Sanzu");
+                    "regrouping in Sanzu");
         }
     }
 
@@ -605,7 +605,11 @@ public final class OdysseyStrandedFleetsScript implements EveryFrameScript {
                     FleetAssignment.PATROL_SYSTEM,
                     sanzu.getCenter(),
                     1000000f,
-                    "surveying Sanzu's comparatively safe reaches");
+                    "exploring Sanzu");
+        } else if (fleet.getCurrentAssignment().getAssignment()
+                        == FleetAssignment.PATROL_SYSTEM
+                && fleet.getCurrentAssignment().getTarget() == sanzu.getCenter()) {
+            fleet.getCurrentAssignment().setActionText("exploring Sanzu");
         }
     }
 
@@ -649,15 +653,18 @@ public final class OdysseyStrandedFleetsScript implements EveryFrameScript {
             memory.set(MemFlags.MEMORY_KEY_MAKE_NON_AGGRESSIVE, true);
             memory.set(MemFlags.MEMORY_KEY_AVOID_PLAYER_SLOWLY, true);
         }
+        String actionText = aggressive ? "seizing supplies" : "avoiding contact";
         if (changedPosture || fleet.getCurrentAssignment() == null) {
             fleet.clearAssignments();
             fleet.addAssignment(
                     FleetAssignment.PATROL_SYSTEM,
                     sanzu.getCenter(),
                     1000000f,
-                    aggressive
-                            ? "seizing stores after their commander stripped theirs"
-                            : "hiding after refusing a suicide patrol");
+                    actionText);
+        } else if (fleet.getCurrentAssignment().getAssignment()
+                        == FleetAssignment.PATROL_SYSTEM
+                && fleet.getCurrentAssignment().getTarget() == sanzu.getCenter()) {
+            fleet.getCurrentAssignment().setActionText(actionText);
         }
     }
 
@@ -1021,7 +1028,7 @@ public final class OdysseyStrandedFleetsScript implements EveryFrameScript {
                     fleet,
                     FleetAssignment.DEFEND_LOCATION,
                     camp,
-                    "rationing your contribution at the expedition camp");
+                    "holding at the expedition camp");
         } else {
             fleet.getMemoryWithoutUpdate().unset(
                     MemFlags.NON_HOSTILE_OVERRIDES_MAKE_HOSTILE);
@@ -1040,13 +1047,13 @@ public final class OdysseyStrandedFleetsScript implements EveryFrameScript {
                         fleet,
                         FleetAssignment.INTERCEPT,
                         player,
-                        "requisitioning supplies for the good of humanity");
+                        "requisitioning supplies");
             } else {
                 ensureHegemonyAssignment(
                         fleet,
                         FleetAssignment.DEFEND_LOCATION,
                         camp,
-                        "holding the Alpha Odyssey expedition camp");
+                        "holding at the expedition camp");
             }
         }
     }
@@ -1066,6 +1073,7 @@ public final class OdysseyStrandedFleetsScript implements EveryFrameScript {
         if (fleet.getCurrentAssignment() != null
                 && fleet.getCurrentAssignment().getAssignment() == assignment
                 && fleet.getCurrentAssignment().getTarget() == target) {
+            fleet.getCurrentAssignment().setActionText(actionText);
             return;
         }
         fleet.clearAssignments();

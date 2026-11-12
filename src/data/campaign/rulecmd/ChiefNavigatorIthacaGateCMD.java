@@ -43,7 +43,7 @@ public final class ChiefNavigatorIthacaGateCMD extends BaseCommandPlugin {
             boolean enough = available >= required;
             dialog.getOptionPanel().setEnabled(OPTION_ID, enough);
             dialog.getOptionPanel().setTooltip(OPTION_ID,
-                    "Travel to Ithaca Janus Gate in Ashen Verge.\nFuel required: "
+                    "Travel to Ithaca Janus Gate in Lacedaemon.\nFuel required: "
                             + Misc.getWithDGS(required) + "."
                             + (enough ? "" : "\nThe fleet does not have enough fuel."));
             return true;

@@ -19,7 +19,7 @@ import java.util.Set;
 /** Two independent post-Labor hunts; the existing encounters own their battles. */
 public final class PostLaborHuntIntel extends BaseIntelPlugin {
     public enum Target {
-        BUDAI("Budai", "Avici"), UNGAIKYO("Ungaikyo", "Last Light");
+        BUDAI("Budai", "Avici"), UNGAIKYO("Ungaikyo", "Bouvo Olympus");
         final String name;
         final String systemName;
 
@@ -125,10 +125,10 @@ public final class PostLaborHuntIntel extends BaseIntelPlugin {
             info.addPara("Destroy %s in %s.", 10f, Misc.getTextColor(),
                     Misc.getHighlightColor(), target.name, target.systemName);
             info.addPara(target == Target.BUDAI
-                    ? "Budai hunts alone in Avici, returning toward Kshaya. "
+                    ? "Budai hunts in Avici with a Shrouded escort, returning toward Kshaya. "
                         + "His distortion will pursue your fleet while you remain in the system."
-                    : "Ungaikyo's local Fabricator has knotted the filament web around "
-                        + "the derelict Guardian in Last Light. Destroy it to free the wreck.", 10f);
+                    : "Ungaikyo's local Overseer has knotted the filament web around "
+                        + "the derelict Guardian in Bouvo Olympus. Destroy it to free the wreck.", 10f);
         }
     }
 

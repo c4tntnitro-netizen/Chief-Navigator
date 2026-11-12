@@ -18,6 +18,8 @@ public final class SinniContactIntel extends ContactIntel {
             "chief_navigator_sinni_contact_directions";
     private static final String BUTTON_ORION_KNOT_MAP =
             "chief_navigator_sinni_contact_orion_knot_map";
+    private static final String BUTTON_PEERLESS =
+            "chief_navigator_sinni_contact_peerless";
     private static final String REMOTE_CONTACT_TRIGGER =
             "ChiefNavigatorSinniRemoteContact";
     private static final String ORION_KNOT_MAP_TRIGGER =
@@ -86,6 +88,10 @@ public final class SinniContactIntel extends ContactIntel {
             }
             return;
         }
+        if (BUTTON_PEERLESS.equals(buttonId)) {
+            // Retired contact action: stale button callbacks must not reopen training.
+            return;
+        }
         super.buttonPressConfirmed(buttonId, ui);
     }
 
@@ -151,8 +157,8 @@ public final class SinniContactIntel extends ContactIntel {
 
     @Override
     public SectorEntityToken getMapLocation(SectorMapAPI map) {
-        SectorEntityToken target = SinniNavigationGuidance
-                .getCurrentGuidance().getTarget();
+        SectorEntityToken target = TroyArrivalScript.getMapTarget(
+                SinniNavigationGuidance.getCurrentGuidance().getTarget());
         return target == null ? super.getMapLocation(map) : target;
     }
 }

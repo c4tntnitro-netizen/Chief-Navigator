@@ -101,16 +101,16 @@ public final class MenelausEndingMusicRegression {
 
         f = new Fixture();
         MenelausEndingMusic timer = f.timer();
-        f.seconds(9.999999999);
+        f.seconds(4.999999999);
         timer.advance(100_000f);
         check(f.audio.equals(List.of("suspend:true", "stop")),
-                "Campaign acceleration cannot shorten ten seconds of silence");
-        f.seconds(10);
+                "Campaign acceleration cannot shorten five seconds of silence");
+        f.seconds(5);
         timer.advance(0f);
         check(f.audio.equals(List.of("suspend:true", "stop", "play")),
-                "The cue starts at ten monotonic seconds even during a paused frame");
+                "The cue starts at five monotonic seconds even during a paused frame");
         for (int page = 0; page < 100; page++) {
-            f.seconds(10 + page * 0.2);
+            f.seconds(5 + page * 0.2);
             timer.advance(0.2f);
         }
         check(f.audio.size() == 3 && !timer.isDone(),
@@ -135,7 +135,7 @@ public final class MenelausEndingMusicRegression {
 
         f = new Fixture();
         timer = f.timer();
-        f.seconds(10);
+        f.seconds(5);
         f.current = MenelausCompletionRegression.mock(
                 InteractionDialogAPI.class, (name, values) -> null);
         timer.advance(1f);
@@ -145,7 +145,7 @@ public final class MenelausEndingMusicRegression {
 
         f = new Fixture();
         timer = f.timer();
-        f.seconds(10);
+        f.seconds(5);
         timer.advance(0f);
         Global.setSector(null);
         timer.advance(0f);
@@ -154,7 +154,7 @@ public final class MenelausEndingMusicRegression {
 
         f = new Fixture();
         timer = f.timer();
-        f.seconds(10);
+        f.seconds(5);
         f.hasUI = false;
         timer.advance(0f);
         check(timer.isDone() && f.audio.equals(
@@ -164,7 +164,7 @@ public final class MenelausEndingMusicRegression {
         f = new Fixture();
         Global.setSoundPlayer(null);
         timer = f.timer();
-        f.seconds(10);
+        f.seconds(5);
         timer.advance(0f);
         Global.setSoundPlayer(f.player);
         f.seconds(30);
@@ -175,7 +175,7 @@ public final class MenelausEndingMusicRegression {
         f = new Fixture();
         timer = f.timer();
         Global.setSoundPlayer(null);
-        f.seconds(10);
+        f.seconds(5);
         timer.advance(0f);
         check(timer.isDone() && !f.audio.contains("play")
                         && f.audio.contains("suspend:false"),
@@ -185,7 +185,7 @@ public final class MenelausEndingMusicRegression {
         f.failStop = true;
         f.failPause = true;
         timer = f.timer();
-        f.seconds(10);
+        f.seconds(5);
         timer.advance(0f);
         check(timer.isDone() && f.audio.equals(
                         List.of("suspend:true", "stop", "pause", "suspend:false", "restart")),
@@ -195,7 +195,7 @@ public final class MenelausEndingMusicRegression {
         timer = f.timer();
         f.failPlayback = true;
         f.failPause = true;
-        f.seconds(10);
+        f.seconds(5);
         timer.advance(0f);
         timer.advance(0f);
         check(timer.isDone() && f.audio.equals(
@@ -205,7 +205,7 @@ public final class MenelausEndingMusicRegression {
         verifyAsset();
         Global.setSoundPlayer(null);
         Global.setSector(null);
-        System.out.println("PASS: ending opening cuts music immediately, keeps ten real seconds "
+        System.out.println("PASS: ending opening cuts music immediately, keeps five real seconds "
                 + "of silence, scopes paused playback "
                 + "to its exact scene, cancels/releases safely, and uses the unchanged official Ogg.");
     }

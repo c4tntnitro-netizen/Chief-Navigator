@@ -1,5 +1,6 @@
 package chiefnavigator.quest;
 
+import chiefnavigator.dwellers.AviciDwellerContent;
 import com.fs.starfarer.api.combat.BaseEveryFrameCombatPlugin;
 import com.fs.starfarer.api.combat.CombatEngineAPI;
 import com.fs.starfarer.api.combat.ShipAPI;
@@ -24,8 +25,13 @@ public final class BudaiBattleCreationPlugin
                 for (ShipAPI ship : engine.getShips()) {
                     if (ship != null && ship.isAlive() && !ship.isHulk()
                             && ship.getHullSpec() != null
-                            && "chief_navigator_charybdis".equals(
+                            && ("chief_navigator_charybdis".equals(
                                     ship.getHullSpec().getHullId())
+                                    || AviciDwellerContent.isBudaiHull(
+                                            ship.getHullSpec().getHullId())
+                                            && ship.getVariant() != null
+                                            && AviciDwellerContent.BUDAI_VARIANT.equals(
+                                                    ship.getVariant().getHullVariantId()))
                             && (budai == null || ship.getHullLevel() < budai.getHullLevel())) {
                         budai = ship;
                     }

@@ -19,7 +19,7 @@ Your shuttles deliver the supplies and a copy of Ithaca's coordinates. The capta
 
 “Thank you, Captain. We'll make what we can of it.”
 
-The patrol breaks formation as its crews prepare to depart for Ashen Verge.
+The patrol breaks formation as its crews prepare to depart for Lacedaemon.
 
 + [Continue.] -> END
 

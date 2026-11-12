@@ -13,7 +13,7 @@ import java.awt.Color;
 import java.util.List;
 import org.lwjgl.util.vector.Vector2f;
 
-/** Encounter-only controller for the standalone Last Light Omega core's time stop. */
+/** Encounter-only controller for the standalone Bouvo Olympus Omega core's time stop. */
 public final class OmegaTimeStopCoreHullmod extends BaseHullMod {
     private static final String PLUGIN_KEY = "chief_navigator_omega_time_stop_plugin";
 

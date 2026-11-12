@@ -104,8 +104,8 @@ public final class FobIthacaStationRegression {
         contains(rules,
                 "chiefNavigatorFobIthacaApproachComplete,"
                         + "ChiefNavigatorFobIthacaApproach_complete,,"
-                        + "FireAll ChiefNavigatorFobIthaca",
-                "The first approach must still flow into Menelaus's intro");
+                        + "DismissDialog",
+                "The approach must close before the player contacts Ithaca's central module");
 
         System.out.println(
                 "FOB Ithaca marketless-station regression checks passed.");

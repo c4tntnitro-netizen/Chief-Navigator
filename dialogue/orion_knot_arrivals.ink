@@ -3,7 +3,7 @@
 // The existing Troy crossing and Avici scenes remain in their own sources.
 // Every arrival waits for the common no-active-hostile-tracking safety gate.
 // Completion is recorded only on the final choice.
-// Ashen Verge, Devoured Reach, and Last Light have no arrival vignettes.
+// Lacedaemon, Anatolia, and Bouvo Olympus have no arrival vignettes.
 
 VAR player_title = "Captain"
 // Runtime reads Avici's native visited flag, including a deferred arrival scene.
@@ -98,7 +98,7 @@ You have your fleet hold position for a day. The current, once your nav team run
 
 You later find Sinni sitting at the lip of the opticals. Datapads surround her, complicated equations and reference material glowing all around her. There is a cup of tea next to her, but it looks like it's gone cold.
 
-“It's a black hole,” Sinni says without turning around. She must have seen your reflection in the opticals. “The current is nebular material being pulled in from the Alpha Odyssey and Ashen Verge systems.”
+“It's a black hole,” Sinni says without turning around. She must have seen your reflection in the opticals. “The current is nebular material being pulled in from the Alpha Odyssey and Lacedaemon systems.”
 
 + [“So this system is a black hole system?”] -> sinni_sanzu_avici
 
@@ -124,7 +124,7 @@ Sinni expands the regional map across the opticals.
 
 Alpha Odyssey.
 
-Ashen Verge.
+Lacedaemon.
 
 Your present system.
 
@@ -147,7 +147,7 @@ She looks out through the opticals.
 
 She overlays the current's direction across the regional chart.
 
-The vectors from Alpha Odyssey and Ashen Verge continue southward, converging beyond the limits of your explored map.
+The vectors from Alpha Odyssey and Lacedaemon continue southward, converging beyond the limits of your explored map.
 
 “The model only works if there's a gravitational source out there vastly larger than anything in these systems.”
 
@@ -173,7 +173,7 @@ Sinni looks toward the southern edge of the chart.
 
 === sinni_sanzu_avici_common ===
 
-Sinni draws another line through Alpha Odyssey, then another through Ashen Verge.
+Sinni draws another line through Alpha Odyssey, then another through Lacedaemon.
 
 “The nebulae there are moving too. Slowly enough that you'd never notice from inside them, but they're all drifting in the same direction.”
 

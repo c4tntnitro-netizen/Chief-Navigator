@@ -319,7 +319,7 @@ The moment stretches.
 
 The words are almost absurd coming from something this powerful.
 
-Menelaus raises a digital hand, and Ithaca contracts beneath you. The orbital ring becomes a thin circle of light. The central module shrinks with it, followed by the moons, planets, and finally the whole of Ashen Verge.
+Menelaus raises a digital hand, and Ithaca contracts beneath you. The orbital ring becomes a thin circle of light. The central module shrinks with it, followed by the moons, planets, and finally the whole of Lacedaemon.
 
 Then red begins to spread across the system. Hundreds of Threat contacts populate the map. Some are marked as destroyed. Others pulse steadily at the edges of Spartan patrol zones, while entire regions of the system are shaded in warning colors.
 
@@ -369,7 +369,7 @@ Menelaus dismisses the tactical display.
 
 "I cannot spare any more of them. I need you to act as an independent roaming force."
 
-The map of Ashen Verge changes around him. Spartan formations collapse back toward Ithaca, their patrol routes clustering tightly around the surviving defensive perimeter. Distant points illuminate across the theater: wrecks, Threat concentrations, abandoned installations, lost supply depots. Places far beyond the reach of the Spartan pickets.
+The map of Lacedaemon changes around him. Spartan formations collapse back toward Ithaca, their patrol routes clustering tightly around the surviving defensive perimeter. Distant points illuminate across the theater: wrecks, Threat concentrations, abandoned installations, lost supply depots. Places far beyond the reach of the Spartan pickets.
 
 His gaze settles on you.
 
@@ -455,7 +455,7 @@ She nods.
 
 "Good."
 
-Ashen Verge unfolds around Menelaus once again.
+Lacedaemon unfolds around Menelaus once again.
 
 "Then let's begin."
 

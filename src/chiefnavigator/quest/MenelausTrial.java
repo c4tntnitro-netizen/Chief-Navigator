@@ -45,6 +45,7 @@ public final class MenelausTrial {
             "$chief_navigator_menelaus_final_labor_briefed";
     public static final String FINAL_DEBRIEF_COMPLETE =
             "$chief_navigator_menelaus_final_debrief_complete_v1";
+    public static final String DOMAIN_EPIC = "$chief_navigator_domain_epic_v1";
     public static final String FINAL_LABOR_FAILED =
             "$chief_navigator_menelaus_final_labor_failed_v1";
     public static final String FINAL_LABOR_GATE_SCAN_FAILED =
@@ -408,10 +409,20 @@ public final class MenelausTrial {
                 && !memory().getBoolean(FINAL_DEBRIEF_COMPLETE);
     }
 
+    public static boolean canReceiveDomainEpic() {
+        return Global.getSector() != null && memory().getBoolean(FINAL_DEBRIEF_COMPLETE)
+                && !memory().getBoolean(DOMAIN_EPIC);
+    }
+
+    public static boolean receiveDomainEpic() {
+        return canReceiveDomainEpic() && peerless.api.PeerlessSkills.awardOnce(DOMAIN_EPIC);
+    }
+
     /** Commits Labor V only when the player finishes Menelaus's debrief. */
     public static boolean completeFinalDebrief() {
         if (!isFinalDebriefPending()) return false;
         memory().set(FINAL_DEBRIEF_COMPLETE, true);
+        receiveDomainEpic();
         PostLaborHuntIntel.sync(null);
         MenelausCompletionDialogPlugin.request();
         return true;
@@ -1109,7 +1120,7 @@ public final class MenelausTrial {
             fleet = createFleet(
                     IthacaSectionEncounter.COMBAT_GUARD_FACTION_ID,
                     id,
-                    "Ashen Verge Drone Patrol",
+                    "Lacedaemon Drone Patrol",
                     loadout);
             system.addEntity(fleet);
             fleet.setLocation(
@@ -1142,7 +1153,7 @@ public final class MenelausTrial {
             fleet.addAssignment(
                     com.fs.starfarer.api.campaign.FleetAssignment.PATROL_SYSTEM,
                     system.getCenter(), 1000000f,
-                    "roaming Ashen Verge");
+                    "roaming Lacedaemon");
         }
         return true;
     }
@@ -1321,7 +1332,7 @@ public final class MenelausTrial {
         }
     }
 
-    /** Keeps Ashen Verge's autonomous Derelicts on the player's side. */
+    /** Keeps Lacedaemon's autonomous Derelicts on the player's side. */
     private static void configureAshenAlliedFleet(CampaignFleetAPI fleet) {
         fleet.setNoAutoDespawn(true);
         fleet.setAbortDespawn(true);

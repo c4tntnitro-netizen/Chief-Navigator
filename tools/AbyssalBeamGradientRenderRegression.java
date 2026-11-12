@@ -93,7 +93,7 @@ public final class AbyssalBeamGradientRenderRegression {
     }
 
     public static void main(String[] args) throws Exception {
-        Path core = Path.of(args.length > 1 ? args[1] : "../../starsector-core").toAbsolutePath().normalize();
+        Path core = Path.of("../../starsector-core").toAbsolutePath().normalize();
         Path output = Path.of(args[0]).toAbsolutePath();
         Files.createDirectories(output);
         SettingsAPI oldSettings = Global.getSettings();

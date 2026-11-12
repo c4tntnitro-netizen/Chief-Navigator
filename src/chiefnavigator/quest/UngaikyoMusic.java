@@ -21,7 +21,7 @@ public final class UngaikyoMusic {
         play(OPENING_ID);
     }
 
-    /** The encounter controller supplies only the real Ungaikyo Fabricator. */
+    /** The encounter controller supplies only the real Ungaikyo Overseer. */
     public static void maintainBattleMusic(
             ShipAPI ungaikyo, boolean combatAdvancing) {
         if (combatAdvancing && ungaikyo != null && ungaikyo.isAlive()

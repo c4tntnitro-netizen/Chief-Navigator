@@ -77,7 +77,7 @@ try {
     }
 
     Write-Output "Source: $($sourceBitmap.Width)x$($sourceBitmap.Height)"
-    Write-Output "Ashen Verge background: 2048x2048 -> $runtimePath"
+    Write-Output "Lacedaemon background: 2048x2048 -> $runtimePath"
 }
 finally {
     $sourceBitmap.Dispose()

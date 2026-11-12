@@ -3,11 +3,11 @@
 // Runtime side effects are marked with tags and implemented by
 // ChiefNavigatorSinniIntroCMD.
 
-VAR encountered_dwellers = false // Runtime: $player.encounteredDweller, matching Zunya's dialogue.
 VAR player_is_male = true
 VAR player_name = "Ang"
 VAR player_title = "Captain"
 VAR troy_dp_limit = 50 // Runtime value comes from Chief Navigator's LunaLib fleet-limit setting.
+VAR encountered_dwellers = false // Runtime: $player.encounteredDweller, matching Zunya's dialogue.
 
 -> start
 

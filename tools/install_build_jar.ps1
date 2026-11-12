@@ -60,7 +60,29 @@ function Install-ChiefNavigatorBuildJar {
             if ($archive.Entries.Count -eq 0) { throw 'The staged jar is empty.' }
             foreach ($entry in $archive.Entries) {
                 $entryStream = $entry.Open()
-                try { $entryStream.CopyTo([System.IO.Stream]::Null) }
+                try {
+                    if ($entry.FullName.EndsWith('.class', [StringComparison]::OrdinalIgnoreCase)) {
+                        # The compiler may be newer than Starsector's Java 17.
+                        # Refuse incompatible bytecode before opening installed files.
+                        $header = [byte[]]::new(8)
+                        $offset = 0
+                        while ($offset -lt $header.Length) {
+                            $read = $entryStream.Read($header, $offset, $header.Length - $offset)
+                            if ($read -eq 0) { throw "Truncated class header: $($entry.FullName)" }
+                            $offset += $read
+                        }
+                        if ($header[0] -ne 0xCA -or $header[1] -ne 0xFE -or
+                                $header[2] -ne 0xBA -or $header[3] -ne 0xBE) {
+                            throw "Invalid class header: $($entry.FullName)"
+                        }
+                        $minor = ([int]$header[4] -shl 8) -bor [int]$header[5]
+                        $major = ([int]$header[6] -shl 8) -bor [int]$header[7]
+                        if ($major -gt 61 -or $minor -eq 65535) {
+                            throw "Class '$($entry.FullName)' targets $major.$minor; build with --release 17 for Starsector."
+                        }
+                    }
+                    $entryStream.CopyTo([System.IO.Stream]::Null)
+                }
                 finally { $entryStream.Dispose() }
             }
         } finally { $archive.Dispose() }

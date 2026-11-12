@@ -24,7 +24,7 @@ public final class SpawnSTInvasionFleets implements BaseCommand {
                 .spawnIthacaEndgameInvasionFleets();
         if (fleets.isEmpty()) {
             Console.showMessage("Could not spawn the invasion. Make sure "
-                    + "Ashen Verge and FOB Ithaca have been generated.");
+                    + "Lacedaemon and FOB Ithaca have been generated.");
             return CommandResult.ERROR;
         }
 

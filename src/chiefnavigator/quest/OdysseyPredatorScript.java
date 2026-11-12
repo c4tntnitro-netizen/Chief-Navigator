@@ -1,5 +1,6 @@
 package chiefnavigator.quest;
 
+import chiefnavigator.dwellers.AviciDwellerContent;
 import chiefnavigator.hullmods.IthacaSiegeStalemateHullmod;
 import chiefnavigator.weapons.IthacaResearchUpgrades;
 import com.fs.starfarer.api.EveryFrameScript;
@@ -197,6 +198,10 @@ public final class OdysseyPredatorScript implements EveryFrameScript {
             "$chief_navigator_budai_hunter";
     private static final String BUDAI_SPAWNED =
             "$chief_navigator_budai_spawned";
+    public static final String BUDAI_SPAWNED_AT =
+            "$chief_navigator_budai_spawned_at_v1";
+    public static final String BUDAI_LEGACY_GRACE_AT =
+            "$chief_navigator_budai_manifestation_legacy_grace_at_v1";
     public static final String BUDAI_DEFEATED =
             "$chief_navigator_budai_defeated_v1";
     private static final int FIRST_STRIKE = 0;
@@ -212,7 +217,8 @@ public final class OdysseyPredatorScript implements EveryFrameScript {
         {2, 3, 4, 3, 5, 8}
     };
     // Same role order as ordinary Strikes. These replace, not supplement,
-    // their Third Strike roster, retaining roughly the same deployment cost.
+    // their Third Strike roster. Cyclops intentionally has four fewer
+    // Fabricators than its original composition.
     private static final int[] SCYLLA_STRIKE_COUNTS = {1, 9, 1, 2, 1, 3};
     private static final int[] SIREN_STRIKE_COUNTS = {1, 1, 2, 8, 2, 10};
     private static final int[] CYCLOPS_STRIKE_COUNTS = {5, 1, 2, 2, 2, 4};
@@ -1373,7 +1379,7 @@ public final class OdysseyPredatorScript implements EveryFrameScript {
         }
     }
 
-    /** Keeps Devoured Reach's sole arrival point free of feeding masses. */
+    /** Keeps Anatolia's sole arrival point free of feeding masses. */
     private static void maintainDevouredJumpArrivalClearance() {
         StarSystemAPI system = OdysseyExpanseSystem.findSystemById(
                 OdysseyExpanseSystem.DEVOURED_REACH_ID);
@@ -1571,7 +1577,7 @@ public final class OdysseyPredatorScript implements EveryFrameScript {
                 ASHEN_STARVING_PREFIX,
                 ASHEN_STARVING_PATROL_COUNT,
                 ASHEN_STARVING_OFFSETS,
-                "hunting through Ashen Verge");
+                "hunting through Lacedaemon");
 
         StarSystemAPI devoured = OdysseyExpanseSystem.findSystemById(
                 OdysseyExpanseSystem.DEVOURED_REACH_ID);
@@ -1592,7 +1598,7 @@ public final class OdysseyPredatorScript implements EveryFrameScript {
             if (!isAuthoredStarvingThreatFleet(fleet)
                     || fleet.getContainingLocation() != system
                     // The story controller relocates this exact boss fleet
-                    // to Devoured Reach/Last Light; never delete its objective.
+                    // to Anatolia/Bouvo Olympus; never delete its objective.
                     || TroyArrivalScript.STARVING_THREAT_FLEET_ID.equals(fleet.getId())
                     || TroyArrivalScript.CHARYBDIS_FLEET_ID.equals(fleet.getId())
                     || fleet.getMemoryWithoutUpdate().getBoolean(BUDAI_HUNTER_MARKER)
@@ -1614,7 +1620,7 @@ public final class OdysseyPredatorScript implements EveryFrameScript {
         if (ashen == null) {
             if (!sectorMemory.getBoolean(
                     ITHACA_STRIKE_TRACE_MISSING_SYSTEM)) {
-                logIthacaStrikeWarning("Monthly check stopped: Ashen Verge "
+                logIthacaStrikeWarning("Monthly check stopped: Lacedaemon "
                         + "system was not found.");
                 sectorMemory.set(ITHACA_STRIKE_TRACE_MISSING_SYSTEM, true);
             }
@@ -1628,7 +1634,7 @@ public final class OdysseyPredatorScript implements EveryFrameScript {
                     ITHACA_STRIKE_TRACE_MISSING_CENTER)) {
                 logIthacaStrikeWarning("Monthly check stopped: FOB Ithaca "
                         + "controller " + IthacaSectionEncounter.FOB_ENTITY_ID
-                        + " was not found in Ashen Verge.");
+                        + " was not found in Lacedaemon.");
                 ashen.getMemoryWithoutUpdate().set(
                         ITHACA_STRIKE_TRACE_MISSING_CENTER, true);
             }
@@ -1769,7 +1775,7 @@ public final class OdysseyPredatorScript implements EveryFrameScript {
     /**
      * Console-test hook: materializes a First or Second Strike beside the
      * player and immediately sends it after the nearest surviving bastion.
-     * Returns null unless the player and FOB Ithaca are both in Ashen Verge.
+     * Returns null unless the player and FOB Ithaca are both in Lacedaemon.
      */
     public static CampaignFleetAPI spawnIthacaStrikeNearPlayer(
             boolean secondStrike) {
@@ -1785,7 +1791,7 @@ public final class OdysseyPredatorScript implements EveryFrameScript {
                 OdysseyExpanseSystem.ASHEN_VERGE_ID);
         CampaignFleetAPI player = Global.getSector().getPlayerFleet();
         if (system == null || player.getContainingLocation() != system) {
-            logIthacaStrikeWarning("Console spawn stopped: Ashen Verge was "
+            logIthacaStrikeWarning("Console spawn stopped: Lacedaemon was "
                     + "unavailable or the player was in "
                     + (player.getContainingLocation() == null
                             ? "no location"
@@ -1864,8 +1870,8 @@ public final class OdysseyPredatorScript implements EveryFrameScript {
         StarSystemAPI system = OdysseyExpanseSystem.findSystemById(
                 OdysseyExpanseSystem.ASHEN_VERGE_ID);
         if (system == null) {
-            logIthacaStrikeWarning("Endgame invasion spawn stopped: Ashen "
-                    + "Verge was unavailable.");
+            logIthacaStrikeWarning("Endgame invasion spawn stopped: "
+                    + "Lacedaemon was unavailable.");
             return result;
         }
         SectorEntityToken center = system.getEntityById(
@@ -3768,7 +3774,7 @@ public final class OdysseyPredatorScript implements EveryFrameScript {
         FleetAssignment assignment = bastions.isEmpty()
                 ? FleetAssignment.ORBIT_PASSIVE : FleetAssignment.INTERCEPT;
         String assignmentText = bastions.isEmpty()
-                ? "holding outside the silent Ithaca ring"
+                ? "holding outside Ithaca"
                 : "assaulting " + target.getName();
 
         if (target != null && (fleet.getCurrentAssignment() == null
@@ -3781,6 +3787,8 @@ public final class OdysseyPredatorScript implements EveryFrameScript {
                     target,
                     1000000f,
                     assignmentText);
+        } else if (target != null) {
+            fleet.getCurrentAssignment().setActionText(assignmentText);
         }
     }
 
@@ -4930,6 +4938,40 @@ public final class OdysseyPredatorScript implements EveryFrameScript {
                 && Global.getSector().getMemoryWithoutUpdate().getBoolean(BUDAI_DEFEATED);
     }
 
+    /** Calendar time since actual creation, or a separate conservative legacy grace period. */
+    public static boolean hasBudaiSpawnedFor(float campaignDays) {
+        if (Global.getSector() == null || Global.getSector().getClock() == null
+                || !Float.isFinite(campaignDays) || campaignDays < 0f) return false;
+        MemoryAPI memory = Global.getSector().getMemoryWithoutUpdate();
+        Object anchor = memory.get(BUDAI_SPAWNED_AT);
+        if (!(anchor instanceof Number)) {
+            anchor = memory.get(BUDAI_LEGACY_GRACE_AT);
+            if (!(anchor instanceof Number)) {
+                CampaignFleetAPI existing = findBudaiFleet();
+                boolean liveProof = existing != null && hasBudai(existing)
+                        && existing.getMemoryWithoutUpdate().getBoolean(BUDAI_HUNTER_MARKER);
+                if (!memory.getBoolean(BUDAI_SPAWNED) && !isBudaiDefeated()
+                        && !liveProof) return false;
+                long now = Global.getSector().getClock().getTimestamp();
+                memory.set(BUDAI_LEGACY_GRACE_AT, now);
+                anchor = Long.valueOf(now);
+            }
+        }
+        float elapsed = Global.getSector().getClock().getElapsedDaysSince(
+                ((Number) anchor).longValue());
+        return Float.isFinite(elapsed) && elapsed >= campaignDays;
+    }
+
+    private static void recordBudaiCreationTime() {
+        MemoryAPI memory = Global.getSector().getMemoryWithoutUpdate();
+        memory.set(BUDAI_SPAWNED, true);
+        if (!(memory.get(BUDAI_SPAWNED_AT) instanceof Number)
+                && Global.getSector().getClock() != null) {
+            memory.set(BUDAI_SPAWNED_AT,
+                    Global.getSector().getClock().getTimestamp());
+        }
+    }
+
     private static void markBudaiDefeated() {
         if (Global.getSector() != null) {
             Global.getSector().getMemoryWithoutUpdate().set(BUDAI_DEFEATED, true);
@@ -4996,14 +5038,16 @@ public final class OdysseyPredatorScript implements EveryFrameScript {
         }
         CampaignFleetAPI fleet = Global.getFactory().createEmptyFleet(
                 Factions.DWELLER, "Budai", true);
+        if (fleet == null) return null;
         fleet.setId(TroyArrivalScript.CHARYBDIS_FLEET_ID);
         fleet.setName("Budai");
         fleet.setNoFactionInName(true);
         fleet.setTransponderOn(false);
 
-        addMember(fleet, "chief_navigator_charybdis_Ravenous");
-        fleet.getFleetData().setFlagship(
-                fleet.getFleetData().getMembersListCopy().get(0));
+        FleetMemberAPI budai = addMember(fleet, BudaiFleetComposition.MAW_VARIANT);
+        fleet.getFleetData().setFlagship(budai);
+        budai.setShipName("Budai");
+        fleet.getMemoryWithoutUpdate().set(BUDAI_HUNTER_MARKER, true);
         fleet.getFleetData().setSyncNeeded();
         fleet.getFleetData().syncIfNeeded();
 
@@ -5013,12 +5057,14 @@ public final class OdysseyPredatorScript implements EveryFrameScript {
         Vector2f center = avici.getCenter().getLocation();
         fleet.setLocation(center.x + BUDAI_INITIAL_SPAWN_DISTANCE, center.y);
         configureCharybdis(fleet);
+        recordBudaiCreationTime();
         return fleet;
     }
 
     private static void configureCharybdis(CampaignFleetAPI fleet) {
         if (isBudaiDefeated()) return;
         if (TroyArrivalScript.isFleetBusyForMutation(fleet)) return;
+        BudaiFleetComposition.restore(fleet);
         fleet.setName("Budai");
         fleet.setNoFactionInName(true);
         ensureBudaiSalvageListener(fleet);
@@ -5079,7 +5125,8 @@ public final class OdysseyPredatorScript implements EveryFrameScript {
         if (fleet == null) return false;
         for (FleetMemberAPI member
                 : fleet.getFleetData().getMembersListCopy()) {
-            if ("chief_navigator_charybdis".equals(member.getHullId())) {
+            if ("chief_navigator_charybdis".equals(member.getHullId())
+                    || AviciDwellerContent.BUDAI_HULL.equals(member.getHullId())) {
                 return true;
             }
         }

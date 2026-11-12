@@ -80,7 +80,17 @@ def main():
     sounds = json.loads(content("data/config/sounds.json").decode("utf-8-sig"))
     for cues in sounds["music"].values():
         for cue in cues:
-            selected.add(f'{cue["source"]}/{cue["file"]}')
+            name = f'{cue["source"]}/{cue["file"]}'
+            if name in committed:
+                selected.add(name)
+            elif (CORE / name).is_file():
+                continue  # Native music stays in the installed game.
+            elif (CORE / cue["source"]).is_file():
+                with ZipFile(CORE / cue["source"]) as native_music:
+                    if cue["file"] not in native_music.namelist():
+                        raise SystemExit(f"Missing native music track: {name}")
+            else:
+                raise SystemExit(f"Missing music in mod and base game: {name}")
     for key, cues in sounds.items():
         if key != "music":
             selected.update(cue["file"] for cue in cues)

@@ -38,241 +38,236 @@ Menelaus reviews the four installed component records one by one. Ithaca's defen
 -> END
 
 === menelaus_labor_iv_report ===
-When you get back, you find Menelaus with your sensor reports open.
 
-Is it your imagination, or... does the AI's avatar look grim?
+When you return to Ithaca, Menelaus is already examining the final transmission from your surveillance array.
 
-Menelaus opens the sensor package's final transmission. The Devoured Ring appears as a lattice of consumed mass, failed topology models, and centuries of Starving Threat traffic.
+The Devoured Ring hangs in the holodeck, surrounded by the wreckage of its old superstructure and the unfamiliar machinery that has grown around it. Menelaus has overlaid the image with a series of Domain engineering schematics, highlighting the surviving control assemblies and their counterparts in the surrounding constructions.
 
-“The package completed its work before deleting itself. The Threat have been trying to reconstruct a Janus Device from the ring they consumed. They failed because they possess only one side of the topology.”
+The similarities are difficult to miss. Components that ought to have been consumed long ago have instead been stripped from the Ring and incorporated into structures of the Threat's own making.
 
-“And the closest intact Gate left is...”
+"Do you see it, auxiliary?"
 
-Menelaus stares at the Gate that Task Force Spartan guards.
+* ["Are they eating it?"] -> menelaus_labor_iv_uncertain
+* ["What are they doing?"] -> menelaus_labor_iv_uncertain
 
-You realize.
 
-+ [“If they scan Ithaca's Gate, then—.”] -> menelaus_labor_5_realization_2
+=== menelaus_labor_iv_uncertain ===
 
-=== menelaus_labor_5_realization_2 ===
+"Deconstructing. That is their modus operandi."
 
-“The Persean Sector will die,” Menelaus finishes. “Humanity will die.”
+Menelaus highlights the surviving control assemblies within the ruined Ring. Beside them, corresponding structures illuminate within the great mass of Threat machinery surrounding it.
 
-Suddenly, the simulation of Ashen Verge burns red.
+"However. Observe what they have preserved."
 
-Hundreds.
+* ["They're adapting the Gate's technology?"] -> menelaus_labor_iv_learn
+* ["Could they be trying to destroy it?"] -> menelaus_labor_iv_destroy
 
-Thousands.
 
-Countless red alerts begin appearing along the edge of Ashen Verge.
+=== menelaus_labor_iv_learn ===
 
-All moving inward.
+"Precisely. The same process by which they have incorporated humanity's ship hulls into their own designs."
+
+-> menelaus_labor_iv_revelation
+
+
+=== menelaus_labor_iv_destroy ===
+
+"No. Destruction alone cannot account for these structures. The Threat has also reproduced components of the Gate's control systems."
+
+-> menelaus_labor_iv_revelation
+
+
+=== menelaus_labor_iv_revelation ===
+
+The ruined Ring fades, leaving only the machinery the Threat has constructed around it. Menelaus superimposes the original Domain schematics, and the resemblance becomes apparent.
+
+"They have reproduced much of the Gate's transit architecture. They need not comprehend its function to replicate it."
+
+Half the projected transit topology resolves into a complete configuration. The remainder stays dark.
+
+"But they possess only one side of the topology. The missing parameters must come from another Gate."
+
+Sinni has been watching the reconstruction in silence.
+“Then if they reach Ithaca's Gate—”
+
+“The threat will pour from every Gate.” Menelaus finishes. “Humanity will die.”
+
+A priority alert interrupts the holodeck. The image of Ithaca's Gate recedes as new contact reports arrive from the outer approaches of Lacedaemon, followed by another series from a different direction.
+
+At first the returns are difficult to make sense of. Individual Threat signatures overlap until the tactical display begins grouping them into vast concentrations, each growing as more reports come in. Four formations emerge from the confusion, with numbers far exceeding anything Ithaca's patrols have encountered.
+
+One by one, the sensor reports change from tentative to confirmed.
+
+All four formations are approaching Ithaca's defensive perimeter.
 
 + [“They're already here.”] -> menelaus_labor_5_realization_3
 
 === menelaus_labor_5_realization_3 ===
 
+“Yes.”
+
+The Gate reconstruction vanishes altogether. Around Menelaus, Ithaca's defense stations begin reporting readiness, while orders spread across the tactical map to the surviving ships of Task Force Spartan.
+
 “Auxiliary...”
 
-His blue-white eyes burn into yours.
-
-“Defender of the Domain.”
-
-The surveillance data collapses into a tactical map. Threat concentrations converge on FOB Ithaca in numbers greater than anything you have yet encountered.
+He looks toward you, his attention leaving the incoming reports for the first time.
 
 “This is your final Labor. You have proven that neither the strength of lions nor of bulls shall hold you.”
 
-Over Menelaus's head, more and more red alerts spread like a bloody starry sky.
+Behind him, the four great enemy formations continue to accumulate contacts, the perimeter defenses little more than a thin blue line between them and Ithaca.
+
+* [Continue.] -> END
+
+=== menelaus_final_labor_offer ===
+
+A tactical plan of Ithaca replaces the wider battle map. Three Hostswarm concentrations are marked beyond the North, South, and East Bastions, with the fourth holding farther out.
+
+“The fifth Labor begins on your order. Once you commit, the three forward formations will lay siege to their assigned Bastions. Each position can hold for approximately two months. Any Hostswarm still intact at the end of that period will destroy its Bastion and turn on Task Force Spartan.”
+
+The three defense positions illuminate in blue. Beside them, Spartan's surviving ships are listed with their current readiness and personnel strength.
+
+“Task Force Spartan will hold the Fourth Strike at bay until all three perimeter formations have been destroyed. At that point, every surviving Spartan formation will fight to the last.”
+
+Menelaus leaves the force allocations before you.
+
+“Accept only when your fleet is prepared to defend Ithaca.”
+
+* [Accept the final Labor.] -> menelaus_final_labor_accepted
+* [Leave.] -> END
+
+=== menelaus_final_labor_accepted ===
+
+Menelaus issues the authorization. Command signals spread outward from Ithaca, and acknowledgements begin returning from the Bastions and Task Force Spartan as the defense plan comes into effect.
+
+He looks toward you.
+
+“Auxillary.”
+
+Around him, more acknowledgements arrive from the Bastions and the ships under his command.
 
 “Fight with us until the last light.”
 
-- [Continue.] -> END
-
-=== menelaus_final_labor_offer ===
-“The fifth Labor begins only on your order. Three massive Starving Threat formations are gathering beyond Ithaca's perimeter bastions. Once you accept, each formation will begin a siege lasting approximately two months. Any formation still alive at its deadline will destroy its assigned bastion and turn on Task Force Spartan; Spartan losses will not be replaced.”
-
-“Gautama will not commit the Heavenly Strike until all three perimeter formations are dead. Then every surviving Spartan formation will jump directly to the center engagement. Accept only when you are prepared to defend Ithaca.”
-
-- [Accept the final Labor.] -> menelaus_final_labor_accepted
-- [Leave.] -> END
-
-=== menelaus_final_labor_accepted ===
-Menelaus faces you.
-
-His blue-white eyes burn into yours.
-
-“Hero of Ithaca. Defender of the Domain.”
-
-The surveillance data collapses into a tactical map. Threat concentrations converge on FOB Ithaca in numbers greater than anything you have yet encountered.
-
-“This is your final Labor.”
-
-A pause.
-
-“Save us all.”
-
-- [“We'll stop them.”] -> menelaus_labor_5_depart
+* [“We'll stop them.”] -> menelaus_labor_5_depart
 
 === menelaus_labor_5_depart ===
-The holodeck releases you.
 
-Stars fade. Ashen Verge disappears. Menelaus dissolves into blue-white geometry until only the empty circular chamber remains.
+The holodeck releases you. The stars of the Lacedaemon System fade, followed by the defensive overlays and Menelaus's enormous avatar, until nothing remains but the circular chamber and its scuffed floor.
 
-The doors open.
+The doors open on a corridor already full of movement. Captain Aias Kleon is waiting just outside, speaking into his comm as he walks. He barely breaks stride when he sees you.
 
-Captain Aias Kleon is waiting outside. The commander of Task Force Spartan is already talking into his comm.
+“—affirmative. Full revival authorization. Code Eight, Five, Niner, Alpha-Foxtrot-Alpha. Spartan Actual, over.”
 
-“—yes, all personnel. Full revival authorization. Code Eight, Five, Niner, Alpha-Foxtrot-Alpha.”
+A reply crackles through his earpiece. Kleon motions for you to follow.
 
-He starts walking before you reach him.
+“Medical teams to cryogenic blocks one through nine. Triage at the exits. If they're breathing, find them a station.”
 
-“Medical teams to cryogenic blocks one through nine. Combat personnel report directly to assigned stations on revival. No acclimation period unless medically required. Not unless they're puking up a lung.”
+He listens briefly, then answers before the officer on the other end has finished.
 
-An answer crackles through his earpiece.
+“Override the rotation schedule. Every man to the last.”
 
-“Override the normal schedule. I want every able body awake.”
+"--Yes, sir!" You catch out buzzing out of the man's ear.
 
-Kleon cuts the channel and glances toward you.
+Kleon ends the call and turns toward you.
 
-“{player_title} {player_name}. Come.”
+“{player_title} {player_name}. Come with me.”
 
 -> menelaus_labor_5_field_briefing
 
 === menelaus_labor_5_field_briefing ===
-The corridor outside has transformed since you entered the holodeck.
 
-Personnel rush past in both directions. Bulkhead displays flash mobilization orders. Somewhere deeper inside Ithaca, alarms begin sounding one district after another as sections of the macrocomplex wake from centuries of reduced operation.
+Personnel hurry through the corridor in every direction, carrying weapons and boarding equipment, others maneuvering supply carts toward the transit platforms. Bulkhead displays have switched from station notices to mobilization orders. Farther into Ithaca, alarms sound as districts kept on reduced operation for two centuries begin coming back to life. The ground lights up with mustering stations marked out in lit-up red boxes, and lines of ship crew fill out the blocks before marching as one to their berth assignments.
 
-Captain Kleon brings up a tactical display on his slate.
+Kleon brings up a tactical display on his slate without stopping.
 
-“Menelaus gave you the strategic picture. Here's the battle.”
+Four massive concentrations of Threat contacts appear around FOB Ithaca. The forward three are on separate approaches; the last remains well behind them.
 
-Four enormous Threat formations appear around FOB Ithaca.
+“We've isolated four Hostswarms. Three are heading for the Bastions. One each for North, South, and East.”
 
-“We've isolated four Hostswarms.”
-
-He highlights three.
-
-“One is moving on North Bastion. One on South. One on East.”
-
-The fourth remains farther out, a vast knot of red signatures collecting behind the others. You recognize one of the signatures in the last one.
+The fourth concentration is a dense knot of red signatures. Among them, one familiar contact stands out.
 
 Gautama.
 
-- [“They're holding one back.”] -> menelaus_labor_5_hostswarms
+* [“They're holding one back.”] -> menelaus_labor_5_hostswarms
 
 === menelaus_labor_5_hostswarms ===
-“Exactly.”
 
-Kleon enlarges FOB Ithaca.
+“Yes.”
 
-The three Bastions illuminate around the macrocomplex, each surrounded by batteries, minefields, defense drones, and Spartan ships.
+Kleon enlarges Ithaca's defensive perimeter. The North, South, and East Bastions illuminate, each with its own overlapping fields of heavy batteries.
 
-“Your fleet will reinforce the Bastions. Fight with our defenses. Let the guns, mines, and drones do what they can.”
+“Your fleet will reinforce the Bastions. Fight inside our defensive coverage wherever possible. Let the guns blunt the weight of the assault and use your ships to destroy what gets through. Protect each wall module's reactors at all cost.”
 
-The three attack vectors burn red.
+The three attack routes burn red against the blue defensive positions.
 
-“Defend against the assault on North. South. East.”
+“Destroy each Hostswarm before it brings down its Bastion.”
 
-Then he highlights the fourth Hostswarm.
+He selects the fourth formation. Its projected course runs past the perimeter Bastions and into the old wound in Ithaca's eastern ring, where Gautama tore through the macrocomplex during its previous assault.
 
-It begins moving.
+“The first three attacks will occupy our defenses and spend our ammunition. Then the last Threat Strike comes through here.”
 
-Straight toward the enormous wound in Ithaca's eastern ring.
+Kleon taps the damaged section of the ring.
 
-“The fourth comes afterward.”
+“Here's the main assault.”
 
-The breach Gautama tore through the macrocomplex appears before you.
-
-“The Bastion attacks are attritional. They want our ships committed, our batteries hot, our ammunition depleted.”
-
-His finger taps the breach.
-
-“Then they'll put everything they have through here.”
-
-- [“That hole in the wall.”] -> menelaus_labor_5_breach
+* [“That breach in the wall.”] -> menelaus_labor_5_breach
 
 === menelaus_labor_5_breach ===
-Captain Kleon closes the map around the eastern breach. Task Force Spartan formations begin appearing inside it.
 
-Every surviving ship.
+Captain Kleon closes the map around the eastern breach. Task Force Spartan formations move into position across the opening, their projected strength rising and falling as the display accounts for losses sustained at the Bastions.
 
-Every awakened crew.
+He studies the force allocation before committing the last of the available ships to the line.
 
-“That's where Task Force Spartan makes its stand.”
+“There is where we will make our stand.”
 
-You look at the force allocation.
+There is no reserve.
 
-There is no reserve behind them.
-
-- [“And if the line breaks?”] -> menelaus_labor_5_line
+* [“And if the line breaks?”] -> menelaus_labor_5_line
 
 === menelaus_labor_5_line ===
-“We won't.”
 
-Kleon does not slow down. Then his mic crackles again.
+“We won't." Aias Kleon holds a fist over his breast. "Good luck, Auxilary. Molon Labe.”
+
+* [“You too, Commodore.”] -> menelaus_labor_5_line_2
+* [“Ha. Worry about yourself.”] -> menelaus_labor_5_line_2
+* [“Molon Labe!”] -> menelaus_labor_5_line_2
+
+
+=== menelaus_labor_5_line_2 ===
+Kleon does not slow down. His comm crackles again, and he accepts the call without taking his eyes off the corridor ahead.
 
 “Spartan Actual. Go.”
 
-He strides away, already issuing orders.
+An officer begins reading back readiness figures. Kleon listens for a moment before interrupting.
 
-“Confirm revival counts. Get the reserve pilots into their fighters. I want every Bastion reporting weapons-ready before those Hostswarms cross the perimeter.”
+“Confirm revival counts against ships ready to sortie. Get the reserve pilots into their fighters. I want ammunition and fuel reports from every Bastion. Have every commander acknowledge their manuever assignments before the Hostswarms cross the perimeter.”
 
-Sinni watches him disappear into the flow of personnel.
+He turns at the next junction, already issuing another order, and disappears among the personnel hurrying toward their stations.
 
-Then she looks toward you.
+Sinni watches him go. Then she looks toward you and, without saying anything more, reaches out to squeeze your hand.
 
-“Captain.”
+"Let's go."
 
-Her face is calm again.
-
-She reaches out and squeezes your hand.
-
-“Let's go.”
-
-- [Begin the final Labor.] -> END
+* [Begin the final Labor.] -> END
 
 === menelaus_final_labor_debrief ===
-“Ithaca remains. Task Force Spartan remains. You returned when the work was finished. Few commanders do.”
+“Ithaca remains. Task Force Spartan remains. You returned when the work was finished. Thank you, Captain.”
 
 He studies the surviving formation reports in silence.
 
-// Optional unread question; either route reaches the same acknowledgement and departure.
-- [“What did you learn about Gautama?”] -> menelaus_debrief_gautama
-- [Continue.] -> menelaus_debrief_acknowledgement
-
-=== menelaus_debrief_gautama ===
-The projection of his battered Corinthian helm is steady, but the tactical display behind it is a ruin of extinguished Threat contacts and shattered defensive formations.
-
-“The Heavenly Strike is destroyed,” he says. “Gautama was destroyed with it. Our battle telemetry has corrected a long-standing error: Gautama was never the complete organism.”
-
-The tactical display contracts, then opens across the whole of Devoured Reach. Black traces finer than the display can resolve link the eaten worlds.
-
-“Its true form is a web of nanometer-scale black filaments spanning light-years. We have designated it ‘Ungaikyo.’ Gautama was a coalescence—a local knot drawn tight enough to become a warship.”
-
-One filament pulls away from the eaten worlds and reaches across the chart to Last Light. A knot brightens beside the derelict Guardian there, surrounded by the contacts of a Third Strike.
-
-“Ungaikyo is gathering around the Guardian now. It has learned the architecture of your fleet. Expect it to call reflections of your warships out of the web, and to rebuild them while its local Fabricator survives. The wreck cannot be approached until that knot is destroyed.”
-
-His gaze returns to Ithaca's casualty reports.
-
-- [Continue.] -> menelaus_debrief_acknowledgement
-
-=== menelaus_debrief_acknowledgement ===
-“Your fifth Labor is complete. The prohibition on Ithaca's gate is lifted. Spartan will open the cordon, and the gate will answer your scan.”
+"The prohibition on Ithaca's gate is lifted. Task Force Spartan will open the cordon, and the gate will answer your scan.”
 
 The helm inclines by a fraction.
 
-“Hercules was permitted to rest after his Labors. I suspect neither of us will be granted the same courtesy. Go, Captain. See what your victories have opened.”
+“Your labors are done. But our battles never end. Go, Captain. See what your victories have opened.”
 
-- [Leave Menelaus to his command.] -> END
+* [Leave Menelaus to his command.] -> END
 
 === menelaus_labors_complete ===
 Menelaus inclines the projected Corinthian helm.
 
 “Your final Labor is complete. The prohibition on Ithaca's gate is lifted. Task Force Spartan will open the cordon when you approach; you may scan it.”
 
-The tactical display behind him has already changed. Ungaikyo's black filament web spans the eaten worlds of Devoured Reach, with one arm reaching into Last Light and knotting around the derelict Guardian. Its local Fabricator moves there with a Third Strike. Every other Starving Threat mass is swelling toward First, Second, or Third Strike strength, while a full Shrouded escort gathers around Budai.
+The tactical display behind him has already changed. Ungaikyo's black filament web spans the eaten worlds of Anatolia, with one arm reaching into Bouvo Olympus and knotting around the derelict Guardian. Its local Overseer moves there with a Third Strike. Every other Starving Threat mass is swelling toward First, Second, or Third Strike strength, while a full Shrouded escort gathers around Budai.
 
 “The Labors are complete,” Menelaus says. “The consequences are not.”
 

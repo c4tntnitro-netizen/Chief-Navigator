@@ -1,6 +1,9 @@
 package chiefnavigator.quest;
 
 import com.fs.starfarer.api.Global;
+import peerless.api.PeerlessSkills;
+import com.fs.starfarer.api.characters.PersonAPI;
+import com.fs.starfarer.api.characters.MutableCharacterStatsAPI;
 import com.fs.starfarer.api.campaign.CampaignFleetAPI;
 import com.fs.starfarer.api.campaign.CampaignUIAPI;
 import com.fs.starfarer.api.campaign.InteractionDialogPlugin;
@@ -48,6 +51,7 @@ public final class MenelausCompletionRegression {
             if (name.equals("getBoolean")) {
                 return Boolean.TRUE.equals(flags.get(values[0]));
             }
+            if (name.equals("get") || name.equals("getString")) return flags.get(values[0]);
             if (name.equals("set") && values.length >= 2) {
                 flags.put((String) values[0], values[1]);
             }
@@ -75,6 +79,9 @@ public final class MenelausCompletionRegression {
         });
         SectorAPI sector = mock(SectorAPI.class, (name, values) -> {
             if (name.equals("getMemoryWithoutUpdate")) return memory;
+            if (name.equals("getPlayerPerson")) return mock(PersonAPI.class, (n, a) -> null);
+            if (name.equals("getPlayerStats")) return mock(MutableCharacterStatsAPI.class,
+                    (n, a) -> n.equals("getSkillLevel") ? 2f : null);
             if (name.equals("getPlayerFleet")) return player;
             if (name.equals("getCampaignUI")) return ui;
             if (name.equals("getIntelManager")) return manager;
@@ -87,6 +94,8 @@ public final class MenelausCompletionRegression {
         flags.put(MenelausTrial.FINAL_LABOR_BRIEFED, true);
         check(MenelausTrial.isFinalLaborActive(),
                 "Labor V must be active before the Heavenly Strike dies");
+        check(!MenelausTrial.completeFinalDebrief() && !Global.getSector().getMemoryWithoutUpdate().getBoolean(MenelausTrial.DOMAIN_EPIC),
+                "No Peerless point before victory and the completed debrief");
 
         flags.put(MenelausTrial.GAUTAMA_DEFEATED, true);
         check(MenelausTrial.isFinalDebriefPending(),
@@ -95,11 +104,21 @@ public final class MenelausCompletionRegression {
                 "The invasion controller must stop during the return trip");
         check(!MenelausTrial.isComplete(),
                 "Killing the Strike must not skip Menelaus's debrief");
+        check(!Global.getSector().getMemoryWithoutUpdate().getBoolean(MenelausTrial.DOMAIN_EPIC), "Victory alone does not grant the point");
 
         check(MenelausTrial.completeFinalDebrief(),
                 "Finishing the debrief must commit Labor V");
         check(MenelausTrial.isComplete(),
                 "The quest must complete after the debrief");
+        check(Global.getSector().getMemoryWithoutUpdate().getBoolean(MenelausTrial.DOMAIN_EPIC) && (PeerlessSkills.getPoints() > 0),
+                "The actual final debrief automatically grants Domain Epic and one Peerless point");
+        check(!MenelausTrial.completeFinalDebrief() && !MenelausTrial.receiveDomainEpic(),
+                "Repeated debrief and optional title claim cannot grant another point");
+        check(PeerlessSkills.train("helmsmanship"), "Player can spend the reward on Elite Helmsmanship");
+        check(!(PeerlessSkills.getPoints() > 0), "Training consumes the single point");
+        check(!MenelausTrial.completeFinalDebrief() && !MenelausTrial.receiveDomainEpic()
+                && PeerlessSkills.isTrained("helmsmanship") && !(PeerlessSkills.getPoints() > 0),
+                "Revisiting after training never refunds the point or removes the upgrade");
         check(hunts.size() == 2 && hunts.stream().allMatch(item -> item instanceof PostLaborHuntIntel),
                 "The real debrief immediately starts the two boss hunts");
         check(Boolean.TRUE.equals(flags.get(
@@ -116,6 +135,6 @@ public final class MenelausCompletionRegression {
                 "A successfully opened cinematic must be one-time and durable");
 
         System.out.println("PASS: Heavenly Strike victory routes through "
-                + "Menelaus, then opens the one-time completion cinematic.");
+                + "Menelaus, awards one Peerless point, then opens the one-time completion cinematic.");
     }
 }

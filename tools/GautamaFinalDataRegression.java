@@ -130,12 +130,12 @@ public final class GautamaFinalDataRegression {
                 "data/hulls/skins/chief_navigator_ungaikyo.skin");
         String ungaikyoVariant = read(
                 "data/variants/chief_navigator_ungaikyo_Fabricator.variant");
-        check(ungaikyoSkin.contains("\"baseHullId\": \"fabricator_unit\"")
+        check(ungaikyoSkin.contains("\"baseHullId\": \"overseer_unit\"")
                         && ungaikyoSkin.contains(
-                                "chief_navigator_ungaikyo_fabricator_v1.png")
+                                "chief_navigator_ungaikyo_overseer_obsidian_v1.png")
                         && ungaikyoSkin.contains(
                                 "chief_navigator_ungaikyo_construction_swarm"),
-                "Ungaikyo must be a dark asset-backed vanilla Fabricator skin");
+                "Ungaikyo must be an obsidian asset-backed vanilla Overseer skin");
         check(ungaikyoSkin.contains("\"threat\"")
                         && ungaikyoVariant.contains("\"fragment_swarm\""),
                 "Native Threat tagging must hide the retrofit overlay without removing Fragment Swarm");
@@ -148,9 +148,13 @@ public final class GautamaFinalDataRegression {
         check(ungaikyoVariant.contains(
                         "\"hullId\": \"chief_navigator_ungaikyo\"")
                         && ungaikyoVariant.contains("\"heavy_mass_driver\"")
-                        && ungaikyoVariant.contains("\"devouring_swarm\"")
-                        && ungaikyoVariant.contains("\"secondary_fabricator\""),
-                "Ungaikyo must retain the stock Fabricator loadout and hullmods");
+                        && ungaikyoVariant.contains("\"kinetic_fragments\"")
+                        && ungaikyoVariant.contains("\"voltaic_cannon\"")
+                        && ungaikyoVariant.contains("\"targetingunit\"")
+                        && ungaikyoVariant.contains("\"fluxbreakers\"")
+                        && !ungaikyoVariant.contains("\"secondary_fabricator\"")
+                        && !ungaikyoVariant.contains("\"devouring_swarm\""),
+                "Ungaikyo must use the stock Overseer Type250 loadout and hullmods");
 
         String arrival = read(
                 "src/chiefnavigator/quest/TroyArrivalScript.java");
@@ -177,7 +181,7 @@ public final class GautamaFinalDataRegression {
                                 "LAST_LIGHT_GUARDIAN_WRECK_ID")
                         && arrival.contains(
                                 "coiled around the derelict Guardian"),
-                "Ungaikyo must guard the Guardian in Last Light");
+                "Ungaikyo must guard the Guardian in Bouvo Olympus");
 
         String predator = read(
                 "src/chiefnavigator/quest/OdysseyPredatorScript.java");
@@ -185,7 +189,7 @@ public final class GautamaFinalDataRegression {
                         "OdysseyExpanseSystem.LAST_LIGHT_ID")
                         && predator.contains(
                                 "LAST_LIGHT_GUARDIAN_WRECK_ID"),
-                "Post-Labor Ungaikyo maintenance must target Last Light");
+                "Post-Labor Ungaikyo maintenance must target Bouvo Olympus");
         String world = read(
                 "src/chiefnavigator/quest/OdysseyExpanseSystem.java");
         check(!world.contains("spawnTimeFreezeFacetSample(")
@@ -232,7 +236,7 @@ public final class GautamaFinalDataRegression {
                 + "Gautama carries native THREAT weapons, two Neoferric guns "
                 + "and four Heavy Mass Drivers "
                 + "in every compatibility configuration; Ungaikyo uses a dark "
-                + "stock Fabricator, the 240/200-DP reflection policy, and "
+                + "stock Overseer, the 240/200-DP reflection policy, and "
                 + "suppression without disabling Labor V's pity cycle.");
     }
 

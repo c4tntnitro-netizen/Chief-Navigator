@@ -1,10 +1,13 @@
 package chiefnavigator.quest;
 
 import com.fs.starfarer.api.Global;
+import com.fs.starfarer.api.campaign.FactionAPI;
 import com.fs.starfarer.api.campaign.InteractionDialogAPI;
 import com.fs.starfarer.api.campaign.SectorEntityToken;
+import com.fs.starfarer.api.campaign.econ.MarketAPI;
 import com.fs.starfarer.api.campaign.rules.MemKeys;
 import com.fs.starfarer.api.campaign.rules.MemoryAPI;
+import com.fs.starfarer.api.characters.PersonAPI;
 import com.fs.starfarer.api.impl.campaign.rulecmd.FireBest;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -38,7 +41,23 @@ final class RuleDialogSupport {
         // Sharing the target memory avoids depending on an engine-internal
         // Memory implementation while still providing FireBest's local scope.
         result.put(MemKeys.LOCAL, entity);
+        if (target != null) {
+            FactionAPI faction = target.getFaction();
+            // Shared rules resolve reputation operands through $faction.id.
+            // The updating getter populates the native transient $id fact.
+            if (faction != null) result.put(MemKeys.FACTION, faction.getMemory());
+            MarketAPI market = target.getMarket();
+            if (market != null) result.put(MemKeys.MARKET, market.getMemory());
+        }
         return result;
+    }
+
+    static void addPersonFactionMemory(
+            Map<String, MemoryAPI> memoryMap, PersonAPI person) {
+        memoryMap.remove(MemKeys.PERSON_FACTION);
+        if (person != null && person.getFaction() != null) {
+            memoryMap.put(MemKeys.PERSON_FACTION, person.getFaction().getMemory());
+        }
     }
 
     static boolean fire(

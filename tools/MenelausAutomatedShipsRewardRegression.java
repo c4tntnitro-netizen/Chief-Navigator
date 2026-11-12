@@ -212,7 +212,7 @@ public final class MenelausAutomatedShipsRewardRegression {
         Class<?> store = Class.forName("com.fs.starfarer.loading.SpecStore");
         Map<String, Object> specs = (Map<String, Object>) store.getMethod("new", Class.class).invoke(null, SkillSpec.class);
         Map<String, Object> oldSpecs = new HashMap<>(specs);
-        Map<String, Class<?>> scripts = (Map<String, Class<?>>) Class.forName("com.fs.starfarer.loading.scripts.ScriptStore").getField("void").get(null);
+        Map<String, Class<?>> scripts = (Map<String, Class<?>>) java.util.Arrays.stream(Class.forName("com.fs.starfarer.loading.scripts.ScriptStore").getFields()).filter(cacheField -> cacheField.getType() == java.util.Map.class).findFirst().orElseThrow().get(null);
         Map<String, Class<?>> oldScripts = new HashMap<>(scripts);
         Map oldCache = new HashMap(CharacterStats.getEffectCache());
         try {

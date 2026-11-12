@@ -30,7 +30,7 @@ public final class SpawnIthacaStrike implements BaseCommand {
         CampaignFleetAPI fleet = OdysseyPredatorScript
                 .spawnIthacaStrikeNearPlayer(secondStrike);
         if (fleet == null) {
-            Console.showMessage("Could not spawn the strike. Enter Ashen Verge "
+            Console.showMessage("Could not spawn the strike. Enter Lacedaemon "
                     + "and make sure FOB Ithaca has been generated.");
             return CommandResult.ERROR;
         }

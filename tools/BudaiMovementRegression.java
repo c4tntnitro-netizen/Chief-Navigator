@@ -20,7 +20,7 @@ public final class BudaiMovementRegression {
         final Vector2f position = new Vector2f();
         final Vector2f enemyPosition = new Vector2f(1000, 0);
         final BudaiConvulsiveLungeAI ai = new BudaiConvulsiveLungeAI();
-        final ShipAIConfig config = new ShipAIConfig();
+        final ShipAIConfig config = new ShipAIConfig(null);
         final ShipAIPlugin shipAI;
         final DeployedFleetMemberAPI deployed;
         final CombatTaskManagerAPI tasks;

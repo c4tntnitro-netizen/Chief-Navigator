@@ -11,7 +11,7 @@ import java.util.function.LongSupplier;
 /** A scene-local soundtrack timer, including while the campaign is paused. */
 final class MenelausEndingMusic implements EveryFrameScript {
     static final String MUSIC_ID = "chief_navigator_sinni_ending";
-    private static final long DELAY_NANOS = 10_000_000_000L;
+    private static final long DELAY_NANOS = 5_000_000_000L;
 
     private final SectorAPI sector;
     private final InteractionDialogAPI dialog;

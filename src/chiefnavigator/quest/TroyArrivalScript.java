@@ -144,11 +144,12 @@ public final class TroyArrivalScript {
         StarSystemAPI system = Global.getSector().createStarSystem("Waypoint Troy");
         system.setOptionalUniqueId(SYSTEM_ID);
         system.getMemoryWithoutUpdate().set(AUTHORED_SYSTEM_MARKER, true);
-        system.getLocation().set(59000f, -45000f);
+        system.getLocation().set(getInitialHyperspaceLocation());
         system.setBackgroundTextureFilename("graphics/backgrounds/background4.jpg");
         system.setLightColor(new Color(105, 120, 155));
         system.addTag(Tags.THEME_UNSAFE);
         system.initNonStarCenter();
+        system.generateAnchorIfNeeded();
         makePersistentAndVisible(system);
         ensureDepartureStation(system);
         ensureCanonicalTopology(system);
@@ -159,6 +160,18 @@ public final class TroyArrivalScript {
     public static StarSystemAPI findWaypointTroy() {
         StarSystemAPI candidate = findWaypointTroyClaim();
         return isWaypointTroy(candidate) ? candidate : null;
+    }
+
+    /** Restores only the missing native map anchor of an existing owned Troy. */
+    public static void repairWaypointTroyMapAnchor() {
+        if (Global.getSector() == null
+                || Global.getSector().getHyperspace() == null) return;
+        StarSystemAPI system = findWaypointTroy();
+        if (system != null && system.getHyperspaceAnchor() == null) {
+            // The native course renderer resolves Troy's access point through
+            // this anchor. Native generation preserves saved positions and routes.
+            system.generateAnchorIfNeeded();
+        }
     }
 
     private static StarSystemAPI findWaypointTroyClaim() {
@@ -275,7 +288,7 @@ public final class TroyArrivalScript {
         return isDepartureStation(station) ? station : null;
     }
 
-    /** Creates the visible waypoint opened by Sinni after the 50-DP check. */
+    /** Creates the visible waypoint opened by Sinni after the configured fleet-DP check. */
     public static JumpPointAPI ensureOdysseyWormhole(StarSystemAPI system) {
         if (system == null) return null;
         SectorEntityToken existing = system.getEntityById(WORMHOLE_ID);
@@ -354,10 +367,30 @@ public final class TroyArrivalScript {
     }
 
     private static void makePersistentAndVisible(StarSystemAPI system) {
-        system.getLocation().set(59000f, -45000f);
         system.removeTag(Tags.THEME_HIDDEN);
         system.removeTag(Tags.SYSTEM_CUT_OFF_FROM_HYPER);
         system.setDoNotShowIntelFromThisLocationOnMap(false);
+    }
+
+    /** Keep Troy at the same relative position in a resized Sector. */
+    static Vector2f getInitialHyperspaceLocation() {
+        return new Vector2f(
+                Global.getSettings().getFloat("sectorWidth") * (59000f / 164000f),
+                Global.getSettings().getFloat("sectorHeight") * (-45000f / 104000f));
+    }
+
+    /** Prefer Troy's saved hyperspace entrance; preserve a valid objective fallback. */
+    public static SectorEntityToken getMapTarget(SectorEntityToken target) {
+        if (target == null || Global.getSector() == null) return target;
+        StarSystemAPI troy = findWaypointTroy();
+        if (troy == null || target.getContainingLocation() != troy
+                || Global.getSector().getCurrentLocation() == troy) return target;
+        LocationAPI hyperspace = Global.getSector().getHyperspace();
+        SectorEntityToken access = hyperspace == null ? null
+                : hyperspace.getEntityById(ACCESS_HYPER_JUMP_ID);
+        return access instanceof JumpPointAPI
+                && isOwnedTroyAccessPair(troy, (JumpPointAPI) access)
+                ? access : target;
     }
 
     /** Creates Troy's two-sided access exactly once during system creation. */
@@ -517,8 +550,8 @@ public final class TroyArrivalScript {
         if (hasBlockingGautamaIdClaimAnywhere()) return null;
         boolean finalRematch = MenelausTrial.isComplete();
         if (finalRematch) {
-            // Callers retain their historical Devoured Reach entry points for
-            // pre-Labor Gautama. Once the Labors are complete, Last Light is
+            // Callers retain their historical Anatolia entry points for
+            // pre-Labor Gautama. Once the Labors are complete, Bouvo Olympus is
             // authoritative regardless of which compatibility path called us.
             StarSystemAPI lastLight = OdysseyExpanseSystem.findSystemById(
                     OdysseyExpanseSystem.LAST_LIGHT_ID);
@@ -820,7 +853,7 @@ public final class TroyArrivalScript {
                 GAUTAMA_FINAL_REMATCH_INVALID_V1);
     }
 
-    /** Configures the isolated Last Light patrol without resetting its roster. */
+    /** Configures the isolated Bouvo Olympus patrol without resetting its roster. */
     private static void configureGautamaFinalRematch(
             StarSystemAPI system, CampaignFleetAPI fleet) {
         EncounterCombatChatter.configure(fleet, EncounterCombatChatter.UNGAIKYO);
@@ -903,7 +936,11 @@ public final class TroyArrivalScript {
                     FleetAssignment.ORBIT_AGGRESSIVE,
                     ring,
                     1000000f,
-                    "commanding the Heavenly Strike at the Devoured Ring");
+                    "orbiting the Devoured Ring");
+        } else if (fleet.getCurrentAssignment().getAssignment()
+                        == FleetAssignment.ORBIT_AGGRESSIVE
+                && fleet.getCurrentAssignment().getTarget() == ring) {
+            fleet.getCurrentAssignment().setActionText("orbiting the Devoured Ring");
         }
     }
 
@@ -1365,7 +1402,7 @@ public final class TroyArrivalScript {
 
     /**
      * Retires the shelved Time Freeze encounter without touching unrelated
-     * Omega fleets or reconstructing any static Last Light object.
+     * Omega fleets or reconstructing any static Bouvo Olympus object.
      */
     static boolean retireTimeFreezeFacetSample() {
         if (Global.getSector() == null) return false;

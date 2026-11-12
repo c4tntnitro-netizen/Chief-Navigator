@@ -21,13 +21,13 @@ public final class MirrorCompatibilityRegression {
         Global.setSettings(mock(SettingsAPI.class, (name, values) ->
                 name.equals("getJSONArray") ? exclusions : null));
         try {
-            ShipAIPlugin generic = nativeBasicAI(new ShipAIConfig());
+            ShipAIPlugin generic = nativeBasicAI(new ShipAIConfig(null));
             check(MirrorCompatibility.isGenericDefaultAI(generic),
                     "The real native BasicShipAI is generic, not a custom wrapper");
             checkGenericActivation(generic);
             ShipAIPlugin fearless = nativeBasicAI(GuardDroneAI.createFearlessConfig());
             check(MirrorCompatibility.isGenericDefaultAI(fearless), "Our installed Fearless remains generic");
-            ShipAIConfig tailored = new ShipAIConfig();
+            ShipAIConfig tailored = new ShipAIConfig(null);
             tailored.personalityOverride = "steady";
             ShipAIPlugin configuredBasic = nativeBasicAI(tailored);
             check(MirrorCompatibility.isGenericDefaultAI(configuredBasic),
@@ -36,7 +36,7 @@ public final class MirrorCompatibilityRegression {
             check(configuredBasic.getConfig() == tailored && "reckless".equals(tailored.personalityOverride),
                     "Configure Basic Fearless in place, preserving its class/native modules/config identity");
             ShipAIPlugin delegate = mock(ShipAIPlugin.class, (name, values) ->
-                    name.equals("getConfig") ? new ShipAIConfig() : null);
+                    name.equals("getConfig") ? new ShipAIConfig(null) : null);
             ShipAIPlugin wrapper = (ShipAIPlugin) Class.forName(
                     "com.fs.starfarer.combat.entities.Ship$ShipAIWrapper")
                     .getConstructor(ShipAIPlugin.class).newInstance(delegate);
@@ -130,7 +130,7 @@ public final class MirrorCompatibilityRegression {
         MirrorCompatibility.forgetConstructionAI(ship);
         check(data.isEmpty(), "Cleanup is idempotent and releases its saved custom context");
 
-        ShipAIPlugin generic = nativeBasicAI(new ShipAIConfig());
+        ShipAIPlugin generic = nativeBasicAI(new ShipAIConfig(null));
         current[0] = generic;
         MirrorCompatibility.rememberConstructionAI(ship);
         current[0] = wrapper;

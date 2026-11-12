@@ -206,7 +206,7 @@ public final class IthacaBastionRepairRegression {
         check(f.entities.get(stationId(north)) == null, "Destroyed bastion must remain absent before day 30");
         f.advance(1f);
         check(IthacaSectionEncounter.isBastionReady(f.center,north), "Thirty campaign days restore the owned bastion");
-        check(f.entities.containsKey(proxyId(north)), "Completed rebuild restores its click proxy in established Ashen Verge");
+        check(f.entities.containsKey(proxyId(north)), "Completed rebuild restores its click proxy in established Lacedaemon");
         check(f.entities.get(stationId(east)) == original.api, "Surviving token and member must never be replaced");
         int built = f.createdMembers.size(); f.advance(100f);
         check(f.createdMembers.size() == built, "Healthy stations do not duplicate or refill rosters");

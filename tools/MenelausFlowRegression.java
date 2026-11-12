@@ -19,9 +19,10 @@ import com.fs.starfarer.api.impl.campaign.rulecmd.FireAll;
 import com.fs.starfarer.api.impl.campaign.rulecmd.FireBest;
 import com.fs.starfarer.api.impl.campaign.rulecmd.SetTextHighlightColors;
 import com.fs.starfarer.api.impl.campaign.rulecmd.SetTextHighlights;
+import com.fs.starfarer.api.impl.campaign.rulecmd.PlaySound;
 import com.fs.starfarer.api.util.Misc;
 import com.fs.starfarer.campaign.rules.Memory;
-import com.fs.starfarer.campaign.rules.oOOO;
+import com.fs.starfarer.campaign.rules.A;
 import com.fs.starfarer.campaign.CampaignEngine;
 import com.fs.starfarer.campaign.CampaignClock;
 import data.campaign.rulecmd.ChiefNavigatorMenelausCMD;
@@ -116,11 +117,11 @@ public final class MenelausFlowRegression {
         // Crucially, zero is an immediate-expiry interval, not a persistent flag.
         Memory proof = new Memory();
         Map<String, MemoryAPI> scope = Map.of(MemKeys.LOCAL, proof, MemKeys.GLOBAL, proof);
-        new oOOO("$global.expiring = true 0").execute("expiry_proof", null, scope);
+        new A("$global.expiring = true 0").execute("expiry_proof", null, scope);
         check(proof.getBoolean("$expiring"), "Native assignment must initially exist");
         proof.advance(0.1f);
         check(!proof.contains("$expiring"), "Native trailing zero must expire after unpause");
-        new oOOO("$global.durable = true").execute("durability_proof", null, scope);
+        new A("$global.durable = true").execute("durability_proof", null, scope);
         proof.advance(100f);
         check(proof.getBoolean("$durable"), "Native omitted duration must be durable");
     }
@@ -157,7 +158,7 @@ public final class MenelausFlowRegression {
                 } else {
                     check(line.startsWith("$") || line.startsWith("!$"),
                             "Unrecognized condition in tested authored graph: " + id + ": " + line);
-                    if (!new oOOO(line).isTrueFor(id, f.dialog, memory)) return false;
+                    if (!new A(line).isTrueFor(id, f.dialog, memory)) return false;
                 }
             }
             return true;
@@ -216,6 +217,7 @@ public final class MenelausFlowRegression {
         int availableMask = -1;
         int componentRemovals;
         float hegemonyRelationship;
+        String playerPronoun = "he";
         final List<FleetMemberAPI> playerMembers = new ArrayList<>();
         String[] textHighlights = new String[0];
         Color[] textHighlightColors = new Color[0];
@@ -240,6 +242,7 @@ public final class MenelausFlowRegression {
                 if (name.equals("getId")) return id;
                 if (name.equals("getName")) return new FullName(first, last, FullName.Gender.ANY);
                 if (name.equals("getNameString")) return last.isEmpty() ? first : first + " " + last;
+                if (name.equals("getHeOrShe")) return id.equals("player") ? playerPronoun : "he";
                 if (name.equals("getMemoryWithoutUpdate")) return memory;
                 if (name.equals("getPortraitSprite")) return "graphics/portraits/regression_" + id + ".png";
                 return null;
@@ -409,7 +412,7 @@ public final class MenelausFlowRegression {
         void runScript(Row row, Map<String, MemoryAPI> memory) {
             for (String line : row.script.split("\\R")) {
                 if (line.isBlank()) continue;
-                if (line.startsWith("$")) new oOOO(line).execute(row.id, dialog, memory);
+                if (line.startsWith("$")) new A(line).execute(row.id, dialog, memory);
                 else if (line.startsWith("FireAll ")) FireAll.fire(row.id, dialog, memory, line.substring(8));
                 else if (line.startsWith("FireBest ")) FireBest.fire(row.id, dialog, memory, line.substring(9));
                 else if (line.startsWith("SetTextHighlightColors ")) {
@@ -430,6 +433,10 @@ public final class MenelausFlowRegression {
                             Misc.tokenize(line.substring("ChiefNavigatorPeopleCMD ".length())), memory);
                     check(result, "Authored portrait command could not execute: " + row.id + ": " + line);
                 } else if (line.equals("DismissDialog")) dialog.dismiss();
+                else if (line.startsWith("PlaySound ")) {
+                    new PlaySound().execute(row.id, dialog,
+                            Misc.tokenize(line.substring("PlaySound ".length())), memory);
+                }
                 else if (line.startsWith("SetOptionColor ") || line.startsWith("SetShortcut ")) { /* Presentation only. */ }
                 else throw new AssertionError("Unexercised authored command: " + row.id + ": " + line);
             }
@@ -712,54 +719,24 @@ public final class MenelausFlowRegression {
         LaborFourNativeRegression.verify();
     }
 
-    private static void verifyOptionalVictoryExplanation() throws Exception {
-        String question = "chief_navigator_menelaus_debrief_gautama";
-        String page2 = "chief_navigator_auto_page_chief_navigator_fob_ithaca_debrief_2";
-        String page3 = "chief_navigator_auto_page_chief_navigator_fob_ithaca_debrief_3";
-        String page4 = "chief_navigator_auto_page_chief_navigator_fob_ithaca_debrief_4";
-        for (boolean readExplanation : List.of(false, true)) {
-            Fixture f = new Fixture(); f.stage(MenelausTrial.LABOR_GAUTAMA, true, true);
-            f.fire("ChiefNavigatorFobIthaca");
-            check(f.options.keySet().equals(Set.of(question, page3))
-                            && f.history.get(0).startsWith("\"Ithaca remains.")
-                            && f.history.stream().noneMatch(t -> t.contains("Gautama was never")
-                                    || t.contains("Its true form") || t.contains("Menelaus is waiting")),
-                    "Victory opens with congratulations and a functional optional-question/skip decision");
-            if (readExplanation) {
-                f.choose(question);
-                check(f.options.keySet().equals(Set.of(page2))
-                                && f.history.stream().anyMatch(t -> t.contains("Gautama was never the complete organism.")),
-                        "Choosing the question opens the original Gautama explanation");
-                check(!MenelausTrial.isComplete() && !f.global.getBoolean(MenelausCompletionDialogPlugin.PENDING),
-                        "Opening the optional explanation cannot commit the Labor or queue its ending");
-                f.choose(page2);
-                check(f.options.keySet().equals(Set.of(page3))
-                                && f.history.stream().anyMatch(t -> t.contains("Its true form is a web"))
-                                && f.history.stream().anyMatch(t -> t.contains("The wreck cannot be approached")),
-                        "The optional continuation preserves Ungaikyo and Guardian information");
-            }
-            f.choose(page3);
-            check(f.options.keySet().equals(Set.of(page4))
-                            && f.history.stream().filter(t -> t.contains("Ithaca remains.")).count() == 1
-                            && f.history.stream().anyMatch(t -> t.contains("The prohibition on Ithaca's gate is lifted.")),
-                    "Both routes reach the same gate-release acknowledgement without repeated congratulations");
-            f.choose(page4);
-            check(!MenelausTrial.isComplete() && !f.global.getBoolean(MenelausCompletionDialogPlugin.PENDING),
-                    "Neither reading nor skipping may finish before the existing departure choice");
-            f.choose("chief_navigator_fob_ithaca_debrief_leave");
-            check(MenelausTrial.isComplete() && f.dismissals == 1
-                            && f.global.getBoolean(MenelausCompletionDialogPlugin.PENDING),
-                    "Both routes finish Labor V once and queue the standalone cinematic on departure");
-            if (!readExplanation) {
-                check(f.history.stream().noneMatch(t -> t.contains("Gautama was never") || t.contains("Its true form")),
-                        "Skipping must not silently render the optional explanation later");
-            }
-        }
-        Fixture interrupted = new Fixture(); interrupted.stage(MenelausTrial.LABOR_GAUTAMA, true, true);
-        interrupted.fire("ChiefNavigatorFobIthaca"); interrupted.choose(question);
-        interrupted.settle(); interrupted.fire("ChiefNavigatorFobIthaca");
-        check(interrupted.options.keySet().equals(Set.of(question, page3)) && !MenelausTrial.isComplete(),
-                "Reopening an interrupted optional explanation retains both routes and pending completion");
+    private static void verifyVictoryDebrief() throws Exception {
+        Fixture f = new Fixture(); f.stage(MenelausTrial.LABOR_GAUTAMA, true, true);
+        f.fire("ChiefNavigatorFobIthaca");
+        String leave = "chief_navigator_fob_ithaca_debrief_leave";
+        check(f.options.keySet().equals(Set.of(leave))
+                        && f.history.get(0).startsWith("\"Ithaca remains.")
+                        && String.join("\n", f.history).contains("Thank you, Captain.")
+                        && String.join("\n", f.history).contains("Your labors are done. But our battles never end."),
+                "The supplied victory acknowledgement leads directly to its closing departure");
+        check(!MenelausTrial.isComplete() && !f.global.getBoolean(MenelausCompletionDialogPlugin.PENDING),
+                "Reading the victory text cannot commit completion or queue the ending");
+        f.settle(); f.fire("ChiefNavigatorFobIthaca");
+        check(f.options.keySet().equals(Set.of(leave)) && !MenelausTrial.isComplete(),
+                "Reopening before departure preserves pending completion");
+        f.choose(leave);
+        check(MenelausTrial.isComplete() && f.dismissals == 1
+                        && f.global.getBoolean(MenelausCompletionDialogPlugin.PENDING),
+                "The unchanged departure callback commits Labor V and queues the cinematic");
     }
 
     private static void verifyMenuVisibility() throws Exception {
@@ -1169,7 +1146,8 @@ public final class MenelausFlowRegression {
                         && selected.contains("chief_navigator_menelaus_report_research")
                         && selected.contains("chief_navigator_menelaus_report_sensor")
                         && selected.contains("chief_navigator_menelaus_accept_final")
-                        && selected.contains("chief_navigator_menelaus_debrief_gautama")
+                        && selected.contains("chief_navigator_menelaus_labor_four_report_eating")
+                        && selected.contains("chief_navigator_menelaus_labor_four_report_destroy")
                         && selected.contains("chief_navigator_fob_ithaca_debrief_leave")
                         && selected.contains("chief_navigator_menelaus_helen_end"),
                 "Full graph traversal must exercise every Labor handoff and the final Helen ending; selected " + selected);
@@ -1375,6 +1353,12 @@ public final class MenelausFlowRegression {
                 return Color.WHITE;
             }));
             initializeExpressions(); readRules();
+            if (Arrays.asList(args).contains("--labor-four-debrief")) {
+                LaborFourDebriefNativeRegression.verify();
+                verifyVictoryDebrief();
+                System.out.println("PASS: native Labor IV debrief, all converging branches, explicit Labor V acceptance, Kleon replies and victory departure.");
+                return;
+            }
             if (Arrays.asList(args).contains("--voss")) {
                 verifyVossConfrontation();
                 System.out.println("PASS: 162 native Voss paths across reputation, Sara continuity and all response aliases; Labor III entry, pagination, aftermath highlight and Labor IV handoff ("
@@ -1409,7 +1393,7 @@ public final class MenelausFlowRegression {
             verifyUpgradeLedgerHighlights();
             verifyVossAftermathHighlight();
             verifySinniIdentityRoutes();
-            verifyOptionalVictoryExplanation();
+            verifyVictoryDebrief();
             verifyDurableIntroAndBriefings(); verifyInterruptedTopics();
             verifyAcceptedLegacyContactWithoutMarker();
             verifyNestedOptionGroups(); verifyEarlyWallPriority();

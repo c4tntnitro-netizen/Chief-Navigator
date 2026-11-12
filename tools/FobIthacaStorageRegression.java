@@ -24,8 +24,10 @@ import com.fs.starfarer.api.impl.campaign.submarkets.StoragePlugin;
 import java.lang.reflect.Proxy;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /** Exercises vanilla storage against Ithaca's exact persistent station-owned cargo. */
 public final class FobIthacaStorageRegression {
@@ -193,6 +195,7 @@ public final class FobIthacaStorageRegression {
             final boolean[] hidden = { false };
             final boolean[] playerOwned = { false };
             final SectorEntityToken[] primary = { null };
+            final Set<SectorEntityToken> connected = new LinkedHashSet<>();
             final StoragePlugin storage = new StoragePlugin();
             final List<SubmarketAPI> submarkets = new ArrayList<>();
             final MarketAPI[] holder = { null };
@@ -211,10 +214,13 @@ public final class FobIthacaStorageRegression {
                 if (name.equals("isPlayerOwned")) return playerOwned[0];
                 if (name.equals("getFaction")) return faction;
                 if (name.equals("getPrimaryEntity")) return primary[0];
+                if (name.equals("getConnectedEntities")) return connected;
                 if (name.equals("setPrimaryEntity")) {
                     check(args[0] == null || args[0] == station,
                             "Carrier may bind only the actual station during native core access");
                     primary[0] = (SectorEntityToken) args[0];
+                    // Native Market.setPrimaryEntity adds even null to this list.
+                    if (!connected.contains(primary[0])) connected.add(primary[0]);
                 }
                 if (name.equals("getSubmarket")) {
                     check(Submarkets.SUBMARKET_STORAGE.equals(args[0]),
@@ -282,9 +288,13 @@ public final class FobIthacaStorageRegression {
         }
 
         void assertCarrierReleased() {
-            for (MarketAPI carrier : createdCarriers)
-                check(carrier.getPrimaryEntity() == null,
-                        "A closed or failed carrier must release its station reference");
+            for (MarketAPI carrier : createdCarriers) {
+                check(attachedMarket != carrier,
+                        "A closed or failed carrier must be detached from the station");
+                check(carrier.getPrimaryEntity() == station
+                                && !carrier.getConnectedEntities().contains(null),
+                        "A retained UI carrier must remain valid through native fade-out and mod callbacks");
+            }
         }
     }
 

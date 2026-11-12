@@ -102,5 +102,5 @@ Convert-NebulaAtlas `
     (Join-Path $coreTerrain "nebula_amber_map.png") `
     $mapPath
 
-Write-Output "Ashen Verge nebula atlas -> $runtimePath"
-Write-Output "Ashen Verge nebula map atlas -> $mapPath"
+Write-Output "Lacedaemon nebula atlas -> $runtimePath"
+Write-Output "Lacedaemon nebula map atlas -> $mapPath"

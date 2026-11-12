@@ -11,6 +11,7 @@ public final class ScyllaBossHullmod extends BaseHullMod {
     public void advanceInCombat(ShipAPI ship, float amount) {
         CombatEngineAPI engine = Global.getCombatEngine();
         if (ship == null || engine == null) return;
+        GautamaSwarmLaunch.maintainCloud(ship, amount);
 
         if (ship.isHulk() || !ship.isAlive()) {
             GautamaReincarnation.noteGautamaDeath(engine, ship);

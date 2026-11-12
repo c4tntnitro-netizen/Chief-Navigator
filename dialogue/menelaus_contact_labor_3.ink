@@ -3,7 +3,7 @@
 
 === menelaus_contact_labor_3_active ===
 
-Ashen Verge unfolds around Menelaus. The research packages recovered during your second Labor appear alongside a schematic of Ithaca, their installation markers lighting up in sequence before the display folds them away.
+Lacedaemon unfolds around Menelaus. The research packages recovered during your second Labor appear alongside a schematic of Ithaca, their installation markers lighting up in sequence before the display folds them away.
 
 "Your second Labor has borne fruit. Several of the recovered modules have already been integrated into the macrocomplex, and I estimate that their combined effect has increased Ithaca's force-projection capability by at least eighty percent."
 

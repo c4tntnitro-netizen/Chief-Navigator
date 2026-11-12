@@ -182,6 +182,7 @@ public final class FobIthacaStationInteraction
             memoryMap.put(
                     MemKeys.LOCAL,
                     activeContact.getMemoryWithoutUpdate());
+            RuleDialogSupport.addPersonFactionMemory(memoryMap, activeContact);
         }
     }
 

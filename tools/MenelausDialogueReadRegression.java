@@ -46,7 +46,7 @@ public final class MenelausDialogueReadRegression {
             + "|Accept the final Labor\\.|Begin the final Labor\\.|Follow Captain Kleon\\."
             + "|Leave Menelaus.*|Leave them with Helen.*"
             + "|Deliver and install all recovered Ithaca wall upgrades\\."
-            + "|\"I accept\\.\"|\"Understood\\.\"|\"That.s enough for now\\.\"|Enter\\.)$";
+            + "|\"I accept\\.\"|\"Understood\\.\"|\"That.s all\\.\"|\"That.s enough for now\\.\"|Enter\\.)$";
 
     static final class Fixture {
         final Map<String, Object> flags = new HashMap<>();
@@ -293,32 +293,27 @@ public final class MenelausDialogueReadRegression {
                 "Discarding an interrupted answer must not persist a premature read flag");
     }
 
-    static void optionalDebriefAnswer() {
-        String topic = "menelaus_debrief_gautama";
-        String page2 = "auto_page_chief_navigator_fob_ithaca_debrief_2";
-        String page3 = "auto_page_chief_navigator_fob_ithaca_debrief_3";
-        String page4 = "auto_page_chief_navigator_fob_ithaca_debrief_4";
-        for (boolean readAnswer : List.of(false, true)) {
-            Fixture f = new Fixture();
-            MenelausDialogueReadState state = new MenelausDialogueReadState();
-            f.page(topic, page3);
-            state.afterPage(f.dialog, f.memory, null);
-            check(f.writes == 0 && Color.YELLOW.equals(f.color(topic)),
-                    "The optional victory question must start yellow without read or quest writes");
-            if (readAnswer) {
-                f.page(page2); state.afterPage(f.dialog, f.memory, PREFIX + topic);
-                f.page(page3); state.afterPage(f.dialog, f.memory, PREFIX + page2);
-                check(f.writes == 0, "The optional two-page explanation must not be marked read on entry");
-            }
-            f.page(page4); state.afterPage(f.dialog, f.memory, PREFIX + page3);
-            f.page("fob_ithaca_debrief_leave"); state.afterPage(f.dialog, f.memory, PREFIX + page4);
-            check(f.writes == (readAnswer ? 1 : 0),
-                    "Finishing the debrief marks only an actually selected Gautama answer read");
-            f.page(topic, page3);
-            new MenelausDialogueReadState().afterPage(f.dialog, f.memory, null);
-            check((readAnswer ? Color.CYAN : Color.YELLOW).equals(f.color(topic)),
-                    "Reload preserves read/default styling and leaves a skipped question yellow");
+    static void laborFourDebriefAnswer() {
+        String topic = "menelaus_labor_four_report_learn";
+        List<String> pages = List.of("menelaus_labor_four_report_revelation",
+                "auto_page_chief_navigator_menelaus_labor_four_report_revelation_2",
+                "auto_page_chief_navigator_menelaus_labor_four_report_revelation_3");
+        Fixture f = new Fixture();
+        MenelausDialogueReadState state = new MenelausDialogueReadState();
+        f.page(topic); state.afterPage(f.dialog, f.memory, null);
+        check(f.writes == 0 && Color.YELLOW.equals(f.color(topic)), "The debrief response begins unread");
+        String selected = topic;
+        for (String page : pages) {
+            f.page(page); state.afterPage(f.dialog, f.memory, PREFIX + selected);
+            check(f.writes == 0, "The revelation must remain unread through every continuation");
+            selected = page;
         }
+        f.page("menelaus_labor_5_realization_3");
+        state.afterPage(f.dialog, f.memory, PREFIX + selected);
+        check(f.writes == 1, "The selected answer is read only after the entire revelation");
+        f.page(topic);
+        new MenelausDialogueReadState().afterPage(f.dialog, f.memory, null);
+        check(f.writes == 1 && Color.CYAN.equals(f.color(topic)), "Reopening preserves its durable read key");
     }
 
     public static void main(String[] args) throws Exception {
@@ -347,7 +342,7 @@ public final class MenelausDialogueReadRegression {
             authoringCoverage();
             completionAndReload();
             abandonedAnswer();
-            optionalDebriefAnswer();
+            laborFourDebriefAnswer();
             System.out.println("Menelaus unread-option coverage, completion, reopen, interruption and styling checks passed.");
         } finally { Global.setSettings(old); }
     }

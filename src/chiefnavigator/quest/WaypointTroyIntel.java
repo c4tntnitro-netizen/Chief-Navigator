@@ -87,7 +87,7 @@ public final class WaypointTroyIntel extends BaseIntelPlugin {
         } else if (Global.getSector().getMemoryWithoutUpdate().getBoolean(
                 OdysseyExpanseSystem.ENTERED)
                 && !MenelausTrial.isAccepted()) {
-            info.addPara("Sinni has guided the expedition through the Troy Terminus and marked FOB Ithaca in Ashen Verge. Reach the installation and establish contact with whoever still commands it.", 10f);
+            info.addPara("Sinni has guided the expedition through the Troy Terminus and marked FOB Ithaca in Lacedaemon. Reach the installation and establish contact with whoever still commands it.", 10f);
         } else if (!Global.getSector().getMemoryWithoutUpdate().getBoolean(
                 OdysseyExpanseSystem.ENTERED)) {
             info.addPara("Sinni has joined your expedition under a cooperative charter. Travel to the expedition anchorage in Waypoint Troy, use its free storage for any ships and cargo you do not intend to bring, and open the route with a fleet worth no more than "
@@ -143,7 +143,7 @@ public final class WaypointTroyIntel extends BaseIntelPlugin {
         if (Global.getSector().getMemoryWithoutUpdate().getBoolean(
                 OdysseyExpanseSystem.ENTERED)
                 && !MenelausTrial.isAccepted()) {
-            return "Reach FOB Ithaca in Ashen Verge";
+            return "Reach FOB Ithaca in Lacedaemon";
         }
         if (!Global.getSector().getMemoryWithoutUpdate().getBoolean(
                 OdysseyExpanseSystem.ENTERED)
@@ -193,7 +193,8 @@ public final class WaypointTroyIntel extends BaseIntelPlugin {
 
     @Override
     public SectorEntityToken getMapLocation(SectorMapAPI map) {
-        return SinniNavigationGuidance.getCurrentGuidance().getTarget();
+        return TroyArrivalScript.getMapTarget(
+                SinniNavigationGuidance.getCurrentGuidance().getTarget());
     }
 
     @Override

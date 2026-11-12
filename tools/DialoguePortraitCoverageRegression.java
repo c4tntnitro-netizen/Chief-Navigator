@@ -123,7 +123,7 @@ public final class DialoguePortraitCoverageRegression {
                         "illustrated chief_navigator_sinni_eventide_tea"),
                 Map.entry("chiefNavigatorSinniAlphaOdysseyArrival",
                         "illustrated chief_navigator_alpha_odyssey_arrival"),
-                Map.entry("chiefNavigatorLabor5EndingWakingPage4",
+                Map.entry("chiefNavigatorLabor5EndingSinni",
                         "illustrated chief_navigator_sinni_ending"));
         if (vossOnly) {
             expected = expected.entrySet().stream().filter(entry ->

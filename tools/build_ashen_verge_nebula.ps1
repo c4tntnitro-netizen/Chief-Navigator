@@ -63,7 +63,7 @@ try {
     }
 
     $bitmap.Save($outputPath, [System.Drawing.Imaging.ImageFormat]::Png)
-    Write-Output "Ashen Verge nebula mask: ${width}x${height} -> $outputPath"
+    Write-Output "Lacedaemon nebula mask: ${width}x${height} -> $outputPath"
 }
 finally {
     $bitmap.Dispose()

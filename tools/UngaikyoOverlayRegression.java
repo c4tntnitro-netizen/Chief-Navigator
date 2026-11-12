@@ -15,6 +15,16 @@ import org.json.JSONObject;
 public final class UngaikyoOverlayRegression {
     public static void main(String[] args) throws Exception {
         JSONObject skin = read("data/hulls/skins/chief_navigator_ungaikyo.skin");
+        check(skin.getString("baseHullId").equals("overseer_unit")
+                        && skin.getString("skinHullId").equals("chief_navigator_ungaikyo")
+                        && skin.getString("systemId").equals("chief_navigator_ungaikyo_construction_swarm")
+                        && skin.getString("spriteName").equals("graphics/ships/starving_threat/"
+                                + "chief_navigator_ungaikyo_overseer_obsidian_v1.png"),
+                "The retained Ungaikyo identity must use the obsidian Overseer and unique reflection/extraction system");
+        for (String field : new String[]{"bounds", "weaponSlots", "engineSlots", "center",
+                "collisionRadius", "width", "height"}) {
+            check(!skin.has(field), "Inherit unmodified vanilla Overseer geometry: " + field);
+        }
         Set<String> tags = new HashSet<>();
         JSONArray authoredTags = skin.getJSONArray("tags");
         for (int index = 0; index < authoredTags.length(); index++) {
@@ -34,16 +44,23 @@ public final class UngaikyoOverlayRegression {
 
         JSONObject variant = read("data/variants/chief_navigator_ungaikyo_Fabricator.variant");
         JSONObject stock = read("../../starsector-core/data/variants/threat/"
-                + "fabricator_unit_Type450.variant");
+                + "overseer_unit_Type250.variant");
         for (String field : new String[]{"hullMods", "weaponGroups",
-                "fluxCapacitors", "fluxVents"}) {
+                "fluxCapacitors", "fluxVents", "goalVariant", "permaMods", "sMods"}) {
             check(variant.get(field).toString().equals(stock.get(field).toString()),
-                    "The visual fix must retain the exact stock Fabricator " + field);
+                    "Ungaikyo must retain the exact stock Overseer Type250 " + field);
         }
-        check(skin.getJSONArray("removeBuiltInMods").length() == 0,
-                "Do not remove inherited hullmods to hide the overlay");
+        check(variant.getString("hullId").equals("chief_navigator_ungaikyo")
+                        && variant.getString("variantId").equals("chief_navigator_ungaikyo_Fabricator"),
+                "Keep historical hull and variant IDs for saved encounters");
+        for (String field : new String[]{"removeBuiltInMods", "removeBuiltInWeapons",
+                "removeWeaponSlots", "removeEngineSlots"}) {
+            check(skin.getJSONArray(field).length() == 0, "Preserve inherited Overseer systems: " + field);
+        }
+        check(skin.getJSONObject("builtInWeapons").length() == 0 && tags.contains("threat_overseer"),
+                "Retain native Overseer role classification without extra weapon overrides");
         System.out.println("PASS: untagged overlay reproduced, native Threat overlay suppression, "
-                + "and unchanged stock Fabricator weapons, hullmods, and flux allocation.");
+                + "native Overseer geometry, stock Type250 weapons/hullmods/flux, and retained encounter IDs/system.");
     }
 
     private static int overlayWrites(Set<String> tags) {

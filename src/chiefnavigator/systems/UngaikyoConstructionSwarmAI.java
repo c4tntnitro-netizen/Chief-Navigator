@@ -9,7 +9,7 @@ import com.fs.starfarer.api.combat.ShipwideAIFlags;
 import com.fs.starfarer.api.util.Misc;
 import org.lwjgl.util.vector.Vector2f;
 
-/** Activates Ungaikyo's backward extraction when the Fabricator is pressured. */
+/** Activates Ungaikyo's backward extraction when the Overseer is pressured. */
 public final class UngaikyoConstructionSwarmAI implements ShipSystemAIScript {
     private ShipAPI ship;
     private ShipSystemAPI system;

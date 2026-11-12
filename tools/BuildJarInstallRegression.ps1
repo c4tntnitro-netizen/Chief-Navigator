@@ -15,14 +15,21 @@ function Assert-BuildInstall {
     if (-not $Condition) { throw $Message }
 }
 function New-FixtureJar {
-    param([string]$Path, [string]$Payload)
+    param([string]$Path, [string]$Payload, [int]$MajorVersion = 61, [int]$MinorVersion = 0)
     $stream = [System.IO.File]::Open($Path, [System.IO.FileMode]::Create)
     $archive = [System.IO.Compression.ZipArchive]::new(
         $stream, [System.IO.Compression.ZipArchiveMode]::Create, $false)
     try {
         foreach ($name in @('META-INF/MANIFEST.MF', 'example/Fixture.class')) {
             $entry = $archive.CreateEntry($name)
-            $writer = [System.IO.StreamWriter]::new($entry.Open(), $utf8)
+            $entryStream = $entry.Open()
+            if ($name.EndsWith('.class')) {
+                $header = [byte[]]@(0xCA, 0xFE, 0xBA, 0xBE,
+                    ($MinorVersion -shr 8), ($MinorVersion -band 255),
+                    ($MajorVersion -shr 8), ($MajorVersion -band 255))
+                $entryStream.Write($header, 0, $header.Length)
+            }
+            $writer = [System.IO.StreamWriter]::new($entryStream, $utf8)
             try { $writer.Write($Payload + ':' + $name) }
             finally { $writer.Dispose() }
         }
@@ -93,6 +100,19 @@ try {
     Assert-BuildInstall $refused 'A corrupt staged jar must reject installation.'
     Assert-FixtureUnchanged
 
+    foreach ($version in @(@(67, 0), @(61, 65535))) {
+        $incompatibleJar = Join-Path $fixtureRoot "incompatible-$($version[0])-$($version[1]).jar"
+        New-FixtureJar $incompatibleJar 'incompatible bytecode' $version[0] $version[1]
+        $refused = $false
+        try {
+            Install-ChiefNavigatorBuildJar -StagedJarPath $incompatibleJar `
+                -DestinationPath $fixtureDestination -ModInfoPath $fixtureManifest `
+                -ExpectedModInfo $manifestText
+        } catch { $refused = $_.Exception.Message -like '*--release 17*' }
+        Assert-BuildInstall $refused 'Newer-Java and preview classes must reject installation before writing.'
+        Assert-FixtureUnchanged
+    }
+
     Install-ChiefNavigatorBuildJar -StagedJarPath $fixtureStaged `
         -DestinationPath $fixtureDestination -ModInfoPath $fixtureManifest `
         -ExpectedModInfo $manifestText
@@ -106,7 +126,11 @@ try {
     try {
         Assert-BuildInstall ($installedArchive.Entries.Count -eq 2) 'Installed jar must retain every ZIP entry.'
         foreach ($entry in $installedArchive.Entries) {
-            $entryReader = [System.IO.StreamReader]::new($entry.Open())
+            $entryStream = $entry.Open()
+            if ($entry.FullName.EndsWith('.class')) {
+                for ($i = 0; $i -lt 8; $i++) { $null = $entryStream.ReadByte() }
+            }
+            $entryReader = [System.IO.StreamReader]::new($entryStream)
             try { Assert-BuildInstall ($entryReader.ReadToEnd() -eq ('new verified jar:' + $entry.FullName)) 'Installed ZIP entry payload changed.' }
             finally { $entryReader.Dispose() }
         }
@@ -115,4 +139,4 @@ try {
     Remove-ChiefNavigatorBuildStage -StageRoot $fixtureRoot -ProjectRoot $projectRoot
 }
 Assert-BuildInstall (-not (Test-Path -LiteralPath $fixtureRoot)) 'Fixture staging cleanup failed.'
-Write-Host 'PASS: inactive dev slot, canonical release, locked destination/manifest refusal under Continue, stale manifest and corrupt ZIP refusal, unchanged live jar, verified install and staging cleanup.'
+Write-Host 'PASS: inactive dev slot, canonical release, locked destination/manifest refusal under Continue, stale manifest, corrupt ZIP and incompatible/preview bytecode refusal, unchanged live jar, verified install and staging cleanup.'

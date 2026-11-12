@@ -30,6 +30,7 @@ final class FobIthacaContactInteraction extends ChoicePreservingDialogPlugin {
         // contact's markers as local memory even though Ithaca remains the
         // interaction target.
         memoryMap.put(MemKeys.LOCAL, person.getMemoryWithoutUpdate());
+        RuleDialogSupport.addPersonFactionMemory(memoryMap, person);
         dialog.getVisualPanel().showPersonInfo(person, true);
         if (!RuleDialogSupport.fire(dialog, memoryMap, "PickGreeting")) {
             returnToDirectory();

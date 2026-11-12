@@ -51,8 +51,8 @@ public final class ForceFinalLabor implements BaseCommand {
             return CommandResult.SUCCESS;
         }
         if (spawned == OdysseyPredatorScript.FORCE_FINAL_LABOR_MISSING_WORLD) {
-            Console.showMessage("Could not start Labor V. Make sure Ashen "
-                    + "Verge and FOB Ithaca were generated successfully.");
+            Console.showMessage("Could not start Labor V. Make sure Lacedaemon "
+                    + "and FOB Ithaca were generated successfully.");
             return CommandResult.ERROR;
         }
         if (spawned <= 0) {

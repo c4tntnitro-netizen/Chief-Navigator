@@ -666,6 +666,14 @@ public final class IthacaFinalLaborBattleCreationPlugin
 
         private void markStationStructure(ShipAPI ship) {
             if (ship == null) return;
+            // These authored defenders share the player's combat side but
+            // belong to allied command. Native ship UI caches the ship flag,
+            // while the task manager reads the deployed fleet member's flag.
+            if (ship.getOwner() == 0) {
+                FleetMemberAPI member = ship.getFleetMember();
+                if (member != null) member.setAlly(true);
+                ship.setAlly(true);
+            }
             // Rapid hits on the many station modules otherwise create a
             // continuous wall of yellow hull-damage flashes. This native
             // visual flag leaves damage and destruction behavior intact.

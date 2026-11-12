@@ -200,12 +200,12 @@ public final class DerelictJumpAvoidanceRegression {
         for (JumpPointAPI jump : lastLightJumps) {
             check(distance(repairedLastLightAnchor, jump)
                             >= OdysseyPredatorScript.DERELICT_ANCHOR_CLEARANCE,
-                    "Legacy Last Light patrol anchor was not cleared");
+                    "Legacy Bouvo Olympus patrol anchor was not cleared");
         }
         checkNear(legacyLastLightAnchor.x, 6500f,
-                "Projection mutated the legacy Last Light anchor x");
+                "Projection mutated the legacy Bouvo Olympus anchor x");
         checkNear(legacyLastLightAnchor.y, -4600f,
-                "Projection mutated the legacy Last Light anchor y");
+                "Projection mutated the legacy Bouvo Olympus anchor y");
         Vector2f repairedAgain =
                 OdysseyPredatorScript.projectOutsideJumpClearance(
                         system(lastLightJumps),

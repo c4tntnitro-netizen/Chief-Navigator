@@ -66,23 +66,23 @@ public final class OdysseyClusterLayoutRegression {
         check(sanzu[1] < odyssey[1], "Sanzu must remain south of Alpha Odyssey");
         check(avici[1] < sanzu[1], "Avici must remain south of Sanzu");
 
-        check(ashen[0] > odyssey[0], "Ashen Verge must be east of Alpha Odyssey");
+        check(ashen[0] > odyssey[0], "Lacedaemon must be east of Alpha Odyssey");
         checkNear(ashen[1], odyssey[1],
-                "Ashen Verge must sit level with Alpha Odyssey");
+                "Lacedaemon must sit level with Alpha Odyssey");
         checkNear(distance(odyssey, ashen), routeSpacing,
-                "Ashen Verge must be one neighborhood step from Alpha Odyssey");
+                "Lacedaemon must be one neighborhood step from Alpha Odyssey");
 
         check(lastLight[0] < odyssey[0],
-                "Last Light must be a little west of Alpha Odyssey");
+                "Bouvo Olympus must be a little west of Alpha Odyssey");
         check(lastLight[1] < odyssey[1],
-                "Last Light must be south of Alpha Odyssey");
+                "Bouvo Olympus must be south of Alpha Odyssey");
         checkNear(distance(odyssey, lastLight), routeSpacing,
-                "Last Light must be one neighborhood step from Alpha Odyssey");
+                "Bouvo Olympus must be one neighborhood step from Alpha Odyssey");
 
         check(devoured[1] > ashen[1],
-                "Devoured Reach must be north of Ashen Verge");
+                "Anatolia must be north of Lacedaemon");
         checkNear(distance(ashen, devoured), routeSpacing,
-                "Devoured Reach must be one neighborhood step from Ashen Verge");
+                "Anatolia must be one neighborhood step from Lacedaemon");
 
         check(OdysseyExpanseSystem.getAuthoredHyperspaceOffset(
                         "not_an_odyssey_system") == null,
@@ -132,7 +132,7 @@ public final class OdysseyClusterLayoutRegression {
                             OdysseyExpanseSystem.ASHEN_VERGE_ID, index));
         }
         check(formationDifference >= 1800f,
-                "Alpha Odyssey and Ashen Verge must not share a formation");
+                "Alpha Odyssey and Lacedaemon must not share a formation");
 
         System.out.println("Odyssey cluster layout regression passed.");
     }

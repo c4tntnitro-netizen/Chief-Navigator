@@ -218,7 +218,7 @@ public final class MenelausTrialIntel extends BaseIntelPlugin {
                     + "drones remain recoverable through normal battle salvage.", 10f);
         } else if (laborStage == MenelausTrial.LABOR_SENSOR) {
             info.addPara("Menelaus has opened the fourth Labor: reach the Mara "
-                    + "Observation Array in Devoured Reach without an aware "
+                    + "Observation Array in Anatolia without an aware "
                     + "hostile fleet nearby, then run his black-box sensor "
                     + "package. The package is already integrated into your "
                     + "fleet systems and occupies no cargo space.", 10f);
@@ -258,10 +258,10 @@ public final class MenelausTrialIntel extends BaseIntelPlugin {
                     recovered);
             info.addPara("The six original components provide: quadruple "
                     + "naval-turret traverse, 40%% naval-beam cooldowns, "
-                    + "shield-respecting beam EMP arcs, six fixed 54-round "
+                    + "shield-respecting beam EMP arcs, four fixed 41-round "
                     + "Cloudswarm PD launchers, guided Atropos conversion for the "
                     + "base Hammer batteries, "
-                    + "and 40%% missile refire/reload times plus 108-round "
+                    + "and 40%% missile refire/reload times plus 81-round "
                     + "Cloudswarm bursts. Components remain inert cargo until "
                     + "delivered to Menelaus, who consumes and installs them "
                     + "in FOB Ithaca's defense wall. His contact menu tracks "

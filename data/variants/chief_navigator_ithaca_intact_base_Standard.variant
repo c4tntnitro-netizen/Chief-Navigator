@@ -36,22 +36,6 @@
       "autofire": true,
       "mode": "ALTERNATING",
       "weapons": {
-        "MEDIUM_UNIVERSAL_01": "pulselaser",
-        "MEDIUM_UNIVERSAL_02": "pulselaser",
-        "MEDIUM_UNIVERSAL_03": "heavyneedler",
-        "MEDIUM_UNIVERSAL_04": "heavymauler",
-        "MEDIUM_UNIVERSAL_05": "pulselaser",
-        "MEDIUM_UNIVERSAL_06": "heavyneedler",
-        "MEDIUM_UNIVERSAL_07": "heavyneedler",
-        "MEDIUM_UNIVERSAL_08": "pulselaser",
-        "MEDIUM_UNIVERSAL_09": "heavymauler",
-        "MEDIUM_UNIVERSAL_10": "heavyneedler"
-      }
-    },
-    {
-      "autofire": true,
-      "mode": "ALTERNATING",
-      "weapons": {
         "LOCUST_PD_01": "chief_navigator_ithaca_locust_pd_array",
         "LOCUST_PD_03": "chief_navigator_ithaca_locust_pd_array",
         "LOCUST_PD_04": "chief_navigator_ithaca_locust_pd_array",

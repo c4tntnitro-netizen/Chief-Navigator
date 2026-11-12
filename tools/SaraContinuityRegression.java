@@ -20,7 +20,7 @@ public final class SaraContinuityRegression {
     public static void main(String[] args) throws Exception {
         String rules = Files.readString(
                 ROOT.resolve("data/campaign/rules.csv"),
-                StandardCharsets.UTF_8).replace("\r\n", "\n");
+                StandardCharsets.UTF_8);
         String habitatCommand = Files.readString(
                 ROOT.resolve("src/data/campaign/rulecmd/"
                         + "ChiefNavigatorAviciHabitatCMD.java"),

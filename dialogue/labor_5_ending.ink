@@ -1,20 +1,19 @@
+
 === labor_5_aftermath ===
 
-The aftermath of the battle is a blur.
+The aftermath of the battle passes in a blur.
 
-Damage reports. Casualty lists. Ships limping home beneath the guns of FOB Ithaca. Spartan crews transferring scores of wounded and dead between vessels while repair drones swarm over anything still capable of holding atmosphere. The loading docks operate without pause, recovery shuttles and their escorts buzzing in and out at all hours.
+Damage reports. Casualty lists. Ships limping home beneath the guns of FOB Ithaca. Spartan crews transfer their wounded and dead from crippled vessels to the station's receiving bays, while repair drones swarm over damaged hulls, sealing breaches and cutting away ruined plating. The loading docks operate without pause, recovery shuttles arriving with casualties and departing with salvage teams, their escorts threading through the traffic outside.
 
-Somewhere in the thick of it, your fleet docks.
+Somewhere in the thick of it, your fleet returns to Ithaca.
 
 You remember stepping off the shuttle.
 
 You remember someone trying to give you a report.
 
-After that, not much.
+After that, not much. By the time you reach the quarters Menelaus prepared for you, several days of near-continuous fighting have reduced walking to a matter of stubbornness.
 
-By the time you reach the quarters Menelaus prepared for you, several days of near-continuous fighting have reduced walking to a matter of stubbornness.
-
-You barely make it to the bed before everything goes dark.
+You make it as far as the bed.
 
 + [Continue.] -> labor_5_waking
 
@@ -25,15 +24,13 @@ When you wake, you have no idea how long you have been asleep. It is dark and qu
 
 Something soft has been draped over you.
 
-You pull it away.
-
-You can't be sure in the darkness, but it feels like a blanket of some sort. It has the texture of fine silken threads, far nicer than anything issued aboard your fleet. The fabric flows through your fingers like water, and you feel embroidery along the edges.
+You can't be sure in the darkness, but it feels like a blanket of some sort. It has the texture of silken threads, far finer than anything issued aboard your fleet. The fabric slips through your fingers like water, and you feel embroidery along the edges.
 
 It smells faintly of osmanthus.
 
 You fumble in the dark and turn the lights on.
 
-It's a blanket. Yes.
+It's a blanket.
 
 Beside the wall-bed sits a small insulated flask.
 
@@ -41,35 +38,42 @@ You open it.
 
 Tea. Still hot.
 
-You take a drink.
-
--> labor_5_sinni_optical
++ [Continue.] -> labor_5_sinni_optical
 
 
 === labor_5_sinni_optical ===
 
-Later, after food and a shower, you find Sinni near one of Ithaca's observation galleries.
+Later, after food and a shower, you find the chance to walk through Ithaca. The blanket is light enough that you can drape it over your shoulders.
 
-She is alone at the optical.
+Somewhere in the distance, a ceremonial gun battery fires a thirteen-gun salute. The reports are carried through the station's public address system, each separated by a measured interval.
 
-Beyond the armored glass, the macrocomplex stretches away beneath the stars.
+You have been hearing them for hours.
 
-The eastern breach is still there.
+Passing through one of the old embarkation concourses, you find the passage occupied by hundreds of coffins, arranged in orderly rows beneath the names of their ships. Each coffin is draped in the flag of the Domain of Man, its Star Emblem of Humanity displayed above a navy-blue sash bearing the insignia of Task Force Spartan. A few are accompanied by personal effects recovered from the wrecks. Others have only a name, a rank, and a service number.
 
-It will be there for years.
+Most bear the same additional notation.
 
-But it no longer looks like a mortal wound.
+REMAINS NOT RECOVERED
 
-Thousands of repair drones move across its edges, welding temporary spans over the gaps. Tug craft haul wreckage away from the fighting. Farther out, Spartan ships hold formation beneath the surviving defense batteries.
+Most of the coffins are empty.
 
-FOB Ithaca lives.
+The salutes continue behind you as you leave the concourse and make your way toward the observation galleries.
+
++ [Continue.] -> labor_5_sinni_3
+
+
+=== labor_5_sinni_3 ===
+
+You find Sinni near one of Ithaca's observation galleries. She is alone at the optical. Beyond the armored glass, the macrocomplex stretches away beneath the stars. The eastern breach is still there. It will be there for years, but it no longer looks like a mortal wound. Thousands of repair drones move across its edges, welding temporary spans over the gaps. Tug craft haul wreckage away from the fighting. Farther out, Spartan ships hold formation beneath the surviving defense batteries.
+
+Forward Operating Base Ithaca lives.
 
 Sinni watches it all in silence.
 
-Her attire is casual. Her silver hair is tied up in a messy bun. And for once, there is no tea in her hands.
+Her attire is casual. There are deep bags under her eyes. And for once, there is no tea in her hands.
 
 * ["Sleep at all?"] -> labor_5_sinni_sleep
-* ["Thanks for the tea."] -> labor_5_sinni_shawl
+* ["Thanks for the tea."] -> labor_5_sinni_tea
 * [Stand beside her.] -> labor_5_sinni_silent
 
 
@@ -91,7 +95,7 @@ She glances toward you.
 
 The corner of her mouth moves.
 
-"I feared you dead."
+"You looked dead."
 
 * ["You checked?"] -> labor_5_sinni_shawl
 * [Look out at Ithaca.] -> labor_5_sinni_view
@@ -102,8 +106,6 @@ The corner of her mouth moves.
 You hold up one end of the silken blanket.
 
 Sinni looks at it.
-
-Then away.
 
 "Cold rooms are bad for recovery."
 
@@ -121,15 +123,12 @@ Sinni continues looking through the optical.
 
 "Also tea."
 
-* ["Strictly medical?"] -> labor_5_sinni_thanks
-* ["Thank you."] -> labor_5_sinni_thanks
+* ["Thanks."] -> labor_5_sinni_silent
 
 
 === labor_5_sinni_thanks ===
 
 "You're welcome."
-
-Quietly.
 
 -> labor_5_sinni_silent
 
@@ -140,10 +139,6 @@ You take your place beside her.
 
 For a while, neither of you speaks.
 
-Eventually Sinni does.
-
-"We survived."
-
 -> labor_5_sinni_view
 
 
@@ -151,27 +146,13 @@ Eventually Sinni does.
 
 The two of you watch the repair lights move along the broken ring.
 
-"We survived," Sinni says again.
-
-This time, she sounds as though she is still trying to believe it.
+"We survived," Sinni says.
 
 A Spartan cruiser passes beneath the optical, one entire flank blackened from battle. Repair drones trail behind it like a cloud of silver insects.
 
 Sinni follows it with her eyes.
 
-* ["Barely."] -> labor_5_sinni_barely
 * ["You sound surprised."] -> labor_5_sinni_surprised
-
-
-=== labor_5_sinni_barely ===
-
-"That still counts."
-
-She looks toward you.
-
-"At sea, every port is a victory."
-
--> labor_5_sinni_end_1
 
 
 === labor_5_sinni_surprised ===
@@ -186,15 +167,15 @@ She stops.
 
 Her fingers tighten against the rail.
 
-"I thought us done for. But you command the fleet like we were your own hands."
+"I thought us done for. But clash after clash, even as our ships fell away and the line threatened to break, you kept the rest together. You brought us through the storm."
 
 Sinni closes her eyes, then recites:
 
-"You Speak and We Move,
+"{He/She} Speaks and We Move,
 
 Soaring through the Stellar Ash,
 
-Toward Victory."
+Onwards, Victory."
 
 + ["You're chatty today."] -> labor_5_sinni_poem
 + ["Did you compose that? Just now?"] -> labor_5_sinni_poem
@@ -212,13 +193,11 @@ Sinni puts her sleeves together, bowing her head.
 
 === labor_5_sinni_end_1 ===
 
-"Perchance Lord {player_title} would enjoy my second gift as well?"
+"Then would the {player_title} enjoy my second gift as well?"
 
-Sinni reaches into her robes and pulls out a licquer bottle.
+Sinni reaches into her robes and pulls out a bottle.
 
 Now you're talking.
-
-"For a special occasion."
 
 + ["Now you're talking."] -> labor_5_sinni_end_3
 
@@ -227,11 +206,9 @@ Now you're talking.
 
 Sinni reaches out and lightly nudges you aside.
 
-"Perchance Lord {player_title} would prefer my second gift then?"
+"Then perhaps the {player_title} would enjoy my second gift instead?"
 
-Sinni reaches into her robes and pulls out a licquer bottle.
-
-"For a special occasion."
+Sinni reaches into her robes and pulls out a bottle.
 
 + ["Now you're talking."] -> labor_5_sinni_end_3
 
@@ -239,8 +216,6 @@ Sinni reaches into her robes and pulls out a licquer bottle.
 === labor_5_sinni_end_3 ===
 
 Sinni produces two small cups from somewhere within her robes and pours.
-
-"Cheers!"
 
 She raises hers toward you.
 
@@ -250,8 +225,20 @@ She raises hers toward you.
 
 
 === labor_5_sinni_end_4 ===
-At the bridge between sectors.
 
-At the gate to the graveyard of the Domain.
+* [Spit it out.] -> labor_5_sinni_end_5
+* [Cough and lean over.] -> labor_5_sinni_end_5
+* ["What the hell is that?!"] -> labor_5_sinni_end_5
 
-Together, you and your Chief Navigator share a drink beneath that Sea of Stars.
+
+=== labor_5_sinni_end_5 ===
+
+"Pai Chiu," Sinni says, smiling openly now. She cradles her cup in the crook of her elbow and tips it back, draining it without apparent difficulty.
+
+"Over sixty percent alcohol."
+
+Sinni pours you another finger. You're debating whether to toss it to the side.
+
+Beyond the armored glass, the repair lights continue their slow work along Ithaca's broken ring. Farther out, the surviving ships of Task Force Spartan keep watch over the Gate, their running lights scattered among the stars. For a while, you and Sinni stay drinking at the optical, at the bridge between sectors, at the Graveyard of the Domain. In that Sea of Stars.
+
+-> END

@@ -1,5 +1,24 @@
 {
   "music": {
+    "chief_navigator_ashen_verge_exploration": [
+      {
+        "file": "campaign_noncore_part1.ogg",
+        "source": "sounds/music/music.bin",
+        "volume": 1.0
+      }
+    ],
+    "chief_navigator_ashen_verge_exploration_complete": [
+      {
+        "file": "campaign_noncore_part1.ogg",
+        "source": "sounds/music/music.bin",
+        "volume": 1.0
+      },
+      {
+        "file": "chief_navigator_sinni_ending.ogg",
+        "source": "sounds/music",
+        "volume": 0.5
+      }
+    ],
     "chief_navigator_alpha_odyssey_exploration": [
       {
         "file": "chief_navigator_alpha_odyssey_exploration.ogg",

@@ -21,6 +21,7 @@ import com.fs.starfarer.api.combat.ShipHullSpecAPI.ShipTypeHints;
 import com.fs.starfarer.api.combat.ShipVariantAPI;
 import com.fs.starfarer.api.fleet.FleetMemberAPI;
 import com.fs.starfarer.api.fleet.FleetMemberType;
+import com.fs.starfarer.api.fleet.CrewCompositionAPI;
 import com.fs.starfarer.api.impl.campaign.ids.Personalities;
 import com.fs.starfarer.api.impl.campaign.ids.Stats;
 import com.fs.starfarer.api.impl.campaign.ids.Tags;
@@ -825,14 +826,13 @@ public final class GautamaFinalRematchBattleCreationPlugin
                 }
             }
             mirror.setPullBackFighters(false);
-            setShipToFullCR(mirror, member);
             mirror.setTimeDeployed(0f);
             // Detached modules/fighters can already have left the parent's
             // current tree. Hand off each owned live entity exactly once.
             for (ShipAPI component : getConstructionEntities()) {
                 activateMirrorShip(component,
                         component == mirror ? member : component.getFleetMember(),
-                        manager.getOwner());
+                        manager.getOwner(), member);
             }
             orderCompletedMirrorToHunt(mirror, manager);
             complete = true;
@@ -857,6 +857,9 @@ public final class GautamaFinalRematchBattleCreationPlugin
         }
 
         private void prepareComponent(ShipAPI component) {
+            FleetMemberAPI componentMember = component == mirror
+                    ? member : component.getFleetMember();
+            setShipToFullCR(component, componentMember == null ? member : componentMember);
             MirrorCompatibility.rememberConstructionAI(component);
             componentCollisionClasses.put(
                     component, component.getCollisionClass());
@@ -1011,12 +1014,13 @@ public final class GautamaFinalRematchBattleCreationPlugin
         for (ShipAPI component : getShipTree(mirror)) {
             if (component != mirror && (!component.isAlive() || component.isHulk())) continue;
             activateMirrorShip(component, component == mirror ? member : component.getFleetMember(),
-                    enemyOwner);
+                    enemyOwner, member);
         }
     }
 
     private static void activateMirrorShip(
-            ShipAPI mirror, FleetMemberAPI member, int enemyOwner) {
+            ShipAPI mirror, FleetMemberAPI member, int enemyOwner,
+            FleetMemberAPI readinessFallback) {
         if (member != null) {
             member.setOwner(enemyOwner);
         }
@@ -1025,6 +1029,7 @@ public final class GautamaFinalRematchBattleCreationPlugin
         mirror.setControlsLocked(false);
         mirror.setHoldFire(false);
         mirror.setPhased(false);
+        setShipToFullCR(mirror, member == null ? readinessFallback : member);
         ShipAIPlugin ai = mirror.getShipAI();
         ShipAIPlugin saved = MirrorCompatibility.takeConstructionAI(mirror);
         if (saved != null && saved != ai
@@ -1120,6 +1125,18 @@ public final class GautamaFinalRematchBattleCreationPlugin
 
     private static void setMemberToFullCR(FleetMemberAPI member) {
         if (member == null || member.getRepairTracker() == null) return;
+        // Combat-created members have no AI campaign fleet to supply virtual
+        // staffing. An empty crew applies the native -50% maximum-CR penalty,
+        // so fill only this generated member before asking for its real cap.
+        CrewCompositionAPI crew = member.getCrewComposition();
+        if (crew != null) {
+            float missing = member.getMinCrew() - crew.getCrew();
+            if (Float.isFinite(missing) && missing > 0f) {
+                crew.addCrew(missing);
+                member.setStatUpdateNeeded(true);
+                member.updateStats();
+            }
+        }
         member.getRepairTracker().setCR(
                 member.getRepairTracker().getMaxCR());
     }

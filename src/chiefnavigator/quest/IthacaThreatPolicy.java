@@ -63,7 +63,7 @@ public final class IthacaThreatPolicy {
         memory.unset(MemFlags.FLEET_DO_NOT_IGNORE_PLAYER);
         memory.unset(MemFlags.MEMORY_KEY_STICK_WITH_PLAYER_IF_ALREADY_TARGET);
         memory.unset(MemFlags.MEMORY_KEY_MAKE_NON_AGGRESSIVE);
-        // The Ashen Verge population is allowed to see fleets because Spartan
+        // The Lacedaemon population is allowed to see fleets because Spartan
         // is now its primary campaign target. Player pursuit remains gated by
         // the close-range opportunity check below.
         memory.unset(MemFlags.FLEET_IGNORES_OTHER_FLEETS);

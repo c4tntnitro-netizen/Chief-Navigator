@@ -26,7 +26,8 @@ public final class LaborFourReadRegression {
         for (var row : DialoguePortraitCoverageRegression.readRules(
                 Files.readString(Path.of("data/campaign/rules.csv"))).values()) {
             if (!row.get(0).startsWith("chiefNavigatorMenelausLaborFour")
-                    && !row.get(0).startsWith("chiefNavigatorFobIthacaSensorBriefing")) continue;
+                    && !row.get(0).startsWith("chiefNavigatorFobIthacaSensorBriefing")
+                    && !row.get(0).startsWith("chiefNavigatorFobIthacaSensorReport")) continue;
             for (String option : row.get(5).split("\\R")) {
                 if (option.isBlank()) continue;
                 String[] parts = option.split(":", 3);

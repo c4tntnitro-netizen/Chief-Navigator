@@ -1,13 +1,18 @@
-param([switch]$Release)
+param([switch]$Release, [string]$StarsectorRoot = '')
 
 $ErrorActionPreference = "Stop"
 
 $modRoot = $PSScriptRoot
 $parentRoot = Split-Path $modRoot -Parent
-$starsectorRoot = @($parentRoot, (Split-Path $parentRoot -Parent)) |
-    Where-Object { Test-Path -LiteralPath (Join-Path $_ 'starsector-core') -PathType Container } |
-    Select-Object -First 1
+if (-not $starsectorRoot) {
+    $starsectorRoot = @($parentRoot, (Split-Path $parentRoot -Parent)) |
+        Where-Object { Test-Path -LiteralPath (Join-Path $_ 'starsector-core') -PathType Container } |
+        Select-Object -First 1
+}
 if (-not $starsectorRoot) { throw "Cannot locate Starsector beside the source repository." }
+if (-not (Test-Path -LiteralPath (Join-Path $starsectorRoot 'starsector-core') -PathType Container)) {
+    throw 'StarsectorRoot must contain starsector-core.'
+}
 $modsRoot = Join-Path $starsectorRoot 'mods'
 $coreRoot = Join-Path $starsectorRoot "starsector-core"
 $graphicsLibJar = Join-Path $modsRoot "GraphicsLib\jars\Graphics.jar"
@@ -26,7 +31,10 @@ $modInfoPath = Join-Path $modRoot 'mod_info.json'
 $modInfo = [System.IO.File]::ReadAllText($modInfoPath)
 $jarPath = Join-Path $jarDirectory (Get-ChiefNavigatorBuildJarName -ModInfo $modInfo -Release:$Release)
 
-$classpath = @(
+$peerlessRoot = Join-Path $modsRoot 'Peerless Skills'
+$peerlessMetadata = Get-Content -LiteralPath (Join-Path $peerlessRoot 'mod_info.json') -Raw | ConvertFrom-Json
+$peerlessJars = @($peerlessMetadata.jars | ForEach-Object { Join-Path $peerlessRoot $_ })
+$classpath = ($peerlessJars + @(
     (Join-Path $coreRoot "starfarer.api.jar"),
     (Join-Path $coreRoot "json.jar"),
     (Join-Path $coreRoot "lwjgl.jar"),
@@ -36,7 +44,7 @@ $classpath = @(
     $consoleCommandsJar,
     $combatChatterJar,
     $lunaLibJar
-) -join ";"
+)) -join ";"
 
 function Assert-RulesCsv {
     param([string]$Path)
@@ -87,6 +95,7 @@ function Assert-RulesCsv {
             }
             $optionLabel = $Matches[2].Trim()
             $punctuationProbe = $optionLabel -replace '\s+\([^()]*\)$', ''
+            # Interrupted spoken choices may end with an em dash and closing quote.
             if ($punctuationProbe -notmatch '(?:[.?!](?:"|”)?|—(?:"|”))$') {
                 throw "rules.csv rule '$($row.id)' has an option without terminal punctuation: '$optionLabel'."
             }
@@ -154,11 +163,12 @@ try {
     if (-not $resolvedOutput.StartsWith($resolvedProject + '\', [StringComparison]::OrdinalIgnoreCase)) {
         throw "Build output must remain inside the source repository."
     }
-    $sourceArguments = Join-Path $stagingRoot 'sources.args'
-    $quotedSources = @($sources | ForEach-Object { '"' + $_.Replace('\', '/') + '"' })
-    [System.IO.File]::WriteAllLines($sourceArguments, $quotedSources,
+    # Nested checkouts can exceed Windows' command-line limit with all sources.
+    $sourceArguments = Join-Path $stagingRoot 'sources.txt'
+    [System.IO.File]::WriteAllLines($sourceArguments,
+        @($sources | ForEach-Object { '"' + $_.Replace('\', '/') + '"' }),
         [System.Text.UTF8Encoding]::new($false))
-    & (Join-Path $jdkRoot "javac.exe") "-J-Djava.io.tmpdir=$javaTmpRoot" -encoding UTF-8 --release 17 -cp $classpath -d $outputRoot ("@" + $sourceArguments)
+    & (Join-Path $jdkRoot "javac.exe") "-J-Djava.io.tmpdir=$javaTmpRoot" -encoding UTF-8 --release 17 -cp $classpath -d $outputRoot "@$sourceArguments"
     if ($LASTEXITCODE -ne 0) {
         throw "javac failed with exit code $LASTEXITCODE"
     }

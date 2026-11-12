@@ -3,3 +3,6 @@ Starving Construction Swarm,chief_navigator_starving_construction_swarm,,,,,,,,,
 Ungaikyo Reflection Swarm,chief_navigator_ungaikyo_construction_swarm,,,,,,,,,,1,5,1,12,,,,,,,,,,,,defensive,graphics/icons/hullsys/construction_swarm.png
 Time Freeze,chief_navigator_omega_time_freeze,,,,,,,,,,0.5,30,0.5,20,,,,,,,,,,,,offensive,graphics/icons/hullsys/temporal_shell.png
 Budai Convulsive Lunge,chief_navigator_budai_convulsive_lunge,,,,,,,,,,2,3,0.5,12,,,,,TRUE,,,,,,,movement,graphics/icons/hullsys/convulsive_lunge.png
+Neural Web,chief_navigator_avici_brain_aura,0,0,0,0,0,0,0,1,400,0.5,400,0.5,0,true,false,false,false,false,false,false,false,false,false,false,"buff, shrouded",graphics/icons/hullsys/targeting_feed.png
+Banshee's Scream,chief_navigator_avici_banshee_jump,0,0,0,0,0,0,0,1,25,0.3,10,0.4,18,false,false,false,false,false,false,false,false,false,false,false,"teleport, shrouded",graphics/icons/hullsys/targeting_feed.png
+Forced Reality,chief_navigator_avici_hunter_domain,0,0,0,0,0,0,0,1,20,0.4,12,0.5,24,false,false,false,false,false,false,false,false,false,false,false,"buff, domain, shrouded",graphics/icons/hullsys/high_energy_focus.png

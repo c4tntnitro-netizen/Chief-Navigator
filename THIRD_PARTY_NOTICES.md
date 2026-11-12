@@ -6,6 +6,27 @@ This grant covers only rights held by the project's author and contributors.
 It does not relicense third-party recordings, artwork, game assets or other
 third-party material, including modified copies of those materials.
 
+## Enemy-only Shroud Expansion Pack adaptation
+
+The development Avici Dweller enemies adapt selected hull definitions, ship
+creators, combat AI, systems and body artwork from **Shroud Expansion Pack** by
+**TIDAL and RoaringWriter**. TIDAL gave the project author permission to include
+his custom Dwellers in Chief Navigator's endgame area on October 9, 2026.
+
+Upstream: <https://github.com/TIDAL88/sep>, source revision
+`e2bafc5a0bfceb86be46ab48a40463d284ca6f55` (version 0.9.6).
+Adapted source is under `src/chiefnavigator/dwellers/`; associated hulls,
+variants, systems and body artwork use the `chief_navigator_avici_` prefix.
+Attribution and this permission notice must be retained. These upstream
+materials are used with permission and are excluded from this project's MIT
+grant; no repository-wide upstream license is asserted.
+
+The port excludes SEP's questline, Entity, officers, Second in Command content,
+weapons, rewards and recordings. It references existing Starsector assets and
+uses vanilla weapons rather than copying those resources. Chief Navigator's
+Avici population controller does not replace or suppress a separately installed
+SEP's rules, classes, data or spawning.
+
 ## Music
 
 All music in `sounds/music/`, including runtime Ogg files, retained MP3s,
@@ -39,6 +60,20 @@ their respective creators. Chief Navigator references game-provided assets
 and includes adaptations of game artwork/data; those underlying materials
 remain outside the MIT grant. Avici's vanilla Shrouded Dweller music is
 referenced from the installed game and is not copied into this repository.
+
+Ithaca's seven upgrade item icons derive from Fractal Softworks' 32x32 Codex artwork in `starsector-core/graphics/icons/codex/`. Built-in ImageGen extracted their foregrounds onto transparent backgrounds; `tools/build_ithaca_codex_icons.ps1` prepares the saved cutouts as 96x96 item textures. Source selections and prompt constraints are recorded in `graphics/source/ithaca_codex_cutouts/README.md`. These game-derived icons remain outside the MIT grant.
+
+Ithaca's teal mount covers adapt the vanilla low-tech turret and hardpoint
+cover sprites, plus small low-tech, midline and high-tech turret covers.
+See `docs/FOB_ITHACA_MOUNT_CAPS.md` for source paths and the
+ImageGen enlargement/recolor prompts; the underlying artwork remains
+Fractal Softworks material outside the MIT grant.
+
+Ungaikyo's obsidian Overseer sprite is an ImageGen adaptation of the vanilla
+`graphics/ships/threat/overseer.png`, with vanilla Fabricator artwork as a style
+reference. Its underlying Starsector artwork
+remains outside the MIT grant. See `docs/UNGAIKYO_OBSIDIAN_OVERSEER.md` for the
+generated masters, final prompt and preparation workflow.
 
 The game's license and applicable modding permissions continue to apply.
 GraphicsLib, Combat Chatter, Console Commands and any other external libraries

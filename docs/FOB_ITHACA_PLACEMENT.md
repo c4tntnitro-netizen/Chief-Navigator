@@ -152,10 +152,10 @@ restoration. No surrounding stations, gates, or campaign topology are rebuilt.
 The perimeter invasions retain their existing targets: **Scylla Strike**
 attacks north with a Hive-majority mixed roster, **Siren Strike** attacks
 south with Skirmish scouts and Line units, and **Cyclops Strike** attacks
-east with a Fabricator-heavy mixed roster. All six Starving roles remain
-represented. Scylla and Siren retain approximately the previous Third Strike
-deployment cost; Cyclops has five Fabricators (16 hulls, 214 DP). These
-compositions apply when fleets are created;
+east with five Starving Fabricators, one Hive, two Overseers, two Line units,
+two Assault units and four Skirmish units. All six Starving roles remain
+represented. Scylla and Siren stay near the previous Third Strike's deployment
+cost; Cyclops is deliberately reduced to 214 DP. These compositions apply when fleets are created;
 upkeep never replenishes casualties or rewrites a surviving saved roster.
 
 Their flagship campaign sprites are overridden with `graphics/fx/empty.png`
@@ -184,7 +184,7 @@ private static final Color STRUCTURE_TINT =
 
 This keeps the source textures nondestructive while reducing them to roughly
 45% of their original RGB brightness. Raise all three values to brighten the
-installation, or lower them to make it recede further into Ashen Verge. Keep
+installation, or lower them to make it recede further into Lacedaemon. Keep
 the three values close together unless a deliberate color cast is wanted.
 
 ## Rotate the whole station
@@ -220,7 +220,7 @@ private static final float OFFSET_Y = 0f;
 Use these only to correct centering inside the PNG. They do not move the map
 label, detection marker, or interaction radius.
 
-## Move the complete entity in Ashen Verge
+## Move the complete entity in Lacedaemon
 
 `OdysseyExpanseSystem.ensureFobIthaca()` contains:
 

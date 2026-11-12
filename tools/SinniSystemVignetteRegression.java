@@ -494,14 +494,14 @@ public final class SinniSystemVignetteRegression {
                         == SinniSystemVignetteScript.Category.SANZU,
                 "Sanzu must use its own arrival instead of a nebula/white-dwarf scene");
         check(SinniSystemVignetteScript.classifySystem(ashen) == null,
-                "Ashen Verge must have neither an arrival nor a generic vignette");
+                "Lacedaemon must have neither an arrival nor a generic vignette");
         check(SinniSystemVignetteScript.classifySystem(devoured) == null,
-                "Devoured Reach must have neither an arrival nor a generic vignette");
+                "Anatolia must have neither an arrival nor a generic vignette");
         check(!SinniSystemVignetteScript.isExplorationVignetteSystem(ashen)
                         && !SinniSystemVignetteScript.isExplorationVignetteSystem(devoured),
                 "Retired regional arrivals must stay excluded from the stellar chart");
         check(SinniSystemVignetteScript.classifySystem(lastLight) == null,
-                "Last Light must have neither an arrival nor a generic vignette");
+                "Bouvo Olympus must have neither an arrival nor a generic vignette");
         for (SinniSystemVignetteScript.Category regional : Arrays.asList(
                 SinniSystemVignetteScript.Category.SANZU,
                 SinniSystemVignetteScript.Category.ASHEN_VERGE,

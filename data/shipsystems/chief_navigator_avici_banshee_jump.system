@@ -1,0 +1,10 @@
+{
+  "id": "chief_navigator_avici_banshee_jump",
+  "type": "STAT_MOD",
+  "aiType": "CUSTOM",
+  "aiScript": "chiefnavigator.dwellers.ShroudBansheeSystemAI",
+  "statsScript": "chiefnavigator.dwellers.ShroudBansheeStats",
+  "runScriptWhileIdle": true,
+  "useSound": "system_phase_cloak_activate",
+  "aiHints": {}
+}

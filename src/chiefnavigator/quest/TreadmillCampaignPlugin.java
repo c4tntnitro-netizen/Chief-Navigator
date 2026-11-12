@@ -32,7 +32,7 @@ public final class TreadmillCampaignPlugin extends BaseCampaignPlugin {
                                 .getOptionalUniqueId())) {
             AlphaOdysseyJumpRepair.repairDuplicates();
         }
-        // This must precede the blanket Ashen Verge fleet route below. It is
+        // This must precede the blanket Lacedaemon fleet route below. It is
         // the race-proof fallback for a click on Ithaca or its Spartan cordon
         // before the spatial first-contact trigger gets a free campaign frame.
         if (FobIthacaApproachScript.shouldInterceptInteraction(target)) {
@@ -75,6 +75,12 @@ public final class TreadmillCampaignPlugin extends BaseCampaignPlugin {
                 return new PluginPick<InteractionDialogPlugin>(
                         new OdysseyRescueEscortInteraction(),
                         PickPriority.HIGHEST);
+            }
+            if (AviciDwellerPopulation.isOwnedFleet(enemy)) {
+                // Reuse the native nonhuman presentation without Budai's
+                // identity, rewards or special battle/music route.
+                return new PluginPick<InteractionDialogPlugin>(
+                        new BudaiInteraction(false), PickPriority.HIGHEST);
             }
             if (OdysseyPredatorScript.isBudaiBattle(enemy)) {
                 OdysseyPredatorScript.configureBudaiInteractionIdentity(enemy);

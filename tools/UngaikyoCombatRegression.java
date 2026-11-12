@@ -90,7 +90,7 @@ public final class UngaikyoCombatRegression {
         check(cues.size() == 2, "Paused deployment must not trigger the transition");
         controller.advance(0.1f, Collections.emptyList());
         check(cues.size() == 3 && cues.get(2).equals(UngaikyoMusic.ENRAGED_ID),
-                "The real Fabricator below 50% must switch to Savor");
+                "The real Ungaikyo below 50% must switch to Savor");
         makeRetryDue();
         controller.advance(0.1f, Collections.emptyList());
         hull[0] = 0.9f;
@@ -157,7 +157,7 @@ public final class UngaikyoCombatRegression {
         UngaikyoConstructionSwarmAI ai = new UngaikyoConstructionSwarmAI();
         ai.init(ship, system, flags, engine);
         ai.advance(0.1f, null, null, null);
-        check(commands.isEmpty(), "An unpressured Fabricator must not waste extraction");
+        check(commands.isEmpty(), "An unpressured Ungaikyo must not waste extraction");
         flux[0] = 0.7f;
         ai.advance(0.1f, null, null, null);
         check(commands.size() == 1 && commands.get(0) == ShipCommand.USE_SYSTEM,

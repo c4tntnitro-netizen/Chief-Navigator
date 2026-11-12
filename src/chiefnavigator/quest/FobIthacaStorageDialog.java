@@ -89,6 +89,9 @@ final class FobIthacaStorageDialog {
     private static void release(SectorEntityToken station, MarketAPI carrier,
             MarketAPI previous) {
         if (station.getMarket() == carrier) station.setMarket(previous);
-        carrier.setPrimaryEntity(null);
+        // Native dismissal starts a fade; the panel and mod callbacks can
+        // still hold this unregistered carrier. Keep its model valid until
+        // those references expire. setPrimaryEntity(null) also adds a null
+        // entry to the native market's connected-entity list.
     }
 }

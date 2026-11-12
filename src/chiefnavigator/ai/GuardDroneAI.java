@@ -32,7 +32,7 @@ public final class GuardDroneAI {
      * burn-drive use.
      */
     public static ShipAIConfig createFearlessConfig() {
-        ShipAIConfig config = new ShipAIConfig();
+        ShipAIConfig config = new ShipAIConfig(null);
         configureFearless(config);
         return config;
     }

@@ -3,7 +3,7 @@ import com.fs.starfarer.api.campaign.*;
 import com.fs.starfarer.api.campaign.rules.*;
 import com.fs.starfarer.api.impl.campaign.rulecmd.FireAll;
 import com.fs.starfarer.api.impl.campaign.rulecmd.FireBest;
-import com.fs.starfarer.campaign.rules.oOOO;
+import com.fs.starfarer.campaign.rules.A;
 import com.fs.starfarer.campaign.rules.ooOO;
 import java.awt.Color;
 import java.lang.reflect.*;
@@ -52,7 +52,7 @@ public final class SinniDwellerChoiceRegression {
                         SinniDwellerChoiceRegression.class.getClassLoader()));
             }
         }
-        @SuppressWarnings("unchecked") Map<String, Class<?>> scripts = (Map<String, Class<?>>) store.getField("void").get(null);
+        @SuppressWarnings("unchecked") Map<String, Class<?>> scripts = (Map<String, Class<?>>) java.util.Arrays.stream(store.getFields()).filter(field -> field.getType() == java.util.Map.class).findFirst().orElseThrow().get(null);
         scripts.put(FireAll.class.getName(), FireAll.class);
         Map<String, Object> local = new HashMap<>(), player = new HashMap<>(), global = new HashMap<>();
         Map<String, MemoryAPI> scope = new HashMap<>(Map.of(MemKeys.LOCAL, memory(local),
@@ -76,8 +76,8 @@ public final class SinniDwellerChoiceRegression {
             JSONObject row = rows.getJSONObject(i);
             if (!row.optString("id").startsWith("chiefNavigatorSinniMonsters")) continue;
             ooOO rule = new ooOO(row.getString("id"), row.getString("trigger"), row.optString("conditions"));
-            for (String line : row.optString("conditions").split("\\R")) if (!line.isBlank()) rule.getConditions().add(new oOOO(line));
-            for (String line : row.optString("script").split("\\R")) if (!line.isBlank()) rule.getScript().add(new oOOO(line));
+            for (String line : row.optString("conditions").split("\\R")) if (!line.isBlank()) rule.getConditions().add(new A(line));
+            for (String line : row.optString("script").split("\\R")) if (!line.isBlank()) rule.getScript().add(new A(line));
             rule.getText().add(row.optString("text"));
             for (String line : row.optString("options").split("\\R")) {
                 if (line.isBlank()) continue;

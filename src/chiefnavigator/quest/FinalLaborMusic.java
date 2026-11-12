@@ -8,6 +8,10 @@ import com.fs.starfarer.api.impl.MusicPlayerPluginImpl;
 
 /** Owns Labor V's campaign, perimeter-combat, and center-breach cues. */
 public final class FinalLaborMusic {
+    public static final String ASHEN_EXPLORATION_ID =
+            "chief_navigator_ashen_verge_exploration";
+    public static final String ASHEN_COMPLETED_EXPLORATION_ID =
+            "chief_navigator_ashen_verge_exploration_complete";
     public static final String MISSION_START_ID =
             "chief_navigator_final_labor_mission";
     public static final String PERIMETER_FIGHT_ID =
@@ -167,6 +171,14 @@ public final class FinalLaborMusic {
         }
     }
 
+    /** The ending recording becomes ambient music only after the final debrief. */
+    static String getExplorationMusicId() {
+        return Global.getSector() != null
+                && Global.getSector().getMemoryWithoutUpdate().getBoolean(
+                        MenelausTrial.FINAL_DEBRIEF_COMPLETE)
+                ? ASHEN_COMPLETED_EXPLORATION_ID : ASHEN_EXPLORATION_ID;
+    }
+
     private static void clearMissionLocationMusic() {
         if (Global.getSector() == null) return;
         StarSystemAPI ashen = OdysseyExpanseSystem.findSystemById(
@@ -174,10 +186,16 @@ public final class FinalLaborMusic {
         if (ashen == null) return;
         String current = ashen.getMemoryWithoutUpdate().getString(
                 MusicPlayerPluginImpl.MUSIC_SET_MEM_KEY);
-        if (MISSION_START_ID.equals(current)
-                || FINAL_FIGHT_ID.equals(current)) {
-            ashen.getMemoryWithoutUpdate().unset(
-                    MusicPlayerPluginImpl.MUSIC_SET_MEM_KEY);
+        if (current == null || MISSION_START_ID.equals(current)
+                || FINAL_FIGHT_ID.equals(current)
+                || ASHEN_EXPLORATION_ID.equals(current)
+                || ASHEN_COMPLETED_EXPLORATION_ID.equals(current)) {
+            String exploration = getExplorationMusicId();
+            if (!exploration.equals(current)) {
+                ashen.getMemoryWithoutUpdate().set(
+                        MusicPlayerPluginImpl.MUSIC_SET_MEM_KEY,
+                        exploration);
+            }
         }
     }
 }

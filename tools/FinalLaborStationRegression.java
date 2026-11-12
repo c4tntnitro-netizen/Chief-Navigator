@@ -50,9 +50,11 @@ public final class FinalLaborStationRegression extends WallResearchRegression {
         final MutableStat turnAcceleration = new MutableStat(2f);
         final MutableStat hullDamage = new MutableStat(1f), armorDamage = new MutableStat(1f);
         final ShipAPI ship;
+        final FleetMemberAPI member;
         int owner, rightCommands;
         float facing, angularVelocity;
         boolean noDamageFlashes, controlsLocked = true;
+        boolean ally, memberAlly;
 
         Station(String variantId, int owner) {
             this.owner = owner;
@@ -60,6 +62,13 @@ public final class FinalLaborStationRegression extends WallResearchRegression {
             turnAcceleration.modifyMult("external_turn_modifier", .75f);
             ShipVariantAPI variant = mock(ShipVariantAPI.class,
                     (n, a) -> n.equals("getHullVariantId") ? variantId : null);
+            member = mock(FleetMemberAPI.class, (n,a) -> {
+                if (n.equals("isAlly")) return memberAlly;
+                if (n.equals("setAlly")) memberAlly = (Boolean) a[0];
+                if (n.equals("getOwner")) return this.owner;
+                if (n.equals("getVariant")) return variant;
+                return null;
+            });
             MutableShipStatsAPI stats = mock(MutableShipStatsAPI.class, (n, a) -> {
                 switch (n) {
                     case "getMaxSpeed": return speed;
@@ -83,6 +92,9 @@ public final class FinalLaborStationRegression extends WallResearchRegression {
                     case "getVelocity": return velocity;
                     case "getOwner": return this.owner;
                     case "setOwner": this.owner = (Integer) a[0]; break;
+                    case "getFleetMember": return member;
+                    case "isAlly": return ally;
+                    case "setAlly": ally = (Boolean) a[0]; break;
                     case "isAlive": return true;
                     case "getFacing": return facing;
                     case "setFacing": facing = (Float) a[0]; break;
@@ -168,17 +180,23 @@ public final class FinalLaborStationRegression extends WallResearchRegression {
                         && reserves[1].position.equals(new Vector2f(2200f, -1200f)),
                 "Both reserve positions stay authored");
         check(reserves[0].facing == 90f && reserves[1].facing == 90f, "Initial spawn facing is retained");
+        for (Station reserve : reserves) {
+            check(reserve.ally&&reserve.memberAlly,"Reserves enter allied command immediately after spawning");
+        }
         configure.invoke(controller, 0);
         for (Station station : new Station[]{persistent, reserves[0], reserves[1], modules[0], modules[1], modules[2]}) {
             check(station.noDamageFlashes, "All three station parents/modules suppress damage flashes");
+            check(station.ally&&station.memberAlly&&station.owner==0,"All authored friendly parents/modules belong to allied command on the player side");
             check(station.hullDamage.getModifiedValue() == 1f && station.armorDamage.getModifiedValue() == 1f,
                     "Visual suppression preserves normal hull/armor damage");
         }
         check(!foreign.noDamageFlashes && !enemy.noDamageFlashes, "Other ships/sides are unaffected");
+        check(!foreign.ally&&!foreign.memberAlly&&!enemy.ally&&!enemy.memberAlly,"Foreign player-side and enemy ships retain command ownership");
         Station late = new Station("late_module", 0);
         persistent.modules.add(late.ship);
         configure.invoke(controller, 0);
         check(late.noDamageFlashes, "Late station modules are configured too");
+        check(late.ally&&late.memberAlly,"Late modules join allied command too");
 
         AxialRotation nativeRotation = new AxialRotation();
         for (Station reserve : reserves) {
@@ -209,7 +227,7 @@ public final class FinalLaborStationRegression extends WallResearchRegression {
         }
         verifyCampaignPresenceGate(constructor, deploy, campaignEntities, campaignDefender);
         System.out.println("PASS: battle-start canonical defender gates reserves, busy present defender permits exactly two, "
-                + "native rotation/anchors, station/module flash suppression, side isolation and unchanged damage");
+                + "allied parent/module command ownership, native rotation/anchors, station/module flash suppression, side isolation and unchanged damage");
     }
 
     private static void verifyCampaignPresenceGate(Constructor<?> constructor, Method deploy,

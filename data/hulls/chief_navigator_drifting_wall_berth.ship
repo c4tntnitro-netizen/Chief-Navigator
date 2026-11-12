@@ -10,7 +10,7 @@
   "moduleAnchor": [0,0],
   "shieldCenter": [0,0],
   "shieldRadius": 325,
-  "spriteName": "graphics/ships/chief_navigator_drifting_wall_insert_v3.png",
+  "spriteName": "graphics/fx/empty.png",
   "style": "LOW_TECH",
   "viewOffset": 0,
   "weaponSlots": [

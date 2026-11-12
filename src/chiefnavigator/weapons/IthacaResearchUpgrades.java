@@ -68,8 +68,8 @@ public final class IthacaResearchUpgrades {
         "Aulis orbit, Odyssey Expanse",
         "Undertow orbit, Sanzu",
         "Cairn orbit, Sanzu",
-        "Scamander orbit, Ashen Verge",
-        "Simois orbit, Ashen Verge",
+        "Scamander orbit, Lacedaemon",
+        "Simois orbit, Lacedaemon",
         "Sanghata orbit, Avici"
     };
 

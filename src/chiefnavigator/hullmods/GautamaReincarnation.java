@@ -35,7 +35,7 @@ import org.lwjgl.util.vector.Vector2f;
  * V's center battle deliberately permits repeated incarnations: each failed
  * eligible death adds ten percentage points to the next hull's size-based
  * chance, capped at certainty, and a successful construction resets the pity
- * cycle. The permanent Last Light rematch remains explicitly suppressed.</p>
+ * cycle. The permanent Bouvo Olympus rematch remains explicitly suppressed.</p>
  */
 public final class GautamaReincarnation {
     private static final String STATE_KEY =
@@ -659,12 +659,12 @@ public final class GautamaReincarnation {
                 wing.setSourceShip(null);
                 for (ShipAPI member : wing.getWingMembers()) {
                     StarvingThreatHullmod.initializeAttackSwarm(member, owner);
-                    FragmentSwarmHullmod.createSwarmFor(member);
                     Vector2f velocity = new Vector2f(direction);
                     velocity.scale(SWARM_LAUNCH_SPEED);
                     Vector2f.add(
                             velocity, gautama.getVelocity(), velocity);
                     member.getVelocity().set(velocity);
+                    GautamaSwarmLaunch.assembleFrom(gautama, member);
                 }
                 Global.getSoundPlayer().playSound(
                         "threat_swarm_launched",

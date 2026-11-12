@@ -4,6 +4,7 @@ import com.fs.starfarer.api.FactoryAPI;
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.SettingsAPI;
 import com.fs.starfarer.api.campaign.CommDirectoryAPI;
+import com.fs.starfarer.api.campaign.FactionAPI;
 import com.fs.starfarer.api.campaign.InteractionDialogAPI;
 import com.fs.starfarer.api.campaign.InteractionDialogPlugin;
 import com.fs.starfarer.api.campaign.OptionPanelAPI;
@@ -96,9 +97,37 @@ public final class FobIthacaDirectoryReturnRegression {
         final MemoryAPI globalMemory = memory(new HashMap<>(Map.of(
                 "$chief_navigator_menelaus_created_v1", true,
                 "$chief_navigator_ithaca_spartan_captain_created_v1", true)));
+        final Map<String, Object> stationFactionValues = new HashMap<>();
+        final Map<String, Object> personFactionValues = new HashMap<>();
+        final MemoryAPI stationFactionMemory = memory(stationFactionValues);
+        final MemoryAPI personFactionMemory = memory(personFactionValues);
+        final MemoryAPI carrierMemory = memory(new HashMap<>(Map.of(
+                "$id", "chief_navigator_fob_ithaca_comm_directory_view")));
+        final FactionAPI stationFaction = mock(FactionAPI.class, (name, args) -> {
+            if (name.equals("getId")) return TaskForceSpartanFaction.ID;
+            if (name.equals("getMemory")) {
+                stationFactionValues.put("$id", TaskForceSpartanFaction.ID);
+                return stationFactionMemory;
+            }
+            if (name.equals("getMemoryWithoutUpdate"))
+                throw new AssertionError("Rules need fresh native station-faction facts");
+            return null;
+        });
+        final FactionAPI personFaction = mock(FactionAPI.class, (name, args) -> {
+            // Deliberately differs from the station to catch a scope mix-up.
+            if (name.equals("getId")) return "independent";
+            if (name.equals("getMemory")) {
+                personFactionValues.put("$id", "independent");
+                return personFactionMemory;
+            }
+            if (name.equals("getMemoryWithoutUpdate"))
+                throw new AssertionError("Rules need fresh native person-faction facts");
+            return null;
+        });
         final PersonAPI person = mock(PersonAPI.class, (name, args) -> {
             if (name.equals("getId")) return MenelausTrial.PERSON_ID;
             if (name.equals("getMemoryWithoutUpdate")) return personMemory;
+            if (name.equals("getFaction")) return personFaction;
             if (name.equals("getName")) return new FullName("Menelaus", "", FullName.Gender.ANY);
             return null;
         });
@@ -114,6 +143,7 @@ public final class FobIthacaDirectoryReturnRegression {
             if (name.equals("getId")) return "chief_navigator_fob_ithaca";
             if (name.equals("getCustomEntityType")) return "chief_navigator_fob_ithaca_campaign";
             if (name.equals("getMemoryWithoutUpdate")) return stationMemory;
+            if (name.equals("getFaction")) return stationFaction;
             if (name.equals("getActivePerson")) return activePerson;
             if (name.equals("setActivePerson")) activePerson = (PersonAPI) args[0];
             if (name.equals("getMarket")) return attachedMarket;
@@ -135,8 +165,13 @@ public final class FobIthacaDirectoryReturnRegression {
         });
         final VisualPanelAPI visual = mock(VisualPanelAPI.class, (name, args) -> null);
         final CommDirectoryAPI directory = mock(CommDirectoryAPI.class, (name, args) -> null);
-        final MarketAPI carrier = mock(MarketAPI.class, (name, args) ->
-                name.equals("getCommDirectory") ? directory : null);
+        final MarketAPI carrier = mock(MarketAPI.class, (name, args) -> {
+            if (name.equals("getCommDirectory")) return directory;
+            if (name.equals("getMemory")) return carrierMemory;
+            if (name.equals("getMemoryWithoutUpdate"))
+                throw new AssertionError("Rules need fresh native market facts");
+            return null;
+        });
         final InteractionDialogAPI dialog = mock(InteractionDialogAPI.class, (name, args) -> {
             if (name.equals("getInteractionTarget")) return station;
             if (name.equals("getOptionPanel")) return optionPanel;
@@ -234,6 +269,35 @@ public final class FobIthacaDirectoryReturnRegression {
             activePerson = person;
             ((RuleBasedDialog) plugin).notifyActivePersonChanged();
             check(plugin.getContext() == person, "Test contact must be active before selecting its exit");
+            assertContactScope();
+        }
+
+        void assertContactScope() {
+            Map<String, MemoryAPI> scope = plugin.getMemoryMap();
+            check(scope.get(MemKeys.LOCAL) == personMemory
+                            && scope.get(MemKeys.ENTITY) == stationMemory,
+                    "Selecting a contact must retain station entity memory beside the person's local memory");
+            check(scope.get(MemKeys.FACTION) == stationFactionMemory
+                            && TaskForceSpartanFaction.ID.equals(
+                                    stationFactionValues.get("$id")),
+                    "Contact rules must retain the station's freshly populated faction scope");
+            check(scope.get(MemKeys.PERSON_FACTION) == personFactionMemory
+                            && "independent".equals(personFactionValues.get("$id")),
+                    "Contact rules must receive their own freshly populated faction scope");
+        }
+
+        void assertStationScope() {
+            Map<String, MemoryAPI> scope = plugin.getMemoryMap();
+            check(scope.get(MemKeys.LOCAL) == stationMemory
+                            && scope.get(MemKeys.ENTITY) == stationMemory,
+                    "Station rules must restore the station's local and entity memories");
+            check(scope.get(MemKeys.FACTION) == stationFactionMemory
+                            && TaskForceSpartanFaction.ID.equals(
+                                    stationFactionValues.get("$id")),
+                    "Station rules must receive freshly populated faction facts");
+            check(!scope.containsKey(MemKeys.PERSON_FACTION)
+                            && !scope.containsKey(MemKeys.MARKET),
+                    "Marketless station rules must not retain person-faction or temporary-market scopes");
         }
 
         void choose(String id, String label) {
@@ -248,6 +312,7 @@ public final class FobIthacaDirectoryReturnRegression {
                     "Return must restore a live station shell with no selected resident");
             check(activePerson == null && attachedMarket == null,
                     "Return must clear the active person and detach the directory's carrier");
+            assertStationScope();
             check(history.get(0).equals("Earlier conversation remains."),
                     "Existing dialogue history must survive the handoff");
             check(history.stream().filter(selectedLabel::equals).count() == expectedEchoes,
@@ -280,6 +345,30 @@ public final class FobIthacaDirectoryReturnRegression {
         f.assertReturned(1, RETURN_LABEL);
     }
 
+    private static void verifyRuleMemoryScopes() {
+        Fixture f = new Fixture();
+        f.install();
+        f.beginStation();
+        f.assertStationScope();
+        // Native core dismissal can refresh a RuleBasedDialog while its
+        // temporary market is still attached. Rebuilding must see only the
+        // currently attached market, then drop that scope after release.
+        f.attachedMarket = f.carrier;
+        ((RuleBasedDialog) f.plugin).updateMemory();
+        check(f.plugin.getMemoryMap().get(MemKeys.MARKET) == f.carrierMemory,
+                "An attached temporary market must supply its actual native memory");
+        f.activatePerson();
+        check(f.plugin.getMemoryMap().get(MemKeys.MARKET) == f.carrierMemory,
+                "Selecting a contact must preserve the current market scope");
+        f.attachedMarket = null;
+        ((RuleBasedDialog) f.plugin).updateMemory();
+        f.assertContactScope();
+        check(!f.plugin.getMemoryMap().containsKey(MemKeys.MARKET),
+                "Rebuilding contact memory after market release must discard the old market scope");
+        f.choose(CONTACT_LEAVE, RETURN_LABEL);
+        f.assertReturned(1, RETURN_LABEL);
+    }
+
     private static void verifyAuthoredLaborExit() {
         Fixture f = new Fixture();
         f.install();
@@ -295,6 +384,7 @@ public final class FobIthacaDirectoryReturnRegression {
         f.activePerson = f.person;
         f.plugin = new FobIthacaContactInteraction(f.person);
         f.plugin.init(f.dialog);
+        f.assertContactScope();
         f.choose(LABOR_LEAVE, "End the briefing.");
         f.assertReturned(1, "End the briefing.");
     }
@@ -393,6 +483,7 @@ public final class FobIthacaDirectoryReturnRegression {
             verifyStaleHub(BACK);
             verifyStaleHub(CONTACT_LEAVE);
             verifyNormalContactReturn();
+            verifyRuleMemoryScopes();
             verifyAuthoredLaborExit();
             verifyLegacyContactShell();
             verifyNativeFallback();

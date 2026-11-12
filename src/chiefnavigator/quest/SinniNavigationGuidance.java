@@ -90,7 +90,7 @@ public final class SinniNavigationGuidance {
         if (!MenelausTrial.isAccepted()) {
             target = OdysseyExpanseSystem.getFobIthaca();
             destination = withSystem("FOB Ithaca", target);
-            objective = "Reach the macrobase in Ashen Verge and answer its "
+            objective = "Reach the macrobase in Lacedaemon and answer its "
                     + "command channel.";
             return finish(destination, objective, target);
         }
@@ -267,7 +267,7 @@ public final class SinniNavigationGuidance {
         if (recovered) {
             return "Bring the recovered TTS Penumbra for the Mara "
                     + "survey-communications deployment. Sinni recommends "
-                    + "its phase cloak for slipping through Devoured Reach "
+                    + "its phase cloak for slipping through Anatolia "
                     + "before deploying the sensor package.";
         }
         if (revealed) {

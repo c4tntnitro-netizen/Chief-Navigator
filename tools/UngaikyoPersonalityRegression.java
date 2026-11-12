@@ -118,7 +118,7 @@ public final class UngaikyoPersonalityRegression {
         private int owner = 1, originalOwner, defaultActivations, nativeResets, evaluations;
         private boolean locked = true, holdFire = true, phased = true;
         private FleetMemberAPI boundMember;
-        private ShipAIConfig config = new ShipAIConfig();
+        private ShipAIConfig config = new ShipAIConfig(null);
         private final List<ShipAPI> children = new ArrayList<>();
         private final PersonAPI captain;
         private final FleetMemberAPI member;

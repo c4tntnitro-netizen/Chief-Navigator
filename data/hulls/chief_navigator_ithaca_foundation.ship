@@ -59,17 +59,7 @@
     "LARGE_BALLISTIC_01": "chief_navigator_drifting_wall_annihilator_destroyed",
     "LARGE_BALLISTIC_02": "chief_navigator_drifting_wall_annihilator_launcher",
     "LARGE_BALLISTIC_03": "chief_navigator_drifting_wall_annihilator_destroyed",
-    "LARGE_BALLISTIC_04": "chief_navigator_drifting_wall_annihilator_launcher",
-    "MEDIUM_UNIVERSAL_01": "pulselaser",
-    "MEDIUM_UNIVERSAL_02": "pulselaser",
-    "MEDIUM_UNIVERSAL_03": "heavyneedler",
-    "MEDIUM_UNIVERSAL_04": "heavymauler",
-    "MEDIUM_UNIVERSAL_05": "pulselaser",
-    "MEDIUM_UNIVERSAL_06": "heavyneedler",
-    "MEDIUM_UNIVERSAL_07": "heavyneedler",
-    "MEDIUM_UNIVERSAL_08": "pulselaser",
-    "MEDIUM_UNIVERSAL_09": "heavymauler",
-    "MEDIUM_UNIVERSAL_10": "heavyneedler"
+    "LARGE_BALLISTIC_04": "chief_navigator_drifting_wall_annihilator_launcher"
   },
   "center": [2816,1108],
   "collisionRadius": 3100,
@@ -154,96 +144,6 @@
       "mount": "TURRET",
       "size": "LARGE",
       "type": "BALLISTIC"
-    },
-    {
-      "angle": 0,
-      "arc": 360,
-      "id": "MEDIUM_UNIVERSAL_01",
-      "locations": [926,442],
-      "mount": "TURRET",
-      "size": "MEDIUM",
-      "type": "UNIVERSAL"
-    },
-    {
-      "angle": 0,
-      "arc": 360,
-      "id": "MEDIUM_UNIVERSAL_02",
-      "locations": [929,-432],
-      "mount": "TURRET",
-      "size": "MEDIUM",
-      "type": "UNIVERSAL"
-    },
-    {
-      "angle": 0,
-      "arc": 360,
-      "id": "MEDIUM_UNIVERSAL_03",
-      "locations": [323,1754],
-      "mount": "TURRET",
-      "size": "MEDIUM",
-      "type": "UNIVERSAL"
-    },
-    {
-      "angle": 0,
-      "arc": 360,
-      "id": "MEDIUM_UNIVERSAL_04",
-      "locations": [386,1312],
-      "mount": "TURRET",
-      "size": "MEDIUM",
-      "type": "UNIVERSAL"
-    },
-    {
-      "angle": 0,
-      "arc": 360,
-      "id": "MEDIUM_UNIVERSAL_05",
-      "locations": [454,1069],
-      "mount": "TURRET",
-      "size": "MEDIUM",
-      "type": "UNIVERSAL"
-    },
-    {
-      "angle": 0,
-      "arc": 360,
-      "id": "MEDIUM_UNIVERSAL_06",
-      "locations": [341,796],
-      "mount": "TURRET",
-      "size": "MEDIUM",
-      "type": "UNIVERSAL"
-    },
-    {
-      "angle": 0,
-      "arc": 360,
-      "id": "MEDIUM_UNIVERSAL_07",
-      "locations": [337,-781],
-      "mount": "TURRET",
-      "size": "MEDIUM",
-      "type": "UNIVERSAL"
-    },
-    {
-      "angle": 0,
-      "arc": 360,
-      "id": "MEDIUM_UNIVERSAL_08",
-      "locations": [460,-1048],
-      "mount": "TURRET",
-      "size": "MEDIUM",
-      "type": "UNIVERSAL"
-    },
-    {
-      "angle": 0,
-      "arc": 360,
-      "id": "MEDIUM_UNIVERSAL_09",
-      "locations": [398,-1298],
-      "mount": "TURRET",
-      "size": "MEDIUM",
-      "type": "UNIVERSAL"
-    },
-    {
-      "angle": 0,
-      "arc": 360,
-      "id": "MEDIUM_UNIVERSAL_10",
-      "locations": [344,-1745],
-      "mount": "TURRET",
-      "size": "MEDIUM",
-      "type": "UNIVERSAL"
     },
     {
       "angle": 0,

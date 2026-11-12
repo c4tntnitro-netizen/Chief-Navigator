@@ -9,7 +9,7 @@ import com.fs.starfarer.api.plugins.ShipSystemStatsScript.State;
 
 /**
  * Reflection construction remains owned by the encounter controller. The
- * active system gives this Fabricator an autonomous, backward Extraction
+ * active system gives this Overseer an autonomous, backward Extraction
  * Protocol maneuver without opening a stock THREAT construction path.
  */
 public final class UngaikyoConstructionSwarmSystem

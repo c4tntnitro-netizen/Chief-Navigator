@@ -12,7 +12,7 @@ import com.fs.starfarer.api.impl.campaign.ids.Tags;
 import com.fs.starfarer.api.impl.campaign.rulecmd.missions.GateCMD;
 import com.fs.starfarer.api.impl.campaign.rulecmd.FireAll;
 import com.fs.starfarer.api.impl.campaign.rulecmd.FireBest;
-import com.fs.starfarer.campaign.rules.oOOO;
+import com.fs.starfarer.campaign.rules.A;
 import com.fs.starfarer.campaign.rules.ooOO;
 import com.fs.starfarer.api.ui.LabelAPI;
 import com.fs.starfarer.api.util.Misc.Token;
@@ -303,7 +303,7 @@ public final class IthacaGateTravelRegression {
         rejected("Wrong destination plugin is not adopted", f -> f.target.nativePlugin = false);
         rejected("Destination still requires the native gate tag", f -> f.target.tags.remove(Tags.GATE));
         rejected("Foreign destination location is not adopted", f -> f.target.where = f.core);
-        rejected("Foreign Ashen Verge ownership is not adopted", f -> f.ashen.memory.values.clear());
+        rejected("Foreign Lacedaemon ownership is not adopted", f -> f.ashen.memory.values.clear());
         rejected("Unscanned source gates cannot be used", f -> f.source.memory.values.remove(GateEntityPlugin.GATE_SCANNED));
         rejected("Unregistered source gates cannot be used", f -> f.data.scanned.remove(f.source.api));
         rejected("Non-gate source entities cannot be used", f -> f.source.tags.remove(Tags.GATE));
@@ -433,7 +433,7 @@ public final class IthacaGateTravelRegression {
             }
         }
         @SuppressWarnings("unchecked") Map<String, Class<?>> scripts =
-                (Map<String, Class<?>>) store.getField("void").get(null);
+                (Map<String, Class<?>>) java.util.Arrays.stream(store.getFields()).filter(field -> field.getType() == java.util.Map.class).findFirst().orElseThrow().get(null);
         scripts.put(ChiefNavigatorIthacaGateCMD.class.getName(), ChiefNavigatorIthacaGateCMD.class);
         Method parse = Class.forName("com.fs.starfarer.loading.G").getMethod("o00000", String.class);
         JSONArray rows = (JSONArray) parse.invoke(null, Files.readString(Path.of("data/campaign/rules.csv")));
@@ -443,10 +443,10 @@ public final class IthacaGateTravelRegression {
             if (!row.optString("id").startsWith("chiefNavigatorIthacaGateTravel")) continue;
             ooOO rule = new ooOO(row.getString("id"), row.getString("trigger"), row.optString("conditions"));
             for (String line : row.optString("conditions").split("\\R")) {
-                if (!line.isBlank()) rule.getConditions().add(new oOOO(line));
+                if (!line.isBlank()) rule.getConditions().add(new A(line));
             }
             for (String line : row.optString("script").split("\\R")) {
-                if (!line.isBlank()) rule.getScript().add(new oOOO(line));
+                if (!line.isBlank()) rule.getScript().add(new A(line));
             }
             for (String line : row.optString("options").split("\\R")) {
                 if (line.isBlank()) continue;

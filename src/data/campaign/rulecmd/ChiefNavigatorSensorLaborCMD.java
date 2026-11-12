@@ -8,7 +8,7 @@ import com.fs.starfarer.api.util.Misc.Token;
 import java.util.List;
 import java.util.Map;
 
-/** Rules-side completion command for the Devoured Reach sensor Labor. */
+/** Rules-side completion command for the Anatolia sensor Labor. */
 public final class ChiefNavigatorSensorLaborCMD extends BaseCommandPlugin {
     @Override
     public boolean execute(

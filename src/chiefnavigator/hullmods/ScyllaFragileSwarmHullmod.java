@@ -23,5 +23,11 @@ public final class ScyllaFragileSwarmHullmod extends BaseHullMod {
         ship.setExplosionScale(0f);
         ship.setHulkChanceOverride(0f);
         ship.setDoNotRender(true);
+        GautamaSwarmLaunch.prepare(ship);
+    }
+
+    @Override
+    public void advanceInCombat(ShipAPI ship, float amount) {
+        GautamaSwarmLaunch.advance(ship, amount);
     }
 }

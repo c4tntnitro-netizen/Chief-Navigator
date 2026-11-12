@@ -282,7 +282,7 @@ public class GautamaConstructionRegression {
                 StandardCharsets.UTF_8);
         WallResearchRegression.check(
                 rematch.contains("GautamaReincarnation.suppressForBattle(engine)"),
-                "The permanent Last Light rematch must explicitly suppress reincarnation");
+                "The permanent Bouvo Olympus rematch must explicitly suppress reincarnation");
         String reincarnation = Files.readString(Paths.get(
                 "src/chiefnavigator/hullmods/GautamaReincarnation.java"),
                 StandardCharsets.UTF_8);

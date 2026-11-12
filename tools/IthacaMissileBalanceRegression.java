@@ -214,13 +214,27 @@ public final class IthacaMissileBalanceRegression {
             String expected = i == 1 || i == 3 ? "chief_navigator_drifting_wall_annihilator_destroyed" : WALL_HAMMER;
             check(enemy.get(slot).equals(expected), "Hostile Wall launcher/destroyed-fixture layout must stay intact");
         }
-        String[] medium = {"pulselaser", "pulselaser", "heavyneedler", "heavymauler", "pulselaser",
-                "heavyneedler", "heavyneedler", "pulselaser", "heavymauler", "heavyneedler"};
-        for (int i = 0; i < medium.length; i++) {
-            String slot = String.format("MEDIUM_UNIVERSAL_%02d", i + 1);
-            check(builtins.getString(slot).equals(medium[i]) && equipped.get(slot).equals(medium[i])
-                            && enemy.get(slot).equals(medium[i]),
-                    "Ordinary medium-gun equipment must not change: " + slot);
+        for (String path : List.of(
+                "data/hulls/chief_navigator_drifting_wall_base.ship",
+                "data/hulls/chief_navigator_ithaca_foundation.ship",
+                "data/hulls/skins/chief_navigator_ithaca_intact_base.skin",
+                "data/variants/chief_navigator_drifting_wall_base_Standard.variant",
+                "data/variants/chief_navigator_ithaca_foundation_Standard.variant",
+                "data/variants/chief_navigator_ithaca_intact_base_Standard.variant")) {
+            JSONObject wall = json(path);
+            String data = read(path);
+            check(!data.contains("MEDIUM_UNIVERSAL_") && !data.contains("pulselaser")
+                            && !data.contains("heavyneedler") && !data.contains("heavymauler"),
+                    "Retired experimental vanilla guns and slots must stay absent: " + path);
+            if (wall.has("weaponSlots")) {
+                JSONArray remaining = wall.getJSONArray("weaponSlots");
+                for (int i = 0; i < remaining.length(); i++) {
+                    String id = remaining.getJSONObject(i).getString("id");
+                    check(id.startsWith("COL_NAVAL_") || id.startsWith("LARGE_BALLISTIC_")
+                                    || id.startsWith("LOCUST_PD_") || id.equals("REACTOR"),
+                            "Wall geometry must contain only its authored major systems: " + id);
+                }
+            }
         }
         for (String directory : List.of("data/hulls", "data/variants")) {
             try (var files = Files.walk(Path.of(directory))) {
@@ -258,8 +272,9 @@ public final class IthacaMissileBalanceRegression {
     }
 
     private static void untouched(String path, String expected) throws Exception {
+        // Git checks text out with CRLF on Windows; compare authored content.
         String hash = HexFormat.of().formatHex(MessageDigest.getInstance("SHA-256")
-                .digest(Files.readAllBytes(Path.of(path))));
+                .digest(read(path).replace("\r\n", "\n").getBytes(StandardCharsets.UTF_8)));
         check(hash.equalsIgnoreCase(expected), "Unrelated Damocles bombs must remain unchanged: " + path);
     }
 

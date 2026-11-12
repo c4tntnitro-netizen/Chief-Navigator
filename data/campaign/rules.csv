@@ -1,4 +1,5 @@
 id,trigger,conditions,script,text,options,notes
+chiefNavigatorAviciManifestationEncounterOpening,BeginFleetEncounter,$chief_navigator_avici_manifestation_v1 score:1000,,"A shrouded manifestation prowls through Avici. No transmission accompanies its approach.",,Owned Avici manifestations use native nonhuman fleet interaction without Budai identity or rewards.
 chiefNavigatorBudaiEncounterOpening,BeginFleetEncounter,"$chief_navigator_budai_hunter score:1000
 !$global.chief_navigator_budai_defeated_v1",,"Budai's distortion fills the tactical display. No transmission accompanies its approach.",,Owned Budai bypasses the generic faction FleetDesc; native fleet dialog retains battle and salvage choices.
 chiefNavigatorSinniPrompt,ChiefNavigatorSinniIntro_prompt,,,A waitress approaches you with a note in hand.,0:chief_navigator_sinni_event:Take the note from the woman drinking tea at the bar.,Sinni story-bar prompt.
@@ -1705,43 +1706,25 @@ ChiefNavigatorMenelausCMD stage wall_report","ChiefNavigatorMenelausCMD init
 ChiefNavigatorMenelausCMD report wall
 FireAll ChiefNavigatorHegemonyIthacaArrival",,,Commits Labor III without a separate debrief page and continues directly into Voss's arrival.
 chiefNavigatorFobIthacaSensorReport,ChiefNavigatorFobIthaca,"!ChiefNavigatorMenelausCMD stage early_wall
-ChiefNavigatorMenelausCMD stage sensor_report",ChiefNavigatorMenelausCMD init,"When you get back, you find Menelaus with your sensor reports open.
+ChiefNavigatorMenelausCMD stage sensor_report",ChiefNavigatorMenelausCMD init,"When you return to Ithaca, Menelaus is already examining the final transmission from your surveillance array.
 
-Is it your imagination, or... does the AI's avatar look grim?
+The Devoured Ring hangs in the holodeck, surrounded by the wreckage of its old superstructure and the unfamiliar machinery that has grown around it. Menelaus has overlaid the image with a series of Domain engineering schematics, highlighting the surviving control assemblies and their counterparts in the surrounding constructions.
 
-Menelaus opens the sensor package's final transmission. The Devoured Ring appears as a lattice of consumed mass, failed topology models, and centuries of Starving Threat traffic.
+The similarities are difficult to miss. Components that ought to have been consumed long ago have instead been stripped from the Ring and incorporated into structures of the Threat's own making.
 
-""The package completed its work before deleting itself. The Threat have been trying to reconstruct a Janus Device from the ring they consumed. They failed because they possess only one side of the topology.""
+""Do you see it, auxiliary?""","0:chief_navigator_menelaus_labor_four_report_eating:""Are they eating it?""
+10:chief_navigator_menelaus_labor_four_report_doing:""What are they doing?""","Supplied Labor IV debrief / Labor V dialogue, November 11, 2026."
+chiefNavigatorMenelausLaborFiveRealization3,DialogOptionSelected,$option == chief_navigator_menelaus_labor_5_realization_3,,"""Yes.""
 
-""And the closest intact Gate left is...""
+The Gate reconstruction vanishes altogether. Around Menelaus, Ithaca's defense stations begin reporting readiness, while orders spread across the tactical map to the surviving ships of Task Force Spartan.
 
-Menelaus stares at the Gate that Task Force Spartan guards.
+""Auxiliary...""
 
-You realize.","0:chief_navigator_menelaus_labor_5_realization_2:""If they scan Ithaca's Gate, then—.""",Labor IV debrief reveals why the Threat are converging on Ithaca.
-chiefNavigatorMenelausLaborFiveRealization2,DialogOptionSelected,$option == chief_navigator_menelaus_labor_5_realization_2,,"""They will flood every last Gate and devour everythingA,"" Menelaus finishes. ""Humanity will die.""
-
-Suddenly, the simulation of Ashen Verge burns red.
-
-Hundreds.
-
-Thousands.
-
-Countless red alerts begin appearing along the edge of Ashen Verge.
-
-All moving inward.",0:chief_navigator_menelaus_labor_5_realization_3:""They're already here.".",Labor IV realization continues as the invasion appears.
-chiefNavigatorMenelausLaborFiveRealization3,DialogOptionSelected,$option == chief_navigator_menelaus_labor_5_realization_3,,"""Auxiliary...""
-
-His blue-white eyes burn into yours.
-
-""Defender of the Domain.""
-
-The surveillance data collapses into a tactical map. Threat concentrations converge on FOB Ithaca in numbers greater than anything you have yet encountered.
+He looks toward you, his attention leaving the incoming reports for the first time.
 
 ""This is your final Labor. You have proven that neither the strength of lions nor of bulls shall hold you.""
 
-Over Menelaus's head, more and more red alerts spread like a bloody starry sky.
-
-""Fight with us until the last light.""",0:chief_navigator_menelaus_report_sensor:Continue.,Completes the Labor IV debrief only after the full Labor V realization.
+Behind him, the four great enemy formations continue to accumulate contacts, the perimeter defenses little more than a thin blue line between them and Ithaca.",0:chief_navigator_menelaus_report_sensor:Continue.,"Supplied Labor IV debrief / Labor V dialogue, November 11, 2026."
 chiefNavigatorFobIthacaBriefing,ChiefNavigatorFobIthaca,"!ChiefNavigatorMenelausCMD stage early_wall
 ChiefNavigatorMenelausCMD stage briefing
 !ChiefNavigatorMenelausCMD introduced",,"Your command shuttle leaves your flagship under Spartan escort.
@@ -1752,7 +1735,7 @@ Maintenance drones move across the surface in endless streams. Some are little l
 chiefNavigatorFobIthacaBriefingMenu,ChiefNavigatorFobIthaca,"!ChiefNavigatorMenelausCMD stage early_wall
 ChiefNavigatorMenelausCMD stage briefing
 ChiefNavigatorMenelausCMD introduced","ChiefNavigatorMenelausCMD init
-FireAll ChiefNavigatorMenelausLaborOneHubOptions","Ashen Verge unfolds around Menelaus.
+FireAll ChiefNavigatorMenelausLaborOneHubOptions","Lacedaemon unfolds around Menelaus.
 
 The marker for the Odyssey Expanse still burns gold at the edge of the theater.
 
@@ -1983,7 +1966,7 @@ FireAll ChiefNavigatorMenelausFirstStatusOptions","""I am in need of your assist
 
 The words are almost absurd coming from something this powerful.
 
-Menelaus raises a digital hand, and Ithaca contracts beneath you. The orbital ring becomes a thin circle of light. The central module shrinks with it, followed by the moons, planets, and finally the whole of Ashen Verge.
+Menelaus raises a digital hand, and Ithaca contracts beneath you. The orbital ring becomes a thin circle of light. The central module shrinks with it, followed by the moons, planets, and finally the whole of Lacedaemon.
 
 Then red begins to spread across the system. Hundreds of Threat contacts populate the map. Some are marked as destroyed. Others pulse steadily at the edges of Spartan patrol zones, while entire regions of the system are shaded in warning colors.
 
@@ -2015,14 +1998,11 @@ chiefNavigatorMenelausFirstLosing2,DialogOptionSelected,$option == chief_navigat
 A series of cryogenic vaults illuminate across the macrocomplex.
 
 ""It was because of Gautama that I reactivated Task Force Spartan from cryosuspension. They have shored up the defenses as best they can.""",0:chief_navigator_menelaus_first_losing_return:Continue.,Full Menelaus first contact: Losing2.
-chiefNavigatorMenelausFirstLosingReturn,DialogOptionSelected,$option == chief_navigator_menelaus_first_losing_return,"ChiefNavigatorMenelausCMD init
-FireAll ChiefNavigatorMenelausFirstNeed",,,Full Menelaus first contact: LosingReturn.
-chiefNavigatorMenelausFirstNeedLegacy,DialogOptionSelected,$option == chief_navigator_menelaus_first_need,FireAll ChiefNavigatorMenelausFirstNeed,,,Full Menelaus first contact: NeedLegacy.
 chiefNavigatorMenelausFirstNeed,ChiefNavigatorMenelausFirstNeed,,,"Menelaus dismisses the tactical display.
 
 ""I cannot spare any more of them. I need you to act as an independent roaming force.""
 
-The map of Ashen Verge changes around him. Spartan formations collapse back toward Ithaca, their patrol routes clustering tightly around the surviving defensive perimeter. Distant points illuminate across the theater: wrecks, Threat concentrations, abandoned installations, lost supply depots. Places far beyond the reach of the Spartan pickets.
+The map of Lacedaemon changes around him. Spartan formations collapse back toward Ithaca, their patrol routes clustering tightly around the surviving defensive perimeter. Distant points illuminate across the theater: wrecks, Threat concentrations, abandoned installations, lost supply depots. Places far beyond the reach of the Spartan pickets.
 
 His gaze settles on you.",0:chief_navigator_auto_page_chief_navigator_menelaus_first_need_2:Continue.,Full Menelaus first contact: Need. Auto-paged 1/4.
 chiefNavigatorMenelausFirstNeedPage2,DialogOptionSelected,$option == chief_navigator_auto_page_chief_navigator_menelaus_first_need_2,,"""I have objectives throughout the Orion Knot which must be completed, and no force I can presently spare to complete them.""
@@ -2044,6 +2024,9 @@ Ship schematics, weapons inventories, industrial stockpiles, and ancient Domain 
 
 A pause.",0:chief_navigator_auto_page_chief_navigator_menelaus_first_need_4:Continue.,Automatic runtime continuation 3/4 for chiefNavigatorMenelausFirstNeed.
 chiefNavigatorMenelausFirstNeedPage4,DialogOptionSelected,$option == chief_navigator_auto_page_chief_navigator_menelaus_first_need_4,FireAll ChiefNavigatorMenelausFirstNeedOptions,"""And wealth enough that I doubt you will find the arrangement unrewarding.""",,Automatic runtime continuation 4/4 for chiefNavigatorMenelausFirstNeed.
+chiefNavigatorMenelausFirstLosingReturn,DialogOptionSelected,$option == chief_navigator_menelaus_first_losing_return,"ChiefNavigatorMenelausCMD init
+FireAll ChiefNavigatorMenelausFirstNeed",,,Full Menelaus first contact: LosingReturn.
+chiefNavigatorMenelausFirstNeedLegacy,DialogOptionSelected,$option == chief_navigator_menelaus_first_need,FireAll ChiefNavigatorMenelausFirstNeed,,,Full Menelaus first contact: NeedLegacy.
 chiefNavigatorMenelausFirstNeedMercenaryOption,ChiefNavigatorMenelausFirstNeedOptions,!$chiefNavigatorMenelausFirstAskedMercenary,,,"0:chief_navigator_menelaus_first_need_mercenary:""You're hiring me as a mercenary.""",Full Menelaus first contact: NeedMercenaryOption.
 chiefNavigatorMenelausFirstNeedAuthorityOption,ChiefNavigatorMenelausFirstNeedOptions,!$chiefNavigatorMenelausFirstAskedAuthority,,,"10:chief_navigator_menelaus_first_need_authority:""You can actually grant Domain authority?""",Full Menelaus first contact: NeedAuthorityOption.
 chiefNavigatorMenelausFirstNeedRefuseOption,ChiefNavigatorMenelausFirstNeedOptions,!$chiefNavigatorMenelausFirstAskedRefuse,,,"20:chief_navigator_menelaus_first_need_refuse:""And if I don't want to work for you?""",Full Menelaus first contact: NeedRefuseOption.
@@ -2095,7 +2078,7 @@ You can see the woman tremble, just a little. But her voice is steady and her ey
 For the first time since entering the holodeck... perhaps in her entire life, Sinni seems uncertain how to continue.",0:chief_navigator_auto_page_chief_navigator_menelaus_first_sinni_helen_2:Continue.,Repeatable Labor-I Helen topic: Sinni introduces herself before Menelaus opens Helen's record. Auto-paged 1/3.
 chiefNavigatorMenelausFirstSinniHelenPage2,DialogOptionSelected,$option == chief_navigator_auto_page_chief_navigator_menelaus_first_sinni_helen_2,,"""Helen Argyros. A navigator for the Fourteenth.""
 
-Around Menelaus, Ashen Verge continues to move. Fleet markers crawl across the system. Numbers update. Drones move through the ring.
+Around Menelaus, Lacedaemon continues to move. Fleet markers crawl across the system. Numbers update. Drones move through the ring.
 
 Sinni watches him carefully.
 
@@ -2136,7 +2119,7 @@ Sinni swallows.",,Menelaus agrees and immediately opens Helen's service record.
 chiefNavigatorMenelausFirstHelenEnd,ChiefNavigatorMenelausFirstHelenEnd,,FireAll ChiefNavigatorMenelausLaborOneHelenRecord,,,Both player responses continue into the same Helen record without returning to the hub.
 chiefNavigatorMenelausFirstNeedAccept,ChiefNavigatorMenelausFirstNeedAccept,,,"""Good.""
 
-Ashen Verge unfolds around Menelaus once again.
+Lacedaemon unfolds around Menelaus once again.
 
 ""Then let's begin.""",0:chief_navigator_menelaus_first_finish:Continue.,Full Menelaus first contact: NeedAccept.
 chiefNavigatorMenelausFirstFinishOption,DialogOptionSelected,$option == chief_navigator_menelaus_first_finish,"$global.chief_navigator_menelaus_intro_shown_v1 = true
@@ -2144,7 +2127,7 @@ $global.chief_navigator_menelaus_intro_shown_v2 = true
 ChiefNavigatorMenelausCMD finishIntro",,,Commits the one-time station introduction and opens FOB Ithaca's station interface.
 chiefNavigatorFobIthacaWallBriefing,ChiefNavigatorFobIthaca,"!ChiefNavigatorMenelausCMD stage early_wall
 ChiefNavigatorMenelausCMD stage wall
-!$global.chief_navigator_menelaus_labor_three_briefed",ChiefNavigatorMenelausCMD init,"Ashen Verge unfolds around Menelaus. The research packages recovered during your second Labor appear alongside a schematic of Ithaca, their installation markers lighting up in sequence before the display folds them away.
+!$global.chief_navigator_menelaus_labor_three_briefed",ChiefNavigatorMenelausCMD init,"Lacedaemon unfolds around Menelaus. The research packages recovered during your second Labor appear alongside a schematic of Ithaca, their installation markers lighting up in sequence before the display folds them away.
 
 ""Your second Labor has borne fruit. Several of the recovered modules have already been integrated into the macrocomplex, and I estimate that their combined effect has increased Ithaca's force-projection capability by at least eighty percent.""
 
@@ -2197,12 +2180,12 @@ FireAll ChiefNavigatorMenelausLaborTwoHubOptions","Lacedaemon returns around Men
 ""What do you require?""",,Reusable Menelaus hub while Labor II remains active.
 chiefNavigatorFobIthacaMotherships,ChiefNavigatorFobIthaca,"!ChiefNavigatorMenelausCMD stage early_wall
 ChiefNavigatorMenelausCMD stage motherships","ChiefNavigatorMenelausCMD init
-FireAll ChiefNavigatorMenelausLaborOneHubOptions","Ashen Verge unfolds around Menelaus.
+FireAll ChiefNavigatorMenelausLaborOneHubOptions","Lacedaemon unfolds around Menelaus.
 
 The marker for the Odyssey Expanse still burns gold at the edge of the theater.
 
 ""What do you require?""",,Reusable Menelaus hub while Labor I remains active.
-chiefNavigatorMenelausLaborOneHub,ChiefNavigatorMenelausLaborOneHub,,FireAll ChiefNavigatorMenelausLaborOneHubOptions,"Ashen Verge unfolds around Menelaus.
+chiefNavigatorMenelausLaborOneHub,ChiefNavigatorMenelausLaborOneHub,,FireAll ChiefNavigatorMenelausLaborOneHubOptions,"Lacedaemon unfolds around Menelaus.
 
 The marker for the Odyssey Expanse still burns gold at the edge of the theater.
 
@@ -2217,12 +2200,12 @@ chiefNavigatorMenelausLaborOneHubServices,ChiefNavigatorMenelausLaborOneHubOptio
 chiefNavigatorMenelausLaborOneBriefing,DialogOptionSelected,"$option == chief_navigator_menelaus_labor_one
 !$global.chief_navigator_menelaus_trial_accepted",,"Menelaus raises one hand.
 
-A point of light appears at the edge of Ashen Verge, then flies off into hyperspace. The entire display changes to the Odyssey Expanse, where you first arrived in the Odyssey Sector.
+A point of light appears at the edge of Lacedaemon, then flies off into hyperspace. The entire display changes to the Odyssey Expanse, where you first arrived in the Odyssey Sector.
 
 ""Your first Labor.""
 
 The point of light splits into four, each flying toward a different part of the system.",0:chief_navigator_auto_page_chief_navigator_menelaus_labor_one_briefing_2:Continue.,Pre-acceptance Labor-I explanation; acceptance remains a separate explicit choice. Auto-paged 1/3.
-chiefNavigatorMenelausLaborOneBriefingPage2,DialogOptionSelected,$option == chief_navigator_auto_page_chief_navigator_menelaus_labor_one_briefing_2,,"""To recover the AD-87 Defense Module—the structure you know as the Drifting Wall—ripped from our macrocomplex defense ring by the Threat singularity known as 'Gautama,' I deployed four Guard Motherships to the area. Their task was to reverse the wall's momentum and return it to Ashen Verge for repairs.""
+chiefNavigatorMenelausLaborOneBriefingPage2,DialogOptionSelected,$option == chief_navigator_auto_page_chief_navigator_menelaus_labor_one_briefing_2,,"""To recover the AD-87 Defense Module—the structure you know as the Drifting Wall—ripped from our macrocomplex defense ring by the Threat singularity known as 'Gautama,' I deployed four Guard Motherships to the area. Their task was to reverse the wall's momentum and return it to Lacedaemon for repairs.""
 
 Four lights blink within the amber nebula. Menelaus enlarges the contacts.
 
@@ -2780,7 +2763,7 @@ The deployment marker continues blinking amid the red.",,Automatic runtime conti
 chiefNavigatorFobIthacaSensorMenu,ChiefNavigatorFobIthaca,"!ChiefNavigatorMenelausCMD stage early_wall
 ChiefNavigatorMenelausCMD stage sensor
 $global.chief_navigator_menelaus_labor_four_briefed","ChiefNavigatorMenelausCMD init
-FireAll ChiefNavigatorMenelausLaborFourHubOptions","The Devoured Reach hangs behind Menelaus like a red wound across the holodeck.
+FireAll ChiefNavigatorMenelausLaborFourHubOptions","The Anatolia hangs behind Menelaus like a red wound across the holodeck.
 
 ""What do you require?""",,Reusable Menelaus hub while Labor IV remains active.
 chiefNavigatorMenelausLaborFourBriefingMiddleOption,ChiefNavigatorMenelausLaborFourBriefingOptions,,,,"0:chief_navigator_menelaus_labor_four_middle:""You want me to take that into the middle of the swarm?""",One-shot danger question in the Labor IV briefing.
@@ -2871,7 +2854,7 @@ chiefNavigatorMenelausLaborFourHub,ChiefNavigatorMenelausLaborFourHub,,FireAll C
 
 ""What do you require?""",,"Supplied Labor IV conversation, November 7 2026."
 chiefNavigatorMenelausLaborFourHubLabor,ChiefNavigatorMenelausLaborFourHubOptions,,,,"0:chief_navigator_menelaus_labor_four_active:""About my current Labor.""",Persistent Labor IV topic.
-chiefNavigatorMenelausLaborFourHubReach,ChiefNavigatorMenelausLaborFourHubOptions,!$chiefNavigatorMenelausL4AskedReach,,,"10:chief_navigator_menelaus_labor_four_reach:""What do you know about the Anatolia system?""",One-shot Devoured Reach history question.
+chiefNavigatorMenelausLaborFourHubReach,ChiefNavigatorMenelausLaborFourHubOptions,!$chiefNavigatorMenelausL4AskedReach,,,"10:chief_navigator_menelaus_labor_four_reach:""What do you know about the Anatolia system?""",One-shot Anatolia history question.
 chiefNavigatorMenelausLaborFourHubThreat,ChiefNavigatorMenelausLaborFourHubOptions,!$chiefNavigatorMenelausL4AskedThreat,,,"20:chief_navigator_menelaus_labor_four_threat:""What exactly is the Starving Threat?""",One-shot Threat origin question.
 chiefNavigatorMenelausLaborFourHubHelen,ChiefNavigatorMenelausLaborFourHubOptions,!$chiefNavigatorMenelausL4AskedHelen,,,30:chief_navigator_menelaus_labor_four_helen:Ask more about Helen Argyros.,One-shot fourth Helen conversation.
 chiefNavigatorMenelausLaborFourHubServices,ChiefNavigatorMenelausLaborFourHubOptions,,,,"80:chief_navigator_fob_ithaca_upgrades:Review Ithaca defense upgrades.
@@ -2977,119 +2960,84 @@ The avatar dissolves into geometric light. The holodeck falls silent.",,"Supplie
 chiefNavigatorMenelausLaborFourRepair,DialogOptionSelected,$option == chief_navigator_menelaus_labor_four_repair,"ChiefNavigatorMenelausCMD repair
 FireAll ChiefNavigatorMenelausLaborFourHub","FOB Ithaca's automated gantries restore your fleet's hulls and armor, then cycle every ship to maximum combat readiness. No payment is requested.",,Repairs the fleet and returns to the reusable Labor IV hub.
 chiefNavigatorFobIthacaFinalOffer,ChiefNavigatorFobIthaca,"!ChiefNavigatorMenelausCMD stage early_wall
-ChiefNavigatorMenelausCMD stage final_offer",ChiefNavigatorMenelausCMD init,"""The fifth Labor begins only on your order. Three massive Starving Threat formations are gathering beyond Ithaca's perimeter bastions. Once you accept, each formation will begin a siege lasting approximately two months. Any formation still alive at its deadline will destroy its assigned bastion and turn on Task Force Spartan; Spartan losses will not be replaced.""",0:chief_navigator_auto_page_chief_navigator_fob_ithaca_final_offer_3:Continue.,Labor V remains dormant until the player selects its red acceptance option. Auto-paged 1/2.
-chiefNavigatorFobIthacaFinalOfferPage3,DialogOptionSelected,$option == chief_navigator_auto_page_chief_navigator_fob_ithaca_final_offer_3,SetOptionColor chief_navigator_menelaus_accept_final chiefNavigatorSinniOptionColor,"""Gautama will not commit the Heavenly Strike until all three perimeter formations are dead. Then every surviving Spartan formation will jump directly to the center engagement. Accept only when you are prepared to defend Ithaca.""","10:chief_navigator_menelaus_accept_final:Accept the final Labor.
+ChiefNavigatorMenelausCMD stage final_offer","ChiefNavigatorMenelausCMD init
+SetOptionColor chief_navigator_menelaus_accept_final chiefNavigatorSinniOptionColor","A tactical plan of Ithaca replaces the wider battle map. Three Hostswarm concentrations are marked beyond the North, South, and East Bastions, with the fourth holding farther out.
+
+""The fifth Labor begins on your order. Once you commit, the three forward formations will lay siege to their assigned Bastions. Each position can hold for approximately two months. Any Hostswarm still intact at the end of that period will destroy its Bastion and turn on Task Force Spartan.""
+
+The three defense positions illuminate in blue. Beside them, Spartan's surviving ships are listed with their current readiness and personnel strength.
+
+""Task Force Spartan will hold the Fourth Strike at bay until all three perimeter formations have been destroyed. At that point, every surviving Spartan formation will fight to the last.""
+
+Menelaus leaves the force allocations before you.
+
+""Accept only when your fleet is prepared to defend Ithaca.""","10:chief_navigator_menelaus_accept_final:Accept the final Labor.
 80:chief_navigator_fob_ithaca_upgrades:Review Ithaca defense upgrades.
 95:chief_navigator_fob_ithaca_repair:Request free repairs.
-100:chief_navigator_fob_ithaca_leave:Leave.",Automatic runtime continuation 2/2 for chiefNavigatorFobIthacaFinalOffer.
-chiefNavigatorMenelausAcceptFinal,DialogOptionSelected,$option == chief_navigator_menelaus_accept_final,ChiefNavigatorMenelausCMD acceptFinalLabor,"Menelaus faces you.
+100:chief_navigator_fob_ithaca_leave:Leave.","Supplied Labor IV debrief / Labor V dialogue, November 11, 2026."
+chiefNavigatorMenelausAcceptFinal,DialogOptionSelected,$option == chief_navigator_menelaus_accept_final,ChiefNavigatorMenelausCMD acceptFinalLabor,"Menelaus issues the authorization. Command signals spread outward from Ithaca, and acknowledgements begin returning from the Bastions and Task Force Spartan as the defense plan comes into effect.
 
-His blue-white eyes burn into yours.
+He looks toward you.
 
-""Hero of Ithaca. Defender of the Domain.""
+""Auxillary.""
 
-The surveillance data collapses into a tactical map. Threat concentrations converge on FOB Ithaca in numbers greater than anything you have yet encountered.
+Around him, more acknowledgements arrive from the Bastions and the ships under his command.
 
-""This is your final Labor.""
+""Fight with us until the last light.""","0:chief_navigator_menelaus_labor_five_depart:""We'll stop them.""","Supplied Labor IV debrief / Labor V dialogue, November 11, 2026."
+chiefNavigatorMenelausLaborFiveDepart,DialogOptionSelected,$option == chief_navigator_menelaus_labor_five_depart,ChiefNavigatorMenelausCMD showSpartan,"The holodeck releases you. The stars of the Lacedaemon System fade, followed by the defensive overlays and Menelaus's enormous avatar, until nothing remains but the circular chamber and its scuffed floor.
 
-A pause.
+The doors open on a corridor already full of movement. Captain Aias Kleon is waiting just outside, speaking into his comm as he walks. He barely breaks stride when he sees you.
 
-""Save us all.""","0:chief_navigator_menelaus_labor_five_depart:""We'll stop them.""","Explicitly accepts Labor V, creates its Intel entry, starts its music, and opens the field briefing."
-chiefNavigatorMenelausLaborFiveDepart,DialogOptionSelected,$option == chief_navigator_menelaus_labor_five_depart,ChiefNavigatorMenelausCMD showSpartan,"The holodeck releases you.
+""—affirmative. Full revival authorization. Code Eight, Five, Niner, Alpha-Foxtrot-Alpha. Spartan Actual, over.""
 
-Stars fade. Ashen Verge disappears. Menelaus dissolves into blue-white geometry until only the empty circular chamber remains.
+A reply crackles through his earpiece. Kleon motions for you to follow.",0:chief_navigator_auto_page_chief_navigator_menelaus_labor_five_depart_2:Continue.,"Supplied Labor IV debrief / Labor V dialogue, November 11, 2026. Auto-paged 1/3."
+chiefNavigatorMenelausLaborFiveDepartPage2,DialogOptionSelected,$option == chief_navigator_auto_page_chief_navigator_menelaus_labor_five_depart_2,,"""Medical teams to cryogenic blocks one through nine. Triage at the exits. If they're breathing, find them a station.""
 
-The doors open.
+He listens briefly, then answers before the officer on the other end has finished.
 
-Captain Aias Kleon is waiting outside. The commander of Task Force Spartan is already talking into his comm.
+""Override the rotation schedule. Every man to the last.""
 
-""—yes, all personnel. Full revival authorization. Code Eight, Five, Niner, Alpha-Foxtrot-Alpha.""
+""--Yes, sir!"" You catch out buzzing out of the man's ear.
 
-He starts walking before you reach him.",0:chief_navigator_auto_page_chief_navigator_menelaus_labor_five_depart_2:Continue.,Hands the accepted Labor V briefing from Menelaus to Captain Kleon. Auto-paged 1/2.
-chiefNavigatorMenelausLaborFiveDepartPage2,DialogOptionSelected,$option == chief_navigator_auto_page_chief_navigator_menelaus_labor_five_depart_2,,"""Medical teams to cryogenic blocks one through nine. Combat personnel report directly to assigned stations on revival. No acclimation period unless medically required. Not unless they're puking up a lung.""
+Kleon ends the call and turns toward you.",0:chief_navigator_auto_page_chief_navigator_menelaus_labor_five_depart_3:Continue.,Automatic runtime continuation 2/3 for chiefNavigatorMenelausLaborFiveDepart.
+chiefNavigatorMenelausLaborFiveDepartPage3,DialogOptionSelected,$option == chief_navigator_auto_page_chief_navigator_menelaus_labor_five_depart_3,,"""$chiefNavigatorLaborFivePlayerTitle $chiefNavigatorLaborFivePlayerName. Come with me.""",0:chief_navigator_menelaus_labor_five_field_briefing:Continue.,Automatic runtime continuation 3/3 for chiefNavigatorMenelausLaborFiveDepart.
+chiefNavigatorMenelausLaborFiveFieldBriefing,DialogOptionSelected,$option == chief_navigator_menelaus_labor_five_field_briefing,,"Personnel hurry through the corridor in every direction, carrying weapons and boarding equipment, others maneuvering supply carts toward the transit platforms. Bulkhead displays have switched from station notices to mobilization orders. Farther into Ithaca, alarms sound as districts kept on reduced operation for two centuries begin coming back to life. The ground lights up with mustering stations marked out in lit-up red boxes, and lines of ship crew fill out the blocks before marching as one to their berth assignments.
 
-An answer crackles through his earpiece.
+Kleon brings up a tactical display on his slate without stopping.
 
-""Override the normal schedule. I want every able body awake.""
+Four massive concentrations of Threat contacts appear around FOB Ithaca. The forward three are on separate approaches; the last remains well behind them.
 
-Kleon cuts the channel and glances toward you.
+""We've isolated four Hostswarms. Three are heading for the Bastions. One each for North, South, and East.""
 
-""$chiefNavigatorLaborFivePlayerTitle $chiefNavigatorLaborFivePlayerName. Come.""",0:chief_navigator_menelaus_labor_five_field_briefing:Follow Captain Kleon.,Automatic runtime continuation 2/2 for chiefNavigatorMenelausLaborFiveDepart.
-chiefNavigatorMenelausLaborFiveFieldBriefing,DialogOptionSelected,$option == chief_navigator_menelaus_labor_five_field_briefing,,"The corridor outside has transformed since you entered the holodeck.
+The fourth concentration is a dense knot of red signatures. Among them, one familiar contact stands out.
 
-Personnel rush past in both directions. Bulkhead displays flash mobilization orders. Somewhere deeper inside Ithaca, alarms begin sounding one district after another as sections of the macrocomplex wake from centuries of reduced operation.
+Gautama.","0:chief_navigator_menelaus_labor_five_hostswarms:""They're holding one back.""","Supplied Labor IV debrief / Labor V dialogue, November 11, 2026."
+chiefNavigatorMenelausLaborFiveHostswarms,DialogOptionSelected,$option == chief_navigator_menelaus_labor_five_hostswarms,,"""Yes.""
 
-Captain Kleon brings up a tactical display on his slate.
+Kleon enlarges Ithaca's defensive perimeter. The North, South, and East Bastions illuminate, each with its own overlapping fields of heavy batteries.
 
-""Menelaus gave you the strategic picture. Here's the battle.""",0:chief_navigator_auto_page_chief_navigator_menelaus_labor_five_field_briefing_2:Continue.,Captain Kleon opens the Labor V tactical field briefing. Auto-paged 1/2.
-chiefNavigatorMenelausLaborFiveFieldBriefingPage2,DialogOptionSelected,$option == chief_navigator_auto_page_chief_navigator_menelaus_labor_five_field_briefing_2,,"Four enormous Threat formations appear around FOB Ithaca.
+""Your fleet will reinforce the Bastions. Fight inside our defensive coverage wherever possible. Let the guns blunt the weight of the assault and use your ships to destroy what gets through. Protect each wall module's reactors at all cost.""
 
-""We've isolated four Hostswarms.""
+The three attack routes burn red against the blue defensive positions.",0:chief_navigator_auto_page_chief_navigator_menelaus_labor_five_hostswarms_2:Continue.,"Supplied Labor IV debrief / Labor V dialogue, November 11, 2026. Auto-paged 1/2."
+chiefNavigatorMenelausLaborFiveHostswarmsPage2,DialogOptionSelected,$option == chief_navigator_auto_page_chief_navigator_menelaus_labor_five_hostswarms_2,,"""Destroy each Hostswarm before it brings down its Bastion.""
 
-He highlights three.
+He selects the fourth formation. Its projected course runs past the perimeter Bastions and into the old wound in Ithaca's eastern ring, where Gautama tore through the macrocomplex during its previous assault.
 
-""One is moving on North Bastion. One on South. One on East.""
+""The first three attacks will occupy our defenses and spend our ammunition. Then the last Threat Strike comes through here.""
 
-The fourth remains farther out, a vast knot of red signatures collecting behind the others. You recognize one of the signatures in the last one.
+Kleon taps the damaged section of the ring.
 
-Gautama.","0:chief_navigator_menelaus_labor_five_hostswarms:""They're holding one back.""",Automatic runtime continuation 2/2 for chiefNavigatorMenelausLaborFiveFieldBriefing.
-chiefNavigatorMenelausLaborFiveHostswarms,DialogOptionSelected,$option == chief_navigator_menelaus_labor_five_hostswarms,,"""Exactly.""
+""Here's the main assault.""","0:chief_navigator_menelaus_labor_five_breach:""That breach in the wall.""",Automatic runtime continuation 2/2 for chiefNavigatorMenelausLaborFiveHostswarms.
+chiefNavigatorMenelausLaborFiveBreach,DialogOptionSelected,$option == chief_navigator_menelaus_labor_five_breach,,"Captain Kleon closes the map around the eastern breach. Task Force Spartan formations move into position across the opening, their projected strength rising and falling as the display accounts for losses sustained at the Bastions.
 
-Kleon enlarges FOB Ithaca.
+He studies the force allocation before committing the last of the available ships to the line.
 
-The three Bastions illuminate around the macrocomplex, each surrounded by batteries, minefields, defense drones, and Spartan ships.
+""There is where we will make our stand.""
 
-""Your fleet will reinforce the Bastions. Fight with our defenses. Let the guns, mines, and drones do what they can.""
-
-The three attack vectors burn red.
-
-""Defend against the assault on North. South. East.""",0:chief_navigator_auto_page_chief_navigator_menelaus_labor_five_hostswarms_2:Continue.,Explains the three perimeter attacks and Gautama's delayed fourth wave. Auto-paged 1/3.
-chiefNavigatorMenelausLaborFiveHostswarmsPage2,DialogOptionSelected,$option == chief_navigator_auto_page_chief_navigator_menelaus_labor_five_hostswarms_2,,"Then he highlights the fourth Hostswarm.
-
-It begins moving.
-
-Straight toward the enormous wound in Ithaca's eastern ring.
-
-""The fourth comes afterward.""
-
-The breach Gautama tore through the macrocomplex appears before you.
-
-""The Bastion attacks are attritional. They want our ships committed, our batteries hot, our ammunition depleted.""",0:chief_navigator_auto_page_chief_navigator_menelaus_labor_five_hostswarms_3:Continue.,Automatic runtime continuation 2/3 for chiefNavigatorMenelausLaborFiveHostswarms.
-chiefNavigatorMenelausLaborFiveHostswarmsPage3,DialogOptionSelected,$option == chief_navigator_auto_page_chief_navigator_menelaus_labor_five_hostswarms_3,,"His finger taps the breach.
-
-""Then they'll put everything they have through here.""","0:chief_navigator_menelaus_labor_five_breach:""That hole in the wall.""",Automatic runtime continuation 3/3 for chiefNavigatorMenelausLaborFiveHostswarms.
-chiefNavigatorMenelausLaborFiveBreach,DialogOptionSelected,$option == chief_navigator_menelaus_labor_five_breach,,"Captain Kleon closes the map around the eastern breach. Task Force Spartan formations begin appearing inside it.
-
-Every surviving ship.
-
-Every awakened crew.
-
-""That's where Task Force Spartan makes its stand.""
-
-You look at the force allocation.
-
-There is no reserve behind them.","0:chief_navigator_menelaus_labor_five_line:""And if the line breaks?""",Shows Task Force Spartan's final defensive line at Ithaca's breach.
-chiefNavigatorMenelausLaborFiveLine,DialogOptionSelected,$option == chief_navigator_menelaus_labor_five_line,,"""We won't.""
-
-Kleon does not slow down. Then his mic crackles again.
-
-""Spartan Actual. Go.""
-
-He strides away, already issuing orders.
-
-""Confirm revival counts. Get the reserve pilots into their fighters. I want every Bastion reporting weapons-ready before those Hostswarms cross the perimeter.""
-
-Sinni watches him disappear into the flow of personnel.
-
-Then she looks toward you.
-
-""Captain.""
-
-Her face is calm again.
-
-She reaches out and squeezes your hand.
-
-""Let's go.""",0:chief_navigator_menelaus_labor_five_begin:Begin the final Labor.,Concludes Captain Kleon's field briefing.
+There is no reserve.","0:chief_navigator_menelaus_labor_five_line:""And if the line breaks?""","Supplied Labor IV debrief / Labor V dialogue, November 11, 2026."
+chiefNavigatorMenelausLaborFiveLine,DialogOptionSelected,$option == chief_navigator_menelaus_labor_five_line,,"""We won't."" Aias Kleon holds a fist over his breast. ""Good luck, Auxilary. Molon Labe.""","0:chief_navigator_menelaus_labor_five_line_good_luck:""You too, Commodore.""
+10:chief_navigator_menelaus_labor_five_line_joke:""Ha. Worry about yourself.""
+20:chief_navigator_menelaus_labor_five_line_molon:""Molon Labe!""","Supplied Labor IV debrief / Labor V dialogue, November 11, 2026."
 chiefNavigatorMenelausLaborFiveBegin,DialogOptionSelected,$option == chief_navigator_menelaus_labor_five_begin,ChiefNavigatorMenelausCMD endContact,,,Ends Menelaus's contact briefing as the Labor V invasion becomes active.
 chiefNavigatorFobIthacaGautama,ChiefNavigatorFobIthaca,"!ChiefNavigatorMenelausCMD stage early_wall
 ChiefNavigatorMenelausCMD stage gautama",ChiefNavigatorMenelausCMD init,"Menelaus's alpha-core sigil burns steadily beneath the helm.
@@ -3100,26 +3048,22 @@ The active Ithaca invasion is marked on your campaign map.","80:chief_navigator_
 95:chief_navigator_fob_ithaca_repair:Request free repairs.
 100:chief_navigator_fob_ithaca_leave:Leave.",Sequential four-wave Labor V at FOB Ithaca.
 chiefNavigatorFobIthacaDebrief,ChiefNavigatorFobIthaca,"!ChiefNavigatorMenelausCMD stage early_wall
-ChiefNavigatorMenelausCMD stage debrief",ChiefNavigatorMenelausCMD init,"""Ithaca remains. Task Force Spartan remains. You returned when the work was finished. Few commanders do.""
+ChiefNavigatorMenelausCMD stage debrief",ChiefNavigatorMenelausCMD init,"""Ithaca remains. Task Force Spartan remains. You returned when the work was finished. Thank you, Captain.""
 
-He studies the surviving formation reports in silence.","10:chief_navigator_menelaus_debrief_gautama:""Is it finally over?""
-100:chief_navigator_auto_page_chief_navigator_fob_ithaca_debrief_3:Continue.",Congratulates the player first; Gautama/Ungaikyo's explanation is optional. The separate completion cinematic still opens only after the closing departure.
-chiefNavigatorMenelausDebriefGautama,DialogOptionSelected,$option == chief_navigator_menelaus_debrief_gautama,,"The projection of his battered Corinthian helm is steady, but the tactical display behind it is a ruin of extinguished Threat contacts and shattered defensive formations.
+He studies the surviving formation reports in silence.
 
-""The Heavenly Strike is destroyed,"" he says. ""Gautama was destroyed with it. Telemetry believes this is the last time we'll ever see it again.""
+""The prohibition on Ithaca's gate is lifted. Task Force Spartan will open the cordon, and the gate will answer your scan.""
 
-His gaze returns to Ithaca's casualty reports.",0:chief_navigator_auto_page_chief_navigator_fob_ithaca_debrief_3:Continue.,Optional explanation continuation; returns to the common completion acknowledgement without repeating the congratulations.
-chiefNavigatorFobIthacaDebriefPage3,DialogOptionSelected,$option == chief_navigator_auto_page_chief_navigator_fob_ithaca_debrief_3,,"""Your fifth Labor is complete. The prohibition on Ithaca's gate is lifted. Spartan will open the cordon, and the gate will answer your scan.""
+The helm inclines by a fraction.
 
-The helm inclines by a fraction.",0:chief_navigator_auto_page_chief_navigator_fob_ithaca_debrief_4:Continue.,Common acknowledgement reached whether the optional Gautama question was read or skipped.
-chiefNavigatorFobIthacaDebriefPage4,DialogOptionSelected,$option == chief_navigator_auto_page_chief_navigator_fob_ithaca_debrief_4,,"""Hercules was permitted to rest after his Labors. I suspect neither of us will be granted the same courtesy. Go, Captain. See what your victories have opened.""",0:chief_navigator_fob_ithaca_debrief_leave:Leave Menelaus to his command.,Automatic runtime continuation 4/4 for chiefNavigatorFobIthacaDebrief.
+""Your labors are done. But our battles never end. Go, Captain. See what your victories have opened.""",0:chief_navigator_fob_ithaca_debrief_leave:Leave Menelaus to his command.,"Supplied Labor IV debrief / Labor V dialogue, November 11, 2026."
 chiefNavigatorFobIthacaComplete,ChiefNavigatorFobIthaca,"!ChiefNavigatorMenelausCMD stage early_wall
 ChiefNavigatorMenelausCMD stage complete","ChiefNavigatorMenelausCMD init
 FireAll ChiefNavigatorFobIthacaCompleteOptions","Menelaus inclines the projected Corinthian helm.
 
 ""Your final Labor is complete. The prohibition on Ithaca's gate is lifted. Task Force Spartan will open the cordon when you approach; you may scan it.""
 
-The tactical display behind him has already changed. Ungaikyo's black filament web spans the eaten worlds of Devoured Reach, with one arm reaching into Last Light and knotting around the derelict Guardian. Its local Fabricator moves there with a Third Strike. Every other Starving Threat mass is swelling toward First, Second, or Third Strike strength, while a full Shrouded escort gathers around Budai.
+The tactical display behind him has already changed. Ungaikyo's black filament web spans the eaten worlds of Anatolia, with one arm reaching into Bouvo Olympus and knotting around the derelict Guardian. Its local Overseer moves there with a Third Strike. Every other Starving Threat mass is swelling toward First, Second, or Third Strike strength, while a full Shrouded escort gathers around Budai.
 
 ""The Labors are complete,"" Menelaus says. ""You are the finest amongst all under me. None even within Task Force Spartan can claim your might.""",,All Labors completed; releases the Ithaca gate and reports the permanent escalation.
 chiefNavigatorFobIthacaCompleteHelenOption,ChiefNavigatorFobIthacaCompleteOptions,!$global.chief_navigator_menelaus_helen_final_heard_v2,,,0:chief_navigator_menelaus_helen_final:Let Sinni ask Menelaus about Helen.,One-time revised final Helen conversation after all five Labors.
@@ -3754,9 +3698,9 @@ FireAll PopulateOptions","Kleon brings up Avici on his tactical slate.
 ""We've heard of some anomaly down galactic south. We'd appreciate it if you could check it out.""",,Reveals Avici and advances only the Budai hunt without spawning or changing its encounter.
 chiefNavigatorIthacaHuntUngaikyo,DialogOptionSelected,"$option == chief_navigator_ithaca_hunt_ungaikyo
 ChiefNavigatorPostLaborHuntCMD ungaikyoAvailable","ChiefNavigatorPostLaborHuntCMD briefUngaikyo
-FireAll PopulateOptions","Kleon marks Last Light. 
+FireAll PopulateOptions","Kleon marks Bouvo Olympus. 
 
-""Telemetry revealed what Gautama actually is. It's a web. The strands are just nanometers wide but they span light years. We think we've found the central processing unit of this web here in Last Light. Destroy it, and put an end to this nightmare.""",,Reveals Last Light and advances only the Ungaikyo hunt without spawning or changing its encounter.
+""Telemetry revealed what Gautama actually is. It's a web. The strands are just nanometers wide but they span light years. We think we've found the central processing unit of this web here in Bouvo Olympus. Destroy it, and put an end to this nightmare.""",,Reveals Bouvo Olympus and advances only the Ungaikyo hunt without spawning or changing its encounter.
 chiefNavigatorIthacaExileGreeting,PickGreeting,$chief_navigator_ithaca_hegemony_exile_contact score:1000,FireAll PopulateOptions,"The rescued officer answers from cramped quarters aboard Ithaca. The Hegemony uniform remains, but Voss's insignia has been cut from it.
 
 ""You brought us back alive. That is more than Voss intended.""",,Rescued Hegemony exile greeting.
@@ -3778,7 +3722,7 @@ chiefNavigatorExilesAid,ChiefNavigatorExiles_aid,,,"Your shuttles deliver the su
 
 ""Thank you, Captain. We'll make what we can of it.""
 
-The patrol breaks formation as its crews prepare to depart for Ashen Verge.",0:exile_done:Continue.,Aid transfers supplies and dispatches their own fleet without embarking passengers or creating a contact.
+The patrol breaks formation as its crews prepare to depart for Lacedaemon.",0:exile_done:Continue.,Aid transfers supplies and dispatches their own fleet without embarking passengers or creating a contact.
 chiefNavigatorExilesUnderway,ChiefNavigatorExiles_underway,,,"The captain confirms that the patrol is still making its way to FOB Ithaca. ""The supplies are holding. We'll keep going.""",0:exile_done:Continue.,An aided fleet never requests a second donation.
 chiefNavigatorExilesDone,ChiefNavigatorExiles_exile_done,,DismissDialog,,,Close the simple exile encounter.
 chiefNavigatorLeagueRescueVictory,ChiefNavigatorLeagueRescue_league_victory,,,"Your fleet smashes the Persean League survivors.
@@ -3972,167 +3916,114 @@ FireAll PopulateOptions","Mira watches Toma finish his row of washers before she
 
 ""I will tell him her name, and what she did.""",,Mira chooses a precise account of Sara for Toma.
 chiefNavigatorIthacaLeagueHub,DialogOptionSelected,$option == chief_navigator_ithaca_league_hub,FireAll PopulateOptions,,,Returns to the repeatable League resident topics.
-chiefNavigatorLabor5EndingOpening,ChiefNavigatorLabor5Ending_opening,,PlaySound ui_contact_developed,"The aftermath of the battle is a blur.
+chiefNavigatorLabor5EndingOpening,ChiefNavigatorLabor5Ending_opening,,PlaySound ui_contact_developed,"The aftermath of the battle passes in a blur.
 
-Damage reports. Casualty lists. Ships limping home beneath the guns of FOB Ithaca. Spartan crews transferring scores of wounded and dead between vessels while repair drones swarm over anything still capable of holding atmosphere. The loading docks operate without pause, recovery shuttles and their escorts buzzing in and out at all hours.
+Damage reports. Casualty lists. Ships limping home beneath the guns of FOB Ithaca. Spartan crews transfer their wounded and dead from crippled vessels to the station's receiving bays, while repair drones swarm over damaged hulls, sealing breaches and cutting away ruined plating. The loading docks operate without pause, recovery shuttles arriving with casualties and departing with salvage teams, their escorts threading through the traffic outside.
 
-Somewhere in the thick of it, your fleet docks.
+Somewhere in the thick of it, your fleet returns to Ithaca.
 
 You remember stepping off the shuttle.
 
 You remember someone trying to give you a report.
 
-After that, not much.
+After that, not much. By the time you reach the quarters Menelaus prepared for you, several days of near-continuous fighting have reduced walking to a matter of stubbornness.
 
-By the time you reach the quarters Menelaus prepared for you, several days of near-continuous fighting have reduced walking to a matter of stubbornness.
-
-You barely make it to the bed before everything goes dark.",0:aftermath_continue:Continue.,Opens the illustrated Labor V aftermath after Menelaus commits the debrief.
+You make it as far as the bed.",0:aftermath_continue:Continue.,"Supplied Labor V ending, November 11, 2026."
 chiefNavigatorLabor5EndingWaking,ChiefNavigatorLabor5Ending_aftermath_continue,,,"When you wake, you have no idea how long you have been asleep. It is dark and quiet.
 
 Something soft has been draped over you.
 
-You pull it away.
+You can't be sure in the darkness, but it feels like a blanket of some sort. It has the texture of silken threads, far finer than anything issued aboard your fleet. The fabric slips through your fingers like water, and you feel embroidery along the edges.
 
-You can't be sure in the darkness, but it feels like a blanket of some sort. It has the texture of fine silken threads, far nicer than anything issued aboard your fleet. The fabric flows through your fingers like water, and you feel embroidery along the edges.
+It smells faintly of osmanthus.
 
-It smells faintly of osmanthus.",0:chief_navigator_auto_page_chief_navigator_labor5_ending_waking_2:Continue.,Waking and the automatic transition to Sinni at Ithaca's observation gallery. Auto-paged 1/4.
-chiefNavigatorLabor5EndingWakingPage2,ChiefNavigatorLabor5Ending_chief_navigator_auto_page_chief_navigator_labor5_ending_waking_2,,,"You fumble in the dark and turn the lights on.
+You fumble in the dark and turn the lights on.
 
-It's a blanket. Yes.
+It's a blanket.
 
 Beside the wall-bed sits a small insulated flask.
 
 You open it.
 
-Tea. Still hot.
+Tea. Still hot.",0:waking_continue:Continue.,"Supplied Labor V ending, November 11, 2026."
+chiefNavigatorLabor5EndingMemorial,ChiefNavigatorLabor5Ending_waking_continue,,,"Later, after food and a shower, you find the chance to walk through Ithaca. The blanket is light enough that you can drape it over your shoulders.
 
-You take a drink.
+Somewhere in the distance, a ceremonial gun battery fires a thirteen-gun salute. The reports are carried through the station's public address system, each separated by a measured interval.
 
-Later, after food and a shower, you find Sinni near one of Ithaca's observation galleries.",0:chief_navigator_auto_page_chief_navigator_labor5_ending_waking_3:Continue.,Automatic runtime continuation 2/4 for chiefNavigatorLabor5EndingWaking.
-chiefNavigatorLabor5EndingWakingPage3,ChiefNavigatorLabor5Ending_chief_navigator_auto_page_chief_navigator_labor5_ending_waking_3,,,"She is alone at the optical.
+You have been hearing them for hours.",0:chief_navigator_auto_page_chief_navigator_labor5_ending_memorial_2:Continue.,"Supplied Labor V ending, November 11, 2026. Auto-paged 1/3."
+chiefNavigatorLabor5EndingMemorialPage2,ChiefNavigatorLabor5Ending_chief_navigator_auto_page_chief_navigator_labor5_ending_memorial_2,,,"Passing through one of the old embarkation concourses, you find the passage occupied by hundreds of coffins, arranged in orderly rows beneath the names of their ships. Each coffin is draped in the flag of the Domain of Man, its Star Emblem of Humanity displayed above a navy-blue sash bearing the insignia of Task Force Spartan. A few are accompanied by personal effects recovered from the wrecks. Others have only a name, a rank, and a service number.
 
-Beyond the armored glass, the macrocomplex stretches away beneath the stars.
+Most bear the same additional notation.
 
-The eastern breach is still there.
+REMAINS NOT RECOVERED
 
-It will be there for years.
+Most of the coffins are empty.",0:chief_navigator_auto_page_chief_navigator_labor5_ending_memorial_3:Continue.,Automatic runtime continuation 2/3 for chiefNavigatorLabor5EndingMemorial.
+chiefNavigatorLabor5EndingMemorialPage3,ChiefNavigatorLabor5Ending_chief_navigator_auto_page_chief_navigator_labor5_ending_memorial_3,,,The salutes continue behind you as you leave the concourse and make your way toward the observation galleries.,0:optical_continue:Continue.,Automatic runtime continuation 3/3 for chiefNavigatorLabor5EndingMemorial.
+chiefNavigatorLabor5EndingSinni,ChiefNavigatorLabor5Ending_optical_continue,,ChiefNavigatorPeopleCMD illustrated chief_navigator_sinni_ending,"You find Sinni near one of Ithaca's observation galleries. She is alone at the optical. Beyond the armored glass, the macrocomplex stretches away beneath the stars. The eastern breach is still there. It will be there for years, but it no longer looks like a mortal wound. Thousands of repair drones move across its edges, welding temporary spans over the gaps. Tug craft haul wreckage away from the fighting. Farther out, Spartan ships hold formation beneath the surviving defense batteries.
 
-But it no longer looks like a mortal wound.",0:chief_navigator_auto_page_chief_navigator_labor5_ending_waking_4:Continue.,Automatic runtime continuation 3/4 for chiefNavigatorLabor5EndingWaking.
-chiefNavigatorLabor5EndingWakingPage4,ChiefNavigatorLabor5Ending_chief_navigator_auto_page_chief_navigator_labor5_ending_waking_4,,ChiefNavigatorPeopleCMD illustrated chief_navigator_sinni_ending,"Thousands of repair drones move across its edges, welding temporary spans over the gaps. Tug craft haul wreckage away from the fighting. Farther out, Spartan ships hold formation beneath the surviving defense batteries.
-
-FOB Ithaca lives.
+Forward Operating Base Ithaca lives.
 
 Sinni watches it all in silence.
 
-Her attire is casual. Her silver hair is tied up in a messy bun. And for once, there is no tea in her hands.","0:sleep_at_all:""Sleep at all?""
+Her attire is casual. There are deep bags under her eyes. And for once, there is no tea in her hands.","0:sleep_at_all:""Sleep at all?""
 10:thanks_for_tea:""Thanks for the tea.""
-20:stand_beside:Stand beside her.",Automatic runtime continuation 4/4 for chiefNavigatorLabor5EndingWaking.
-chiefNavigatorLabor5EndingSleep,ChiefNavigatorLabor5Ending_sleep_at_all,,,"""Some.""
+20:stand_beside:Stand beside her.","Supplied Labor V ending, November 11, 2026."
+chiefNavigatorLabor5EndingSleep,ChiefNavigatorLabor5Ending_sleep,,,"""Some.""
 
 She glances toward you.
 
 ""You?""","0:enough:""Enough.""
-10:twelve_hours:""I passed the hell out for about twelve hours.""",Sinni asks how long the player slept.
-chiefNavigatorLabor5EndingEnough,ChiefNavigatorLabor5Ending_enough,,FireAll ChiefNavigatorLabor5Ending_after_sleep,,,Unique alias for the first sleep answer.
-chiefNavigatorLabor5EndingTwelveHours,ChiefNavigatorLabor5Ending_twelve_hours,,FireAll ChiefNavigatorLabor5Ending_after_sleep,,,Unique alias for the second sleep answer.
+10:twelve_hours:""I passed the hell out for about twelve hours.""","Supplied Labor V ending, November 11, 2026."
 chiefNavigatorLabor5EndingAfterSleep,ChiefNavigatorLabor5Ending_after_sleep,,,"""Mm.""
 
 The corner of her mouth moves.
 
-""I feared you dead.""","0:you_checked:""You checked?""
-10:look_at_ithaca:Look out at Ithaca.",Sinni admits she feared the player dead.
-chiefNavigatorLabor5EndingThanksForTea,ChiefNavigatorLabor5Ending_thanks_for_tea,,FireAll ChiefNavigatorLabor5Ending_shawl,,,Routes the opening tea choice to the shawl exchange.
-chiefNavigatorLabor5EndingYouChecked,ChiefNavigatorLabor5Ending_you_checked,,FireAll ChiefNavigatorLabor5Ending_shawl,,,Routes the sleep branch to the shawl exchange.
+""You looked dead.""","0:you_checked:""You checked?""
+10:look_at_ithaca:Look out at Ithaca.","Supplied Labor V ending, November 11, 2026."
 chiefNavigatorLabor5EndingShawl,ChiefNavigatorLabor5Ending_shawl,,,"You hold up one end of the silken blanket.
 
 Sinni looks at it.
 
-Then away.
-
 ""Cold rooms are bad for recovery.""","0:and_the_tea:""And the tea?""
-10:shawl_thank_you:""Thank you.""",Sinni explains the blanket.
-chiefNavigatorLabor5EndingTea,ChiefNavigatorLabor5Ending_and_the_tea,,,"""Hydration.""
+10:shawl_thank_you:""Thank you.""","Supplied Labor V ending, November 11, 2026."
+chiefNavigatorLabor5EndingTea,ChiefNavigatorLabor5Ending_tea,,,"""Hydration.""
 
 You wait.
 
 Sinni continues looking through the optical.
 
-""Also tea.""","0:strictly_medical:""Strictly medical?""
-10:tea_thank_you:""Thank you.""",Sinni explains the tea.
-chiefNavigatorLabor5EndingShawlThankYou,ChiefNavigatorLabor5Ending_shawl_thank_you,,FireAll ChiefNavigatorLabor5Ending_thanks,,,Unique alias for thanking Sinni after the shawl exchange.
-chiefNavigatorLabor5EndingStrictlyMedical,ChiefNavigatorLabor5Ending_strictly_medical,,FireAll ChiefNavigatorLabor5Ending_thanks,,,Unique alias for teasing Sinni about the tea.
-chiefNavigatorLabor5EndingTeaThankYou,ChiefNavigatorLabor5Ending_tea_thank_you,,FireAll ChiefNavigatorLabor5Ending_thanks,,,Unique alias for thanking Sinni after the tea exchange.
+""Also tea.""","0:tea_thank_you:""Thanks.""","Supplied Labor V ending, November 11, 2026."
 chiefNavigatorLabor5EndingThanks,ChiefNavigatorLabor5Ending_thanks,,,"""You're welcome.""
-
-Quietly.
 
 You take your place beside her.
 
 For a while, neither of you speaks.
 
-Eventually Sinni does.
-
-""We survived.""
-
 The two of you watch the repair lights move along the broken ring.
 
-""We survived,"" Sinni says again.
-
-This time, she sounds as though she is still trying to believe it.
+""We survived,"" Sinni says.
 
 A Spartan cruiser passes beneath the optical, one entire flank blackened from battle. Repair drones trail behind it like a cloud of silver insects.
 
-Sinni follows it with her eyes.","0:barely_from_thanks:""Barely.""
-10:surprised_from_thanks:""You sound surprised.""",Continues automatically through the quiet observation beat after thanking Sinni.
-chiefNavigatorLabor5EndingStandBeside,ChiefNavigatorLabor5Ending_stand_beside,,FireAll ChiefNavigatorLabor5Ending_silent,,,Routes the silent opening choice to the shared observation beat.
+Sinni follows it with her eyes.","0:surprised:""You sound surprised.""","Supplied Labor V ending, November 11, 2026."
 chiefNavigatorLabor5EndingSilent,ChiefNavigatorLabor5Ending_silent,,,"You take your place beside her.
 
 For a while, neither of you speaks.
 
-Eventually Sinni does.
-
-""We survived.""
-
 The two of you watch the repair lights move along the broken ring.
 
-""We survived,"" Sinni says again.
-
-This time, she sounds as though she is still trying to believe it.
+""We survived,"" Sinni says.
 
 A Spartan cruiser passes beneath the optical, one entire flank blackened from battle. Repair drones trail behind it like a cloud of silver insects.
 
-Sinni follows it with her eyes.","0:barely_from_silent:""Barely.""
-10:surprised_from_silent:""You sound surprised.""",Continues automatically from silence into the shared observation beat.
-chiefNavigatorLabor5EndingLookAtIthaca,ChiefNavigatorLabor5Ending_look_at_ithaca,,FireAll ChiefNavigatorLabor5Ending_view,,,Routes the sleep branch directly to the shared observation beat.
+Sinni follows it with her eyes.","0:surprised:""You sound surprised.""","Supplied Labor V ending, November 11, 2026."
 chiefNavigatorLabor5EndingView,ChiefNavigatorLabor5Ending_view,,,"The two of you watch the repair lights move along the broken ring.
 
-""We survived,"" Sinni says again.
-
-This time, she sounds as though she is still trying to believe it.
+""We survived,"" Sinni says.
 
 A Spartan cruiser passes beneath the optical, one entire flank blackened from battle. Repair drones trail behind it like a cloud of silver insects.
 
-Sinni follows it with her eyes.","0:barely_from_view:""Barely.""
-10:surprised_from_view:""You sound surprised.""",The shared view of Ithaca's repairs.
-chiefNavigatorLabor5EndingBarelyThanks,ChiefNavigatorLabor5Ending_barely_from_thanks,,FireAll ChiefNavigatorLabor5Ending_barely,,,Unique alias for the barely response after thanking Sinni.
-chiefNavigatorLabor5EndingBarelySilent,ChiefNavigatorLabor5Ending_barely_from_silent,,FireAll ChiefNavigatorLabor5Ending_barely,,,Unique alias for the barely response after standing silently.
-chiefNavigatorLabor5EndingBarelyView,ChiefNavigatorLabor5Ending_barely_from_view,,FireAll ChiefNavigatorLabor5Ending_barely,,,Unique alias for the barely response after looking out at Ithaca.
-chiefNavigatorLabor5EndingSurprisedThanks,ChiefNavigatorLabor5Ending_surprised_from_thanks,,FireAll ChiefNavigatorLabor5Ending_surprised,,,Unique alias for the surprised response after thanking Sinni.
-chiefNavigatorLabor5EndingSurprisedSilent,ChiefNavigatorLabor5Ending_surprised_from_silent,,FireAll ChiefNavigatorLabor5Ending_surprised,,,Unique alias for the surprised response after standing silently.
-chiefNavigatorLabor5EndingSurprisedView,ChiefNavigatorLabor5Ending_surprised_from_view,,FireAll ChiefNavigatorLabor5Ending_surprised,,,Unique alias for the surprised response after looking out at Ithaca.
-chiefNavigatorLabor5EndingBarely,ChiefNavigatorLabor5Ending_barely,,,"""That still counts.""
-
-She looks toward you.
-
-""At sea, every port is a victory.""
-
-""Perchance Lord $chiefNavigatorLabor5PlayerTitle would enjoy my second gift as well?""
-
-Sinni reaches into her robes and pulls out a liquor bottle.
-
-Now you're talking.
-
-""For a special occasion.""",0:now_talking_barely:""Now you're talking.".",The terse survival branch and Sinni's first gift offer.
+Sinni follows it with her eyes.","0:surprised:""You sound surprised.""","Supplied Labor V ending, November 11, 2026."
 chiefNavigatorLabor5EndingSurprised,ChiefNavigatorLabor5Ending_surprised,,,"""I was.""
 
 Sinni does not pretend otherwise.
@@ -4143,55 +4034,68 @@ She stops.
 
 Her fingers tighten against the rail.
 
-""I thought us done for. But you command the fleet like we were your own hands.""
+""I thought us done for. But clash after clash, even as our ships fell away and the line threatened to break, you kept the rest together. You brought us through the storm.""
 
 Sinni closes her eyes, then recites:
 
-""You Speak and We Move,
+""$chiefNavigatorLabor5PlayerPronoun Speaks and We Move,
 
 Soaring through the Stellar Ash,
 
-Toward Victory.""","0:chatty:""You're chatty today.""
-10:composed_now:""Did you compose that? Just now?""",Sinni recites her poem after the battle.
-chiefNavigatorLabor5EndingChatty,ChiefNavigatorLabor5Ending_chatty,,FireAll ChiefNavigatorLabor5Ending_poem,,,Unique alias for the first response to Sinni's poem.
-chiefNavigatorLabor5EndingComposedNow,ChiefNavigatorLabor5Ending_composed_now,,FireAll ChiefNavigatorLabor5Ending_poem,,,Unique alias for the second response to Sinni's poem.
+Onwards, Victory.""","0:chatty:""You're chatty today.""
+10:composed_now:""Did you compose that? Just now?""","Supplied Labor V ending, November 11, 2026."
 chiefNavigatorLabor5EndingPoem,ChiefNavigatorLabor5Ending_poem,,,"Sinni puts her sleeves together, bowing her head.
 
 ""On a whim, a meager offering of my poetry skills.""","0:like_poem:""I like it. Thank you.""
-10:tease_poem:""So the great Chief Navigator isn't good at everything. I'm shocked.""",The player responds to Sinni's poem.
-chiefNavigatorLabor5EndingLikePoem,ChiefNavigatorLabor5Ending_like_poem,,FireAll ChiefNavigatorLabor5Ending_end_1,,,Routes praise to Sinni's first gift offer.
-chiefNavigatorLabor5EndingTeasePoem,ChiefNavigatorLabor5Ending_tease_poem,,FireAll ChiefNavigatorLabor5Ending_end_2,,,Routes teasing to Sinni's second gift offer.
-chiefNavigatorLabor5EndingEnd1,ChiefNavigatorLabor5Ending_end_1,,,"""Perchance Lord $chiefNavigatorLabor5PlayerTitle would enjoy my second gift as well?""
+10:tease_poem:""So the great Chief Navigator isn't good at everything. I'm shocked.""","Supplied Labor V ending, November 11, 2026."
+chiefNavigatorLabor5EndingEnd1,ChiefNavigatorLabor5Ending_end_1,,,"""Then would the $chiefNavigatorLabor5PlayerTitle enjoy my second gift as well?""
 
-Sinni reaches into her robes and pulls out a liquor bottle.
+Sinni reaches into her robes and pulls out a bottle.
 
-Now you're talking.
-
-""For a special occasion.""",0:now_talking_end_1:""Now you're talking.".",Sinni offers the celebratory bottle after praise.
+Now you're talking.","0:now_talking_end_1:""Now you're talking.""","Supplied Labor V ending, November 11, 2026."
 chiefNavigatorLabor5EndingEnd2,ChiefNavigatorLabor5Ending_end_2,,,"Sinni reaches out and lightly nudges you aside.
 
-""Perchance Lord $chiefNavigatorLabor5PlayerTitle would prefer my second gift then?""
+""Then perhaps the $chiefNavigatorLabor5PlayerTitle would enjoy my second gift instead?""
 
-Sinni reaches into her robes and pulls out a liquor bottle.
-
-""For a special occasion.""",0:now_talking_end_2:""Now you're talking.".",Sinni offers the celebratory bottle after teasing.
-chiefNavigatorLabor5EndingNowTalkingBarely,ChiefNavigatorLabor5Ending_now_talking_barely,,FireAll ChiefNavigatorLabor5Ending_end_3,,,Unique alias from the barely branch to the toast.
-chiefNavigatorLabor5EndingNowTalkingEnd1,ChiefNavigatorLabor5Ending_now_talking_end_1,,FireAll ChiefNavigatorLabor5Ending_end_3,,,Unique alias from the praise branch to the toast.
-chiefNavigatorLabor5EndingNowTalkingEnd2,ChiefNavigatorLabor5Ending_now_talking_end_2,,FireAll ChiefNavigatorLabor5Ending_end_3,,,Unique alias from the teasing branch to the toast.
+Sinni reaches into her robes and pulls out a bottle.","0:now_talking_end_2:""Now you're talking.""","Supplied Labor V ending, November 11, 2026."
 chiefNavigatorLabor5EndingEnd3,ChiefNavigatorLabor5Ending_end_3,,,"Sinni produces two small cups from somewhere within her robes and pours.
 
-""Cheers!"" Sinni smiles, and raises hers toward you.","0:cheers_period:""Cheers.""
+She raises hers toward you.","0:cheers_period:""Cheers.""
 10:cheers_bang:""Cheers!""
-20:down_wine:Down the wine.",Sinni and the player toast the end of the Five Labors.
-chiefNavigatorLabor5EndingCheersPeriod,ChiefNavigatorLabor5Ending_cheers_period,,FireAll ChiefNavigatorLabor5Ending_end_4,,,Unique alias for the quiet toast.
-chiefNavigatorLabor5EndingCheersBang,ChiefNavigatorLabor5Ending_cheers_bang,,FireAll ChiefNavigatorLabor5Ending_end_4,,,Unique alias for the emphatic toast.
-chiefNavigatorLabor5EndingDownWine,ChiefNavigatorLabor5Ending_down_wine,,FireAll ChiefNavigatorLabor5Ending_end_4,,,Unique alias for drinking the wine.
-chiefNavigatorLabor5EndingEnd4,ChiefNavigatorLabor5Ending_end_4,,SetShortcut ending_close ESCAPE,"At the bridge between sectors.
+20:down_wine:Down the wine.","Supplied Labor V ending, November 11, 2026."
+chiefNavigatorLabor5EndingEnd4,ChiefNavigatorLabor5Ending_end_4,,,,"0:spit_it_out:Spit it out.
+10:cough:Cough and lean over.
+20:what_the_hell:""What the hell is that?!""","Supplied Labor V ending, November 11, 2026."
+chiefNavigatorLabor5EndingEnd5,ChiefNavigatorLabor5Ending_end_5,,SetShortcut ending_close ESCAPE,"""Pai Chiu,"" Sinni says, smiling openly now. She cradles her cup in the crook of her elbow and tips it back, draining it without apparent difficulty.
 
-At the gate to the graveyard of the Domain.
+""Over sixty percent alcohol.""
 
-Together, you and your Chief Navigator share a drink beneath that Sea of Stars.",100:ending_close:Continue.,Closes the authored Sinni ending on the Sea of Stars.
-chiefNavigatorLabor5EndingClose,ChiefNavigatorLabor5Ending_ending_close,,DismissDialog,,,Completion endpoint for the Labor V ending scene.
+Sinni pours you another finger. You're debating whether to toss it to the side.
+
+Beyond the armored glass, the repair lights continue their slow work along Ithaca's broken ring. Farther out, the surviving ships of Task Force Spartan keep watch over the Gate, their running lights scattered among the stars. For a while, you and Sinni stay drinking at the optical, at the bridge between sectors, at the Graveyard of the Domain. In that Sea of Stars.",0:ending_close:Leave.,"Supplied Labor V ending, November 11, 2026."
+chiefNavigatorLabor5EndingRouteSleepAtAll,ChiefNavigatorLabor5Ending_sleep_at_all,,FireAll ChiefNavigatorLabor5Ending_sleep,,,"Supplied Labor V ending, November 11, 2026."
+chiefNavigatorLabor5EndingRouteThanksForTea,ChiefNavigatorLabor5Ending_thanks_for_tea,,FireAll ChiefNavigatorLabor5Ending_tea,,,"Supplied Labor V ending, November 11, 2026."
+chiefNavigatorLabor5EndingRouteStandBeside,ChiefNavigatorLabor5Ending_stand_beside,,FireAll ChiefNavigatorLabor5Ending_silent,,,"Supplied Labor V ending, November 11, 2026."
+chiefNavigatorLabor5EndingRouteEnough,ChiefNavigatorLabor5Ending_enough,,FireAll ChiefNavigatorLabor5Ending_after_sleep,,,"Supplied Labor V ending, November 11, 2026."
+chiefNavigatorLabor5EndingRouteTwelveHours,ChiefNavigatorLabor5Ending_twelve_hours,,FireAll ChiefNavigatorLabor5Ending_after_sleep,,,"Supplied Labor V ending, November 11, 2026."
+chiefNavigatorLabor5EndingRouteYouChecked,ChiefNavigatorLabor5Ending_you_checked,,FireAll ChiefNavigatorLabor5Ending_shawl,,,"Supplied Labor V ending, November 11, 2026."
+chiefNavigatorLabor5EndingRouteLookAtIthaca,ChiefNavigatorLabor5Ending_look_at_ithaca,,FireAll ChiefNavigatorLabor5Ending_view,,,"Supplied Labor V ending, November 11, 2026."
+chiefNavigatorLabor5EndingRouteAndTheTea,ChiefNavigatorLabor5Ending_and_the_tea,,FireAll ChiefNavigatorLabor5Ending_tea,,,"Supplied Labor V ending, November 11, 2026."
+chiefNavigatorLabor5EndingRouteShawlThankYou,ChiefNavigatorLabor5Ending_shawl_thank_you,,FireAll ChiefNavigatorLabor5Ending_thanks,,,"Supplied Labor V ending, November 11, 2026."
+chiefNavigatorLabor5EndingRouteTeaThankYou,ChiefNavigatorLabor5Ending_tea_thank_you,,FireAll ChiefNavigatorLabor5Ending_silent,,,"Supplied Labor V ending, November 11, 2026."
+chiefNavigatorLabor5EndingRouteChatty,ChiefNavigatorLabor5Ending_chatty,,FireAll ChiefNavigatorLabor5Ending_poem,,,"Supplied Labor V ending, November 11, 2026."
+chiefNavigatorLabor5EndingRouteComposedNow,ChiefNavigatorLabor5Ending_composed_now,,FireAll ChiefNavigatorLabor5Ending_poem,,,"Supplied Labor V ending, November 11, 2026."
+chiefNavigatorLabor5EndingRouteLikePoem,ChiefNavigatorLabor5Ending_like_poem,,FireAll ChiefNavigatorLabor5Ending_end_1,,,"Supplied Labor V ending, November 11, 2026."
+chiefNavigatorLabor5EndingRouteTeasePoem,ChiefNavigatorLabor5Ending_tease_poem,,FireAll ChiefNavigatorLabor5Ending_end_2,,,"Supplied Labor V ending, November 11, 2026."
+chiefNavigatorLabor5EndingRouteNowTalkingEnd1,ChiefNavigatorLabor5Ending_now_talking_end_1,,FireAll ChiefNavigatorLabor5Ending_end_3,,,"Supplied Labor V ending, November 11, 2026."
+chiefNavigatorLabor5EndingRouteNowTalkingEnd2,ChiefNavigatorLabor5Ending_now_talking_end_2,,FireAll ChiefNavigatorLabor5Ending_end_3,,,"Supplied Labor V ending, November 11, 2026."
+chiefNavigatorLabor5EndingRouteCheersPeriod,ChiefNavigatorLabor5Ending_cheers_period,,FireAll ChiefNavigatorLabor5Ending_end_4,,,"Supplied Labor V ending, November 11, 2026."
+chiefNavigatorLabor5EndingRouteCheersBang,ChiefNavigatorLabor5Ending_cheers_bang,,FireAll ChiefNavigatorLabor5Ending_end_4,,,"Supplied Labor V ending, November 11, 2026."
+chiefNavigatorLabor5EndingRouteDownWine,ChiefNavigatorLabor5Ending_down_wine,,FireAll ChiefNavigatorLabor5Ending_end_4,,,"Supplied Labor V ending, November 11, 2026."
+chiefNavigatorLabor5EndingRouteSpitItOut,ChiefNavigatorLabor5Ending_spit_it_out,,FireAll ChiefNavigatorLabor5Ending_end_5,,,"Supplied Labor V ending, November 11, 2026."
+chiefNavigatorLabor5EndingRouteCough,ChiefNavigatorLabor5Ending_cough,,FireAll ChiefNavigatorLabor5Ending_end_5,,,"Supplied Labor V ending, November 11, 2026."
+chiefNavigatorLabor5EndingRouteWhatTheHell,ChiefNavigatorLabor5Ending_what_the_hell,,FireAll ChiefNavigatorLabor5Ending_end_5,,,"Supplied Labor V ending, November 11, 2026."
+chiefNavigatorLabor5EndingClose,ChiefNavigatorLabor5Ending_ending_close,,DismissDialog,,,"Supplied Labor V ending, November 11, 2026."
 chiefNavigatorDevouredRing,ChiefNavigatorDevouredRing,,"ShowDefaultVisual
 ChiefNavigatorDevouredRingCMD discover
 SetShortcut chief_navigator_devoured_ring_leave ESCAPE
@@ -5091,7 +4995,7 @@ Sinni stares at the navigation display for several seconds before her hands begi
 chiefNavigatorSinniOrionSanzuRiverPage2,ChiefNavigatorSinniVignette_chief_navigator_auto_page_chief_navigator_sinni_orion_sanzu_river_2,,,"You have your fleet hold position for a day. The current, once your nav team runs their calculations, is trivial to counteract with sublight travel, and your tac officer delivers a report expressing confidence in the concealment capabilities of the flowing nebula clouds. Just keep a careful watch against the current, he warns. Enemies might ride the river to attack.
 
 You later find Sinni sitting at the lip of the opticals. Datapads surround her, complicated equations and reference material glowing all around her. There is a cup of tea next to her, but it looks like it's gone cold.",0:chief_navigator_auto_page_chief_navigator_sinni_orion_sanzu_river_3:Continue.,Automatic runtime continuation 2/3 for chiefNavigatorSinniOrionSanzuRiver.
-chiefNavigatorSinniOrionSanzuRiverPage3,ChiefNavigatorSinniVignette_chief_navigator_auto_page_chief_navigator_sinni_orion_sanzu_river_3,,,"""It's a black hole,"" Sinni says without turning around. She must have seen your reflection in the opticals. ""The current is nebular material being pulled in from the Alpha Odyssey and Ashen Verge systems.""","0:sinni_sanzu_avici:""So this system is a black hole system?""",Automatic runtime continuation 3/3 for chiefNavigatorSinniOrionSanzuRiver.
+chiefNavigatorSinniOrionSanzuRiverPage3,ChiefNavigatorSinniVignette_chief_navigator_auto_page_chief_navigator_sinni_orion_sanzu_river_3,,,"""It's a black hole,"" Sinni says without turning around. She must have seen your reflection in the opticals. ""The current is nebular material being pulled in from the Alpha Odyssey and Lacedaemon systems.""","0:sinni_sanzu_avici:""So this system is a black hole system?""",Automatic runtime continuation 3/3 for chiefNavigatorSinniOrionSanzuRiver.
 chiefNavigatorSinniOrionSanzuAviciSeenBranch,ChiefNavigatorSinniVignette_sinni_sanzu_avici,$chiefNavigatorSinniSawAvici == true,,"""No.""
 
 ""Do you remember that black hole system galactic south of here? The one with abyssal hyperspace spilling into realspace?""","0:sinni_sanzu_avici_seen:""How could I forget.""",Authored Sanzu arrival; shared pursuit safety gate; completion only on final Continue.
@@ -5102,7 +5006,7 @@ chiefNavigatorSinniOrionSanzuAviciSeen,ChiefNavigatorSinniVignette_sinni_sanzu_a
 
 Alpha Odyssey.
 
-Ashen Verge.
+Lacedaemon.
 
 Your present system.
 
@@ -5118,7 +5022,7 @@ chiefNavigatorSinniOrionSanzuAviciUnseen,ChiefNavigatorSinniVignette_sinni_sanzu
 
 She overlays the current's direction across the regional chart.
 
-The vectors from Alpha Odyssey and Ashen Verge continue southward, converging beyond the limits of your explored map.
+The vectors from Alpha Odyssey and Lacedaemon continue southward, converging beyond the limits of your explored map.
 
 ""The model only works if there's a gravitational source out there vastly larger than anything in these systems.""
 
@@ -5131,7 +5035,7 @@ chiefNavigatorSinniOrionSanzuAviciUnseen2,ChiefNavigatorSinniVignette_sinni_sanz
 Sinni looks toward the southern edge of the chart.
 
 ""Nothing smaller fits the model.""",0:sinni_sanzu_avici_common:Continue.,Authored Sanzu arrival; shared pursuit safety gate; completion only on final Continue.
-chiefNavigatorSinniOrionSanzuAviciCommon,ChiefNavigatorSinniVignette_sinni_sanzu_avici_common,,,"Sinni draws another line through Alpha Odyssey, then another through Ashen Verge.
+chiefNavigatorSinniOrionSanzuAviciCommon,ChiefNavigatorSinniVignette_sinni_sanzu_avici_common,,,"Sinni draws another line through Alpha Odyssey, then another through Lacedaemon.
 
 ""The nebulae there are moving too. Slowly enough that you'd never notice from inside them, but they're all drifting in the same direction.""","0:sinni_sanzu_avici_3_response_1:""So this whole river is feeding it.""
 10:sinni_sanzu_avici_3_response_2:""It's pulling material out of entire systems.""
@@ -5201,4 +5105,71 @@ chiefNavigatorBudaiSalvageExtractChief,ChiefNavigatorBudaiSalvage_extract_salvag
 A single modularized Heavy Adjudicator is transferred to the fleet's weapon stores. Its improvised mounting frame is jerry-rigged to fit standard large ballistic hardpoints.",0:complete:Continue.,Awards exactly one mountable Heavy Adjudicator without Isa's assistance.
 chiefNavigatorBudaiSalvageComplete,ChiefNavigatorBudaiSalvage_complete,,DismissDialog,,,Closes the one-time post-Budai salvage scene.
 
+chiefNavigatorPeerlessEntry,ChiefNavigatorFobIthacaCompleteOptions,,SetOptionColor chief_navigator_peerless_open highlight,,20:chief_navigator_peerless_open:Discuss the Domain Epic distinction.,Player-only Peerless Helmsmanship prototype.
+chiefNavigatorPeerlessOpen,DialogOptionSelected,$option == chief_navigator_peerless_open,FireAll ChiefNavigatorPeerlessView,,,Player-only Peerless Helmsmanship prototype.
+chiefNavigatorPeerlessOffer,ChiefNavigatorPeerlessView,ChiefNavigatorPeerlessCMD canReceive,SetOptionColor chief_navigator_peerless_receive highlight,"Menelaus opens a service record bearing your name. Beneath it, two words appear in gold.
+
+DOMAIN EPIC
+
+""I retain the authority to confer this distinction. You have earned it.""","0:chief_navigator_peerless_receive:Accept the Domain Epic title.
+100:chief_navigator_peerless_back:Return to the Labors.",Player-only Peerless Helmsmanship prototype.
+chiefNavigatorPeerlessReceive,DialogOptionSelected,"$option == chief_navigator_peerless_receive
+ChiefNavigatorPeerlessCMD canReceive","ChiefNavigatorPeerlessCMD receive
+FireAll ChiefNavigatorPeerlessView",,,Player-only Peerless Helmsmanship prototype.
+chiefNavigatorPeerlessAvailable,ChiefNavigatorPeerlessView,"ChiefNavigatorPeerlessCMD hasTitle
+!ChiefNavigatorPeerlessCMD selected",PeerlessSkillsCMD open,,,Player-only Peerless Helmsmanship prototype.
+chiefNavigatorPeerlessChoice,ChiefNavigatorPeerlessOptions,ChiefNavigatorPeerlessCMD canSelect,SetOptionColor chief_navigator_peerless_select highlight,,0:chief_navigator_peerless_select:Make Helmsmanship Peerless.,Player-only Peerless Helmsmanship prototype.
+chiefNavigatorPeerlessRequirement,ChiefNavigatorPeerlessOptions,!ChiefNavigatorPeerlessCMD canSelect,,Elite Helmsmanship is required. Your distinction will wait until you have learned it.,,Player-only Peerless Helmsmanship prototype.
+chiefNavigatorPeerlessBack,ChiefNavigatorPeerlessOptions,,,,100:chief_navigator_peerless_back:Return to the Labors.,Player-only Peerless Helmsmanship prototype.
+chiefNavigatorPeerlessSelect,DialogOptionSelected,"$option == chief_navigator_peerless_select
+ChiefNavigatorPeerlessCMD canSelect","ChiefNavigatorPeerlessCMD select
+FireAll ChiefNavigatorPeerlessView",,,Player-only Peerless Helmsmanship prototype.
+chiefNavigatorPeerlessSelected,ChiefNavigatorPeerlessView,"ChiefNavigatorPeerlessCMD hasTitle
+ChiefNavigatorPeerlessCMD selected",PeerlessSkillsCMD open,,,Player-only Peerless Helmsmanship prototype.
+chiefNavigatorPeerlessReturn,DialogOptionSelected,$option == chief_navigator_peerless_back,FireAll ChiefNavigatorFobIthaca,,,Player-only Peerless Helmsmanship prototype.
+
 chiefNavigatorHegemonyBaseDenied,ChiefNavigatorHegemonyBaseDenied,,ShowDefaultVisual,"The Hegemony Expeditionary Fleet denies your ship entry to its forward base.","0:leave:Leave.",Occupied expedition base placeholder.
+chiefNavigatorMenelausLaborFourReportEating,DialogOptionSelected,$option == chief_navigator_menelaus_labor_four_report_eating,FireAll ChiefNavigatorMenelausLaborFourReportUncertain,,,"Supplied Labor IV debrief / Labor V dialogue, November 11, 2026."
+chiefNavigatorMenelausLaborFourReportDoing,DialogOptionSelected,$option == chief_navigator_menelaus_labor_four_report_doing,FireAll ChiefNavigatorMenelausLaborFourReportUncertain,,,"Supplied Labor IV debrief / Labor V dialogue, November 11, 2026."
+chiefNavigatorMenelausLaborFourReportUncertain,ChiefNavigatorMenelausLaborFourReportUncertain,,,"""Deconstructing. That is their modus operandi.""
+
+Menelaus highlights the surviving control assemblies within the ruined Ring. Beside them, corresponding structures illuminate within the great mass of Threat machinery surrounding it.
+
+""However. Observe what they have preserved.""","0:chief_navigator_menelaus_labor_four_report_learn:""They're adapting the Gate's technology?""
+10:chief_navigator_menelaus_labor_four_report_destroy:""Could they be trying to destroy it?""","Supplied Labor IV debrief / Labor V dialogue, November 11, 2026."
+chiefNavigatorMenelausLaborFourReportLearn,DialogOptionSelected,$option == chief_navigator_menelaus_labor_four_report_learn,,"""Precisely. The same process by which they have incorporated humanity's ship hulls into their own designs.""",0:chief_navigator_menelaus_labor_four_report_revelation:Continue.,"Supplied Labor IV debrief / Labor V dialogue, November 11, 2026."
+chiefNavigatorMenelausLaborFourReportDestroy,DialogOptionSelected,$option == chief_navigator_menelaus_labor_four_report_destroy,,"""No. Destruction alone cannot account for these structures. The Threat has also reproduced components of the Gate's control systems.""",0:chief_navigator_menelaus_labor_four_report_revelation:Continue.,"Supplied Labor IV debrief / Labor V dialogue, November 11, 2026."
+chiefNavigatorMenelausLaborFourReportRevelation,DialogOptionSelected,$option == chief_navigator_menelaus_labor_four_report_revelation,,"The ruined Ring fades, leaving only the machinery the Threat has constructed around it. Menelaus superimposes the original Domain schematics, and the resemblance becomes apparent.
+
+""They have reproduced much of the Gate's transit architecture. They need not comprehend its function to replicate it.""
+
+Half the projected transit topology resolves into a complete configuration. The remainder stays dark.
+
+""But they possess only one side of the topology. The missing parameters must come from another Gate.""",0:chief_navigator_auto_page_chief_navigator_menelaus_labor_four_report_revelation_2:Continue.,"Supplied Labor IV debrief / Labor V dialogue, November 11, 2026. Auto-paged 1/3."
+chiefNavigatorMenelausLaborFourReportRevelationPage2,DialogOptionSelected,$option == chief_navigator_auto_page_chief_navigator_menelaus_labor_four_report_revelation_2,,"Sinni has been watching the reconstruction in silence.
+""Then if they reach Ithaca's Gate—""
+
+""The threat will pour from every Gate."" Menelaus finishes. ""Humanity will die.""
+
+A priority alert interrupts the holodeck. The image of Ithaca's Gate recedes as new contact reports arrive from the outer approaches of Lacedaemon, followed by another series from a different direction.",0:chief_navigator_auto_page_chief_navigator_menelaus_labor_four_report_revelation_3:Continue.,Automatic runtime continuation 2/3 for chiefNavigatorMenelausLaborFourReportRevelation.
+chiefNavigatorMenelausLaborFourReportRevelationPage3,DialogOptionSelected,$option == chief_navigator_auto_page_chief_navigator_menelaus_labor_four_report_revelation_3,,"At first the returns are difficult to make sense of. Individual Threat signatures overlap until the tactical display begins grouping them into vast concentrations, each growing as more reports come in. Four formations emerge from the confusion, with numbers far exceeding anything Ithaca's patrols have encountered.
+
+One by one, the sensor reports change from tentative to confirmed.
+
+All four formations are approaching Ithaca's defensive perimeter.","0:chief_navigator_menelaus_labor_5_realization_3:""They're already here.""",Automatic runtime continuation 3/3 for chiefNavigatorMenelausLaborFourReportRevelation.
+chiefNavigatorMenelausLaborFiveLineGoodLuck,DialogOptionSelected,$option == chief_navigator_menelaus_labor_five_line_good_luck,FireAll ChiefNavigatorMenelausLaborFiveLine2,,,"Supplied Labor IV debrief / Labor V dialogue, November 11, 2026."
+chiefNavigatorMenelausLaborFiveLineJoke,DialogOptionSelected,$option == chief_navigator_menelaus_labor_five_line_joke,FireAll ChiefNavigatorMenelausLaborFiveLine2,,,"Supplied Labor IV debrief / Labor V dialogue, November 11, 2026."
+chiefNavigatorMenelausLaborFiveLineMolon,DialogOptionSelected,$option == chief_navigator_menelaus_labor_five_line_molon,FireAll ChiefNavigatorMenelausLaborFiveLine2,,,"Supplied Labor IV debrief / Labor V dialogue, November 11, 2026."
+chiefNavigatorMenelausLaborFiveLine2,ChiefNavigatorMenelausLaborFiveLine2,,,"Kleon does not slow down. His comm crackles again, and he accepts the call without taking his eyes off the corridor ahead.
+
+""Spartan Actual. Go.""
+
+An officer begins reading back readiness figures. Kleon listens for a moment before interrupting.
+
+""Confirm revival counts against ships ready to sortie. Get the reserve pilots into their fighters. I want ammunition and fuel reports from every Bastion. Have every commander acknowledge their manuever assignments before the Hostswarms cross the perimeter.""
+
+He turns at the next junction, already issuing another order, and disappears among the personnel hurrying toward their stations.
+
+Sinni watches him go. Then she looks toward you and, without saying anything more, reaches out to squeeze your hand.
+
+""Let's go.""",0:chief_navigator_menelaus_labor_five_begin:Begin the final Labor.,"Supplied Labor IV debrief / Labor V dialogue, November 11, 2026."

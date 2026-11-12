@@ -15,7 +15,7 @@ VAR friendly_guard_patrols = 0
 
 === menelaus_contact_labor_1_active ===
 
-Ashen Verge unfolds around Menelaus.
+Lacedaemon unfolds around Menelaus.
 
 The marker for the Odyssey Expanse still burns gold at the edge of the theater.
 
@@ -44,13 +44,13 @@ The marker for the Odyssey Expanse still burns gold at the edge of the theater.
     - else:
         Menelaus raises one hand.
 
-        A point of light appears at the edge of Ashen Verge, then flies off into hyperspace. The entire display changes to the Odyssey Expanse, where you first arrived in the Odyssey Sector.
+        A point of light appears at the edge of Lacedaemon, then flies off into hyperspace. The entire display changes to the Odyssey Expanse, where you first arrived in the Odyssey Sector.
 
         “Your first Labor.”
 
         The point of light splits into four, each flying toward a different part of the system.
 
-        “To recover the AD-87 Defense Module—the structure you know as the Drifting Wall—ripped from our macrocomplex defense ring by the Threat singularity known as ‘Gautama,’ I deployed four Guard Motherships to the area. Their task was to reverse the wall's momentum and return it to Ashen Verge for repairs.”
+        “To recover the AD-87 Defense Module—the structure you know as the Drifting Wall—ripped from our macrocomplex defense ring by the Threat singularity known as ‘Gautama,’ I deployed four Guard Motherships to the area. Their task was to reverse the wall's momentum and return it to Lacedaemon for repairs.”
 
         Four lights blink within the amber nebula. Menelaus enlarges the contacts.
 
@@ -219,7 +219,7 @@ For the first time since entering the holodeck... perhaps in her entire life, Si
 
 “Helen. Helen Argyros. A navigator for the Fourteenth.”
 
-Around Menelaus, Ashen Verge continues to move. Fleet markers crawl across the system. Numbers update. Drones move through the ring.
+Around Menelaus, Lacedaemon continues to move. Fleet markers crawl across the system. Numbers update. Drones move through the ring.
 
 Sinni watches him carefully.
 

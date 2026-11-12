@@ -29,7 +29,7 @@ public final class BoardingPodFighterAI implements ShipAIPlugin {
     private final ShipAPI ship;
     private final CombatEngineAPI engine;
     private final ShipwideAIFlags flags = new ShipwideAIFlags();
-    private final ShipAIConfig config = new ShipAIConfig();
+    private final ShipAIConfig config = new ShipAIConfig(null);
     private ShipAPI target;
     private float scanRemaining;
     private float orbitAngle;

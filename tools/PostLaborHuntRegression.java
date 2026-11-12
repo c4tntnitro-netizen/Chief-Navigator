@@ -128,7 +128,7 @@ public final class PostLaborHuntRegression {
             check(f.command("briefBudai", f.local), "Budai briefing advances its quest");
             check(f.command("briefBudai", f.local) && f.entries.size() == 2, "Reasking is safe");
             check(description(f.hunt("Budai")).contains("Avici"), "Budai location revealed");
-            check(!description(f.hunt("Ungaikyo")).contains("Last Light"), "Other quest stays unbriefed");
+            check(!description(f.hunt("Ungaikyo")).contains("Bouvo Olympus"), "Other quest stays unbriefed");
             check(!f.command("briefUngaikyo", f.local), "Wrong option cannot brief other target");
             check(!f.command("budaiAvailable", f.global), "Foreign local memory rejected");
             f.personFlags.clear();
@@ -142,7 +142,7 @@ public final class PostLaborHuntRegression {
             f.context = f.person;
             f.local.set("$option", "chief_navigator_ithaca_hunt_ungaikyo");
             check(f.command("briefUngaikyo", f.local), "Owned Ungaikyo question advances its hunt");
-            check(description(f.hunt("Ungaikyo")).contains("Last Light"), "Last Light revealed");
+            check(description(f.hunt("Ungaikyo")).contains("Bouvo Olympus"), "Bouvo Olympus revealed");
             check(f.hunt("Budai").getMapLocation(null) == null, "Missing system left missing");
             SectorEntityToken aviciCenter = mock(SectorEntityToken.class, (n, a) -> null);
             SectorEntityToken lastLightCenter = mock(SectorEntityToken.class, (n, a) -> null);
@@ -152,7 +152,7 @@ public final class PostLaborHuntRegression {
             check(f.hunt("Budai").getMapLocation(null) == aviciCenter,
                     "Budai briefing marks Avici, not a live fleet tracking coordinate");
             check(f.hunt("Ungaikyo").getMapLocation(null) == guardian,
-                    "Ungaikyo briefing marks the existing Guardian in Last Light");
+                    "Ungaikyo briefing marks the existing Guardian in Bouvo Olympus");
             f.flags.put(OdysseyPredatorScript.BUDAI_DEFEATED, true);
             PostLaborHuntIntel.sync(null);
             check(f.hunt("Budai").isEnding() && !f.hunt("Ungaikyo").isEnding(), "Independent kill progress");

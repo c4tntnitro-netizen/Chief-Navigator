@@ -70,7 +70,7 @@ public final class MenelausDoomIntel extends BaseIntelPlugin {
         info.addPara("Menelaus has supplied the coordinates of the TTS "
                 + "Penumbra, a salvageable Doom-class phase cruiser adrift "
                 + "in Sanzu. Recovering it is optional, but its phase cloak "
-                + "may make the Devoured Reach sensor insertion easier.", 10f);
+                + "may make the Anatolia sensor insertion easier.", 10f);
         if (recovered || isEnding() || isEnded()) {
             info.addPara("The TTS Penumbra has been recovered.", 10f,
                     Misc.getPositiveHighlightColor(), "recovered");

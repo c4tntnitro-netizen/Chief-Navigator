@@ -13,9 +13,11 @@ import com.fs.starfarer.api.combat.ShipAPI.HullSize;
 import com.fs.starfarer.api.combat.ShipHullSpecAPI.ShipTypeHints;
 import com.fs.starfarer.api.fleet.FleetMemberAPI;
 import com.fs.starfarer.api.fleet.RepairTrackerAPI;
+import com.fs.starfarer.api.fleet.CrewCompositionAPI;
 import com.fs.starfarer.api.graphics.SpriteAPI;
 import com.fs.starfarer.api.impl.campaign.ids.Personalities;
 import com.fs.starfarer.api.impl.combat.threat.SwarmLauncherEffect;
+import com.fs.starfarer.api.impl.combat.CRPluginImpl;
 import com.fs.starfarer.api.util.DynamicStatsAPI;
 import java.awt.Color;
 import java.lang.reflect.Constructor;
@@ -152,7 +154,8 @@ public final class UngaikyoPopulatedMirrorRegression {
             if (name.equals("getDynamic")) return dynamic;
             if (name.equals("getEntity")) return entity;
             return stats.computeIfAbsent(name,
-                    ignored -> new MutableStat(name.equals("getZeroFluxSpeedBoost") ? 0f : 1f));
+                    ignored -> new MutableStat(name.equals("getZeroFluxSpeedBoost")
+                            || name.equals("getMaxCombatReadiness") ? 0f : 1f));
         });
     }
 
@@ -166,14 +169,22 @@ public final class UngaikyoPopulatedMirrorRegression {
         String captainPersonality = Personalities.STEADY;
         int owner;
         float cr = 0.3f;
+        float crew;
+        final CrewCompositionAPI staffing = mock(CrewCompositionAPI.class, (method, args) -> {
+            if (method.equals("getCrew")) return crew;
+            if (method.equals("addCrew")) crew += (Float) args[0];
+            return null;
+        });
         final PersonAPI captain = mock(PersonAPI.class, (method, args) -> {
             if (method.equals("getPersonality")) return captainPersonality;
             if (method.equals("setPersonality")) captainPersonality = (String) args[0];
             return null;
         });
         final RepairTrackerAPI repair = mock(RepairTrackerAPI.class, (method, args) -> {
-            if (method.equals("getMaxCR")) return 0.7f;
-            if (method.equals("getCR")) return cr;
+            if (method.equals("getMaxCR")) return Math.max(0f,
+                    Math.min(1f, stats.api.getMaxCombatReadiness().getModifiedValue()));
+            if (method.equals("getCR")) return cr * crewFraction();
+            if (method.equals("getBaseCR")) return cr;
             if (method.equals("setCR")) cr = (Float) args[0];
             return null;
         });
@@ -194,6 +205,10 @@ public final class UngaikyoPopulatedMirrorRegression {
                     case "getDeploymentPointsCost": return dp;
                     case "getStats": return stats.api;
                     case "getRepairTracker": return repair;
+                    case "getCrewComposition": return staffing;
+                    case "getMinCrew": return minimumCrew();
+                    case "getCrewFraction": return crewFraction();
+                    case "updateStats": refreshReadiness(); break;
                     case "getCaptain": return captain;
                     case "getOwner": return owner;
                     case "setOwner": owner = (Integer) args[0]; break;
@@ -202,8 +217,12 @@ public final class UngaikyoPopulatedMirrorRegression {
                 }
                 return null;
             });
+            refreshReadiness();
             fixture.members.put(api, this);
         }
+        float minimumCrew() { return variant.size == HullSize.FIGHTER ? 0f : 20f; }
+        float crewFraction() { return minimumCrew() == 0f ? 1f : Math.min(1f, crew / minimumCrew()); }
+        void refreshReadiness() { new CRPluginImpl().applyMaxCRCrewModifiers(api); }
     }
 
     private static final class Wing {
@@ -232,10 +251,11 @@ public final class UngaikyoPopulatedMirrorRegression {
         boolean alive = true, expired, fighter, module, drone, locked, holdFire, phased;
         boolean unreadableWing, unreadableHull;
         float alpha = 1f;
+        float currentCR = 0.2f, deploymentCR = 0.2f;
         CollisionClass collision = CollisionClass.SHIP;
         ShipAPI parent, droneSource;
         Wing wing;
-        ShipAIConfig aiConfig = new ShipAIConfig();
+        ShipAIConfig aiConfig = new ShipAIConfig(null);
         int defaultAiBindings, circumstanceEvaluations, huntOrders, mutations;
         ShipAIPlugin currentAi;
         final ShipAIPlugin ai = mock(ShipAIPlugin.class, (method, args) -> {
@@ -291,6 +311,10 @@ public final class UngaikyoPopulatedMirrorRegression {
                     case "getMaxSpeedWithoutBoost": return 100f;
                     case "getFacing": return 90f;
                     case "getMutableStats": return stats.api;
+                    case "getCurrentCR": return currentCR;
+                    case "getCRAtDeployment": return deploymentCR;
+                    case "setCurrentCR": currentCR = (Float) args[0]; break;
+                    case "setCRAtDeployment": deploymentCR = (Float) args[0]; break;
                     case "getArmorGrid": return armor;
                     case "getAllWeapons", "getWeaponGroupsCopy": return Collections.emptyList();
                     case "getShipAI": return currentAi;
@@ -556,6 +580,15 @@ public final class UngaikyoPopulatedMirrorRegression {
             for (Ship ship : group) check(!inPlay.contains(ship.api),
                     message + ": " + ship.member.id);
         }
+        void assertReadiness(Ship ship) {
+            float maximum = ship.member.repair.getMaxCR();
+            check(Math.abs(maximum - 0.7f) < 0.00001f
+                            && Math.abs(ship.member.repair.getCR() - maximum) < 0.00001f
+                            && Math.abs(ship.currentCR - maximum) < 0.00001f
+                            && Math.abs(ship.deploymentCR - maximum) < 0.00001f,
+                    "Generated root/module must reach its normal staffed member/current/deployment CR: " + ship.member.id);
+            for (ShipAPI child : ship.children) assertReadiness(ships.get(child));
+        }
     }
 
     private static void populatedRepeatedLifecycle() throws Exception {
@@ -596,6 +629,10 @@ public final class UngaikyoPopulatedMirrorRegression {
         Ship constructingOnslaught = f.ships.get(field(
                 field(f.slots().get(onslaught.id), "construction"), "mirror"));
         Ship openingDetachedVambrace = f.ships.get(constructingOnslaught.children.get(0));
+        f.assertReadiness(constructingOnslaught);
+        // Completion must restore readiness after construction, not only at spawn.
+        constructingOnslaught.currentCR = constructingOnslaught.deploymentCR = 0.2f;
+        openingDetachedVambrace.currentCR = openingDetachedVambrace.deploymentCR = 0.2f;
         constructingOnslaught.children.remove(openingDetachedVambrace.api);
         openingDetachedVambrace.parent = null;
         Ship transientSwarm = f.generated.stream()
@@ -613,9 +650,11 @@ public final class UngaikyoPopulatedMirrorRegression {
                         && !openingDetachedVambrace.locked && !openingDetachedVambrace.holdFire
                         && !openingDetachedVambrace.phased,
                 "A live module detached during construction must retain its custom AI and receive one handoff");
+        f.assertReadiness(openingDetachedVambrace);
         for (String id : f.slots().keySet()) {
             f.assertHealthy(id);
             Ship root = f.active(id);
+            f.assertReadiness(root);
             check(root != null && root.owner == 1 && !root.locked && !root.holdFire
                             && !root.phased && root.currentAi == root.ai
                             && root.defaultAiBindings == (id.equals("player-champion") ? 1 : 0)
@@ -681,6 +720,7 @@ public final class UngaikyoPopulatedMirrorRegression {
             f.assertRemoved(retired, "Destroyed parent left a detached vambrace/drone in play");
             f.advance(26f);
             Ship rebuilt = f.active(onslaught.id);
+            f.assertReadiness(rebuilt);
             check(rebuilt != null && rebuilt != root && rebuilt.huntOrders == 1
                             && rebuilt.member.variant.weapons.equals(onslaught.variant.weapons),
                     "The same selected source must rebuild through real timing at least twice");
@@ -739,7 +779,8 @@ public final class UngaikyoPopulatedMirrorRegression {
             Member source = f.members.get(member);
             check(source.variant.tags.isEmpty() && source.variant.permaMods.isEmpty()
                             && source.owner == 0 && Personalities.STEADY.equals(source.personality)
-                            && Personalities.STEADY.equals(source.captainPersonality),
+                            && Personalities.STEADY.equals(source.captainPersonality)
+                            && source.crew == 0f && source.cr == 0.3f,
                     "Snapshot/construction mutated original campaign member " + source.id);
             for (Variant module : source.variant.modules.values()) {
                 check(module.tags.isEmpty() && module.permaMods.isEmpty(),
@@ -828,7 +869,7 @@ public final class UngaikyoPopulatedMirrorRegression {
             populatedCivilianFallback();
             System.out.println("PASS: real populated mirror controller on a mocked combat lifecycle; "
                     + "military/civilian selection, root/nested-module exclusions, native construction smoke/swarms, carriers/modules, "
-                    + "two rebuilds, detached vambraces/drones/shards, transformed root, retrying collapse "
+                    + "staffed maximum CR at opening/completion and two rebuilds, detached vambraces/drones/shards, transformed root, retrying collapse "
                     + "and untouched player/native enemies.");
         } finally {
             Global.setSettings(settings);

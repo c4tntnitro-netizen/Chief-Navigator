@@ -1,3 +1,5 @@
+# Historical inactive Fabricator artwork. Current Overseer art is prepared by
+# tools/build_ungaikyo_overseer.ps1 from its archived ImageGen master.
 $ErrorActionPreference = "Stop"
 
 $modRoot = Split-Path $PSScriptRoot -Parent

@@ -376,8 +376,7 @@ public final class SinniOfficerSkillsRegression {
                     "Elite effects require purchased skill level 2");
             // Supply the native script cache without starting Starsector's campaign loader.
             @SuppressWarnings("unchecked")
-            Map<String, Class<?>> scriptCache = (Map<String, Class<?>>) Class.forName(
-                    "com.fs.starfarer.loading.scripts.ScriptStore").getField("void").get(null);
+            Map<String, Class<?>> scriptCache = (Map<String, Class<?>>) java.util.Arrays.stream(Class.forName("com.fs.starfarer.loading.scripts.ScriptStore").getFields()).filter(cacheField -> cacheField.getType() == java.util.Map.class).findFirst().orElseThrow().get(null);
             for (int group = 0; group < groups.length(); group++) {
                 JSONArray effects = groups.getJSONObject(group).getJSONArray("effects");
                 for (int index = 0; index < effects.length(); index++) {

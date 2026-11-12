@@ -16,6 +16,7 @@ import com.fs.starfarer.api.campaign.PlanetAPI;
 import com.fs.starfarer.api.campaign.SectorEntityToken;
 import com.fs.starfarer.api.campaign.SpecialItemData;
 import com.fs.starfarer.api.campaign.StarSystemAPI;
+import com.fs.starfarer.api.campaign.ai.FleetAssignmentDataAPI;
 import com.fs.starfarer.api.campaign.rules.MemoryAPI;
 import com.fs.starfarer.api.combat.ShipAPI.HullSize;
 import com.fs.starfarer.api.combat.ShipVariantAPI;
@@ -129,6 +130,8 @@ public final class OdysseyExpanseSystem {
             "chief_navigator_devoured_ring";
     private static final String AUTHORED_SYSTEM_MARKER =
             "$chief_navigator_odyssey_authored_system_v1";
+    private static final String SYSTEM_DISPLAY_NAMES_V1 =
+            "$chief_navigator_system_display_names_v1";
     private static final String[] HOLLOW_WORLD_IDS = {
         "chief_navigator_devoured_mara",
         "chief_navigator_devoured_vey",
@@ -220,7 +223,7 @@ public final class OdysseyExpanseSystem {
         Factions.INDEPENDENT
     };
     // The serialized custom-entity type keeps its original name so older saves
-    // can load it before the obsolete Ashen Verge anchor is migrated.
+    // can load it before the obsolete Lacedaemon anchor is migrated.
     private static final String MESSINA_BLACK_CLOUD_TYPE =
             "chief_navigator_ashen_verge_clouds";
     private static final String MESSINA_BLACK_CLOUD_ID =
@@ -611,9 +614,9 @@ public final class OdysseyExpanseSystem {
     private static final String[] PLACEHOLDER_NAMES = {
         "Avici",
         "Sanzu",
-        "Ashen Verge",
-        "Last Light",
-        "Devoured Reach"
+        "Lacedaemon",
+        "Bouvo Olympus",
+        "Anatolia"
     };
     /**
      * Hyperspace offsets from the center of the Odyssey Sector pocket.
@@ -701,6 +704,97 @@ public final class OdysseyExpanseSystem {
         if (expanse != null) repairClusterJumpPointSpacing(expanse);
     }
 
+    /** Explicit naming patch: update labels on existing owned objects only. */
+    public static void renameAuthoredSystemLabels() {
+        renameAuthoredSystemLabels(ASHEN_VERGE_ID, "Ashen Verge", "Lacedaemon");
+        renameAuthoredSystemLabels(DEVOURED_REACH_ID, "Devoured Reach", "Anatolia");
+        renameAuthoredSystemLabels(LAST_LIGHT_ID, "Last Light", "Bouvo Olympus");
+    }
+
+    private static void renameAuthoredSystemLabels(
+            String id, String oldName, String newName) {
+        StarSystemAPI system = findSystem(id);
+        if (system == null || system.getMemoryWithoutUpdate().getBoolean(
+                SYSTEM_DISPLAY_NAMES_V1)) return;
+
+        String originalName = system.getName();
+        if (oldName.equals(system.getBaseName())) {
+            // Native setBaseName also changes the full name. Preserve its
+            // authored suffix (or a player's custom display name) below.
+            system.setBaseName(newName);
+        }
+        if (originalName != null) {
+            String renamed = originalName.replace(oldName, newName);
+            if (!renamed.equals(system.getName())) system.setName(renamed);
+        }
+        PlanetAPI star = system.getStar();
+        if (star != null && star.getContainingLocation() != system) star = null;
+        renameEntityLabel(star, oldName, newName);
+        SectorEntityToken center = system.getCenter();
+        if (center != null && center.getContainingLocation() == system) {
+            renameEntityLabel(center, oldName, newName);
+        }
+
+        for (CampaignFleetAPI fleet : system.getFleets()) {
+            if (!OdysseyPredatorScript.isAuthoredMobileDerelict(fleet)
+                    && !OdysseyPredatorScript.isAuthoredStarvingThreatFleet(fleet)) continue;
+            renameEntityLabel(fleet, oldName, newName);
+            if (fleet.getAI() == null) continue;
+            for (FleetAssignmentDataAPI assignment : fleet.getAI().getAssignmentsCopy()) {
+                String text = assignment.getActionText();
+                if (text != null && text.contains(oldName)) {
+                    assignment.setActionText(text.replace(oldName, newName));
+                }
+            }
+        }
+
+        List<JumpPointAPI> localEndpoints = new ArrayList<JumpPointAPI>();
+        for (int index = 0; index < getAuthoredHyperspaceEndpointCount(id); index++) {
+            JumpPointAPI local = findExistingClusterLocalEndpoint(system, index);
+            if (local == null || local.getContainingLocation() != system) continue;
+            renameEntityLabel(local, oldName, newName);
+            localEndpoints.add(local);
+        }
+
+        // Hyperspace bookkeeping lists are transient. Match serialized routes
+        // by their actual destination identities, without rebuilding anything.
+        LocationAPI hyperspace = Global.getSector().getHyperspace();
+        if (hyperspace == null) return;
+        SectorEntityToken anchor = system.getHyperspaceAnchor();
+        if (anchor != null && anchor.getContainingLocation() == hyperspace) {
+            renameEntityLabel(anchor, oldName, newName);
+        }
+        for (SectorEntityToken entity : hyperspace.getAllEntities()) {
+            if (entity.getContainingLocation() != hyperspace) continue;
+            if (entity instanceof NascentGravityWellAPI
+                    && star != null
+                    && ((NascentGravityWellAPI) entity).getTarget() == star) {
+                renameEntityLabel(entity, oldName, newName);
+            }
+            if (!(entity instanceof JumpPointAPI)) continue;
+            JumpPointAPI jump = (JumpPointAPI) entity;
+            boolean linked = false;
+            for (JumpPointAPI.JumpDestination destination : jump.getDestinations()) {
+                if (destination == null
+                        || !localEndpoints.contains(destination.getDestination())) continue;
+                linked = true;
+                String label = destination.getLabelInInteractionDialog();
+                if (label != null && label.contains(oldName)) {
+                    destination.setLabelInInteractionDialog(label.replace(oldName, newName));
+                }
+            }
+            if (linked) renameEntityLabel(jump, oldName, newName);
+        }
+        system.getMemoryWithoutUpdate().set(SYSTEM_DISPLAY_NAMES_V1, true);
+    }
+
+    private static void renameEntityLabel(
+            SectorEntityToken entity, String oldName, String newName) {
+        if (entity == null || entity.getName() == null) return;
+        String name = entity.getName();
+        if (name.contains(oldName)) entity.setName(name.replace(oldName, newName));
+    }
+
     /**
      * Uses Starsector's native location-music contract. This survives combat
      * and is also honored by replacement MusicPlayerPlugin implementations.
@@ -719,6 +813,8 @@ public final class OdysseyExpanseSystem {
             } else if (MESSINA_ID.equals(id)) {
                 setSystemMusic(system,
                         chiefnavigator.campaign.AviciMusicScript.MUSIC_ID);
+            } else if (ASHEN_VERGE_ID.equals(id) && !MenelausTrial.isFinalLaborActive()) {
+                setSystemMusic(system, FinalLaborMusic.getExplorationMusicId());
             }
         }
     }
@@ -1007,7 +1103,7 @@ public final class OdysseyExpanseSystem {
         return systems;
     }
 
-    /** Populates every ordinary destination while leaving Devoured Reach bare. */
+    /** Populates every ordinary destination while leaving Anatolia bare. */
     private static void ensureScatteredSystemContent(
             StarSystemAPI expanse,
             List<StarSystemAPI> clusterSystems) {
@@ -1159,7 +1255,7 @@ public final class OdysseyExpanseSystem {
                 GENERATED_SCATTERED_SALVAGE, true);
     }
 
-    /** Adds Last Light's one-time Guardian wreck, unlocked by Ungaikyo's death. */
+    /** Adds Bouvo Olympus's one-time Guardian wreck, unlocked by Ungaikyo's death. */
     private static void ensureLastLightGuardianWreck(StarSystemAPI system) {
         if (system == null || system.getMemoryWithoutUpdate().getBoolean(
                 GENERATED_LAST_LIGHT_GUARDIAN_WRECK)) {
@@ -1337,12 +1433,12 @@ public final class OdysseyExpanseSystem {
     private static StarSystemAPI ensureDevouredReachSystem(float[] offset) {
         StarSystemAPI system = findSystem(DEVOURED_REACH_ID);
         if (system == null) {
-            system = Global.getSector().createStarSystem("Devoured Reach");
+            system = Global.getSector().createStarSystem("Anatolia");
         }
         if (system.getCenter() == null) system.initNonStarCenter();
 
         configureClusterSystem(
-                system, DEVOURED_REACH_ID, "Devoured Reach", offset);
+                system, DEVOURED_REACH_ID, "Anatolia", offset);
         system.setMapGridWidthOverride(24000f);
         system.setMapGridHeightOverride(22000f);
         system.setHasSystemwideNebula(false);
@@ -1557,17 +1653,17 @@ public final class OdysseyExpanseSystem {
     private static StarSystemAPI ensureAshenVergeSystem(float[] offset) {
         StarSystemAPI system = findSystem(ASHEN_VERGE_ID);
         if (system == null) {
-            system = Global.getSector().createStarSystem("Ashen Verge");
+            system = Global.getSector().createStarSystem("Lacedaemon");
         }
 
         configureClusterSystem(
-                system, ASHEN_VERGE_ID, "Ashen Verge", offset);
+                system, ASHEN_VERGE_ID, "Lacedaemon", offset);
         system.setMapGridWidthOverride(24000f);
         system.setMapGridHeightOverride(19000f);
         system.setHasSystemwideNebula(true);
         system.setBackgroundTextureFilename(ASHEN_VERGE_BACKGROUND);
         system.setLightColor(new Color(255, 214, 176));
-        ensureAshenVergeSun(system, ASHEN_VERGE_ID, "Ashen Verge");
+        ensureAshenVergeSun(system, ASHEN_VERGE_ID, "Lacedaemon");
         removeEntityById(system, LEGACY_ASHEN_VERGE_CLOUD_ID);
         ensureAshenVergeNebula(system);
         ensureFobIthaca(system);
@@ -2006,7 +2102,7 @@ public final class OdysseyExpanseSystem {
         // neutral/hostile so nearby battles put it on the player's side.
         ithaca.setFaction(Factions.PLAYER);
         // Close enough that the complete installation enters the default
-        // arrival view, without overlapping the Ashen Verge primary.
+        // arrival view, without overlapping the Lacedaemon primary.
         ithaca.setFixedLocation(4500f, 0f);
         ithaca.setFacing(0f);
         // The central body and three colocated bastion tokens are interactive.
@@ -2835,7 +2931,7 @@ public final class OdysseyExpanseSystem {
         system.getMemoryWithoutUpdate().set(GENERATED_WHITE_DWARF, true);
     }
 
-    /** Creates the bright Ashen Verge primary and migrates its old dwarfs. */
+    /** Creates the bright Lacedaemon primary and migrates its old dwarfs. */
     private static void ensureAshenVergeSun(
             StarSystemAPI system,
             String id,
@@ -2866,7 +2962,7 @@ public final class OdysseyExpanseSystem {
                 ASHEN_VERGE_NEBULA_ID);
         if (idMatch != null && !(idMatch instanceof CampaignTerrainAPI)) {
             Global.getLogger(OdysseyExpanseSystem.class).error(
-                    "Ashen Verge nebula ID contains incompatible serialized "
+                    "Lacedaemon nebula ID contains incompatible serialized "
                             + "state; refusing replacement");
             system.getMemoryWithoutUpdate().set(
                     GENERATED_ASHEN_VERGE_NEBULA_V1, true);
@@ -2914,7 +3010,7 @@ public final class OdysseyExpanseSystem {
                 StarAge.OLD);
         if (!(created instanceof CampaignTerrainAPI)) {
             Global.getLogger(OdysseyExpanseSystem.class).error(
-                    "Could not create the authored Ashen Verge nebula");
+                    "Could not create the authored Lacedaemon nebula");
             return;
         }
         nebula = (CampaignTerrainAPI) created;
@@ -3736,7 +3832,7 @@ public final class OdysseyExpanseSystem {
             return ensureLocalPassage(
                     system,
                     CLUSTER_SECONDARY_LOCAL_PREFIX + id,
-                    "Ashen Verge Fringe Jump-point",
+                    "Lacedaemon Fringe Jump-point",
                     -11200f,
                     -2500f);
         }
@@ -3752,7 +3848,7 @@ public final class OdysseyExpanseSystem {
             return ensureLocalPassage(
                     system,
                     CLUSTER_SECONDARY_LOCAL_PREFIX + id,
-                    "Devoured Reach Outer Jump-point",
+                    "Anatolia Outer Jump-point",
                     -9700f,
                     -2400f);
         }
@@ -3760,7 +3856,7 @@ public final class OdysseyExpanseSystem {
             return ensureLocalPassage(
                     system,
                     CLUSTER_SECONDARY_LOCAL_PREFIX + id,
-                    "Last Light Inner Jump-point",
+                    "Bouvo Olympus Inner Jump-point",
                     -8200f,
                     -4100f);
         }
@@ -3774,13 +3870,13 @@ public final class OdysseyExpanseSystem {
             return "Sanzu Downstream Jump-point";
         }
         if (ASHEN_VERGE_ID.equals(id)) {
-            return "Ashen Verge Fringe Jump-point";
+            return "Lacedaemon Fringe Jump-point";
         }
         if (MESSINA_ID.equals(id)) return "Avici Outer Jump-point";
         if (DEVOURED_REACH_ID.equals(id)) {
-            return "Devoured Reach Outer Jump-point";
+            return "Anatolia Outer Jump-point";
         }
-        return "Last Light Inner Jump-point";
+        return "Bouvo Olympus Inner Jump-point";
     }
 
     private static JumpPointAPI ensureClusterTertiaryEndpoint(
@@ -3806,7 +3902,7 @@ public final class OdysseyExpanseSystem {
             return ensureLocalPassage(
                     system,
                     CLUSTER_TERTIARY_LOCAL_PREFIX + id,
-                    "Ashen Verge Inner Jump-point",
+                    "Lacedaemon Inner Jump-point",
                     7800f,
                     8800f);
         }
@@ -3822,7 +3918,7 @@ public final class OdysseyExpanseSystem {
             return ensureLocalPassage(
                     system,
                     CLUSTER_TERTIARY_LOCAL_PREFIX + id,
-                    "Devoured Reach Inner Jump-point",
+                    "Anatolia Inner Jump-point",
                     7600f,
                     -7200f);
         }
@@ -3830,7 +3926,7 @@ public final class OdysseyExpanseSystem {
             return ensureLocalPassage(
                     system,
                     CLUSTER_TERTIARY_LOCAL_PREFIX + id,
-                    "Last Light Fringe Jump-point",
+                    "Bouvo Olympus Fringe Jump-point",
                     9100f,
                     1800f);
         }
@@ -3844,13 +3940,13 @@ public final class OdysseyExpanseSystem {
             return "Sanzu Crosscurrent Jump-point";
         }
         if (ASHEN_VERGE_ID.equals(id)) {
-            return "Ashen Verge Inner Jump-point";
+            return "Lacedaemon Inner Jump-point";
         }
         if (MESSINA_ID.equals(id)) return "Avici Polar Jump-point";
         if (DEVOURED_REACH_ID.equals(id)) {
-            return "Devoured Reach Inner Jump-point";
+            return "Anatolia Inner Jump-point";
         }
-        return "Last Light Fringe Jump-point";
+        return "Bouvo Olympus Fringe Jump-point";
     }
 
     private static JumpPointAPI ensureClusterLocalEndpoint(
@@ -3882,7 +3978,7 @@ public final class OdysseyExpanseSystem {
             return ensureLocalPassage(
                     system,
                     ASHEN_VERGE_PASSAGE_ID,
-                    "Ashen Verge Jump-point",
+                    "Lacedaemon Jump-point",
                     -2500f,
                     1400f);
         }
@@ -3890,7 +3986,7 @@ public final class OdysseyExpanseSystem {
             local = ensureLocalPassage(
                     system,
                     CLUSTER_JUMP_HYPER_PREFIX + id + "_local",
-                    "Devoured Reach Threshold",
+                    "Anatolia Threshold",
                     1800f,
                     10200f);
             local.clearDestinations();
@@ -3900,7 +3996,7 @@ public final class OdysseyExpanseSystem {
             local = ensureLocalPassage(
                     system,
                     LAST_LIGHT_LOCAL_JUMP_ID,
-                    "Last Light Jump-point",
+                    "Bouvo Olympus Jump-point",
                     -2300f,
                     8900f);
             local.clearDestinations();
@@ -4208,7 +4304,7 @@ public final class OdysseyExpanseSystem {
         return findSystem(id);
     }
 
-    /** Stable lookup for one of Devoured Reach's three hollow worlds. */
+    /** Stable lookup for one of Anatolia's three hollow worlds. */
     public static SectorEntityToken getDevouredWorld(int index) {
         if (index < 0 || index >= HOLLOW_WORLD_IDS.length) return null;
         StarSystemAPI reach = findSystem(DEVOURED_REACH_ID);
@@ -4268,7 +4364,7 @@ public final class OdysseyExpanseSystem {
                 && DEVOURED_RING_TYPE.equals(entity.getCustomEntityType());
     }
 
-    /** True only for Last Light's authored recoverable Guardian wreck. */
+    /** True only for Bouvo Olympus's authored recoverable Guardian wreck. */
     public static boolean isLastLightGuardianWreck(
             SectorEntityToken entity) {
         if (entity == null
@@ -4316,9 +4412,10 @@ public final class OdysseyExpanseSystem {
     }
 
     private static Vector2f getExpanseLocation() {
+        Vector2f center = getInitialHoleCenter();
         return new Vector2f(
-                getHoleCenterX() + ENTRY_OFFSET_X,
-                getHoleCenterY() + ENTRY_OFFSET_Y);
+                center.x + ENTRY_OFFSET_X,
+                center.y + ENTRY_OFFSET_Y);
     }
 
     private static float getHoleCenterX() {
@@ -4331,6 +4428,18 @@ public final class OdysseyExpanseSystem {
 
     /** Positions Alpha Odyssey beyond the vanilla map in the remote southeast. */
     private static Vector2f getHoleCenter() {
+        // A saved pocket belongs to its saved system coordinates. Map mods may
+        // change global dimensions between sessions; do not move the boundary
+        // away from the already serialized worlds, terrain, and jump points.
+        StarSystemAPI existing = Global.getSector() == null ? null : findExisting();
+        if (existing != null) {
+            return new Vector2f(existing.getLocation().x - ENTRY_OFFSET_X,
+                    existing.getLocation().y - ENTRY_OFFSET_Y);
+        }
+        return getInitialHoleCenter();
+    }
+
+    private static Vector2f getInitialHoleCenter() {
         return new Vector2f(
                 Global.getSettings().getFloat("sectorWidth")
                         * REMOTE_HOLE_X_FACTOR,

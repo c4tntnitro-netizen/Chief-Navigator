@@ -35,9 +35,9 @@ Kleon brings up Avici on his tactical slate.
 
 === kleon_hunt_ungaikyo ===
 
-Kleon marks Last Light.
+Kleon marks Bouvo Olympus.
 
-"Telemetry revealed what Gautama actually is. It's a web. The strands are just nanometers wide but they span light years. We think we've found the central processing unit of this web here in Last Light. Destroy it, and put an end to this nightmare."
+"Telemetry revealed what Gautama actually is. It's a web. The strands are just nanometers wide but they span light years. We think we've found the central processing unit of this web here in Bouvo Olympus. Destroy it, and put an end to this nightmare."
 
 -> kleon_hunts
 
