@@ -5,7 +5,7 @@
   "utility": "false",
   "version": "0.6.0",
   "description": "An expedition quest about following master navigator Sinni through the Abyss to the lost Domain macrobase FOB Ithaca.",
-  "gameVersion": "0.98a",
+  "gameVersion": "0.98.5a-RC4",
   "jars": ["jars/ChiefNavigator.jar"],
   "modPlugin": "chiefnavigator.ChiefNavigatorModPlugin",
   "dependencies": [
