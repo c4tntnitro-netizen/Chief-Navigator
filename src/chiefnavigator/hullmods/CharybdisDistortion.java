@@ -1,19 +1,16 @@
 package chiefnavigator.hullmods;
 
 import com.fs.starfarer.api.Global;
+import com.fs.starfarer.api.combat.BaseEveryFrameCombatPlugin;
 import com.fs.starfarer.api.combat.BeamAPI;
 import com.fs.starfarer.api.combat.BoundsAPI;
 import com.fs.starfarer.api.combat.CombatEngineAPI;
 import com.fs.starfarer.api.combat.CombatEntityAPI;
-import com.fs.starfarer.api.combat.CombatAssignmentType;
-import com.fs.starfarer.api.combat.CombatFleetManagerAPI;
-import com.fs.starfarer.api.combat.CombatTaskManagerAPI;
 import com.fs.starfarer.api.combat.DamageAPI;
 import com.fs.starfarer.api.combat.DamageType;
 import com.fs.starfarer.api.combat.DamagingProjectileAPI;
 import com.fs.starfarer.api.combat.MutableShipStatsAPI;
 import com.fs.starfarer.api.combat.ShipAPI;
-import com.fs.starfarer.api.combat.ShipAIPlugin;
 import com.fs.starfarer.api.combat.ShipCommand;
 import com.fs.starfarer.api.combat.ShipHullSpecAPI;
 import com.fs.starfarer.api.combat.ShipSystemAPI;
@@ -29,13 +26,14 @@ import com.fs.starfarer.api.impl.combat.dweller.DwellerShipPart;
 import com.fs.starfarer.api.impl.combat.dweller.DwellerShroud;
 import com.fs.starfarer.api.impl.combat.dweller.ShroudedMawShipCreator;
 import com.fs.starfarer.api.loading.WeaponSlotAPI;
+import com.fs.starfarer.api.input.InputEventAPI;
 import com.fs.starfarer.api.util.IntervalUtil;
 import com.fs.starfarer.api.util.Misc;
 import chiefnavigator.quest.BudaiMusic;
-import chiefnavigator.ai.GuardDroneAI;
 import chiefnavigator.systems.BudaiConvulsiveLungeSystem;
 import java.awt.Color;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Random;
 import java.util.Set;
 import org.dark.shaders.distortion.DistortionShader;
@@ -60,10 +58,6 @@ public final class CharybdisDistortion extends DwellerHullmod {
             "chief_navigator_charybdis_bubble_expansion";
     private static final String SMOKE_KEY =
             "chief_navigator_charybdis_enrage_smoke";
-    private static final String RETREAT_GUARD_KEY =
-            "chief_navigator_charybdis_retreat_guard";
-    private static final String FEARLESS_AI_KEY =
-            "chief_navigator_charybdis_fearless_ai";
     private static final String SLOW_ID_PREFIX =
             "chief_navigator_charybdis_slow_";
     private static final String DAMAGE_REDUCTION_ID =
@@ -164,10 +158,7 @@ public final class CharybdisDistortion extends DwellerHullmod {
         }
 
         if (!ship.isAlive() || ship.isHulk() || !engine.isEntityInPlay(ship)) {
-            clearEnrage(ship);
-            restoreRetreatGuard(ship);
-            removeDistortion(ship);
-            clearSlowdown(engine, ship);
+            clearField(engine, ship);
             return;
         }
 
@@ -180,7 +171,6 @@ public final class CharybdisDistortion extends DwellerHullmod {
                     && !ship.getCustomData().containsKey(ENRAGED_KEY)) {
                 beginEnrage(ship);
             }
-            preventRetreat(engine, ship);
             // Advance an existing expansion before the sequence can start a new
             // one, so the fourth completion begins at the exact current radius.
             advanceBubbleExpansion(engine, ship, amount);
@@ -202,68 +192,45 @@ public final class CharybdisDistortion extends DwellerHullmod {
             ripple.setLifetime(DISTORTION_LIFETIME);
             DistortionShader.addDistortion(ripple);
             ship.setCustomData(DISTORTION_KEY, ripple);
+            // Hullmod callbacks can stop when the ship dies or leaves play.
+            // Keep cleanup on the combat engine's independent frame loop.
+            engine.addPlugin(new DistortionCleanup(engine, ship, ripple));
         }
         maintain(ripple, ship, radius);
     }
 
-    private static void preventRetreat(CombatEngineAPI engine, ShipAPI ship) {
-        boolean reevaluate = ship.isRetreating();
-        if (reevaluate) {
-            ship.setRetreating(false, false);
-        }
-        ShipAIPlugin ai = ship.getShipAI();
-        if (ai != null && ai.getConfig() != null
-                && ship.getCustomData().get(FEARLESS_AI_KEY) != ai) {
-            GuardDroneAI.configureFearless(ai.getConfig());
-            ship.setCustomData(FEARLESS_AI_KEY, ai);
-            reevaluate = true;
-        }
-
-        CombatFleetManagerAPI manager = engine.getFleetManager(ship.getOwner());
-        if (manager != null) {
-            CombatTaskManagerAPI tasks = manager.getTaskManager(ship.isAlly());
-            Object cached = ship.getCustomData().get(RETREAT_GUARD_KEY);
-            RetreatGuard guard = cached instanceof RetreatGuard ? (RetreatGuard) cached : null;
-            if (guard == null || guard.manager != manager || guard.tasks != tasks) {
-                restoreRetreatGuard(ship);
-                guard = new RetreatGuard(manager, tasks);
-                ship.setCustomData(RETREAT_GUARD_KEY, guard);
-            }
-            // Budai is a lone boss. Keep his own side engaged even when native
-            // fleet logic decides the fight is lost; never touch the opposing side.
-            manager.setCanForceShipsToEngageWhenBattleClearlyLost(true);
-            if (tasks != null) {
-                tasks.setPreventFullRetreat(true);
-                CombatFleetManagerAPI.AssignmentInfo assignment = tasks.getAssignmentFor(ship);
-                if (assignment != null && assignment.getType() == CombatAssignmentType.RETREAT) {
-                    var deployed = manager.getDeployedFleetMember(ship);
-                    if (deployed != null) {
-                        tasks.orderSearchAndDestroy(deployed, false);
-                        reevaluate = true;
-                    }
-                }
-            }
-        }
-        ShipwideAIFlags flags = ship.getAIFlags();
-        if (flags != null) {
-            flags.unsetFlag(ShipwideAIFlags.AIFlags.BACK_OFF);
-            flags.unsetFlag(ShipwideAIFlags.AIFlags.BACKING_OFF);
-            flags.setFlag(ShipwideAIFlags.AIFlags.DO_NOT_BACK_OFF, 2f);
-            flags.setFlag(ShipwideAIFlags.AIFlags.DO_NOT_BACK_OFF_EVEN_WHILE_VENTING, 2f);
-        }
-        if (reevaluate && ai != null) {
-            ai.cancelCurrentManeuver();
-            ai.forceCircumstanceEvaluation();
-        }
+    private static void clearField(CombatEngineAPI engine, ShipAPI ship) {
+        clearEnrage(ship);
+        removeDistortion(ship);
+        clearSlowdown(engine, ship);
     }
 
-    private static void restoreRetreatGuard(ShipAPI ship) {
-        Object cached = ship.getCustomData().get(RETREAT_GUARD_KEY);
-        if (cached instanceof RetreatGuard) {
-            RetreatGuard guard = (RetreatGuard) cached;
-            guard.manager.setCanForceShipsToEngageWhenBattleClearlyLost(guard.forceEngage);
-            if (guard.tasks != null) guard.tasks.setPreventFullRetreat(guard.preventFullRetreat);
-            ship.removeCustomData(RETREAT_GUARD_KEY);
+    private static final class DistortionCleanup extends BaseEveryFrameCombatPlugin {
+        private final CombatEngineAPI engine;
+        private final ShipAPI ship;
+        private final RippleDistortion ripple;
+        private boolean finished;
+
+        private DistortionCleanup(CombatEngineAPI engine, ShipAPI ship, RippleDistortion ripple) {
+            this.engine = engine;
+            this.ship = ship;
+            this.ripple = ripple;
+        }
+
+        @Override
+        public void advance(float amount, List<InputEventAPI> events) {
+            if (finished) return;
+            if (ship.getCustomData().get(DISTORTION_KEY) != ripple) {
+                // An earlier cleanup or replacement already owns the ship state.
+                DistortionShader.removeDistortion(ripple);
+            } else if (!ship.isAlive() || ship.isHulk() || !engine.isEntityInPlay(ship)) {
+                // Also release movement penalties while paused.
+                clearField(engine, ship);
+            } else {
+                return;
+            }
+            finished = true;
+            engine.removePlugin(this);
         }
     }
 
@@ -469,8 +436,10 @@ public final class CharybdisDistortion extends DwellerHullmod {
 
     private static void clearSlowdown(CombatEngineAPI engine, ShipAPI charybdis) {
         String id = SLOW_ID_PREFIX + charybdis.getId();
+        // A removed source may already be absent from the engine's ship list.
+        unmodifyMovement(charybdis.getMutableStats(), id);
         for (ShipAPI target : engine.getShips()) {
-            if (target != null) {
+            if (target != null && target != charybdis) {
                 unmodifyMovement(target.getMutableStats(), id);
             }
         }
@@ -655,20 +624,6 @@ public final class CharybdisDistortion extends DwellerHullmod {
             params.negativeParticleNumBase = Math.round(normalCount * countMult);
             params.negativeParticleNumOverloaded = Math.round(overloadedCount * countMult);
             params.negativeParticleGenRate = rate * (1f + (ENRAGE_SMOKE_RATE_MULT - 1f) * strength);
-        }
-    }
-
-    private static final class RetreatGuard {
-        private final CombatFleetManagerAPI manager;
-        private final CombatTaskManagerAPI tasks;
-        private final boolean forceEngage;
-        private final boolean preventFullRetreat;
-
-        private RetreatGuard(CombatFleetManagerAPI manager, CombatTaskManagerAPI tasks) {
-            this.manager = manager;
-            this.tasks = tasks;
-            forceEngage = manager.isCanForceShipsToEngageWhenBattleClearlyLost();
-            preventFullRetreat = tasks != null && tasks.isPreventFullRetreat();
         }
     }
 

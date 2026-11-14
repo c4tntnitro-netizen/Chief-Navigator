@@ -4,13 +4,14 @@ import chiefnavigator.systems.BudaiConvulsiveLungeSystem;
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.combat.*;
 import com.fs.starfarer.api.impl.combat.dweller.DwellerShroud;
+import com.fs.starfarer.api.impl.combat.dweller.ConvulsiveLungeSystemAI;
 import com.fs.starfarer.api.impl.combat.dweller.DwellerShroud.DwellerShroudParams;
 import java.lang.reflect.Method;
 import java.lang.reflect.Field;
 import java.util.*;
 import org.lwjgl.util.vector.Vector2f;
 
-/** Exercises fearless AI decisions, enrage ownership, cooldown and retreat guards. */
+/** Compares ordinary decisions with native Maw AI and checks enrage/effect isolation. */
 public final class BudaiMovementRegression {
     private static final class Fixture {
         final Map<String, Object> data = new HashMap<>();
@@ -19,7 +20,7 @@ public final class BudaiMovementRegression {
         final ShipwideAIFlags flags = new ShipwideAIFlags();
         final Vector2f position = new Vector2f();
         final Vector2f enemyPosition = new Vector2f(1000, 0);
-        final BudaiConvulsiveLungeAI ai = new BudaiConvulsiveLungeAI();
+        final ConvulsiveLungeSystemAI ai;
         final ShipAIConfig config = new ShipAIConfig(null);
         final ShipAIPlugin shipAI;
         final DeployedFleetMemberAPI deployed;
@@ -48,6 +49,11 @@ public final class BudaiMovementRegression {
         final ShipAPI ship;
 
         Fixture() {
+            this(new BudaiConvulsiveLungeAI());
+        }
+
+        Fixture(ConvulsiveLungeSystemAI delegate) {
+            ai = delegate;
             shipAI = WallResearchRegression.mock(ShipAIPlugin.class, (name, args) -> {
                 if (name.equals("getConfig")) return config;
                 if (name.equals("forceCircumstanceEvaluation")) evaluations++;
@@ -159,6 +165,7 @@ public final class BudaiMovementRegression {
         }
 
         void advance(float amount) {
+            Global.setCombatEngine(engine);
             if (!paused) elapsed += amount;
             ai.advance(amount, null, null, null);
         }
@@ -181,23 +188,29 @@ public final class BudaiMovementRegression {
                 }));
         for (float facing : new float[] {0f, 90f, 180f, 270f}) {
             Fixture f = new Fixture();
+            Fixture stock = new Fixture(new ConvulsiveLungeSystemAI());
             f.facing = facing;
+            stock.facing = facing;
             double radians = Math.toRadians(facing);
             f.enemyPosition.set((float) Math.cos(radians) * 1000f,
                     (float) Math.sin(radians) * 1000f);
+            stock.enemyPosition.set(f.enemyPosition);
             f.advance(6.1f);
-            check(f.commands == 0 && f.destination() == null,
-                    "A close enemy must no longer trigger automatic backward jumps at " + facing);
+            stock.advance(6.1f);
+            compareNativeDecision(f, stock, "close enemy at " + facing);
             f.hull = 0.1f;
+            stock.hull = f.hull;
             f.advance(1.3f);
-            check(f.commands == 0,
-                    "The actual native hull-loss pullback is rejected at facing " + facing);
+            stock.advance(1.3f);
+            compareNativeDecision(f, stock, "hull-loss pullback at " + facing);
+            check(f.commands > 0, "The real native pullback must remain available");
+            int previous = f.commands;
             f.ai.giveCommand(new Vector2f((float) Math.cos(radians) * -1000f,
                     (float) Math.sin(radians) * -1000f));
-            check(f.commands == 0, "Explicit native rearward commands are rejected");
+            check(f.commands == previous + 1, "Native rearward commands remain available");
             f.ai.giveCommand(new Vector2f((float) Math.cos(radians) * 1000f,
                     (float) Math.sin(radians) * 1000f));
-            check(f.commands == 1 && f.destination() == null,
+            check(f.commands == previous + 2 && f.destination() == null,
                     "Forward native commands remain available at every hull facing");
         }
 
@@ -270,52 +283,20 @@ public final class BudaiMovementRegression {
         f.ai.giveCommand(new Vector2f(1000, 0));
         check(f.destination() == null, "Stock forward lunges must discard stale rear targets");
 
-        Method preventRetreat = CharybdisDistortion.class.getDeclaredMethod(
-                "preventRetreat", CombatEngineAPI.class, ShipAPI.class);
-        preventRetreat.setAccessible(true);
-        for (float hull : new float[] {1f, 0.2f, 0.1f}) {
-            f = new Fixture();
-            f.hull = hull;
-            f.retreating = true;
-            f.flags.setFlag(ShipwideAIFlags.AIFlags.BACK_OFF);
-            f.flags.setFlag(ShipwideAIFlags.AIFlags.BACKING_OFF);
-            preventRetreat.invoke(null, f.engine, f.ship);
-            check(!f.retreating, "Prevent retreat at every hull level");
-            check(!f.flags.hasFlag(ShipwideAIFlags.AIFlags.BACK_OFF)
-                            && !f.flags.hasFlag(ShipwideAIFlags.AIFlags.BACKING_OFF)
-                            && f.flags.hasFlag(ShipwideAIFlags.AIFlags.DO_NOT_BACK_OFF)
-                            && f.flags.hasFlag(ShipwideAIFlags.AIFlags.DO_NOT_BACK_OFF_EVEN_WHILE_VENTING),
-                    "Hold ground rather than backing off, including at low hull and while venting");
-            check(f.forceEngage && f.preventFullRetreat && f.huntOrders == 1,
-                    "Block defeat-driven withdrawal and replace Budai's existing retreat order");
-            check("reckless".equals(f.config.personalityOverride)
-                            && f.config.alwaysStrafeOffensively && !f.config.backingOffWhileNotVentingAllowed,
-                    "Configure Fearless in place, retaining native Maw AI and system modules");
-            preventRetreat.invoke(null, f.engine, f.ship);
-            check(f.huntOrders == 1 && f.evaluations == 1 && f.maneuverCancels == 1,
-                    "Ordinary frames must not keep replacing orders or rebuilding/evaluating AI");
-            f.assignment = CombatAssignmentType.RETREAT;
-            preventRetreat.invoke(null, f.engine, f.ship);
-            check(f.huntOrders == 2, "Cancel a later native retreat order too");
-            method("restoreRetreatGuard", ShipAPI.class).invoke(null, f.ship);
-            check(!f.forceEngage && !f.preventFullRetreat,
-                    "Restore the side's original withdrawal settings when Budai leaves");
-        }
-        f = new Fixture();
-        f.forceEngage = true;
-        f.preventFullRetreat = true;
-        f.assignment = CombatAssignmentType.DEFEND;
-        preventRetreat.invoke(null, f.engine, f.ship);
-        method("restoreRetreatGuard", ShipAPI.class).invoke(null, f.ship);
-        check(f.forceEngage && f.preventFullRetreat && f.huntOrders == 0,
-                "Preserve preexisting fleet settings and non-retreat assignments");
         verifyNativeSmoke();
         verifySmokeTransition();
         verifyBubbleDamage();
-        System.out.println("PASS: Budai rejects automatic/native rearward escapes, retains forward "
-                + "lunges and cooldown/readiness guards, holds ground while venting, preserves "
-                + "enrage priority, no retreat orders, temporary heavy native smoke, five-second "
+        System.out.println("PASS: Budai matches native Maw pullback decisions at four facings, retains forward "
+                + "and rearward lunges and cooldown/readiness guards, preserves "
+                + "enrage priority, temporary heavy native smoke, five-second "
                 + "bubble expansion and 30% bubble damage reduction");
+    }
+
+    private static void compareNativeDecision(Fixture actual, Fixture stock, String detail) {
+        check(actual.commands == stock.commands, "Native command count: " + detail);
+        check(Objects.equals(actual.flags.getCustom(ShipwideAIFlags.AIFlags.SYSTEM_TARGET_COORDS),
+                        stock.flags.getCustom(ShipwideAIFlags.AIFlags.SYSTEM_TARGET_COORDS)),
+                "Native lunge destination: " + detail);
     }
 
     private static void verifySmokeTransition() throws Exception {

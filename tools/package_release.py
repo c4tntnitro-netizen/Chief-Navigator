@@ -10,7 +10,7 @@ from zipfile import ZIP_DEFLATED, ZipFile, ZipInfo
 
 
 ROOT = Path(__file__).resolve().parents[1]
-CORE = next((parent / "starsector-core" for parent in (ROOT.parent, ROOT.parent.parent)
+CORE = next((parent / "starsector-core" for parent in ROOT.parents
              if (parent / "starsector-core").is_dir()), None)
 if CORE is None:
     raise SystemExit("Cannot locate Starsector beside the source repository")
