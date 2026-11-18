@@ -224,7 +224,7 @@ public final class CharybdisDistortion extends DwellerHullmod {
                 // An earlier cleanup or replacement already owns the ship state.
                 DistortionShader.removeDistortion(ripple);
             } else if (!ship.isAlive() || ship.isHulk() || !engine.isEntityInPlay(ship)) {
-                // Also release movement penalties while paused.
+                // Also release movement penalties and retreat guards while paused.
                 clearField(engine, ship);
             } else {
                 return;

@@ -1,0 +1,54 @@
+{
+  "displayName": "Wall",
+  "variantId": "chief_navigator_threaxus_wall_Standard",
+  "hullId": "chief_navigator_threaxus_wall",
+  "fluxCapacitors": 20,
+  "fluxVents": 30,
+  "hullMods": [],
+  "weaponGroups": [
+    {
+      "autofire": true,
+      "mode": "LINKED",
+      "weapons": {
+        "L1": "neoferric_quadcoil",
+        "L2": "neoferric_quadcoil"
+      }
+    },
+    {
+      "autofire": true,
+      "mode": "LINKED",
+      "weapons": {
+        "M1": "heavy_mass_driver",
+        "M2": "heavy_mass_driver"
+      }
+    },
+    {
+      "autofire": true,
+      "mode": "LINKED",
+      "weapons": {
+        "H1": "chief_navigator_threaxus_swarm_launcher",
+        "H2": "chief_navigator_threaxus_swarm_launcher"
+      }
+    },
+    {
+      "autofire": true,
+      "mode": "LINKED",
+      "weapons": {
+        "S1": "light_mass_driver",
+        "S2": "light_mass_driver",
+        "S3": "light_mass_driver",
+        "S4": "light_mass_driver"
+      }
+    },
+    {
+      "autofire": true,
+      "mode": "LINKED",
+      "weapons": {
+        "S5": "voltaic_discharge",
+        "S6": "voltaic_discharge",
+        "S7": "voltaic_discharge",
+        "S8": "voltaic_discharge"
+      }
+    }
+  ]
+}

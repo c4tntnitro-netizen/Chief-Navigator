@@ -2,6 +2,7 @@ package chiefnavigator.quest;
 
 import com.fs.starfarer.api.FactoryAPI;
 import com.fs.starfarer.api.Global;
+import com.fs.starfarer.api.SettingsAPI;
 import com.fs.starfarer.api.campaign.CampaignUIAPI;
 import com.fs.starfarer.api.campaign.CargoAPI;
 import com.fs.starfarer.api.campaign.CoreInteractionListener;
@@ -15,12 +16,19 @@ import com.fs.starfarer.api.campaign.SpecialItemData;
 import com.fs.starfarer.api.campaign.SubmarketPlugin;
 import com.fs.starfarer.api.campaign.VisualPanelAPI;
 import com.fs.starfarer.api.campaign.econ.MarketAPI;
+import com.fs.starfarer.api.campaign.econ.Industry;
 import com.fs.starfarer.api.campaign.econ.SubmarketAPI;
 import com.fs.starfarer.api.campaign.rules.MemoryAPI;
 import com.fs.starfarer.api.fleet.FleetMemberAPI;
 import com.fs.starfarer.api.impl.campaign.ids.Submarkets;
 import com.fs.starfarer.api.impl.campaign.ids.Factions;
+import com.fs.starfarer.api.impl.campaign.ids.HullMods;
+import com.fs.starfarer.api.impl.campaign.ids.Industries;
+import com.fs.starfarer.api.impl.campaign.econ.impl.Spaceport;
+import data.hullmods.InsulatedEngines;
 import com.fs.starfarer.api.impl.campaign.submarkets.StoragePlugin;
+import com.fs.starfarer.api.loading.HullModSpecAPI;
+import com.fs.starfarer.api.loading.IndustrySpecAPI;
 import java.lang.reflect.Proxy;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -29,7 +37,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-/** Exercises vanilla storage against Ithaca's exact persistent station-owned cargo. */
+/** Exercises native dockside hullmod permissions and persistent station-owned storage. */
 public final class FobIthacaStorageRegression {
     private static final String CARGO_KEY = "$chief_navigator_ithaca_storage_cargo";
     interface Call { Object invoke(String name, Object[] args); }
@@ -60,6 +68,12 @@ public final class FobIthacaStorageRegression {
     }
 
     private static final class Fixture {
+        final IndustrySpecAPI spaceportSpec = mock(IndustrySpecAPI.class, (name, args) -> {
+            if (name.equals("getId")) return Industries.SPACEPORT;
+            if (name.equals("hasTag")) return Industries.TAG_SPACEPORT.equals(args[0]);
+            return null;
+        });
+        final InsulatedEngines docksideHullmod = new InsulatedEngines();
         final Map<String, Float> commodities = new HashMap<>();
         final Map<String, Integer> weapons = new HashMap<>();
         final Map<String, Float> specialItems = new HashMap<>();
@@ -160,6 +174,21 @@ public final class FobIthacaStorageRegression {
                     "Temporary storage carrier must be hidden and player-owned");
             check(attachedMarket.getPrimaryEntity() == station,
                     "Native core must retain the station as its storage carrier's target");
+            check(docksideHullmod.canBeAddedOrRemovedNow(null, attachedMarket,
+                            CampaignUIAPI.CoreUITradeMode.OPEN),
+                    "Native Insulated Engine Assembly removal must recognize Ithaca's refit facilities");
+            check(!docksideHullmod.canBeAddedOrRemovedNow(null, attachedMarket,
+                            CampaignUIAPI.CoreUITradeMode.NONE)
+                            && !docksideHullmod.canBeAddedOrRemovedNow(null, null,
+                            CampaignUIAPI.CoreUITradeMode.OPEN),
+                    "Dockside permissions must still require an active station refit context");
+            check(attachedMarket.getIndustries().size() == 1,
+                    "The UI carrier needs exactly one refit facility marker");
+            Industry facilities = attachedMarket.getIndustries().get(0);
+            check(facilities instanceof Spaceport && facilities.getMarket() == attachedMarket
+                            && facilities.getAllSupply().isEmpty() && facilities.getAllDemand().isEmpty()
+                            && facilities.getUpkeep().getModifiedValue() == 0f,
+                    "Refit facilities must be initialized without applying colony production or upkeep");
             check(attachedMarket.getSubmarketsCopy().size() == 1,
                     "Ithaca's carrier must contain storage only");
             openedStorage = (StoragePlugin) attachedMarket
@@ -198,6 +227,7 @@ public final class FobIthacaStorageRegression {
             final Set<SectorEntityToken> connected = new LinkedHashSet<>();
             final StoragePlugin storage = new StoragePlugin();
             final List<SubmarketAPI> submarkets = new ArrayList<>();
+            final List<Industry> facilities = new ArrayList<>();
             final MarketAPI[] holder = { null };
             final SubmarketAPI submarket = mock(SubmarketAPI.class, (name, args) -> {
                 if (name.equals("getMarket")) return holder[0];
@@ -213,6 +243,14 @@ public final class FobIthacaStorageRegression {
                 if (name.equals("setPlayerOwned")) playerOwned[0] = (boolean) args[0];
                 if (name.equals("isPlayerOwned")) return playerOwned[0];
                 if (name.equals("getFaction")) return faction;
+                if (name.equals("getIndustries")) return facilities;
+                if (name.equals("instantiateIndustry")) {
+                    check(Industries.SPACEPORT.equals(args[0]) && facilities.isEmpty(),
+                            "Only the UI refit facility may be instantiated");
+                    Spaceport spaceport = new Spaceport();
+                    spaceport.init(Industries.SPACEPORT, holder[0]);
+                    return spaceport;
+                }
                 if (name.equals("getPrimaryEntity")) return primary[0];
                 if (name.equals("getConnectedEntities")) return connected;
                 if (name.equals("setPrimaryEntity")) {
@@ -246,6 +284,18 @@ public final class FobIthacaStorageRegression {
         }
 
         void install() {
+            docksideHullmod.init(mock(HullModSpecAPI.class, (name, args) -> {
+                if (name.equals("getId")) return "insulatedengine";
+                if (name.equals("hasTag")) return HullMods.TAG_REQ_SPACEPORT.equals(args[0]);
+                return null;
+            }));
+            Global.setSettings(mock(SettingsAPI.class, (name, args) -> {
+                if (name.equals("getIndustrySpec")) {
+                    check(Industries.SPACEPORT.equals(args[0]), "Only the native spaceport spec is needed");
+                    return spaceportSpec;
+                }
+                return null;
+            }));
             Global.setFactory(mock(FactoryAPI.class, (name, args) -> {
                 if (name.equals("createMarket")) {
                     check("chief_navigator_fob_ithaca_storage_view".equals(args[0])
@@ -444,9 +494,11 @@ public final class FobIthacaStorageRegression {
     }
 
     public static void main(String[] args) {
+        SettingsAPI previousSettings = Global.getSettings();
         SectorAPI previousSector = Global.getSector();
         FactoryAPI previousFactory = Global.getFactory();
         try {
+            Global.setSettings(mock(SettingsAPI.class, (name, args1) -> null));
             verifyPersistentItemsAndShips();
             verifyNullableEntityCargo();
             verifyPrunedNativeCargo();
@@ -454,8 +506,9 @@ public final class FobIthacaStorageRegression {
             verifyPreviousMarketAndDuplicateDismissal();
             verifyFailureCleanup();
             verifyUnrelatedMarketReplacement();
-            System.out.println("FOB Ithaca native storage regression passed");
+            System.out.println("FOB Ithaca native refit facilities and storage regression passed");
         } finally {
+            Global.setSettings(previousSettings);
             Global.setSector(previousSector);
             Global.setFactory(previousFactory);
         }

@@ -9,6 +9,7 @@ import com.fs.starfarer.api.campaign.rules.MemoryAPI;
 import com.fs.starfarer.api.characters.FullName;
 import com.fs.starfarer.api.characters.ImportantPeopleAPI;
 import com.fs.starfarer.api.characters.PersonAPI;
+import com.fs.starfarer.api.characters.OfficerDataAPI;
 import com.fs.starfarer.api.impl.campaign.ids.Factions;
 import com.fs.starfarer.api.impl.campaign.ids.Personalities;
 import com.fs.starfarer.api.impl.campaign.ids.Ranks;
@@ -27,6 +28,7 @@ public final class FobIthacaContacts {
             "chief_navigator_ithaca_league_survivor_leader";
     public static final String KSHAYA_REFUGEE_PERSON_ID =
             "chief_navigator_ithaca_kshaya_refugee_mother";
+    private static final String ISA_PERSON_ID = "ship_trophy_isa";
 
     public static final String LIAISON_MARKER =
             "$chief_navigator_ithaca_liaison";
@@ -115,6 +117,8 @@ public final class FobIthacaContacts {
         List<PersonAPI> result = new ArrayList<PersonAPI>();
         addIfResident(result, MenelausTrial.getOrCreateMenelaus());
         addIfResident(result, getOrCreateSpartanCaptain());
+        PersonAPI isa = getRosterIsa();
+        if (isa != null) result.add(isa);
         if (Global.getSector().getMemoryWithoutUpdate().getBoolean(
                 AviciHabitatEncounter.REFUGEES_RESCUED)) {
             addIfResident(result, getOrCreateKshayaRefugee());
@@ -128,6 +132,23 @@ public final class FobIthacaContacts {
             }
         }
         return result;
+    }
+
+    /** Borrow the current officer record without creating or relocating a contact. */
+    public static PersonAPI getRosterIsa() {
+        CampaignFleetAPI player = Global.getSector() == null ? null : Global.getSector().getPlayerFleet();
+        if (player == null || player.getFleetData() == null) return null;
+        List<OfficerDataAPI> officers = player.getFleetData().getOfficersCopy();
+        if (officers == null) return null;
+        for (OfficerDataAPI officer : officers) {
+            PersonAPI person = officer == null ? null : officer.getPerson();
+            if (person != null && ISA_PERSON_ID.equals(person.getId())) return person;
+        }
+        return null;
+    }
+
+    public static boolean isRosterIsa(PersonAPI person) {
+        return person != null && ISA_PERSON_ID.equals(person.getId()) && person == getRosterIsa();
     }
 
     public static PersonAPI getOrCreateSpartanCaptain() {
@@ -366,7 +387,7 @@ public final class FobIthacaContacts {
     static boolean isOwnedIthacaContact(PersonAPI person) {
         if (person == null) return false;
         MemoryAPI memory = person.getMemoryWithoutUpdate();
-        return memory.getBoolean(RESCUE_CONTACT_OWNER)
+        return isRosterIsa(person) || memory.getBoolean(RESCUE_CONTACT_OWNER)
                 || memory.getBoolean(STATIC_CONTACT_OWNER)
                 || memory.getBoolean(MENELAUS_MARKER)
                 || memory.getBoolean(SPARTAN_CAPTAIN_MARKER)
@@ -398,6 +419,7 @@ public final class FobIthacaContacts {
         // The catch-all resident scan also sees old serialized liaisons.
         // Exclude their exact identity or role without deleting the person.
         if (person != null
+                && !ISA_PERSON_ID.equals(person.getId())
                 && !LIAISON_PERSON_ID.equals(person.getId())
                 && !person.getMemoryWithoutUpdate().getBoolean(LIAISON_MARKER)
                 && person.getMemoryWithoutUpdate()

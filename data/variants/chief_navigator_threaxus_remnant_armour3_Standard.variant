@@ -1,0 +1,13 @@
+{
+  "displayName": "Standard",
+  "fluxCapacitors": 0,
+  "fluxVents": 0,
+  "hullId": "remnant_armour3",
+  "hullMods": [],
+  "quality": 0.5,
+  "variantId": "chief_navigator_threaxus_remnant_armour3_Standard",
+  "weaponGroups": [],
+  "permaMods": [
+    "always_detaches"
+  ]
+}

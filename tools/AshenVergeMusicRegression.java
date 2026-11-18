@@ -138,7 +138,7 @@ public final class AshenVergeMusicRegression {
                     "Both ambient states retain the same ordinary exploration track");
             check(!ordinary.toString().contains(ending.getString("file")),
                     "The ending recording cannot be randomly selected before story completion");
-            try (ZipFile nativeTracks = new ZipFile(Path.of(System.getProperty("chiefNavigator.testCore", "../../starsector-core"), stock.getString("source")).toFile())) {
+            try (ZipFile nativeTracks = new ZipFile(Path.of("../../starsector-core", stock.getString("source")).toFile())) {
                 check(nativeTracks.getEntry(stock.getString("file")) != null, "Stock exploration track exists in native archive");
             }
             System.out.println("PASS: native Lacedaemon music stays spoiler-free until the final debrief; "

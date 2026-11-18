@@ -1,0 +1,61 @@
+{
+  "displayName": "Awakening",
+  "variantId": "chief_navigator_threatxus_Standard",
+  "hullId": "chief_navigator_threatxus",
+  "goalVariant": true,
+  "fluxCapacitors": 40,
+  "fluxVents": 50,
+  "hullMods": [
+    "targetingunit",
+    "hardenedshieldemitter"
+  ],
+  "weaponGroups": [
+    {
+      "autofire": false,
+      "mode": "LINKED",
+      "weapons": {
+        "WS 036": "plasma",
+        "WS 037": "plasma"
+      }
+    },
+    {
+      "autofire": false,
+      "mode": "LINKED",
+      "weapons": {
+        "WS 035": "tachyonlance",
+        "WS 038": "tachyonlance"
+      }
+    },
+    {
+      "autofire": true,
+      "mode": "LINKED",
+      "weapons": {
+        "WS 032": "ionpulser",
+        "WS 033": "heavyblaster",
+        "WS 034": "heavyblaster"
+      }
+    },
+    {
+      "autofire": true,
+      "mode": "LINKED",
+      "weapons": {
+        "WS 001": "pdburst",
+        "WS 007": "pdburst",
+        "WS 016": "pdburst",
+        "WS 039": "pdburst",
+        "WS 040": "pdburst"
+      }
+    }
+  ],
+  "modules": [
+    {
+      "WALL_LEFT": "chief_navigator_threaxus_wall_Standard"
+    },
+    {
+      "WALL_RIGHT": "chief_navigator_threaxus_wall_Standard"
+    },
+    {
+      "WALL_REAR": "chief_navigator_threaxus_wall_Standard"
+    }
+  ]
+}

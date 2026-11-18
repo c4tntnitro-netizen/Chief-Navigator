@@ -278,6 +278,6 @@ He offers nothing more.
 
 === menelaus_labor_3_repair ===
 
-FOB Ithaca's automated gantries restore your fleet's hulls and armor, then cycle every ship to maximum combat readiness. No payment is requested.
+FOB Ithaca's automated gantries restore your fleet's hulls and armor, then cycle every ship to maximum combat readiness.
 
 -> menelaus_contact_labor_3_menu

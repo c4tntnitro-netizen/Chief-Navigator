@@ -1,6 +1,5 @@
 package chiefnavigator.quest;
 
-import chiefnavigator.dwellers.AviciDwellerContent;
 import com.fs.starfarer.api.EveryFrameScript;
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.BattleAPI;
@@ -13,6 +12,7 @@ import com.fs.starfarer.api.campaign.StarSystemAPI;
 import com.fs.starfarer.api.campaign.ai.ModularFleetAIAPI;
 import com.fs.starfarer.api.campaign.listeners.FleetEventListener;
 import com.fs.starfarer.api.campaign.rules.MemoryAPI;
+import com.fs.starfarer.api.combat.ShipVariantAPI;
 import com.fs.starfarer.api.fleet.FleetMemberAPI;
 import com.fs.starfarer.api.fleet.FleetMemberType;
 import com.fs.starfarer.api.impl.campaign.ids.Factions;
@@ -75,6 +75,7 @@ public final class AviciDwellerPopulation implements EveryFrameScript {
                     // Retained empty tokens, transitions and ongoing interactions remain authoritative.
                     if (fleet.getContainingLocation() == avici && !fleet.isEmpty()
                             && !TroyArrivalScript.isFleetBusyForMutation(fleet)) {
+                        replacePortedMembers(fleet);
                         ensureLossListener(fleet);
                         configurePatrol(fleet, avici);
                     }
@@ -140,7 +141,7 @@ public final class AviciDwellerPopulation implements EveryFrameScript {
         MemoryAPI memory = Global.getSector().getMemoryWithoutUpdate();
         int generation = memory.getInt(generationKey(id)) + 1;
         List<String> variants = roster(slot, new Random(31L * id.hashCode() + generation));
-        // All imported and vanilla definitions must exist before constructing any campaign object.
+        // All vanilla definitions must exist before constructing any campaign object.
         for (String variant : variants) {
             if (Global.getSettings().getVariant(variant) == null) return;
         }
@@ -179,13 +180,35 @@ public final class AviciDwellerPopulation implements EveryFrameScript {
         int tier = TIERS[slot];
         add(variants, TENDRIL, tier == 0 ? 6 + random.nextInt(3)
                 : tier == 1 ? 9 + random.nextInt(4) : 11 + random.nextInt(4));
-        add(variants, EYE, tier == 2 ? 2 : 1);
-        add(variants, MAELSTROM, 1 + random.nextInt(tier == 2 ? 3 : 2));
+        int eyes = tier == 2 ? 2 + random.nextInt(2) : 1;
+        add(variants, EYE, eyes);
+        int min = tier == 0 ? 1 : tier == 1 ? 2 - eyes : 3 - eyes;
+        int max = tier == 0 ? 2 : tier == 1 ? 3 - eyes : 5 - eyes;
+        add(variants, MAELSTROM, min + random.nextInt(max - min + 1));
         if (tier > 0) add(variants, MAW, 1);
-        add(variants, AviciDwellerContent.BANSHEE_VARIANT, tier);
-        if (tier == 2) add(variants, AviciDwellerContent.BRAIN_VARIANT, 1);
-        if (tier == 2) add(variants, AviciDwellerContent.HUNTER_VARIANT, 1);
         return variants;
+    }
+
+    /** Retire imported hulls on their existing members, without restoring any losses. */
+    private static void replacePortedMembers(CampaignFleetAPI fleet) {
+        List<FleetMemberAPI> members = new ArrayList<>();
+        List<ShipVariantAPI> variants = new ArrayList<>();
+        for (FleetMemberAPI member : fleet.getFleetData().getMembersListCopy()) {
+            String hull = member.getHullId();
+            String replacement = "chief_navigator_avici_banshee".equals(hull) ? TENDRIL
+                    : "chief_navigator_avici_brain".equals(hull) ? EYE
+                    : "chief_navigator_avici_hunter".equals(hull) ? MAELSTROM : null;
+            if (replacement == null) continue;
+            ShipVariantAPI variant = Global.getSettings().getVariant(replacement);
+            if (variant == null) return;
+            members.add(member);
+            variants.add(variant.clone());
+        }
+        for (int i = 0; i < members.size(); i++) members.get(i).setVariant(variants.get(i), false, true);
+        if (!members.isEmpty()) {
+            fleet.getFleetData().setSyncNeeded();
+            fleet.getFleetData().syncIfNeeded();
+        }
     }
 
     private static void add(List<String> variants, String variant, int count) {

@@ -1,18 +1,13 @@
-param([switch]$Release, [string]$StarsectorRoot = '')
+param([switch]$Release)
 
 $ErrorActionPreference = "Stop"
 
 $modRoot = $PSScriptRoot
-$parentRoot = Split-Path $modRoot -Parent
-if (-not $starsectorRoot) {
-    $starsectorRoot = @($parentRoot, (Split-Path $parentRoot -Parent)) |
-        Where-Object { Test-Path -LiteralPath (Join-Path $_ 'starsector-core') -PathType Container } |
-        Select-Object -First 1
+$starsectorRoot = $modRoot
+while ($starsectorRoot -and -not (Test-Path -LiteralPath (Join-Path $starsectorRoot 'starsector-core') -PathType Container)) {
+    $starsectorRoot = Split-Path $starsectorRoot -Parent
 }
-if (-not $starsectorRoot) { throw "Cannot locate Starsector beside the source repository." }
-if (-not (Test-Path -LiteralPath (Join-Path $starsectorRoot 'starsector-core') -PathType Container)) {
-    throw 'StarsectorRoot must contain starsector-core.'
-}
+if (-not $starsectorRoot) { throw "Cannot locate Starsector above the source repository." }
 $modsRoot = Join-Path $starsectorRoot 'mods'
 $coreRoot = Join-Path $starsectorRoot "starsector-core"
 $graphicsLibJar = Join-Path $modsRoot "GraphicsLib\jars\Graphics.jar"
@@ -32,9 +27,14 @@ $modInfo = [System.IO.File]::ReadAllText($modInfoPath)
 $jarPath = Join-Path $jarDirectory (Get-ChiefNavigatorBuildJarName -ModInfo $modInfo -Release:$Release)
 
 $peerlessRoot = Join-Path $modsRoot 'Peerless Skills'
-$peerlessMetadata = Get-Content -LiteralPath (Join-Path $peerlessRoot 'mod_info.json') -Raw | ConvertFrom-Json
-$peerlessJars = @($peerlessMetadata.jars | ForEach-Object { Join-Path $peerlessRoot $_ })
-$classpath = ($peerlessJars + @(
+$peerlessCompileJars = @()
+$peerlessManifest = Join-Path $peerlessRoot 'mod_info.json'
+if (Test-Path -LiteralPath $peerlessManifest -PathType Leaf) {
+    $peerlessCompileJars = @((Get-Content -LiteralPath $peerlessManifest -Raw | ConvertFrom-Json).jars |
+        ForEach-Object { Join-Path $peerlessRoot $_ })
+}
+
+$classpath = (@($peerlessCompileJars) + @(
     (Join-Path $coreRoot "starfarer.api.jar"),
     (Join-Path $coreRoot "json.jar"),
     (Join-Path $coreRoot "lwjgl.jar"),
@@ -163,12 +163,9 @@ try {
     if (-not $resolvedOutput.StartsWith($resolvedProject + '\', [StringComparison]::OrdinalIgnoreCase)) {
         throw "Build output must remain inside the source repository."
     }
-    # Nested checkouts can exceed Windows' command-line limit with all sources.
-    $sourceArguments = Join-Path $stagingRoot 'sources.txt'
-    [System.IO.File]::WriteAllLines($sourceArguments,
-        @($sources | ForEach-Object { '"' + $_.Replace('\', '/') + '"' }),
-        [System.Text.UTF8Encoding]::new($false))
-    & (Join-Path $jdkRoot "javac.exe") "-J-Djava.io.tmpdir=$javaTmpRoot" -encoding UTF-8 --release 17 -cp $classpath -d $outputRoot "@$sourceArguments"
+    $sourceList = Join-Path $stagingRoot 'sources.args'
+    [IO.File]::WriteAllLines($sourceList, @($sources | ForEach-Object { '"' + $_.Replace('\', '/') + '"' }), [Text.UTF8Encoding]::new($false))
+    & (Join-Path $jdkRoot "javac.exe") "-J-Djava.io.tmpdir=$javaTmpRoot" -encoding UTF-8 --release 17 -cp $classpath -d $outputRoot "@$sourceList"
     if ($LASTEXITCODE -ne 0) {
         throw "javac failed with exit code $LASTEXITCODE"
     }

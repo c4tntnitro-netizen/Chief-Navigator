@@ -213,8 +213,7 @@ public final class StarvingWeaponLoadoutRegression {
                         "Runtime creation/reconstruction must not remap stock weapons in " + path);
             }
         }
-        System.out.println("PASS: ten Starving and three Gautama variants retain native THREAT IDs, "
-                + "authored weapon mounts/counts/groups and fragment exclusions; built-ins, generator "
-                + "and runtime source cannot restore custom weapons or override native weapon data.");
+        System.out.println("PASS: ten Starving variants retain native THREAT IDs and exclusions; all three Gautamas retain their original native guns. "
+                + "Built-ins, generator and runtime source cannot restore retired bone weapons or override native weapon data.");
     }
 }

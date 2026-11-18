@@ -74,32 +74,42 @@ public final class AviciDwellerPopulationRegression {
     }
 
     private static final class Member {
-        final String variant;
+        String variant;
+        String hull;
+        ShipVariantAPI fit;
+        int variantWrites;
         String shipName;
         final FleetMemberAPI api;
         Member(String variant) {
             this.variant = variant;
-            String hull = variant.equals(AviciDwellerContent.BUDAI_VARIANT) ? AviciDwellerContent.BUDAI_HULL
+            this.hull = variant.equals(AviciDwellerContent.BUDAI_VARIANT) ? AviciDwellerContent.BUDAI_HULL
                     : variant.equals(AviciDwellerContent.BANSHEE_VARIANT) ? AviciDwellerContent.BANSHEE_HULL
                     : variant.equals(AviciDwellerContent.BRAIN_VARIANT) ? AviciDwellerContent.BRAIN_HULL
                     : variant.substring(0, variant.lastIndexOf('_'));
             ShipHullSpecAPI spec = mock(ShipHullSpecAPI.class, (name, args) -> {
-                if (name.equals("getHullId") || name.equals("getBaseHullId")) return hull;
+                if (name.equals("getHullId") || name.equals("getBaseHullId")) return this.hull;
                 return null;
             });
-            ShipVariantAPI fit = mock(ShipVariantAPI.class, (name, args) -> {
+            fit = mock(ShipVariantAPI.class, (name, args) -> {
                 if (name.equals("getHullSpec")) return spec;
-                if (name.equals("getHullVariantId")) return variant;
+                if (name.equals("getHullVariantId")) return this.variant;
+                if (name.equals("clone")) return fit;
                 return null;
             });
             RepairTrackerAPI repair = mock(RepairTrackerAPI.class,
                     (name, args) -> name.equals("getMaxCR") ? 0.7f : null);
             api = mock(FleetMemberAPI.class, (name, args) -> {
-                if (name.equals("getHullId")) return hull;
+                if (name.equals("getHullId")) return this.hull;
                 if (name.equals("getHullSpec")) return spec;
                 if (name.equals("getVariant")) return fit;
                 if (name.equals("getRepairTracker")) return repair;
                 if (name.equals("setShipName")) shipName = (String) args[0];
+                if (name.equals("setVariant")) {
+                    fit = (ShipVariantAPI) args[0];
+                    this.variant = fit.getHullVariantId();
+                    hull = this.variant.substring(0, this.variant.lastIndexOf('_'));
+                    variantWrites++;
+                }
                 return null;
             });
         }
@@ -272,8 +282,7 @@ public final class AviciDwellerPopulationRegression {
                             ? interaction : null);
             Global.setSettings(mock(SettingsAPI.class, (method, args) -> {
                 if (method.equals("getColor")) return Color.WHITE;
-                if (method.equals("getVariant")) return missingVariant ? null
-                        : mock(ShipVariantAPI.class, (call, ignored) -> null);
+                if (method.equals("getVariant")) return missingVariant ? null : new Member((String) args[0]).fit;
                 if (method.equals("getModManager")) throw new AssertionError("Standalone patrols must not query SEP");
                 return null;
             }));
@@ -401,13 +410,13 @@ public final class AviciDwellerPopulationRegression {
         f = new Fixture();
         f.saved.values.put(COMPLETE, true);
         CampaignFleetAPI boss = (CampaignFleetAPI) spawnBudai(f);
-        check(boss != null && f.createdMembers.size() >= 17 && f.createdMembers.size() <= 24
+        check(boss != null && f.createdMembers.size() >= 15 && f.createdMembers.size() <= 20
                         && f.createdMembers.get(0).variant.equals(BudaiFleetComposition.MAW_VARIANT)
                         && "Budai".equals(f.createdMembers.get(0).shipName),
-                "Actual new Budai is the named Maw with a Maw-free SEP large-manifestation escort");
+                "Actual new Budai is the named Maw with a Maw-free vanilla Transcendent escort");
         check(boss.getId().equals(TroyArrivalScript.CHARYBDIS_FLEET_ID)
-                        && boss.getLocation().x == f.center.x + 100000f && boss.getLocation().y == f.center.y,
-                "The new hull must retain canonical fleet identity and actual100000-unit placement");
+                        && boss.getLocation().x == f.center.x + 25000f && boss.getLocation().y == f.center.y,
+                "The new hull retains canonical fleet identity and a faster 25000-unit approach");
         check(Long.valueOf(0L).equals(f.saved.values.get(OdysseyPredatorScript.BUDAI_SPAWNED_AT))
                         && OdysseyPredatorScript.isBudaiBattle(boss),
                 "A successful birth at timestamp0 is valid and recognized by existing quest ownership");
@@ -466,11 +475,11 @@ public final class AviciDwellerPopulationRegression {
                 "The controller must create only its three Lesser, two Greater and one Transcendent slots");
         long banshees = f.createdMembers.stream().filter(member -> member.variant.equals(AviciDwellerContent.BANSHEE_VARIANT)).count();
         long brains = f.createdMembers.stream().filter(member -> member.variant.equals(AviciDwellerContent.BRAIN_VARIANT)).count();
-        check(banshees == 4 && brains == 1 && f.createdMembers.stream().noneMatch(
+        check(banshees == 0 && brains == 0 && f.createdMembers.stream().noneMatch(
                         member -> member.variant.equals(AviciDwellerContent.BUDAI_VARIANT)),
                 "Ambient patrols never contain the retired Budai-specific Hunter variant");
-        check(f.createdMembers.stream().filter(member -> member.variant.equals(AviciDwellerContent.HUNTER_VARIANT)).count() == 1,
-                "One ordinary Insatiable Hunter remains in Avici's Transcendent manifestation");
+        check(f.createdMembers.stream().noneMatch(member -> member.variant.equals(AviciDwellerContent.HUNTER_VARIANT)),
+                "No imported Hunter remains in newly created patrols");
         String[] suffixes = {"lesser_0", "lesser_1", "lesser_2", "greater_0", "greater_1", "transcendent_0"};
         for (int slot = 0; slot < suffixes.length; slot++) {
             Fleet fleet = f.fleetStates.get(f.local.get(AviciDwellerPopulation.id(slot)));
@@ -484,14 +493,16 @@ public final class AviciDwellerPopulationRegression {
             int maxTendrils = tier == 0 ? 8 : tier == 1 ? 12 : 14;
             long tendrilCount = countVariant(fleet, "shrouded_tendril_Roiling");
             check(tendrilCount >= tendrils && tendrilCount <= maxTendrils
-                            && countVariant(fleet, "shrouded_eye_Darkened") == (tier == 2 ? 2 : 1)
+                            && countVariant(fleet, "shrouded_eye_Darkened") >= (tier == 2 ? 2 : 1)
+                            && countVariant(fleet, "shrouded_eye_Darkened") <= (tier == 2 ? 3 : 1)
                             && countVariant(fleet, "shrouded_maw_Ravenous") == (tier == 0 ? 0 : 1)
-                            && countVariant(fleet, AviciDwellerContent.BANSHEE_VARIANT) == tier
-                            && countVariant(fleet, AviciDwellerContent.BRAIN_VARIANT) == (tier == 2 ? 1 : 0)
-                            && countVariant(fleet, AviciDwellerContent.HUNTER_VARIANT) == (tier == 2 ? 1 : 0),
+                            && countVariant(fleet, AviciDwellerContent.BANSHEE_VARIANT) == 0
+                            && countVariant(fleet, AviciDwellerContent.BRAIN_VARIANT) == 0
+                            && countVariant(fleet, AviciDwellerContent.HUNTER_VARIANT) == 0,
                     "Every slot must receive its own tier's roster, including both added slots: " + suffixes[slot]);
             long maelstroms = countVariant(fleet, "shrouded_maelstrom_Menacing");
-            check(maelstroms >= 1 && maelstroms <= (tier == 2 ? 3 : 2),
+            long eyes = countVariant(fleet, "shrouded_eye_Darkened");
+            check(maelstroms >= (tier == 2 ? 3 - eyes : 1) && maelstroms <= (tier == 2 ? 5 - eyes : 2),
                     "Maelstrom count must remain within its tier's bounds: " + suffixes[slot]);
             check(fleet.memory.api.getBoolean(MemFlags.MEMORY_KEY_NO_JUMP)
                             && fleet.assignment.getAssignment() == FleetAssignment.PATROL_SYSTEM
@@ -616,6 +627,39 @@ public final class AviciDwellerPopulationRegression {
                 "A claim in another saved location blocks duplicates and is never teleported or reassigned");
     }
 
+    private static void savedPortedMembersRetire() {
+        for (String guard : List.of("none", "battle", "transition", "dialog", "foreign", "player", "missing")) {
+            Fixture f = new Fixture(); f.unlocked(); f.tick();
+            Fleet fleet = f.created.get(0);
+            Member banshee = new Member(AviciDwellerContent.BANSHEE_VARIANT);
+            Member brain = new Member(AviciDwellerContent.BRAIN_VARIANT);
+            Member hunter = new Member(AviciDwellerContent.HUNTER_VARIANT);
+            fleet.members.clear();
+            fleet.members.addAll(List.of(banshee.api, brain.api, hunter.api));
+            List<FleetMemberAPI> sameMembers = new ArrayList<>(fleet.members);
+            int factories = f.createdMembers.size();
+            fleet.inBattle = guard.equals("battle");
+            fleet.transitioning = guard.equals("transition");
+            f.dialogTarget = guard.equals("dialog") ? fleet.api : null;
+            fleet.faction = guard.equals("foreign") ? "foreign" : Factions.DWELLER;
+            fleet.player = guard.equals("player");
+            f.missingVariant = guard.equals("missing");
+            f.tick();
+            check(banshee.variantWrites == (guard.equals("none") ? 1 : 0)
+                            && brain.variantWrites == banshee.variantWrites && hunter.variantWrites == banshee.variantWrites,
+                    "Saved-hull conversion respects ownership, busy and missing-data guard: " + guard);
+            fleet.inBattle = false; fleet.transitioning = false; f.dialogTarget = null;
+            fleet.faction = Factions.DWELLER; fleet.player = false; f.missingVariant = false;
+            f.tick(); f.tick();
+            check(banshee.variant.equals("shrouded_tendril_Roiling")
+                            && brain.variant.equals("shrouded_eye_Darkened")
+                            && hunter.variant.equals("shrouded_maelstrom_Menacing")
+                            && banshee.variantWrites == 1 && brain.variantWrites == 1 && hunter.variantWrites == 1
+                            && fleet.members.equals(sameMembers) && factories == f.createdMembers.size(),
+                    "Saved patrols retain exactly their surviving members and convert once without any refill");
+        }
+    }
+
     public static void main(String[] args) throws Exception {
         SectorAPI priorSector = Global.getSector();
         SettingsAPI priorSettings = Global.getSettings();
@@ -625,6 +669,7 @@ public final class AviciDwellerPopulationRegression {
             legacyAndMissingContent();
             ownershipAndRosters();
             verifiedLossAndMissingClaims();
+            savedPortedMembersRetire();
             System.out.println("PASS: first-entry Avici unlock, three Lesser/two Greater/one Transcendent patrols, "
                     + "no player tracking, sparse tier rosters, scoped ownership, busy/empty claims, "
                     + "Budai birth compatibility, and verified-loss replacement.");

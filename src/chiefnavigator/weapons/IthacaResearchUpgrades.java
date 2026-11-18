@@ -5,9 +5,16 @@ import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.CargoAPI;
 import com.fs.starfarer.api.campaign.SpecialItemData;
 import com.fs.starfarer.api.combat.ShipAPI;
+import com.fs.starfarer.api.combat.WeaponAPI;
 
 /** Snapshots independently installed Ithaca components per combat deployment. */
 public final class IthacaResearchUpgrades {
+    public static final String ITHACA_ONSLAUGHT_HULL_ID =
+            "chief_navigator_onslaught_ith";
+    public static final String ITHACA_ONSLAUGHT_LASER_ID =
+            "chief_navigator_onslaught_ith_naval_laser";
+    public static final String ITHACA_ODYSSEY_HULL_ID = "chief_navigator_odyssey_ith";
+    public static final String ITHACA_ODYSSEY_LASER_ID = "chief_navigator_odyssey_ith_naval_laser";
     private static final String MASK_KEY =
             "chief_navigator_ithaca_research_component_mask";
     private static final String UNLOCKED_MASK_KEY =
@@ -74,6 +81,23 @@ public final class IthacaResearchUpgrades {
     };
 
     private IthacaResearchUpgrades() { }
+
+    public static boolean isShipNavalLaserId(String id) {
+        return ITHACA_ONSLAUGHT_LASER_ID.equals(id) || ITHACA_ODYSSEY_LASER_ID.equals(id);
+    }
+
+    public static boolean isShipNavalLaser(WeaponAPI weapon) {
+        if (weapon == null) return false;
+        return (ITHACA_ONSLAUGHT_LASER_ID.equals(weapon.getId())
+                    && hasHull(weapon.getShip(), ITHACA_ONSLAUGHT_HULL_ID))
+                || (ITHACA_ODYSSEY_LASER_ID.equals(weapon.getId())
+                    && hasHull(weapon.getShip(), ITHACA_ODYSSEY_HULL_ID));
+    }
+
+    private static boolean hasHull(ShipAPI ship, String id) {
+        return ship != null && ship.getHullSpec() != null
+                && (id.equals(ship.getHullSpec().getHullId()) || id.equals(ship.getHullSpec().getDParentHullId()));
+    }
 
     public static int getMask(ShipAPI ship) {
         if (ship == null || ship.getHullSpec() == null) return 0;
@@ -313,7 +337,11 @@ public final class IthacaResearchUpgrades {
         String hullId = ship.getHullSpec().getHullId();
         return IthacaSectionEncounter.WALL_HULL_ID.equals(hullId)
                 || NAVAL_MOUNT_HULL_ID.equals(hullId)
-                || SPARTAN_BATTLESTATION_HULL_ID.equals(hullId);
+                || SPARTAN_BATTLESTATION_HULL_ID.equals(hullId)
+                || ITHACA_ONSLAUGHT_HULL_ID.equals(hullId)
+                || ITHACA_ONSLAUGHT_HULL_ID.equals(
+                        ship.getHullSpec().getDParentHullId())
+                || hasHull(ship, ITHACA_ODYSSEY_HULL_ID);
     }
 
 }

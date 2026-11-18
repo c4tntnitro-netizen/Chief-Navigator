@@ -160,9 +160,9 @@ public final class BudaiEncounterRegression {
                     "Capture the actual initial placement, not a calculated-but-unused point");
         }
         check(f.factories == 1 && f.entity == f.fleet
-                        && Math.abs(Vector2f.sub(f.initialPosition, f.center, null).length() - 100000f) < 0.01f
+                        && Math.abs(Vector2f.sub(f.initialPosition, f.center, null).length() - 25000f) < 0.01f
                         && f.center.equals(new Vector2f(137f, -22000f)),
-                "Spawn the sole real fleet exactly 100,000 units from the unmodified Avici center");
+                "Spawn the sole real fleet exactly 25,000 units from the unmodified Avici center");
 
         f = new Fixture();
         f.entity = f.fleet;

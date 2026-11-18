@@ -32,6 +32,7 @@ import com.fs.starfarer.api.impl.campaign.ids.MemFlags;
 import com.fs.starfarer.api.impl.campaign.ids.StarTypes;
 import com.fs.starfarer.api.impl.campaign.ids.Submarkets;
 import com.fs.starfarer.api.impl.campaign.ids.Tags;
+import com.fs.starfarer.api.impl.campaign.ids.Terrain;
 import com.fs.starfarer.api.impl.campaign.ids.Planets;
 import com.fs.starfarer.api.impl.campaign.DerelictShipEntityPlugin;
 import com.fs.starfarer.api.impl.campaign.DerelictShipEntityPlugin.DerelictShipData;
@@ -45,11 +46,15 @@ import com.fs.starfarer.api.impl.campaign.rulecmd.salvage.special.ShipRecoverySp
 import com.fs.starfarer.api.impl.campaign.rulecmd.salvage.special.ShipRecoverySpecial.ShipCondition;
 import com.fs.starfarer.api.impl.campaign.procgen.NebulaEditor;
 import com.fs.starfarer.api.impl.campaign.procgen.StarAge;
+import com.fs.starfarer.api.impl.campaign.procgen.StarGenDataSpec;
 import com.fs.starfarer.api.impl.campaign.procgen.StarSystemGenerator;
 import com.fs.starfarer.api.impl.campaign.procgen.StarSystemGenerator.CustomConstellationParams;
 import com.fs.starfarer.api.impl.campaign.procgen.StarSystemGenerator.StarSystemType;
 import com.fs.starfarer.api.impl.campaign.terrain.HyperspaceTerrainPlugin;
 import com.fs.starfarer.api.impl.campaign.terrain.BaseTiledTerrain;
+import com.fs.starfarer.api.impl.campaign.terrain.EventHorizonPlugin;
+import com.fs.starfarer.api.impl.campaign.terrain.StarCoronaTerrainPlugin;
+import com.fs.starfarer.api.impl.campaign.terrain.StarCoronaTerrainPlugin.CoronaParams;
 import com.fs.starfarer.api.util.Misc;
 import java.awt.Color;
 import java.util.ArrayList;
@@ -159,6 +164,8 @@ public final class OdysseyExpanseSystem {
             "$chief_navigator_odyssey_white_dwarf_v4_messina";
     private static final String GENERATED_MESSINA =
             "$chief_navigator_odyssey_messina_black_hole_v1";
+    private static final String AVICI_EVENT_HORIZON_V1 =
+            "$chief_navigator_avici_event_horizon_v1";
     private static final String GENERATED_SILENT_WAKE =
             "$chief_navigator_odyssey_silent_wake_flow_v1";
     private static final String GENERATED_SANZU_WAKE_DERELICTS =
@@ -702,6 +709,60 @@ public final class OdysseyExpanseSystem {
     public static void repairClusterJumpPointSpacing() {
         StarSystemAPI expanse = findExisting();
         if (expanse != null) repairClusterJumpPointSpacing(expanse);
+    }
+
+    /** Targeted correction of Avici's former outward-blowing stellar corona. */
+    public static void repairAviciBlackHoleTerrain() {
+        configureAviciBlackHoleTerrain(findSystem(MESSINA_ID));
+    }
+
+    private static void configureAviciBlackHoleTerrain(StarSystemAPI system) {
+        if (!isOwnedSystem(system, MESSINA_ID)
+                || system.getMemoryWithoutUpdate().getBoolean(AVICI_EVENT_HORIZON_V1)) return;
+        PlanetAPI star = system.getStar();
+        if (star == null || !star.isBlackHole()
+                || !(MESSINA_ID + "_black_hole").equals(star.getId())
+                || star.getContainingLocation() != system) return;
+
+        CampaignTerrainAPI original = null;
+        StarCoronaTerrainPlugin corona = null;
+        for (CampaignTerrainAPI terrain : system.getTerrainCopy()) {
+            if (terrain.getContainingLocation() != system
+                    || !(terrain.getPlugin() instanceof StarCoronaTerrainPlugin)
+                    || (!Terrain.CORONA.equals(terrain.getType())
+                    && !Terrain.EVENT_HORIZON.equals(terrain.getType()))) continue;
+            StarCoronaTerrainPlugin candidate = (StarCoronaTerrainPlugin) terrain.getPlugin();
+            if (candidate.getParams() == null || candidate.getParams().relatedEntity != star) continue;
+            // Missing or ambiguous saved terrain is not permission to rebuild it.
+            if (original != null) return;
+            original = terrain;
+            corona = candidate;
+        }
+        if (original == null) return;
+
+        StarGenDataSpec data = (StarGenDataSpec) Global.getSettings().getSpec(
+                StarGenDataSpec.class, StarTypes.BLACK_HOLE, false);
+        CoronaParams old = corona.getParams();
+        if (corona instanceof EventHorizonPlugin) {
+            old.windBurnLevel = data.getSolarWind();
+            old.flareProbability = 0f;
+            old.crLossMult = data.getCrLossMult();
+        } else {
+            // Match vanilla black-hole generation, preserving Avici's authored
+            // hazard radius and every celestial body, orbit and route.
+            SectorEntityToken horizon = system.addTerrain(Terrain.EVENT_HORIZON,
+                    new CoronaParams(old.bandWidthInEngine, old.middleRadius,
+                            star, data.getSolarWind(), 0f, data.getCrLossMult()));
+            if (horizon == null) return;
+            try {
+                horizon.setCircularOrbit(star, 0f, 0f, 100f);
+            } catch (RuntimeException | Error failure) {
+                system.removeEntity(horizon);
+                throw failure;
+            }
+            system.removeEntity(original);
+        }
+        system.getMemoryWithoutUpdate().set(AVICI_EVENT_HORIZON_V1, true);
     }
 
     /** Explicit naming patch: update labels on existing owned objects only. */
@@ -3106,6 +3167,7 @@ public final class OdysseyExpanseSystem {
                 GENERATED_MESSINA)) {
             system.getMemoryWithoutUpdate().set(GENERATED_MESSINA, true);
         }
+        configureAviciBlackHoleTerrain(system);
         ensureEnvironmentAnchor(
                 system, MESSINA_BLACK_CLOUD_ID, MESSINA_BLACK_CLOUD_TYPE);
         AviciHabitatEncounter.ensureExists(system);

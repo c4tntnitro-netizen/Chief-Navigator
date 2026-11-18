@@ -1,0 +1,7 @@
+Command an Onslaught, an Eagle and two Hammerheads against Tetsu Kannon.
+
+First destroy the three Threat wall modules, one along each side of the central triangle. Their visible mounts carry large, medium and small Threat guns, with Swarm Launchers in the fixed launch banks. The central hull remains protected and inert. When the final wall breaks away, the core wakes and hunts you at70 base speed, without engine flares.
+
+The awakened core retains its wide swarm cloud with a concentrated center. It fabricates specialized Assault Units and stock Fabricators. Destroy the core to halt its production, then finish its surviving units.
+
+If no Assault Unit is active or assembling, the next build is an Assault Unit. Otherwise it builds up to three Fabricators, then fills its remaining Assault Unit slots. Both types take twenty seconds to form and have separate caps of three, including unfinished builds. Assault Units attack only with Exodus Plague; point defense can intercept the stream projectiles. Fabricators retain their ordinary weapons and Construction Swarm.

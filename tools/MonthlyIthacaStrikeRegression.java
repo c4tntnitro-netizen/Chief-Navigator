@@ -27,12 +27,16 @@ public final class MonthlyIthacaStrikeRegression {
 
         check(OdysseyPredatorScript.getMonthlyIthacaStrikeTier(0d) == 0,
                 "low rolls select First Strike");
-        check(OdysseyPredatorScript.getMonthlyIthacaStrikeTier(0.49999d) == 0,
-                "rolls below one half select First Strike");
-        check(OdysseyPredatorScript.getMonthlyIthacaStrikeTier(0.5d) == 1,
-                "rolls at one half select Second Strike");
-        check(OdysseyPredatorScript.getMonthlyIthacaStrikeTier(1d) == 1,
-                "high rolls select Second Strike");
+        check(OdysseyPredatorScript.getMonthlyIthacaStrikeTier(0.94999d) == 0,
+                "ordinary rolls select First Strike");
+        check(OdysseyPredatorScript.getMonthlyIthacaStrikeTier(0.95d) == 1,
+                "the next four percent select Second Strike");
+        check(OdysseyPredatorScript.getMonthlyIthacaStrikeTier(0.98999d) == 1,
+                "Second Strike ends below the final percent");
+        check(OdysseyPredatorScript.getMonthlyIthacaStrikeTier(0.99d) == 2,
+                "the final one percent selects Third Strike");
+        check(OdysseyPredatorScript.getMonthlyIthacaStrikeTier(1d) == 2,
+                "high boundary selects Third Strike");
 
         System.out.println("Monthly Ithaca strike regression checks passed.");
     }

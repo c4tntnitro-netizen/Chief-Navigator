@@ -197,8 +197,6 @@ Sinni puts her sleeves together, bowing her head.
 
 Sinni reaches into her robes and pulls out a bottle.
 
-Now you're talking.
-
 + ["Now you're talking."] -> labor_5_sinni_end_3
 
 

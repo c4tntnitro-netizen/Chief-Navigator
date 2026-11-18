@@ -125,7 +125,7 @@ public final class PostLaborHuntIntel extends BaseIntelPlugin {
             info.addPara("Destroy %s in %s.", 10f, Misc.getTextColor(),
                     Misc.getHighlightColor(), target.name, target.systemName);
             info.addPara(target == Target.BUDAI
-                    ? "Budai hunts in Avici with a Shrouded escort, returning toward Kshaya. "
+                    ? "Budai hunts alone in Avici, returning toward Kshaya. "
                         + "His distortion will pursue your fleet while you remain in the system."
                     : "Ungaikyo's local Overseer has knotted the filament web around "
                         + "the derelict Guardian in Bouvo Olympus. Destroy it to free the wreck.", 10f);

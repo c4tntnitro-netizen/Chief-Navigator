@@ -11,6 +11,7 @@ VAR league_asked_sanzu = false
 VAR league_asked_attack = false
 VAR league_asked_future = false
 VAR league_crew_joined = false
+VAR ithaca_prototype_claimed = false
 VAR kshaya_met = false
 VAR kshaya_asked_settling = false
 VAR kshaya_asked_past = false
@@ -21,6 +22,10 @@ VAR kshaya_asked_sara = false
 // These repeatable Kleon topics reveal each hunt location independently.
 // Runtime availability/completion use the existing permanent boss-defeat flags.
 === kleon_hunts ===
+
+{not ithaca_prototype_claimed:
+    + [Discuss the Ithaca Onslaught prototype.] -> kleon_prototype_offer
+}
 
 + ["Where can I find Budai?"] -> kleon_hunt_budai
 + ["What happens now with the Starving Threat?"] -> kleon_hunt_ungaikyo
@@ -41,6 +46,42 @@ Kleon marks Bouvo Olympus.
 
 -> kleon_hunts
 
+
+=== kleon_prototype_offer ===
+
+Kleon turns his slate toward you. A familiar battleship hangs in one of Ithaca's construction berths, its armor now painted teal and navy.
+
+"SPN-17. The Onslaught from the forge hall. We've finished her trials."
+
+He brings up the armament schematic.
+
+"Two naval lasers in place of the thermal pulse cannons. She'll take the same battery upgrades you've brought us. Menelaus has authorized her transfer to your command."
+
++ ["I'll take command of her."] -> kleon_prototype_received
++ ["Keep her ready. I'll return."] -> kleon_hunts
+
+=== kleon_prototype_received ===
+~ ithaca_prototype_claimed = true
+
+Kleon countersigns the transfer and sends it to berth control.
+
+"She's yours, Captain. Let us know how the guns behave."
+
+The Onslaught clears her construction berth. Docking instructions and the ship's command codes follow over the fleet channel.
+
+-> kleon_hunts
+
+// Isa is listed only while her actual officer record is in the player's roster.
+// This private Ithaca menu has one topic; it has no upgrade side effects.
+=== ithaca_isa ===
+
++ [Discuss Ithaca's naval lasers.] -> ithaca_isa_upgrade
+
+=== ithaca_isa_upgrade ===
+
+Isa's engineering skills adds an extra upgrade to ithaca's naval lasers. TODO
+
+-> ithaca_isa
 
 # league victory
 === league_victory ===

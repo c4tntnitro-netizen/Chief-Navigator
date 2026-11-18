@@ -1,5 +1,19 @@
 # Avici enemy development
 
+## Current local behavior — November 12, 2026
+
+The SEP-derived Banshee, Brain and Insatiable Hunter are disabled in active encounters. Budai uses his existing enlarged Maw and a vanilla DwellerCMD HIGH / Transcendent escort with its Maw omitted: 11–14 Tendrils, 2–3 Eyes, and Maelstroms bringing the combined Eye/Maelstrom count to 3–5. The replacement applies once to an undefeated, idle, owned saved Budai fleet, including fleets with the former SEP escort receipt. Subsequent upkeep never restores escort losses.
+
+All six ambient Avici patrol slots remain, with vanilla LOW/MEDIUM/HIGH rosters. Existing owned patrols convert surviving Banshees to Tendrils, Brains to Eyes, and Hunters to Maelstroms on the same fleet members. No missing ships are recreated. Battle, transit, dialog, foreign/player ownership, and missing native definitions defer conversion. Imported definitions remain dormant so old saves can load before their conversion; attribution is retained. SEP's own files and fleets are untouched.
+
+Budai spawns immediately after Sinni's Avici arrival vignette on the next controller update (0.35–0.55 campaign seconds), with no day-based delay. New spawns start 25,000 rather than 100,000 units from the system center. Existing fleet positions are retained. Pursuit remains inside Avici; defeat and salvage remain permanent and once-only. The three legacy AI config call sites now use the installed 0.98.5a constructor, preserving their previous default settings.
+
+The native constructor regression reproduces the old failure and verifies the fix. Focused checks cover Budai creation and saved-escort replacement, no respawn/refill, native patrol ranges, saved-member conversion, busy/foreign guards, combat behavior, and the preserved ITH Onslaught. Evidence: `out_ship_ai_config_20261112`.
+
+## Historical implementation notes
+
+The following records describe the retired port and earlier verification. They are retained for provenance and do not describe the current encounter roster.
+
 This work lives on `dev`, based on the published 0.5.1 hotfixes and the preserved
 local testing work. The installed `mods/Chief Navigator` directory is the dev
 worktree. No 0.5.1 tag, release asset or public release note is changed.

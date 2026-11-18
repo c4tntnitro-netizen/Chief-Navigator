@@ -3,7 +3,6 @@ import chiefnavigator.weapons.IthacaMissileResearchEffect;
 import chiefnavigator.weapons.IthacaLocustPDEffect;
 import chiefnavigator.weapons.DriftingWallBeamEffect;
 import com.fs.starfarer.api.combat.*;
-import com.fs.starfarer.api.combat.listeners.DamageTakenModifier;
 import com.fs.starfarer.api.loading.*;
 import java.lang.reflect.*;
 import java.util.*;
@@ -39,6 +38,7 @@ public class WallResearchRegression {
             switch (name) {
                 case "getHullSpec": return spec;
                 case "getCustomData": return data;
+                case "setCustomData": data.put((String) args[0], args[1]); return null;
                 case "getOwner": return owner;
                 case "getLocation": return position;
                 case "getVelocity": return new Vector2f();
@@ -455,28 +455,19 @@ public class WallResearchRegression {
             if (n.equals("spawnEmpArc")) {
                 check(a[2] == isaPrimary && a[3] == isaSecondary,
                         "Isa refraction is a single enemy-to-enemy hop");
-                check(Math.abs((Float)a[5] - 250f) < .001f
+                check(Math.abs((Float)a[5] - 125f) < .001f
                                 && (Float)a[6] == 0f,
-                        "Isa secondary beam is half strength and has no EMP");
+                        "Isa secondary beam is quarter strength and has no EMP");
                 refractions[0]++;
             }
             return null;
         });
         new DriftingWallBeamEffect().advance(
                 .25f, isaEngine, isaWeapon);
-        check(listenerInstalled[0]
-                        && isaListener[0] instanceof DamageTakenModifier,
-                "Isa shield listener installed on naval-beam contact");
+        check(!listenerInstalled[0] && isaListener[0] == null,
+                "Isa must not install any shield damage modifier");
         check(refractions[0] == 1,
                 "Isa shield contact emits one non-propagating refraction");
-        MutableStat isaDamageMult = new MutableStat(1f);
-        DamageAPI isaDamage = mock(DamageAPI.class,
-                (n,a) -> n.equals("getModifier") ? isaDamageMult : null);
-        ((DamageTakenModifier) isaListener[0]).modifyDamageTaken(
-                isaBeam, isaPrimary, isaDamage,
-                new Vector2f(1000f, 0f), true);
-        check(Math.abs(isaDamageMult.getModifiedValue() - 1.5f) < .001f,
-                "Isa naval beam deals exactly 50% additional shield damage");
         ShipAPI hostileWall = ship("chief_navigator_drifting_wall_base",
                 0, 1, new Vector2f());
         hostileWall.getCustomData().put(

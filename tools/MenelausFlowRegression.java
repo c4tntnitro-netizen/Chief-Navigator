@@ -155,6 +155,9 @@ public final class MenelausFlowRegression {
                     if (result == negated) {
                         return false;
                     }
+                } else if (commandLine.equals("ChiefNavigatorIthacaIsaCMD")) {
+                    if (!new data.campaign.rulecmd.ChiefNavigatorIthacaIsaCMD().execute(
+                            id, f.dialog, List.of(), memory)) return false;
                 } else {
                     check(line.startsWith("$") || line.startsWith("!$"),
                             "Unrecognized condition in tested authored graph: " + id + ": " + line);

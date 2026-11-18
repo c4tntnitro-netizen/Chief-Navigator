@@ -15,7 +15,7 @@ import java.nio.file.*;
 import java.util.*;
 import org.json.*;
 
-/** Executes the authored prototype graph through native FireAll/FireBest. */
+/** Legacy fixture helpers and the removed Menelaus training-menu contract. */
 public final class PeerlessDialogueRegression {
     interface Call { Object call(String name, Object[] args); }
     static <T> T mock(Class<T> type, Call call) {
@@ -137,22 +137,25 @@ public final class PeerlessDialogueRegression {
             if(n.equals("getPlayerStats"))return stats;
             if(n.equals("getRules"))return rules;return extraSector.call(n,a);
         }));
-        saved.put(MenelausTrial.FINAL_DEBRIEF_COMPLETE,true);
-        FireAll.fire(null,dialog,scope,"ChiefNavigatorFobIthacaCompleteOptions");
-        check(gold.contains("chief_navigator_peerless_open"),"Gold entry");
-        choose("chief_navigator_peerless_open");
-        check(!saved.containsKey(MenelausTrial.DOMAIN_EPIC),"Preview never grants");
-        choose("chief_navigator_peerless_receive");
-        check(Global.getSector().getMemoryWithoutUpdate().getBoolean(MenelausTrial.DOMAIN_EPIC),"Title accepted");
-        check(!options.containsKey("chief_navigator_peerless_select"),"Cannot select without Elite");
-        choose("chief_navigator_peerless_back");check(returned,"Return dispatch");returned=false;
-        skill=2f;FireAll.fire(null,dialog,scope,"ChiefNavigatorPeerlessView");
-        check(gold.contains("chief_navigator_peerless_select"),"Gold selection");
-        choose("chief_navigator_peerless_select");
-        check(PeerlessSkills.isTrained("helmsmanship"),"Skill selected");
-        check(!options.containsKey("chief_navigator_peerless_select"),"No repeat selection");
-        check(options.containsKey("chief_navigator_peerless_back"),"Can return after selection");
-        System.out.println("PASS: native rules parser and FireAll/FireBest; title, prerequisite, choice, gold options, single slot and return route.");
+        check(rows.isEmpty(),"Menelaus has no distinction or training rules");
+        for (boolean complete : new boolean[]{false,true}) {
+            saved.clear(); saved.put(MenelausTrial.FINAL_DEBRIEF_COMPLETE,complete);
+            options.clear();
+            check(!FireAll.fire(null,dialog,scope,"ChiefNavigatorFobIthacaCompleteOptions"),
+                    "The retired section adds no menu options");
+            // Native FireAll records its trigger in the fixture's shared local scope.
+            Map<String,Object> before = new HashMap<>(saved);
+            for(String id:List.of("chief_navigator_peerless_open","chief_navigator_peerless_receive","chief_navigator_peerless_select")) {
+                choice=id;
+                check(!FireBest.fire(null,dialog,scope,"DialogOptionSelected"),"Retired choices cannot reopen training");
+            }
+            for(String action:List.of("canReceive","hasTitle","hasPoint","canSelect","selected","receive","select")) {
+                check(!new ChiefNavigatorPeerlessCMD().execute(null,dialog,Misc.tokenize(action),scope),
+                        "Retired command is inert: "+action);
+            }
+            check(options.isEmpty() && saved.equals(before),"Removed menus cannot grant or spend points");
+        }
+        System.out.println("PASS: Menelaus distinction/training rules removed; stale routes and commands inert; saved state unchanged.");
     }
     public static void main(String[] args)throws Exception{new PeerlessDialogueRegression().run();}
 }

@@ -1,0 +1,10 @@
+{
+  "id": "chief_navigator_exodus_plague",
+  "type": "STAT_MOD",
+  "aiType": "CUSTOM",
+  "aiScript": "chiefnavigator.systems.ExodusPlagueAI",
+  "runScriptWhileIdle": true,
+  "statsScript": "chiefnavigator.systems.ExodusPlagueSystem",
+  "useSound": "threat_swarm_launched",
+  "outOfUsesSound": "gun_out_of_ammo"
+}

@@ -45,22 +45,22 @@ public final class NarrativeDialogueRegression {
         contains(rules,
                 "$global.chief_navigator_menelaus_helen_final_heard_v2",
                 "The final Helen conversation must be one-time");
-        contains(rules, "AUTHORITY: GRAND NAVARCH KALI MOLINA",
+        contains(rules, "AUTHORITY: STRATEGOS KALI MOLINA",
                 "Helen's manifest must name Molina's command authority");
         contains(rules, "My first and only rebellion against my nation",
                 "Menelaus must admit that he fabricated the authorization");
         contains(rules, "chief_navigator_menelaus_helen_navarch_2",
                 "The player must be able to ask about Menelaus's old status");
-        contains(rules, "By undergoing 'Kenosis'—self-emptying",
+        contains(rules, "He set aside the unrestricted exercise of divinity",
                 "Menelaus must explain the model for his self-limitation");
         contains(rules, "I would not sully my experiences with Lieutenant "
-                        + "Commander Argyros for certainty",
+                        + "Commander Argyros for the certainty of a calculation",
                 "Menelaus must reject simulating Helen for certainty");
-        contains(rules, "That AI onboard FOB Ithaca is an annoying motherfucker",
+        contains(rules, "That AI onboard FOB Ithaca is an... annoying motherfucker",
                 "Helen's journal must retain her own profane voice");
         contains(rules, "Still annoying as fuck. But I like it.",
                 "Helen's journal must end on her admission");
-        contains(helenInk, "AUTHORITY: GRAND NAVARCH KALI MOLINA",
+        contains(helenInk, "AUTHORITY: STRATEGOS KALI MOLINA",
                 "The Helen Ink source must mirror the revised manifest");
         contains(helenInk, "=== changed_6 ===",
                 "The Helen Ink source must retain the Kenosis explanation");

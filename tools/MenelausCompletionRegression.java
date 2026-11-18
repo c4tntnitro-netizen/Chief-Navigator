@@ -46,6 +46,14 @@ public final class MenelausCompletionRegression {
     }
 
     public static void main(String[] args) {
+        boolean withoutPeerless = java.util.Arrays.asList(args).contains("--without-peerless");
+        boolean enabledButMissing = java.util.Arrays.asList(args).contains("--enabled-missing");
+        Global.setSettings(mock(com.fs.starfarer.api.SettingsAPI.class, (name, values) -> {
+            if (name.equals("getModManager")) return mock(com.fs.starfarer.api.ModManagerAPI.class,
+                    (method, params) -> method.equals("isModEnabled")
+                            && params[0].equals("peerless_skills") && (!withoutPeerless || enabledButMissing));
+            return null;
+        }));
         Map<String, Object> flags = new HashMap<String, Object>();
         MemoryAPI memory = mock(MemoryAPI.class, (name, values) -> {
             if (name.equals("getBoolean")) {
@@ -110,6 +118,7 @@ public final class MenelausCompletionRegression {
                 "Finishing the debrief must commit Labor V");
         check(MenelausTrial.isComplete(),
                 "The quest must complete after the debrief");
+        if (!withoutPeerless) {
         check(Global.getSector().getMemoryWithoutUpdate().getBoolean(MenelausTrial.DOMAIN_EPIC) && (PeerlessSkills.getPoints() > 0),
                 "The actual final debrief automatically grants Domain Epic and one Peerless point");
         check(!MenelausTrial.completeFinalDebrief() && !MenelausTrial.receiveDomainEpic(),
@@ -119,6 +128,12 @@ public final class MenelausCompletionRegression {
         check(!MenelausTrial.completeFinalDebrief() && !MenelausTrial.receiveDomainEpic()
                 && PeerlessSkills.isTrained("helmsmanship") && !(PeerlessSkills.getPoints() > 0),
                 "Revisiting after training never refunds the point or removes the upgrade");
+        } else {
+            check(!flags.containsKey(MenelausTrial.DOMAIN_EPIC),
+                    "Unavailable optional rewards cannot consume their one-time receipt");
+            check(!MenelausTrial.completeFinalDebrief() && !MenelausTrial.receiveDomainEpic(),
+                    "An absent optional library cannot reopen or duplicate the debrief");
+        }
         check(hunts.size() == 2 && hunts.stream().allMatch(item -> item instanceof PostLaborHuntIntel),
                 "The real debrief immediately starts the two boss hunts");
         check(Boolean.TRUE.equals(flags.get(
@@ -135,6 +150,7 @@ public final class MenelausCompletionRegression {
                 "A successfully opened cinematic must be one-time and durable");
 
         System.out.println("PASS: Heavenly Strike victory routes through "
-                + "Menelaus, awards one Peerless point, then opens the one-time completion cinematic.");
+                + "Menelaus, preserves optional rewards, then opens the one-time completion cinematic"
+                + (withoutPeerless ? " without the Peerless JAR." : " with Peerless installed."));
     }
 }

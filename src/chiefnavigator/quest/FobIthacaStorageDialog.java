@@ -10,6 +10,7 @@ import com.fs.starfarer.api.campaign.SectorEntityToken;
 import com.fs.starfarer.api.campaign.econ.MarketAPI;
 import com.fs.starfarer.api.campaign.rules.MemoryAPI;
 import com.fs.starfarer.api.impl.campaign.ids.Factions;
+import com.fs.starfarer.api.impl.campaign.ids.Industries;
 import com.fs.starfarer.api.impl.campaign.ids.Submarkets;
 import com.fs.starfarer.api.impl.campaign.submarkets.StoragePlugin;
 
@@ -60,6 +61,11 @@ final class FobIthacaStorageDialog {
         // Alias the persistent store, including its mothballed ships. Never
         // copy cargo into a temporary market that will disappear on closing.
         storage.setCargo(stored);
+        // Native hullmods require a station/spaceport-tagged industry in the
+        // refit market. Instantiate only: addIndustry() applies colony effects
+        // and notifies economy listeners, neither of which belongs on this UI
+        // carrier. Its live industry list also covers switching into Refit.
+        carrier.getIndustries().add(carrier.instantiateIndustry(Industries.SPACEPORT));
         carrier.setPrimaryEntity(station);
         station.setMarket(carrier);
 

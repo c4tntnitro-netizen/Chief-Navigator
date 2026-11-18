@@ -29,7 +29,7 @@ public final class GautamaFinalDataRegression {
         check(shipData.contains(
                         "Gautama Base,chief_navigator_scylla_base,"
                         + "Command Organism,Threat,extraction_protocol,"),
-                "Every Gautama skin must inherit the Line Unit's Extraction Protocol");
+                "Every Gautama skin must inherit native Extraction Protocol");
         check(!shipData.contains(",chief_navigator_ungaikyo,"),
                 "Ungaikyo is a skin and must not have a duplicate hull spreadsheet row");
 
@@ -73,6 +73,9 @@ public final class GautamaFinalDataRegression {
                         && !reincarnating.contains("chief_navigator_bone_")
                         && !variant.contains("chief_navigator_bone_"),
                 "Gautama must never equip retired custom Starving weapons");
+        for (String fit : new String[] {historical, reincarnating, variant}) {
+            check(!fit.contains("chief_navigator_threat_swarm_stream"), "Old stream weapon removed from every Gautama fit");
+        }
         String gautamaHull = read("data/hulls/chief_navigator_scylla_base.ship");
         for (String slot : new String[] {"WS 032", "WS 033", "WS 034", "WS 035"}) {
             check(gautamaHull.contains("\"id\": \"" + slot + "\""),
@@ -103,6 +106,10 @@ public final class GautamaFinalDataRegression {
                     "Starving hulls must retain their authored loadouts");
         }
 
+        if (args.length > 0 && args[0].equals("--weapons-only")) {
+            System.out.println("PASS: all three Gautama configurations retain their native guns and inherit Extraction Protocol; original mounts and weapon exclusions verified.");
+            return;
+        }
         String hullmods = read("data/hullmods/hull_mods.csv");
         check(hullmods.contains(
                         "chief_navigator_gautama_mirror,3,,Threat,"

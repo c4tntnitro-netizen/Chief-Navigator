@@ -1,0 +1,38 @@
+{
+  "id": "chief_navigator_exodus_plague_packet_shot",
+  "specClass": "missile",
+  "onHitEffect": "chiefnavigator.systems.ExodusPlaguePacketEffect",
+  "missileType": "MISSILE",
+  "sprite": "graphics/fx/empty.png",
+  "size": [
+    13,
+    17
+  ],
+  "center": [
+    7,
+    9
+  ],
+  "collisionRadius": 8,
+  "collisionClass": "MISSILE_NO_FF",
+  "explosionColor": [
+    130,
+    155,
+    145,
+    80
+  ],
+  "explosionRadius": 12,
+  "useHitGlowWhenDestroyed": true,
+  "fizzleOnReachingWeaponRange": true,
+  "useProjectileRangeCalculation": false,
+  "dudProbabilityOnFlameout": 0,
+  "armingTime": 0,
+  "flameoutTime": 0.1,
+  "noEngineGlowTime": 0,
+  "fadeTime": 0.15,
+  "engineSpec": {
+    "turnAcc": 0,
+    "turnRate": 0,
+    "acc": 0,
+    "dec": 0
+  }
+}

@@ -331,7 +331,7 @@ Sinni goes still while Menelaus dismisses the records. Her expression tightens, 
 === menelaus_labor_2_repair ===
 
 // Runtime invokes ChiefNavigatorMenelausCMD repair before returning to the hub.
-FOB Ithaca's automated gantries restore your fleet's hulls and armor, then cycle every ship to maximum combat readiness. No payment is requested.
+FOB Ithaca's automated gantries restore your fleet's hulls and armor, then cycle every ship to maximum combat readiness.
 
 -> menelaus_contact_labor_2_menu
 

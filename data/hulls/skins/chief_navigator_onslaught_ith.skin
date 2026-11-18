@@ -1,0 +1,26 @@
+{
+  "baseHullId": "onslaught",
+  "skinHullId": "chief_navigator_onslaught_ith",
+  "hullName": "Onslaught (ITH)",
+  "descriptionId": "chief_navigator_onslaught_ith",
+  "tech": "Ithaca",
+  "incompatibleWithBaseHull": true,
+  "spriteName": "graphics/ships/ithaca/chief_navigator_onslaught_ith.png",
+  "tags": [
+    "no_dealer",
+    "no_autofit",
+    "no_bp_drop",
+    "chief_navigator_ithaca"
+  ],
+  "removeWeaponSlots": [],
+  "removeEngineSlots": [],
+  "removeBuiltInMods": [],
+  "removeBuiltInWeapons": [
+    "WS 016",
+    "WS 017"
+  ],
+  "builtInWeapons": {
+    "WS 016": "chief_navigator_onslaught_ith_naval_laser",
+    "WS 017": "chief_navigator_onslaught_ith_naval_laser"
+  }
+}

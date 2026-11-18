@@ -350,6 +350,26 @@ public final class AbyssalLensRegression extends WallResearchRegression {
                 "The stock-fringe fallback must apply only to the exact owned naval weapon");
     }
 
+    private static void ithacaOnslaught() {
+        ithacaShip(IthacaResearchUpgrades.ITHACA_ONSLAUGHT_HULL_ID,
+                IthacaResearchUpgrades.ITHACA_ONSLAUGHT_LASER_ID);
+        ithacaShip(IthacaResearchUpgrades.ITHACA_ODYSSEY_HULL_ID,
+                IthacaResearchUpgrades.ITHACA_ODYSSEY_LASER_ID);
+    }
+
+    private static void ithacaShip(String hull, String weapon) {
+        Fixture f = new Fixture();
+        Ray upgraded = new Ray(hull, IthacaResearchUpgrades.ABYSSAL_LENS, null, weapon);
+        f.advance(new IthacaAbyssalBeamEffect(), upgraded, .01f);
+        check(f.explosions.size() == 1 && f.gradients.size() == 1
+                        && EMPTY.equals(upgraded.fringeTexture) && upgraded.coreTextureWrites == 0,
+                "Ithaca ship uses the native lens impact and its own beam fringe renderer: " + hull);
+        Ray baseline = new Ray(hull, 0, null, weapon);
+        f.advance(new IthacaAbyssalBeamEffect(), baseline, .01f);
+        check(baseline.colorWrites == 0 && f.explosions.size() == 1 && f.gradients.size() == 1,
+                "The new hull does not receive an uninstalled lens");
+    }
+
     public static void main(String[] args) {
         SettingsAPI settings = Global.getSettings();
         SoundPlayerAPI sound = Global.getSoundPlayer();
@@ -376,6 +396,7 @@ public final class AbyssalLensRegression extends WallResearchRegression {
             rendererLifecycle();
             renderingFallback();
             nativeRoughDefaultAndWeaponScope();
+            ithacaOnslaught();
             System.out.println("PASS: scoped lens fringe gradients and lifecycle, unchanged native white core/red Glare "
                     + "explosions and rifts, per-ray acquisition, pause, deployment snapshots and safe rendering fallback.");
         } finally {

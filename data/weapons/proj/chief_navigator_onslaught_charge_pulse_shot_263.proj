@@ -1,0 +1,29 @@
+{
+  "id": "chief_navigator_onslaught_charge_pulse_shot_263",
+  "specClass": "projectile",
+  "spawnType": "BALLISTIC_AS_BEAM",
+  "collisionClass": "RAY",
+  "collisionClassByFighter": "RAY_FIGHTER",
+  "length": 263,
+  "width": 9,
+  "hitGlowRadius": 12,
+  "fadeTime": 0.06,
+  "fringeColor": [
+    38,
+    145,
+    158,
+    255
+  ],
+  "coreColor": [
+    244,
+    255,
+    246,
+    255
+  ],
+  "textureType": "ROUGH",
+  "textureScrollSpeed": 520,
+  "pixelsPerTexel": 1,
+  "passThroughMissiles": true,
+  "passThroughFighters": true,
+  "passThroughFightersOnlyWhenDestroyed": false
+}

@@ -39,7 +39,7 @@ public final class NativeStationAllyRegression extends WallResearchRegression {
         try {
             Global.setSettings(mock(SettingsAPI.class,(n,a)->null));
             org.json.JSONObject settings=new org.json.JSONObject(java.nio.file.Files.readString(
-                    java.nio.file.Path.of(System.getProperty("chiefNavigator.testCore", "../../starsector-core"), "data/config/settings.json")).replaceAll("(?m)#.*$", ""));
+                    java.nio.file.Path.of("../../starsector-core/data/config/settings.json")).replaceAll("(?m)#.*$", ""));
             for (Field field:com.fs.starfarer.settings.StarfarerSettings.class.getDeclaredFields()) {
                 if (field.getType()==org.json.JSONObject.class&&Modifier.isStatic(field.getModifiers())) {
                     field.setAccessible(true);field.set(null,settings);

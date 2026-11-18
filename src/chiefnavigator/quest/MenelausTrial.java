@@ -415,7 +415,7 @@ public final class MenelausTrial {
     }
 
     public static boolean receiveDomainEpic() {
-        return canReceiveDomainEpic() && peerless.api.PeerlessSkills.awardOnce(DOMAIN_EPIC);
+        return canReceiveDomainEpic() && chiefnavigator.compat.PeerlessRewards.awardOnce(DOMAIN_EPIC);
     }
 
     /** Commits Labor V only when the player finishes Menelaus's debrief. */

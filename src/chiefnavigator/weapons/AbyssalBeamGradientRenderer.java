@@ -43,7 +43,8 @@ public final class AbyssalBeamGradientRenderer extends BaseCombatLayeredRenderin
     /** Hide the native fringe only after its visual replacement has registered. */
     public static AbyssalBeamGradientRenderer install(CombatEngineAPI engine, BeamAPI beam) {
         if (engine == null || beam == null || beam.getWeapon() == null
-                || !WEAPON_ID.equals(beam.getWeapon().getId())
+                || !(WEAPON_ID.equals(beam.getWeapon().getId())
+                        || IthacaResearchUpgrades.isShipNavalLaserId(beam.getWeapon().getId()))
                 || !(beam.getWeapon().getSpec() instanceof BeamWeaponSpecAPI)
                 || !IthacaResearchUpgrades.hasUpgrade(
                         beam.getSource(), IthacaResearchUpgrades.ABYSSAL_LENS)) return null;

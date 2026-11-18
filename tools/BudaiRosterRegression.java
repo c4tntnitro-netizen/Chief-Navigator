@@ -19,7 +19,7 @@ import java.util.*;
 import org.lwjgl.util.vector.Vector2f;
 import static chiefnavigator.quest.BudaiSalvageRewardRegression.*;
 
-/** Restored Maw, SEP large-manifestation escorts, one-time conversion and loss preservation. */
+/** Restored Maw, vanilla Transcendent escorts, one-time conversion and loss preservation. */
 public final class BudaiRosterRegression {
     private static final String SPAWNED = "$chief_navigator_budai_spawned";
     private static final String HUNTER = "$chief_navigator_budai_hunter";
@@ -197,14 +197,14 @@ public final class BudaiRosterRegression {
             verifyEscortedCreation(true);
             verifyNoPostLaborRosterGrowth();
             verifyOneTimeHunterRestoration();
-            verifySepComposition();
+            verifyVanillaComposition();
             verifyBusyAndDefeatedConfigurationGuards();
         } finally {
             Global.setSector(previousSector);
             Global.setFactory(previousFactory);
             Global.setSettings(previousSettings);
         }
-        System.out.println("PASS: oversized-Maw variant, SEP large-manifestation escort without Maws, "
+        System.out.println("PASS: oversized-Maw variant, vanilla Transcendent escort without Maws, "
                 + "one-time saved-Hunter restoration, no escort replenishment, busy/player/foreign guards and no respawn.");
     }
 
@@ -214,17 +214,17 @@ public final class BudaiRosterRegression {
         if (completedLabors) f.completeLabors();
         check(f.spawn() == f.fleet && f.entity == f.fleet
                         && f.fleetFactories == 1 && f.memberFactories == f.members.size()
-                        && f.added == f.members.size() && f.members.size() >= 17 && f.members.size() <= 24
+                        && f.added == f.members.size() && f.members.size() >= 15 && f.members.size() <= 20
                         && f.members.get(0) == f.budai
                         && f.flagship == f.budai && f.budai.getVariant() == f.budaiVariant
                         && "Budai".equals(f.shipName),
-                "Fresh Budai is the named Maw with one SEP large-manifestation escort at either quest stage");
+                "Fresh Budai is the named Maw with one vanilla Transcendent escort at either quest stage");
         check(f.requestedVariants.get(0).equals(BudaiFleetComposition.MAW_VARIANT)
                         && f.requestedVariants.stream().filter(id -> id.contains("maw") || id.contains("charybdis")).count() == 1,
                 "Budai is the only Maw; special boss weapons remain confined to his variant");
-        check(Math.abs(Vector2f.sub(f.location, f.center, null).length() - 100000f) < 0.01f
+        check(Math.abs(Vector2f.sub(f.location, f.center, null).length() - 25000f) < 0.01f
                         && f.positionWrites == 1,
-                "Solo roster change must preserve the 100,000-unit initial position");
+                "The initial ambush approach starts 25,000 units from Avici's center");
         f.saved.put(SPAWNED, true);
         int factories = f.memberFactories;
         check(f.spawn() == null && f.fleetFactories == 1 && f.memberFactories == factories,
@@ -264,6 +264,7 @@ public final class BudaiRosterRegression {
         f.members.add(existingEscort);
         f.flagship = existingEscort;
         f.local.put(RETIRED_ESCORT_MARKER, true);
+        f.local.put("$chief_navigator_budai_maw_sep_escort_v1", true);
         f.completeLabors();
         f.configure();
         check(f.members.get(0) == f.budai && f.flagship == f.budai && !f.members.contains(existingEscort)
@@ -285,19 +286,17 @@ public final class BudaiRosterRegression {
         return variants.stream().filter(id::equals).count();
     }
 
-    private static void verifySepComposition() {
+    private static void verifyVanillaComposition() {
         for (int seed = 0; seed < 100; seed++) {
             List<String> roster = BudaiFleetComposition.escortVariants(new Random(seed));
             long tendrils = count(roster, "shrouded_tendril_Roiling");
-            long banshees = count(roster, AviciDwellerContent.BANSHEE_VARIANT);
             long eyes = count(roster, "shrouded_eye_Darkened");
             long maelstroms = count(roster, "shrouded_maelstrom_Menacing");
-            check(tendrils >= 8 && tendrils <= 11 && banshees >= 4 && banshees <= 6
-                            && eyes >= 2 && eyes <= 4 && count(roster, AviciDwellerContent.BRAIN_VARIANT) == 1
+            check(tendrils >= 11 && tendrils <= 14 && eyes >= 2 && eyes <= 3
                             && maelstroms >= Math.max(0, 3 - eyes) && maelstroms <= Math.max(0, 5 - eyes)
                             && roster.stream().noneMatch(id -> id.contains("maw") || id.contains("charybdis"))
-                            && roster.size() == tendrils + banshees + eyes + maelstroms + 1,
-                    "Escort matches SEP's normal largeFleet/HIGH ranges with its Maw entries removed");
+                            && roster.size() == tendrils + eyes + maelstroms,
+                    "Escort matches vanilla DwellerCMD HIGH ranges with its Maw entry removed");
         }
     }
 

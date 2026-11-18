@@ -16,7 +16,7 @@ public final class RulesCsvValidation {
         try {
             // This installed loader appears in the startup crash stack. Keep
             // engine internals confined to this external verification tool.
-            rows = (JSONArray) Class.forName("com.fs.starfarer.loading.G")
+            rows = (JSONArray) Class.forName("com.fs.starfarer.loading.void")
                     .getMethod("o00000", String.class).invoke(null, source);
         } catch (InvocationTargetException ex) {
             throw new IllegalStateException("Starsector rejected " + args[0], ex.getCause());

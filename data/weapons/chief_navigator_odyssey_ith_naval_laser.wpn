@@ -1,0 +1,60 @@
+{
+  "id": "chief_navigator_odyssey_ith_naval_laser",
+  "specClass": "beam",
+  "everyFrameEffect": "chiefnavigator.weapons.DriftingWallBeamEffect",
+  "beamEffect": "chiefnavigator.weapons.IthacaAbyssalBeamEffect",
+  "type": "ENERGY",
+  "size": "LARGE",
+  "beamFireOnlyOnFullCharge": true,
+  "turretSprite": "graphics/weapons/tachyon_lance_turret_base.png",
+  "hardpointSprite": "graphics/weapons/tachyon_lance_hardpoint_base.png",
+  "hardpointGlowSprite": "graphics/weapons/chief_navigator_odyssey_ith_laser_hardpoint_glow.png",
+  "turretOffsets": [
+    -3,
+    0
+  ],
+  "turretAngleOffsets": [
+    0
+  ],
+  "hardpointOffsets": [
+    5,
+    0
+  ],
+  "hardpointAngleOffsets": [
+    0
+  ],
+  "fringeColor": [
+    38,
+    145,
+    158,
+    255
+  ],
+  "coreColor": [
+    244,
+    255,
+    246,
+    255
+  ],
+  "glowColor": [
+    104,
+    210,
+    202,
+    220
+  ],
+  "darkCore": false,
+  "width": 90,
+  "textureType": "ROUGH",
+  "textureScrollSpeed": 520,
+  "pixelsPerTexel": 5,
+  "pierceSet": [
+    "PROJECTILE_FF",
+    "PROJECTILE_NO_FF",
+    "PROJECTILE_FIGHTER",
+    "MISSILE_FF",
+    "MISSILE_NO_FF",
+    "FIGHTER"
+  ],
+  "fireSoundOne": "chief_navigator_naval_gun_load",
+  "fireSoundTwo": "chief_navigator_naval_gun_fire",
+  "turretGlowSprite": "graphics/weapons/chief_navigator_odyssey_ith_laser_turret_glow.png"
+}

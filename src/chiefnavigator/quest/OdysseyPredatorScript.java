@@ -207,6 +207,29 @@ public final class OdysseyPredatorScript implements EveryFrameScript {
     private static final int FIRST_STRIKE = 0;
     private static final int SECOND_STRIKE = 1;
     private static final int THIRD_STRIKE = 2;
+    static final String RARE_STRIKE_TIER = "$chief_navigator_rare_strike_tier";
+
+    static int getRareStrikeTier(double roll) {
+        if (roll >= 0.99) return THIRD_STRIKE;
+        if (roll >= 0.95) return SECOND_STRIKE;
+        return -1;
+    }
+
+    /** Rolls once while creating a new ambient fleet, never during upkeep. */
+    static boolean addRareStrikeRoster(CampaignFleetAPI fleet, double roll) {
+        int tier = getRareStrikeTier(roll);
+        if (tier < 0) return false;
+        addStrikeRoster(fleet, tier);
+        fleet.getMemoryWithoutUpdate().set(RARE_STRIKE_TIER, tier);
+        fleet.setName(strikeTierName(tier));
+        return true;
+    }
+
+    private static String ambientThreatName(CampaignFleetAPI fleet, String ordinary) {
+        MemoryAPI memory = fleet.getMemoryWithoutUpdate();
+        return memory.contains(RARE_STRIKE_TIER)
+                ? strikeTierName(memory.getInt(RARE_STRIKE_TIER)) : ordinary;
+    }
 
     // Deterministic Starving equivalents of the role-count ranges used by
     // vanilla's First, Second, and Third Strike generation. Columns are:
@@ -298,7 +321,7 @@ public final class OdysseyPredatorScript implements EveryFrameScript {
     // Match the authored western breach even when its station is unavailable.
     private static final float ITHACA_FINAL_CENTER_BREACH_OFFSET_X = -1620f;
     private static final float CHARYBDIS_STAGING_OFFSET = 900f;
-    private static final float BUDAI_INITIAL_SPAWN_DISTANCE = 100_000f;
+    private static final float BUDAI_INITIAL_SPAWN_DISTANCE = 25_000f;
     private static final float CHARYBDIS_SENSOR_OVERRIDE = 1000000f;
     private static final float TROY_ARRIVAL_SAFE_RADIUS = 4500f;
     private static final float TROY_ARRIVAL_CLEAR_RADIUS = 6500f;
@@ -1608,7 +1631,7 @@ public final class OdysseyPredatorScript implements EveryFrameScript {
     }
 
     /**
-     * Sends one materialized-from-nowhere First or Second Strike against an
+     * Sends one materialized-from-nowhere Strike against an
      * Ithaca wall bastion roughly once per campaign month. The fleet exists
      * only for a bounded attack window so a surviving raid cannot block all
      * later deployments.
@@ -1742,7 +1765,8 @@ public final class OdysseyPredatorScript implements EveryFrameScript {
     }
 
     static int getMonthlyIthacaStrikeTier(double roll) {
-        return roll < 0.5d ? FIRST_STRIKE : SECOND_STRIKE;
+        int rare = getRareStrikeTier(roll);
+        return rare < 0 ? FIRST_STRIKE : rare;
     }
 
     private static CampaignFleetAPI spawnMonthlyIthacaStrike(
@@ -3115,7 +3139,7 @@ public final class OdysseyPredatorScript implements EveryFrameScript {
         }
     }
 
-    private static void addStrikeRoster(CampaignFleetAPI fleet, int tier) {
+    static void addStrikeRoster(CampaignFleetAPI fleet, int tier) {
         int[] counts = POST_LABOR_STRIKE_COUNTS[tier];
         for (int role = 0; role < counts.length; role++) {
             String[] variants = STARVING_ROLE_VARIANTS[role];
@@ -3157,9 +3181,7 @@ public final class OdysseyPredatorScript implements EveryFrameScript {
         memory.unset(MemFlags.FLEET_IGNORED_BY_OTHER_FLEETS);
 
         int tier = memory.getInt(ITHACA_MONTHLY_STRIKE_TIER);
-        fleet.setName(tier == SECOND_STRIKE
-                ? "Starving Threat Second Strike"
-                : "Starving Threat First Strike");
+        fleet.setName("Starving Threat " + strikeTierName(tier));
         if (fleet.getBattle() != null) {
             if (!memory.getBoolean(ITHACA_STRIKE_TRACE_BATTLE)) {
                 logIthacaStrike("Fleet id=" + fleet.getId()
@@ -3565,18 +3587,20 @@ public final class OdysseyPredatorScript implements EveryFrameScript {
         fleet.getMemoryWithoutUpdate().set(
                 REGIONAL_SMALL_PATROL_MARKER, true);
 
-        int size = 2 + (int) (Math.random() * 3f);
-        boolean lineUnit = Math.random() < REGIONAL_LINE_CHANCE;
-        for (int slot = 0; slot < size; slot++) {
-            String variant;
-            if (lineUnit && slot == 0) {
-                variant = REGIONAL_LINE_VARIANTS[(int) (Math.random()
-                        * REGIONAL_LINE_VARIANTS.length)];
-            } else {
-                variant = REGIONAL_SMALL_PATROL_VARIANTS[(int) (Math.random()
-                        * REGIONAL_SMALL_PATROL_VARIANTS.length)];
+        if (!addRareStrikeRoster(fleet, Math.random())) {
+            int size = 2 + (int) (Math.random() * 3f);
+            boolean lineUnit = Math.random() < REGIONAL_LINE_CHANCE;
+            for (int slot = 0; slot < size; slot++) {
+                String variant;
+                if (lineUnit && slot == 0) {
+                    variant = REGIONAL_LINE_VARIANTS[(int) (Math.random()
+                            * REGIONAL_LINE_VARIANTS.length)];
+                } else {
+                    variant = REGIONAL_SMALL_PATROL_VARIANTS[(int) (Math.random()
+                            * REGIONAL_SMALL_PATROL_VARIANTS.length)];
+                }
+                addMember(fleet, variant);
             }
-            addMember(fleet, variant);
         }
         if (!fleet.getFleetData().getMembersListCopy().isEmpty()) {
             fleet.getFleetData().setFlagship(
@@ -3596,7 +3620,7 @@ public final class OdysseyPredatorScript implements EveryFrameScript {
         if (TroyArrivalScript.isFleetBusyForMutation(fleet)) return;
         configureStarvingThreatIdentity(fleet);
         fleet.setFaction(Factions.THREAT, true);
-        fleet.setName("Starving Threat Patrol");
+        fleet.setName(ambientThreatName(fleet, "Starving Threat Patrol"));
         configureHostileFleet(fleet);
         clearIthacaProtectionOverride(fleet);
         if (!protectAlphaStarvingArrival(fleet, system)) {
@@ -3607,7 +3631,11 @@ public final class OdysseyPredatorScript implements EveryFrameScript {
         fleet.getMemoryWithoutUpdate().set(
                 MemFlags.MEMORY_KEY_NO_JUMP, true);
         fleet.getMemoryWithoutUpdate().set(
-                MemFlags.MEMORY_KEY_FLEET_TYPE, FleetTypes.PATROL_SMALL);
+                MemFlags.MEMORY_KEY_FLEET_TYPE,
+                fleet.getMemoryWithoutUpdate().contains(RARE_STRIKE_TIER)
+                        ? fleet.getMemoryWithoutUpdate().getInt(RARE_STRIKE_TIER) == THIRD_STRIKE
+                                ? FleetTypes.PATROL_LARGE : FleetTypes.PATROL_MEDIUM
+                        : FleetTypes.PATROL_SMALL);
         if (fleet.getCurrentAssignment() == null) {
             fleet.addAssignment(
                     FleetAssignment.PATROL_SYSTEM,
@@ -3632,11 +3660,13 @@ public final class OdysseyPredatorScript implements EveryFrameScript {
         fleet.setNoFactionInName(true);
         fleet.setTransponderOn(false);
 
-        int groups = DEVOURED_STARVING_PREFIX.equals(idPrefix) ? 3 : 1;
-        for (int group = 0; group < groups; group++) {
-            String[] loadout = STARVING_LOADOUTS[
-                    (index + group) % STARVING_LOADOUTS.length];
-            for (String variantId : loadout) addMember(fleet, variantId);
+        if (!addRareStrikeRoster(fleet, Math.random())) {
+            int groups = DEVOURED_STARVING_PREFIX.equals(idPrefix) ? 3 : 1;
+            for (int group = 0; group < groups; group++) {
+                String[] loadout = STARVING_LOADOUTS[
+                        (index + group) % STARVING_LOADOUTS.length];
+                for (String variantId : loadout) addMember(fleet, variantId);
+            }
         }
         if (!fleet.getFleetData().getMembersListCopy().isEmpty()) {
             fleet.getFleetData().setFlagship(
@@ -3693,7 +3723,7 @@ public final class OdysseyPredatorScript implements EveryFrameScript {
 
     private static void configureDevouredStarvingBehavior(
             CampaignFleetAPI fleet, StarSystemAPI system) {
-        fleet.setName("Starving Threat Feeding Mass");
+        fleet.setName(ambientThreatName(fleet, "Starving Threat Feeding Mass"));
         fleet.setFaction(Factions.THREAT, true);
         configureHostileFleet(fleet);
         clearIthacaProtectionOverride(fleet);
@@ -4512,13 +4542,16 @@ public final class OdysseyPredatorScript implements EveryFrameScript {
         }
 
         int hash = source.hashCode() & Integer.MAX_VALUE;
-        int tier = hash % 3 == 0 ? SECOND_STRIKE : FIRST_STRIKE;
+        int tier = getMonthlyIthacaStrikeTier(Math.random());
         CampaignFleetAPI fleet = Global.getFactory().createEmptyFleet(
                 Factions.THREAT, "Starving Threat Gate Incursion", true);
         fleet.setId(fleetId);
         fleet.setNoFactionInName(true);
         fleet.setTransponderOn(false);
         addStrikeRoster(fleet, tier);
+        if (tier > FIRST_STRIKE) {
+            fleet.getMemoryWithoutUpdate().set(RARE_STRIKE_TIER, tier);
+        }
         if (fleet.getFleetData().getMembersListCopy().isEmpty()) return;
         fleet.getFleetData().setFlagship(
                 fleet.getFleetData().getMembersListCopy().get(0));
@@ -4556,7 +4589,7 @@ public final class OdysseyPredatorScript implements EveryFrameScript {
         if (TroyArrivalScript.isFleetBusyForMutation(fleet)) return;
         configureStarvingThreatIdentity(fleet);
         fleet.setFaction(Factions.THREAT, true);
-        fleet.setName("Starving Threat Gate Incursion");
+        fleet.setName(ambientThreatName(fleet, "Starving Threat Gate Incursion"));
         configureHostileFleet(fleet);
         MemoryAPI memory = fleet.getMemoryWithoutUpdate();
         memory.set(GATE_BREACH_FLEET_MARKER, true);
@@ -4897,7 +4930,11 @@ public final class OdysseyPredatorScript implements EveryFrameScript {
     private static int getPostLaborStrikeTier(CampaignFleetAPI fleet) {
         String id = fleet == null ? null : fleet.getId();
         int hash = id == null ? 0 : id.hashCode();
-        return (hash & Integer.MAX_VALUE) % 3;
+        int tier = (hash & Integer.MAX_VALUE) % 3;
+        if (fleet != null && fleet.getMemoryWithoutUpdate().contains(RARE_STRIKE_TIER)) {
+            tier = Math.max(tier, fleet.getMemoryWithoutUpdate().getInt(RARE_STRIKE_TIER));
+        }
+        return tier;
     }
 
     private void ensureCharybdisHunter() {

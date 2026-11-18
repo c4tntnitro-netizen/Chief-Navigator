@@ -4,14 +4,12 @@ import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.combat.BeamAPI;
 import com.fs.starfarer.api.combat.CombatEngineAPI;
 import com.fs.starfarer.api.combat.CombatEntityAPI;
-import com.fs.starfarer.api.combat.DamageAPI;
 import com.fs.starfarer.api.combat.EveryFrameWeaponEffectPlugin;
 import com.fs.starfarer.api.combat.DamageType;
 import com.fs.starfarer.api.combat.AutofireAIPlugin;
 import com.fs.starfarer.api.combat.ShipAPI;
 import com.fs.starfarer.api.combat.WeaponAPI;
 import com.fs.starfarer.api.combat.WeaponGroupAPI;
-import com.fs.starfarer.api.combat.listeners.DamageTakenModifier;
 import com.fs.starfarer.api.util.Misc;
 import com.fs.starfarer.api.loading.BeamWeaponSpecAPI;
 import org.lwjgl.util.vector.Vector2f;
@@ -24,12 +22,7 @@ import java.util.WeakHashMap;
 public final class DriftingWallBeamEffect implements EveryFrameWeaponEffectPlugin {
     private static final String LOG_PREFIX = "[ITHACA_NAVAL] ";
     private static final Color TIMEFLOW_SHIMMER = new Color(116, 232, 238, 220);
-    private static final String NAVAL_WEAPON_ID =
-            "chief_navigator_drifting_wall_colossal_inert";
-    private static final String ISA_SHIELD_DAMAGE_MODIFIER =
-            "chief_navigator_isa_shield_refraction";
-    private static final float ISA_SHIELD_DAMAGE_MULTIPLIER = 1.5f;
-    private static final float REFRACTION_DAMAGE_FRACTION = 0.5f;
+    private static final float REFRACTION_DAMAGE_FRACTION = 0.25f;
     private static final float REFRACTION_INTERVAL = 0.25f;
     private static final float REFRACTION_RANGE = 6000f;
     private static final float DEBUG_INTERVAL = 5f;
@@ -43,6 +36,8 @@ public final class DriftingWallBeamEffect implements EveryFrameWeaponEffectPlugi
     public void advance(float amount, CombatEngineAPI engine, WeaponAPI weapon) {
         if (engine == null || weapon == null) return;
         if (engine.isPaused()) return;
+        boolean hullDischarge = OnslaughtIthDischargeVfx.handles(weapon);
+        if (hullDischarge) OnslaughtIthDischargeVfx.install(engine, weapon);
         State state = states.get(weapon);
         if (state == null) {
             state = new State();
@@ -63,16 +58,24 @@ public final class DriftingWallBeamEffect implements EveryFrameWeaponEffectPlugi
                 if (cycling) {
                     spec.setBurstCooldown(spec.getBurstCooldown()
                             * IthacaResearchUpgrades.NAVAL_CYCLE_MULTIPLIER);
+                    // Burst-beam controllers cache their timing at creation;
+                    // cloning the spec alone does not change that live timer.
+                    state.cooldownReduction = Math.max(0f, weapon.getCooldown()
+                            - spec.getChargedownTime() - spec.getBurstCooldown());
                 }
             }
+            state.cooldownAfterBeam = hullDischarge;
             states.put(weapon, state);
             ColossalNavalTurretRenderer.install(engine, weapon);
             logInitialization(weapon, state);
         }
-
         state.shimmerTime += amount;
         boolean active = hasVisibleBeam(weapon);
+        updateNavalCooldown(weapon, state,
+                active || (state.cooldownAfterBeam && hasLingeringBeam(engine, weapon)));
         float chargeLevel = weapon.getChargeLevel();
+        if (hullDischarge) state.chargePulses.advance(amount, engine, weapon,
+                active || hasLingeringBeam(engine, weapon));
         boolean windingUp = chargeLevel > 0.01f && !active;
         logFiringTransitions(weapon, state, windingUp, active);
         state.debugElapsed += amount;
@@ -81,7 +84,7 @@ public final class DriftingWallBeamEffect implements EveryFrameWeaponEffectPlugi
             logWeaponState(engine, weapon, state, windingUp, active);
         }
         updateTimeflowShimmer(weapon, state, chargeLevel, windingUp, active);
-        updateChargingLightning(amount, engine, weapon, state, chargeLevel, windingUp);
+        if (!hullDischarge) updateChargingLightning(amount, engine, weapon, state, chargeLevel, windingUp);
         if (active && IthacaResearchUpgrades.hasUpgrade(
                 state.upgrades, IthacaResearchUpgrades.ARC_PROJECTOR)) {
             state.empElapsed += amount;
@@ -93,7 +96,6 @@ public final class DriftingWallBeamEffect implements EveryFrameWeaponEffectPlugi
             state.empElapsed = 0f;
         }
         if (active && state.isaRefraction) {
-            installIsaShieldDamageListeners(weapon);
             state.refractionElapsed += amount;
             if (state.refractionElapsed >= REFRACTION_INTERVAL) {
                 state.refractionElapsed = 0f;
@@ -105,12 +107,64 @@ public final class DriftingWallBeamEffect implements EveryFrameWeaponEffectPlugi
         if (active) {
             state.everFired = true;
         } else {
-            if (state.active && state.everFired && !engine.isPaused()) {
+            if (state.active && state.everFired && !engine.isPaused() && !hullDischarge) {
                 ventWeapon(engine, weapon);
                 state.everFired = false;
             }
         }
         state.active = active;
+    }
+
+    private static void updateNavalCooldown(WeaponAPI weapon, State state, boolean beamVisible) {
+        float remaining = weapon.getCooldownRemaining();
+        if (!state.cooldownAfterBeam) {
+            // Preserve the fortress guns' existing native timing correction.
+            if (state.cooldownReduction <= 0f) return;
+            if (remaining <= 0f) {
+                state.cooldownAdjusted = false;
+            } else if (!state.cooldownAdjusted) {
+                weapon.setRemainingCooldownTo(Math.max(0f, remaining - state.cooldownReduction));
+                state.cooldownAdjusted = true;
+            }
+            return;
+        }
+        if (beamVisible) {
+            state.cooldownPending = true;
+            state.cooldownAdjusted = false;
+            // Native burst cooldown can already be running while the ray is
+            // still visible. Hold that phase until this gun's final ray ends.
+            if (remaining > 0f) weapon.setRemainingCooldownTo(weapon.getCooldown());
+        } else if (remaining <= 0f) {
+            state.cooldownAdjusted = false;
+        } else if (state.cooldownPending && !state.cooldownAdjusted) {
+            // The HUD divides remaining time by the controller's cached full
+            // duration. Keep that scale full and change its countdown rate;
+            // setting it straight to the researched delay makes the bar jump.
+            float duration = ((BeamWeaponSpecAPI) weapon.getSpec()).getBurstCooldown();
+            float full = weapon.getCooldown();
+            state.cooldownRate = full / duration;
+            state.cooldownLastRemaining = full;
+            weapon.setRemainingCooldownTo(full);
+            state.cooldownPending = false;
+            state.cooldownAdjusted = true;
+        } else if (state.cooldownAdjusted) {
+            // Observe only the native step since our previous write. This
+            // preserves weapon-rate modifiers, stalls and paused simulation.
+            float elapsed = state.cooldownLastRemaining - remaining;
+            if (elapsed > 0f) {
+                remaining = Math.max(0f, remaining - elapsed * (state.cooldownRate - 1f));
+                weapon.setRemainingCooldownTo(remaining);
+            }
+            state.cooldownLastRemaining = remaining;
+        }
+    }
+
+    private static boolean hasLingeringBeam(CombatEngineAPI engine, WeaponAPI weapon) {
+        if (engine.getBeams() == null) return false;
+        for (BeamAPI beam : engine.getBeams()) {
+            if (beam != null && beam.getWeapon() == weapon && beam.getBrightness() > 0.05f) return true;
+        }
+        return false;
     }
 
     private static void logInitialization(WeaponAPI weapon, State state) {
@@ -124,7 +178,8 @@ public final class DriftingWallBeamEffect implements EveryFrameWeaponEffectPlugi
                 + ", owner=" + (source == null ? -1 : source.getOwner())
                 + ", upgrades=" + state.upgrades
                 + ", isaRefraction=" + state.isaRefraction
-                + ", dps=" + dps + ", range=" + weapon.getRange());
+                + ", dps=" + dps + ", range=" + weapon.getRange()
+                + ", cooldownReduction=" + state.cooldownReduction);
     }
 
     private static void logFiringTransitions(
@@ -335,15 +390,16 @@ public final class DriftingWallBeamEffect implements EveryFrameWeaponEffectPlugi
         Vector2f forward = Misc.getUnitVectorAtDegreeAngle(weapon.getCurrAngle());
         Vector2f lateral = new Vector2f(-forward.y, forward.x);
         Vector2f pivot = weapon.getLocation();
+        float scale = visualScale(weapon);
         // Real visual arcs remain legible even when a glow overlay is washed
         // out by the bright sprite. This windup lightning deals no damage.
         float side = Math.random() < 0.5 ? -1f : 1f;
         Vector2f from = aroundTurretBase(pivot, forward, lateral,
-                random(-100f, 30f), side * random(65f, 125f));
+                random(-100f, 30f) * scale, side * random(65f, 125f) * scale);
         Vector2f to = aroundTurretBase(pivot, forward, lateral,
-                random(180f, 480f), side * random(12f, 40f));
+                random(180f, 480f) * scale, side * random(12f, 40f) * scale);
         engine.spawnEmpArcVisual(from, weapon.getShip(), to, weapon.getShip(),
-                8f + 10f * charge, TIMEFLOW_SHIMMER, Color.WHITE);
+                Math.max(1f, (8f + 10f * charge) * scale), TIMEFLOW_SHIMMER, Color.WHITE);
     }
 
     private static void arcFromBeam(CombatEngineAPI engine, WeaponAPI weapon) {
@@ -381,18 +437,7 @@ public final class DriftingWallBeamEffect implements EveryFrameWeaponEffectPlugi
         }
     }
 
-    /** Ensures the original naval beam receives its exact +50% shield modifier. */
-    private static void installIsaShieldDamageListeners(WeaponAPI weapon) {
-        for (BeamAPI beam : weapon.getBeams()) {
-            ShipAPI target = shieldTarget(beam);
-            if (target != null
-                    && !target.hasListenerOfClass(IsaShieldDamageModifier.class)) {
-                target.addListener(new IsaShieldDamageModifier());
-            }
-        }
-    }
-
-    /** Emits one half-strength, one-hop beam; EMP arcs never invoke this effect. */
+    /** Emits one quarter-strength, one-hop beam; EMP arcs never invoke this effect. */
     private static void refractFromEnemyShield(
             CombatEngineAPI engine, WeaponAPI weapon) {
         ShipAPI source = weapon.getShip();
@@ -403,8 +448,9 @@ public final class DriftingWallBeamEffect implements EveryFrameWeaponEffectPlugi
             ShipAPI secondary = findRefractionTarget(
                     engine, source, primary, beam.getRayEndPrevFrame());
             if (secondary == null) continue;
-            float dps = weapon.getDerivedStats() == null
-                    ? 2000f : weapon.getDerivedStats().getDps();
+            // Derived getDps() includes charge/cooldown; refraction follows firing DPS.
+            float dps = weapon.getSpec() instanceof BeamWeaponSpecAPI
+                    ? ((BeamWeaponSpecAPI) weapon.getSpec()).getDamagePerSecond() : 2000f;
             float damage = Math.max(1f, dps * REFRACTION_DAMAGE_FRACTION
                     * REFRACTION_INTERVAL);
             engine.spawnEmpArc(source, beam.getRayEndPrevFrame(), primary,
@@ -452,30 +498,6 @@ public final class DriftingWallBeamEffect implements EveryFrameWeaponEffectPlugi
         return best;
     }
 
-    private static final class IsaShieldDamageModifier
-            implements DamageTakenModifier {
-        @Override
-        public String modifyDamageTaken(
-                Object param,
-                CombatEntityAPI target,
-                DamageAPI damage,
-                Vector2f point,
-                boolean shieldHit) {
-            if (!shieldHit || damage == null || !(param instanceof BeamAPI)) {
-                return null;
-            }
-            BeamAPI beam = (BeamAPI) param;
-            WeaponAPI weapon = beam.getWeapon();
-            if (weapon == null || !NAVAL_WEAPON_ID.equals(weapon.getId())
-                    || !IthacaResearchUpgrades.hasIsaRefraction(
-                            beam.getSource())) return null;
-            damage.getModifier().modifyMult(
-                    ISA_SHIELD_DAMAGE_MODIFIER,
-                    ISA_SHIELD_DAMAGE_MULTIPLIER);
-            return ISA_SHIELD_DAMAGE_MODIFIER;
-        }
-    }
-
     private static void ventWeapon(CombatEngineAPI engine, WeaponAPI weapon) {
         ShipAPI ship = weapon.getShip();
         if (ship == null) return;
@@ -484,23 +506,24 @@ public final class DriftingWallBeamEffect implements EveryFrameWeaponEffectPlugi
         Vector2f forward = Misc.getUnitVectorAtDegreeAngle(weapon.getCurrAngle());
         Vector2f lateral = new Vector2f(-forward.y, forward.x);
         Vector2f shipVelocity = new Vector2f(ship.getVelocity());
+        float scale = visualScale(weapon);
 
         for (int i = 0; i < SMOKE_COUNT; i++) {
             Vector2f location = aroundTurretBase(
                     pivot,
                     forward,
                     lateral,
-                    centeredRandom(105f),
-                    centeredRandom(145f));
-            float sideVelocity = random(-115f, 115f);
-            float backVelocity = random(-95f, 30f);
+                    centeredRandom(105f) * scale,
+                    centeredRandom(145f) * scale);
+            float sideVelocity = random(-115f, 115f) * scale;
+            float backVelocity = random(-95f, 30f) * scale;
             Vector2f velocity = combineVelocity(
                     shipVelocity, forward, lateral, backVelocity, sideVelocity);
             int shade = Math.round(random(72f, 118f));
             engine.addNebulaSmokeParticle(
                     location,
                     velocity,
-                    random(150f, 340f),
+                    random(150f, 340f) * scale,
                     random(1.35f, 2.25f),
                     random(0.08f, 0.20f),
                     random(0.32f, 0.62f),
@@ -514,16 +537,16 @@ public final class DriftingWallBeamEffect implements EveryFrameWeaponEffectPlugi
                     pivot,
                     forward,
                     lateral,
-                    centeredRandom(70f),
-                    sign * random(55f, 115f));
-            float sideVelocity = sign * random(170f, 390f);
-            float backVelocity = random(-145f, 15f);
+                    centeredRandom(70f) * scale,
+                    sign * random(55f, 115f) * scale);
+            float sideVelocity = sign * random(170f, 390f) * scale;
+            float backVelocity = random(-145f, 15f) * scale;
             Vector2f velocity = combineVelocity(
                     shipVelocity, forward, lateral, backVelocity, sideVelocity);
             engine.addNebulaParticle(
                     location,
                     velocity,
-                    random(105f, 235f),
+                    random(105f, 235f) * scale,
                     random(1.7f, 2.8f),
                     random(0.04f, 0.10f),
                     random(0.18f, 0.36f),
@@ -537,22 +560,28 @@ public final class DriftingWallBeamEffect implements EveryFrameWeaponEffectPlugi
                     pivot,
                     forward,
                     lateral,
-                    centeredRandom(48f),
-                    sign * random(60f, 105f));
+                    centeredRandom(48f) * scale,
+                    sign * random(60f, 105f) * scale);
             Vector2f velocity = combineVelocity(
                     shipVelocity,
                     forward,
                     lateral,
-                    random(-75f, 25f),
-                    sign * random(280f, 520f));
+                    random(-75f, 25f) * scale,
+                    sign * random(280f, 520f) * scale);
             engine.addSmoothParticle(
                     location,
                     velocity,
-                    random(65f, 145f),
+                    random(65f, 145f) * scale,
                     0.82f,
                     random(0.45f, 1.05f),
                     new Color(225, 242, 239, 210));
         }
+    }
+
+    /** The ship's original TPC barrels are much smaller than the fortress emplacement. */
+    private static float visualScale(WeaponAPI weapon) {
+        return IthacaResearchUpgrades.isShipNavalLaserId(weapon.getId())
+                ? 0.04f : 1f;
     }
 
     private static Vector2f aroundTurretBase(
@@ -587,10 +616,17 @@ public final class DriftingWallBeamEffect implements EveryFrameWeaponEffectPlugi
     }
 
     private static final class State {
+        private final OnslaughtChargePulseEffect chargePulses = new OnslaughtChargePulseEffect();
         private boolean active;
         private boolean windingUp;
         private boolean transitionInitialized;
         private boolean everFired;
+        private boolean cooldownAdjusted;
+        private boolean cooldownAfterBeam;
+        private boolean cooldownPending;
+        private float cooldownRate;
+        private float cooldownLastRemaining;
+        private float cooldownReduction;
         private float debugElapsed;
         private float shimmerTime;
         private int upgrades;

@@ -1,0 +1,9 @@
+{
+  "id": "chief_navigator_threatxus_fabrication",
+  "type": "STAT_MOD",
+  "aiType": "NONE",
+  "runScriptWhileIdle": true,
+  "statsScript": "chiefnavigator.systems.ThreatxusFabricationSystem",
+  "useSound": "system_construction_swarm",
+  "outOfUsesSound": "gun_out_of_ammo"
+}

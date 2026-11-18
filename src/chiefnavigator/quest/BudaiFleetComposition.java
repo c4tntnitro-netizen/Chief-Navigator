@@ -16,21 +16,17 @@ import java.util.Random;
 final class BudaiFleetComposition {
     static final String MAW_HULL = "chief_navigator_charybdis";
     static final String MAW_VARIANT = "chief_navigator_charybdis_Ravenous";
-    static final String APPLIED = "$chief_navigator_budai_maw_sep_escort_v1";
+    static final String APPLIED = "$chief_navigator_budai_vanilla_escort_v2";
     private static final String HUNTER = "$chief_navigator_budai_hunter";
 
     private BudaiFleetComposition() { }
 
-    /** SEP DwellerTidalCMD's normal largeFleet/HIGH composition, omitting Maws.
-     * The enemy-only port uses its own Banshee/Brain IDs and vanilla weapon fits.
-     */
+    /** Vanilla DwellerCMD HIGH (Transcendent) composition, omitting its Maw. */
     static List<String> escortVariants(Random random) {
         List<String> variants = new ArrayList<>();
-        add(variants, "shrouded_tendril_Roiling", 8 + random.nextInt(4));
-        add(variants, AviciDwellerContent.BANSHEE_VARIANT, 4 + random.nextInt(3));
-        int eyes = 2 + random.nextInt(3);
+        add(variants, "shrouded_tendril_Roiling", 11 + random.nextInt(4));
+        int eyes = 2 + random.nextInt(2);
         add(variants, "shrouded_eye_Darkened", eyes);
-        add(variants, AviciDwellerContent.BRAIN_VARIANT, 1);
         int min = Math.max(0, 3 - eyes), max = Math.max(0, 5 - eyes);
         add(variants, "shrouded_maelstrom_Menacing", min + random.nextInt(max - min + 1));
         return variants;

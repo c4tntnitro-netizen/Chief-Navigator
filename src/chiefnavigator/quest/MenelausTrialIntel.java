@@ -275,8 +275,8 @@ public final class MenelausTrialIntel extends BaseIntelPlugin {
                     + "by an Abyssal Glare.", 10f);
             info.addPara("If Isa Leicester has ever joined the officer "
                     + "roster, her fire-control package permanently gives "
-                    + "Ithaca's naval beams +50%% shield damage and a single "
-                    + "half-strength refraction to another enemy.", 10f);
+                    + "Ithaca's naval beams a single quarter-strength "
+                    + "refraction to another enemy, with no extra shield damage.", 10f);
         }
         if (completed || isEnding() || isEnded()) {
             info.addPara("Labor complete. Menelaus has opened the next Labor.",

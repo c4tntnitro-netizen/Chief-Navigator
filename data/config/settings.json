@@ -4,6 +4,10 @@
   "chiefNavigatorMirrorExcludedHullIds": [],
   "drop_prob_officer_chief_navigator_odyssey_combat_core": 1.0,
   "graphics": {
+    "chief_navigator_bouvo_wrapping": {
+      "front": "graphics/campaign/ungaikyo/chief_navigator_bouvo_filaments_front_v2.png",
+      "rear": "graphics/campaign/ungaikyo/chief_navigator_bouvo_filaments_rear_v2.png"
+    },
     "dweller": {
       "chief_navigator_avici_brain": "graphics/ships/chief_navigator_avici_brain.png",
       "chief_navigator_avici_banshee": "graphics/ships/chief_navigator_avici_banshee.png",

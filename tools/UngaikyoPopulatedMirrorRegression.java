@@ -255,7 +255,7 @@ public final class UngaikyoPopulatedMirrorRegression {
         CollisionClass collision = CollisionClass.SHIP;
         ShipAPI parent, droneSource;
         Wing wing;
-        ShipAIConfig aiConfig = new ShipAIConfig(null);
+        ShipAIConfig aiConfig = new ShipAIConfig();
         int defaultAiBindings, circumstanceEvaluations, huntOrders, mutations;
         ShipAIPlugin currentAi;
         final ShipAIPlugin ai = mock(ShipAIPlugin.class, (method, args) -> {

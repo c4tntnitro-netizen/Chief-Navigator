@@ -90,7 +90,7 @@ public final class UngaikyoReadinessRegression {
         float current = 0.2f, deployment = 0.2f;
         boolean alive = true;
         int evaluations;
-        final ShipAIConfig config = new ShipAIConfig(null);
+        final ShipAIConfig config = new ShipAIConfig();
         final ShipAIPlugin ai = mock(ShipAIPlugin.class, (name, args) -> {
             if (name.equals("getConfig")) return config;
             if (name.equals("forceCircumstanceEvaluation")) evaluations++;

@@ -1,0 +1,28 @@
+{
+  "baseHullId": "odyssey",
+  "skinHullId": "chief_navigator_odyssey_ith",
+  "hullName": "Odyssey (Ithaca)",
+  "descriptionId": "chief_navigator_odyssey_ith",
+  "tech": "Ithaca",
+  "incompatibleWithBaseHull": true,
+  "spriteName": "graphics/ships/ithaca/chief_navigator_odyssey_ith.png",
+  "tags": [
+    "no_dealer",
+    "no_autofit",
+    "no_bp_drop",
+    "chief_navigator_ithaca"
+  ],
+  "removeWeaponSlots": [
+    "WS 006"
+  ],
+  "removeEngineSlots": [],
+  "removeBuiltInMods": [],
+  "fighterBays": 3,
+  "builtInMods": [
+    "surveying_equipment"
+  ],
+  "builtInWeapons": {
+    "WS 002": "chief_navigator_odyssey_ith_naval_laser",
+    "WS 003": "chief_navigator_odyssey_ith_naval_laser"
+  }
+}

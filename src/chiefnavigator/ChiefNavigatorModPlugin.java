@@ -5,6 +5,7 @@ import chiefnavigator.abilities.SinniGenerateSlipsurgeAbility;
 import chiefnavigator.abilities.SinniAmbushStanceAbility;
 import chiefnavigator.abilities.SinniEmergencyBurnAbility;
 import chiefnavigator.abilities.SinniInterdictionPulseAbility;
+import chiefnavigator.abilities.OrionKnotDistressCallAbility;
 import chiefnavigator.campaign.SinniStormRiderScript;
 import chiefnavigator.campaign.SinniSensorBurstListener;
 import chiefnavigator.campaign.AviciMusicScript;
@@ -13,18 +14,21 @@ import chiefnavigator.campaign.SanzuMusicScript;
 import chiefnavigator.campaign.OdysseyAICoreCampaignPlugin;
 import chiefnavigator.campaign.DomainSecurityIFFAuthorization;
 import chiefnavigator.campaign.CampaignWorldInitialization;
+import chiefnavigator.campaign.BouvoOlympusFilamentWrapping;
 import com.fs.starfarer.api.BaseModPlugin;
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.PluginPick;
 import com.fs.starfarer.api.campaign.CampaignFleetAPI;
 import com.fs.starfarer.api.campaign.CampaignPlugin.PickPriority;
 import com.fs.starfarer.api.campaign.FactionAPI;
+import com.fs.starfarer.api.campaign.StarSystemAPI;
 import com.fs.starfarer.api.characters.AbilityPlugin;
 import com.fs.starfarer.api.combat.ShipAIPlugin;
 import com.fs.starfarer.api.combat.ShipAPI;
 import com.fs.starfarer.api.fleet.FleetMemberAPI;
 import com.fs.starfarer.api.impl.campaign.abilities.GenerateSlipsurgeAbility;
 import com.fs.starfarer.api.impl.campaign.abilities.GoDarkAbility;
+import com.fs.starfarer.api.impl.campaign.abilities.DistressCallAbility;
 import com.fs.starfarer.api.impl.campaign.ids.Abilities;
 import com.fs.starfarer.api.impl.campaign.ids.Factions;
 import chiefnavigator.quest.SinniBarEvent;
@@ -62,6 +66,8 @@ import chiefnavigator.topography.SinniHyperspaceTopographyEventIntel;
  */
 public final class ChiefNavigatorModPlugin extends BaseModPlugin {
     private static final String REMOVED_ODYSSEY_ABILITY = "chief_navigator_hyperspace_odyssey";
+    private static final String BOUVO_OLYMPUS_BACKGROUND =
+            "graphics/backgrounds/chief_navigator_bouvo_olympus_nebula_v1.jpg";
     private static final String COMBAT_GUARD_RELATIONS_INITIALIZED =
             "$chief_navigator_combat_guard_relations_initialized";
 
@@ -141,7 +147,10 @@ public final class ChiefNavigatorModPlugin extends BaseModPlugin {
             TroyArrivalScript.ensureWaypointTroyExists();
             OdysseyExpanseSystem.ensureExists();
         }
+        applyBouvoOlympusBackground();
+        BouvoOlympusFilamentWrapping.install();
         OdysseyExpanseSystem.renameAuthoredSystemLabels();
+        OdysseyExpanseSystem.repairAviciBlackHoleTerrain();
         OdysseyExpanseSystem.reconcileRandomMissionTags();
         TroyArrivalScript.repairWaypointTroyMapAnchor();
         AviciHabitatEncounter.reconcileSaraDeathFlag();
@@ -247,6 +256,16 @@ public final class ChiefNavigatorModPlugin extends BaseModPlugin {
                 COMBAT_GUARD_RELATIONS_INITIALIZED, true);
     }
 
+    /** Cosmetic update on the existing owned system, without rebuilding its world. */
+    private static void applyBouvoOlympusBackground() {
+        StarSystemAPI system = OdysseyExpanseSystem.findSystemById(
+                OdysseyExpanseSystem.LAST_LIGHT_ID);
+        if (system != null && !BOUVO_OLYMPUS_BACKGROUND.equals(
+                system.getBackgroundTextureFilename())) {
+            system.setBackgroundTextureFilename(BOUVO_OLYMPUS_BACKGROUND);
+        }
+    }
+
     private void refreshOverriddenAbilityPlugins() {
         CampaignFleetAPI fleet = Global.getSector().getPlayerFleet();
         if (fleet == null) return;
@@ -255,6 +274,8 @@ public final class ChiefNavigatorModPlugin extends BaseModPlugin {
                 GenerateSlipsurgeAbility.class);
         refreshAbility(fleet, Abilities.GO_DARK,
                 SinniAmbushStanceAbility.class, GoDarkAbility.class);
+        refreshAbility(fleet, Abilities.DISTRESS_CALL,
+                OrionKnotDistressCallAbility.class, DistressCallAbility.class);
     }
 
     private void removeRetiredAmbushStanceAbility() {
