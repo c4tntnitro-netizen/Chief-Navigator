@@ -99,7 +99,7 @@ These notes combine the subsequent 0.5.0 revisions, 0.5.1 updates, and changes i
 
 ## Domain drones and Ithaca combat
 
-- Add the **Odyssey (Ithaca)** prototype with the supplied Domain Odyssey sprite and naval lasers in both large port-side broadside mounts. Remove the medium missile mount below the hangar, increase fighter capacity from two to three bays, and build in Surveying Equipment. Keep the two default Longbow wings with an empty third bay; preserve stock geometry, shields, engines and every other mount. Its energy-mount lasers share current Onslaught naval balance, applicable installed research, Isa's quarter-strength hop, charge pulses and smooth post-beam cooldown, with Odyssey-specific hull lightning.
+- Add the **Odyssey (Ithaca)** / Domaindessy prototype with the supplied sprite, four fixed wings, built-in Surveying Equipment and conventional large energy mounts; remove the aft medium missile mount and retire its naval lasers. Its two Broadsword wings upgrade to Lightning Superiority Fighters through Interception Command Matrix, while Siege Munitions Compiler supplies Tridents in place of the two Khopesh wings. Fortress Autoloader Core upgrades those Tridents to recolored Poseidons carrying four Atropos torpedoes each. Lightning uses a recolored Thunder, miniature Cloudswarm PD, Light Dual Autocannon and the high-delay fighter Ion Cannon. Preserve normal fighter/bomber behavior, stock hull systems and the supplied art; apply research through fixed wing profiles without shared-spec mutation.
 - Fix a naval-laser charge-up crash on RC7 caused by an uninitialized projectile damage specification. Each randomized pulse length now receives native weapon damage initialization before spawning; pulse geometry, cadence and main-beam balance are preserved. Update the development game-version label to 0.98.5a-RC7.
 
 - Reduce Isa's naval-laser refraction to a quarter-strength secondary hop and remove her extra shield damage. Add her to Ithaca's comm directory while she is in the current officer roster, with one placeholder engineering topic.
@@ -163,3 +163,5 @@ These notes combine the subsequent 0.5.0 revisions, 0.5.1 updates, and changes i
 Replace the old mod folder with the eventual release package, install the required dependencies, and restart Starsector.
 
 Existing quest progress is retained. The system-name update changes labels in place. Existing Sinni officers retain their saved progression, and already-shown one-time conversations and endings are not replayed. Previously modded saves with missing static world content are not rebuilt automatically.
+
+- Exclude both Ithaca prototypes, including every Odyssey research configuration, from normal production, generated market/black-market stock, arms dealers, blueprint drops and random fleets. Preserve the scripted Onslaught reward.

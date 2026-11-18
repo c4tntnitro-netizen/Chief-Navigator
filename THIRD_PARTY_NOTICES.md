@@ -76,6 +76,10 @@ remains outside the MIT grant. See `docs/UNGAIKYO_OBSIDIAN_OVERSEER.md` for the
 generated masters, final prompt and preparation workflow.
 
 The game's license and applicable modding permissions continue to apply.
+Lightning and Poseidon fighter sprites use masked palette transfers of the
+vanilla Thunder and Trident artwork, respectively. Their source hashes and
+recolor provenance are recorded under `graphics/source/domaindessy_air_group_20261117`.
+These game-derived sprites remain Fractal Softworks material outside the MIT grant.
 GraphicsLib, Combat Chatter, Console Commands and any other external libraries
 retain their own licenses; importing their APIs does not relicense them.
 

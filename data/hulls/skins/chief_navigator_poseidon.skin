@@ -1,0 +1,14 @@
+{
+  "baseHullId": "trident",
+  "skinHullId": "chief_navigator_poseidon",
+  "hullName": "Poseidon",
+  "descriptionId": "chief_navigator_poseidon",
+  "tech": "Ithaca",
+  "incompatibleWithBaseHull": true,
+  "spriteName": "graphics/ships/ithaca/chief_navigator_poseidon.png",
+  "tags": [
+    "no_dealer",
+    "no_autofit",
+    "no_bp_drop"
+  ]
+}

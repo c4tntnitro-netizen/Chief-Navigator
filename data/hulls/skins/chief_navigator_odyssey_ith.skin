@@ -7,6 +7,8 @@
   "incompatibleWithBaseHull": true,
   "spriteName": "graphics/ships/ithaca/chief_navigator_odyssey_ith.png",
   "tags": [
+    "restricted",
+    "no_sell",
     "no_dealer",
     "no_autofit",
     "no_bp_drop",
@@ -17,12 +19,16 @@
   ],
   "removeEngineSlots": [],
   "removeBuiltInMods": [],
-  "fighterBays": 3,
+  "fighterBays": 4,
   "builtInMods": [
-    "surveying_equipment"
+    "surveying_equipment",
+    "chief_navigator_domaindessy_air_group"
   ],
-  "builtInWeapons": {
-    "WS 002": "chief_navigator_odyssey_ith_naval_laser",
-    "WS 003": "chief_navigator_odyssey_ith_naval_laser"
-  }
+  "builtInWings": [
+    "broadsword_wing",
+    "broadsword_wing",
+    "hoplon_wing",
+    "hoplon_wing"
+  ],
+  "builtInWeapons": {}
 }

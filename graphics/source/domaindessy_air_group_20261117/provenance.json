@@ -1,0 +1,54 @@
+{
+  "configs": [
+    [
+      "",
+      "broadsword_wing",
+      "hoplon_wing"
+    ],
+    [
+      "_interception",
+      "chief_navigator_lightning_wing",
+      "hoplon_wing"
+    ],
+    [
+      "_siege",
+      "broadsword_wing",
+      "trident_wing"
+    ],
+    [
+      "_interception_siege",
+      "chief_navigator_lightning_wing",
+      "trident_wing"
+    ],
+    [
+      "_poseidon",
+      "broadsword_wing",
+      "chief_navigator_poseidon_wing"
+    ],
+    [
+      "_interception_poseidon",
+      "chief_navigator_lightning_wing",
+      "chief_navigator_poseidon_wing"
+    ]
+  ],
+  "art": {
+    "chief_navigator_lightning": {
+      "reference": "graphics/ships/thunder2.png",
+      "source_sha256": "446bf7ec1ef6d264f48a81be30fee7daa579b0f42629983fd8bac536451baf1f",
+      "sprite_sha256": "b8677ed52cc6d969585d206b24f8a92c0bea513c8064f2cee04d1443bf84b98d",
+      "alpha_exact": true,
+      "outside_mask_exact": true
+    },
+    "chief_navigator_poseidon": {
+      "reference": "graphics/ships/trident.png",
+      "source_sha256": "a9fe628de53a3fdd4b42751a3f9de01cbe34de655d283585bb421355f24277ba",
+      "sprite_sha256": "c8b215deb06f9ff03f6d6391b1bf2b202b8c19e1cb06ff10c0be7b0fe041e6f8",
+      "alpha_exact": true,
+      "outside_mask_exact": true
+    }
+  },
+  "recall": false,
+  "lightning_wing_size": 2,
+  "poseidon_wing_size": 2,
+  "poseidon_torpedoes_per_bomber": 4
+}

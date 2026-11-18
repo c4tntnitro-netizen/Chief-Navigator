@@ -1,0 +1,34 @@
+{
+  "baseHullId": "odyssey",
+  "skinHullId": "chief_navigator_odyssey_ith_poseidon",
+  "hullName": "Odyssey (Ithaca)",
+  "descriptionId": "chief_navigator_odyssey_ith",
+  "tech": "Ithaca",
+  "incompatibleWithBaseHull": true,
+  "spriteName": "graphics/ships/ithaca/chief_navigator_odyssey_ith.png",
+  "tags": [
+    "restricted",
+    "no_sell",
+    "no_dealer",
+    "no_autofit",
+    "no_bp_drop",
+    "chief_navigator_ithaca"
+  ],
+  "removeWeaponSlots": [
+    "WS 006"
+  ],
+  "removeEngineSlots": [],
+  "removeBuiltInMods": [],
+  "fighterBays": 4,
+  "builtInMods": [
+    "surveying_equipment",
+    "chief_navigator_domaindessy_air_group"
+  ],
+  "builtInWings": [
+    "broadsword_wing",
+    "broadsword_wing",
+    "chief_navigator_poseidon_wing",
+    "chief_navigator_poseidon_wing"
+  ],
+  "builtInWeapons": {}
+}

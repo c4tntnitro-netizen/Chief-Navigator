@@ -1,0 +1,18 @@
+{
+  "quality": 1,
+  "displayName": "Torpedo Bomber",
+  "hullId": "chief_navigator_poseidon",
+  "variantId": "chief_navigator_poseidon_Bomber",
+  "fluxVents": 0,
+  "fluxCapacitors": 0,
+  "mods": [],
+  "weaponGroups": [
+    {
+      "mode": "ALTERNATING",
+      "weapons": {
+        "WS 004": "atropos",
+        "WS 005": "atropos"
+      }
+    }
+  ]
+}

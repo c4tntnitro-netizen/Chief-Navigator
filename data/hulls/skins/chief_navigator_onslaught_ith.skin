@@ -7,6 +7,8 @@
   "incompatibleWithBaseHull": true,
   "spriteName": "graphics/ships/ithaca/chief_navigator_onslaught_ith.png",
   "tags": [
+    "restricted",
+    "no_sell",
     "no_dealer",
     "no_autofit",
     "no_bp_drop",

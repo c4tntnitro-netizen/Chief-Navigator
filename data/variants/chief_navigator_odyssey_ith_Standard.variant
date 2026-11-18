@@ -24,14 +24,14 @@
       "autofire": true,
       "mode": "LINKED",
       "weapons": {
-        "WS 002": "chief_navigator_odyssey_ith_naval_laser"
+        "WS 002": "autopulse"
       }
     },
     {
       "autofire": true,
       "mode": "LINKED",
       "weapons": {
-        "WS 003": "chief_navigator_odyssey_ith_naval_laser"
+        "WS 003": "hil"
       }
     },
     {
@@ -62,7 +62,9 @@
     }
   ],
   "wings": [
-    "longbow_wing",
-    "longbow_wing"
+    "broadsword_wing",
+    "broadsword_wing",
+    "hoplon_wing",
+    "hoplon_wing"
   ]
 }

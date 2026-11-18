@@ -4,7 +4,7 @@ $ErrorActionPreference = "Stop"
 
 $modRoot = $PSScriptRoot
 $starsectorRoot = $modRoot
-while ($starsectorRoot -and -not (Test-Path -LiteralPath (Join-Path $starsectorRoot 'starsector-core') -PathType Container)) {
+while ($starsectorRoot -and -not ((Test-Path -LiteralPath (Join-Path $starsectorRoot 'starsector-core/starfarer.api.jar') -PathType Leaf) -and (Test-Path -LiteralPath (Join-Path $starsectorRoot 'jdk-23+7/bin/java.exe') -PathType Leaf))) {
     $starsectorRoot = Split-Path $starsectorRoot -Parent
 }
 if (-not $starsectorRoot) { throw "Cannot locate Starsector above the source repository." }

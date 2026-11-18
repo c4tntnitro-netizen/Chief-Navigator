@@ -11,7 +11,8 @@ from zipfile import ZIP_DEFLATED, ZipFile, ZipInfo
 
 ROOT = Path(__file__).resolve().parents[1]
 CORE = next((parent / "starsector-core" for parent in ROOT.parents
-             if (parent / "starsector-core").is_dir()), None)
+             if (parent / "starsector-core/starfarer.api.jar").is_file()
+             and (parent / "jre/bin/java.exe").is_file()), None)
 if CORE is None:
     raise SystemExit("Cannot locate Starsector beside the source repository")
 IMAGE = re.compile(r"graphics/[\w./ -]+\.(?:png|jpe?g|gif|dds)")

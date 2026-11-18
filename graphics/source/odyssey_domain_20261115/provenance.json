@@ -1,0 +1,44 @@
+{
+  "source_method": "approved user-supplied sprite; transparent horizontal padding cropped without resampling",
+  "source_canvas": "graphics/source/odyssey_domain_20261115/odyssey_domain_supplied_canvas.png",
+  "source_canvas_sha256": "7bcce66a369fc7ccc72a6d48f785c0fd1354052d5ad92fb2eca6a44dc6d18cdd",
+  "master": "graphics/source/odyssey_domain_20261115/odyssey_domain_master.png",
+  "master_sha256": "f1ba3d5ef9d21db18ebd4768b6af0bdd059453fae1e91b3b2af82cb36b2e8f20",
+  "runtime_sprite_sha256": "f1ba3d5ef9d21db18ebd4768b6af0bdd059453fae1e91b3b2af82cb36b2e8f20",
+  "source_dimensions": [
+    288,
+    400
+  ],
+  "crop": [
+    60,
+    0,
+    228,
+    400
+  ],
+  "dimensions": [
+    168,
+    400
+  ],
+  "source_RGBA_exact": true,
+  "resampling": false,
+  "uses_image_generation": false,
+  "hull": "chief_navigator_odyssey_ith",
+  "variant": "chief_navigator_odyssey_ith_Standard",
+  "base_geometry": "odyssey",
+  "naval_slots": [],
+  "removed_weapon_slots": [
+    "WS 006"
+  ],
+  "fighter_bays": 4,
+  "added_builtin_mods": [
+    "surveying_equipment",
+    "chief_navigator_domaindessy_air_group"
+  ],
+  "default_wings": [
+    "broadsword_wing",
+    "broadsword_wing",
+    "hoplon_wing",
+    "hoplon_wing"
+  ],
+  "research_air_groups": "graphics/source/domaindessy_air_group_20261117/provenance.json"
+}

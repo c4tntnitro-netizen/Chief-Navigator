@@ -31,7 +31,7 @@ skin = {
     'baseHullId': 'onslaught', 'skinHullId': HULL, 'hullName': 'Onslaught (ITH)',
     'descriptionId': HULL, 'tech': 'Ithaca', 'incompatibleWithBaseHull': True,
     'spriteName': SPRITE.relative_to(ROOT).as_posix(),
-    'tags': ['no_dealer', 'no_autofit', 'no_bp_drop', 'chief_navigator_ithaca'],
+    'tags': ['restricted', 'no_sell', 'no_dealer', 'no_autofit', 'no_bp_drop', 'chief_navigator_ithaca'],
     'removeWeaponSlots': [], 'removeEngineSlots': [], 'removeBuiltInMods': [],
     'removeBuiltInWeapons': ['WS 016', 'WS 017'],
     'builtInWeapons': {'WS 016': LASER, 'WS 017': LASER},

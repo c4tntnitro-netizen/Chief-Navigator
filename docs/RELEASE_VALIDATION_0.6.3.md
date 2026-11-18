@@ -1,0 +1,13 @@
+# Release validation: 0.6.3
+
+Based on public 0.6.2, commit `c20014efb338759bbc8284063eee903148da5af7`. The carrier redesign and acquisition restrictions are the only gameplay changes. All existing 356 archive entries are preserved byte-for-byte. Three Java 17 class entries are added: `DomaindessyAirGroup`, `LightningCloudswarmEffect` and its `InterceptorAI`. A full source build passes; the distributable uses the preserved 0.6.2 entries plus the three newly compiled classes.
+
+Run `python tools/verify_domaindessy.py` from a checkout beneath the installed game to reproduce the carrier checks. It creates isolated native CSV fixtures, compiles external test harnesses and tests the JAR selected by `mod_info.json`. Production classes contain no reflection or engine-private access. Native test harnesses use the game's no-verification flag for the obfuscated RC7 engine names.
+
+Checks cover all 128 research masks on normal/damaged variants, native built-in wing locks, preservation of D-mods and conventional fitted weapons, fail-once configuration handling, missile-first point defense targeting, guidance and target retirement. Actual RC7 loaders validate all carrier/fighter skins, auto-generated damaged profiles, fighter variants, wing CSV data and initialized missile damage. Poseidons have four Atropos torpedoes per bomber. The actual native military production selector excludes all seven prototype profiles, including faction-known controls; stock Onslaught and Odyssey controls remain available.
+
+CSV review confirms only the intended miniature launcher, two wings, air-group hullmod, ship/weapon descriptions and three component-description suffixes change. All 909 dialogue rules, both approved carrier sprites, other combat code, world configuration and unrelated gameplay remain unchanged. Generators preserve the prototype exclusion tags and reproduce their output. The release build locates the complete game installation rather than accepting an incomplete test fixture directory as its root.
+
+The Galatia MCP tagging/distribution references were checked against installed source and bytecode. Normal colony production is excluded by absent blueprint sources; market stock uses `no_sell`, dealers use the existing exclusions, and faction/ship-role entries never include these prototypes. Explicit console grants can bypass normal distribution. This update does not purge saved ships or existing market stock.
+
+Release packaging checks committed inputs, referenced assets, every ZIP payload, checksums and archive integrity. Existing 0.6.2 live-playtest claims apply to its preserved content; this redesign has automated verification only. CN-033 and the Isa conversation placeholder remain unchanged.

@@ -1,0 +1,29 @@
+{
+  "quality": 1,
+  "displayName": "Superiority Fighter",
+  "hullId": "chief_navigator_lightning",
+  "variantId": "chief_navigator_lightning_Fighter",
+  "fluxVents": 0,
+  "fluxCapacitors": 0,
+  "mods": [],
+  "weaponGroups": [
+    {
+      "mode": "LINKED",
+      "weapons": {
+        "WS 001": "ioncannon_fighter"
+      }
+    },
+    {
+      "mode": "LINKED",
+      "weapons": {
+        "WS 002": "lightdualac"
+      }
+    },
+    {
+      "mode": "LINKED",
+      "weapons": {
+        "WS 003": "chief_navigator_lightning_cloudswarm"
+      }
+    }
+  ]
+}

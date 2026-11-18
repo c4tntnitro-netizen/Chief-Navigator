@@ -4,16 +4,16 @@
 
 **Threat boss systems:** All three Gautama configurations retain native Extraction Protocol. Threatxus uses assault fabrication, while its special units carry Exodus Plague: twin tapered streams, independent jitter, 400 packets per activation, kinetic impacts and Defabricate conversion, with a twenty-second cooldown. The former standalone stream weapon and its old mission remain removed. See [system settings and verification](docs/EXODUS_PLAGUE.md).
 
-**Version 0.6.2 — Starsector 0.98.5a-RC7.**
+**Version 0.6.3 — Starsector 0.98.5a-RC7.**
 
-[Download Chief Navigator 0.6.2](https://github.com/c4tntnitro-netizen/Chief-Navigator/releases/tag/v0.6.2).
-See the [0.6.2 release notes](docs/RELEASE_NOTES_0.6.2.md).
+[Download Chief Navigator 0.6.3](https://github.com/c4tntnitro-netizen/Chief-Navigator/releases/tag/v0.6.3).
+See the [0.6.3 release notes](docs/RELEASE_NOTES_0.6.3.md).
 
 **Peerless Skills is optional.** When it is enabled, finishing Menelaus's final Labor debrief grants one Peerless point. Train using **Peerless skills...** above vanilla skill reassignment or **Intel > Contacts > [your character] - Peerless training**. SiC uses the contact route; Menelaus and Sinni do not offer training.
 
 **Onslaught (ITH) prototype:** uses the supplied Ithaca sprite and two built-in naval lasers in the stock TPC hardpoints. Each ship-mounted laser deals 1,000 energy DPS for five seconds, half the fortress laser's base damage. Each laser costs 900 flux per second while firing (1,800 for both). Base cooldown is 30 seconds; the Naval Cycling Regulator reduces it to 12 seconds. Base range is 1,200 units, and beam thickness matches Ithaca's full-size naval lasers. During charge-up, each gun emits thin 100-energy-damage laser bolts (10% of the main beam's 1,000 damage rating), with independently randomized cadence that becomes denser near firing. Charge-up pulses are three times wider, twice their previous visible length at the installed 60-FPS setting, and independently vary in length by up to +/-50%. Their native 6,000-speed length floor is accounted for: width 9, central length 300, random variants from 150 to 450. Charging and firing send teal lightning along both side hulls; the central coaxial arc is removed. Post-fire steam is disabled pending visual rework because the previous plume looked wrong in-game. Installed Macroservos, Naval Cycling Regulator, Caged-Arc Projector, and Abyssal Focusing Lens apply to these lasers; Isa's existing naval package also applies when unlocked. After finishing Menelaus's Labor V debrief, speak to Aias Kleon in FOB Ithaca's comm directory and select **Discuss the Ithaca Onslaught prototype.** Accept the transfer to receive the ship once, or leave it for later. The offer is also available in already-completed saves until claimed.
 
-**Odyssey (Ithaca) prototype:** uses the supplied Domain Odyssey sprite, with two built-in naval lasers in its large port-side broadside mounts. The medium missile mount below the hangar is removed; fighter capacity increases from two to three bays, and Surveying Equipment is built in. The default fit retains its two Longbow wings and leaves the third bay empty. Each gun shares the Onslaught (ITH)'s 1,000 energy DPS, 1,200 base range, 900 firing flux/sec, and 30-second post-beam cooldown (12 seconds with the Naval Cycling Regulator). Installed Ithaca naval research, Isa's quarter-strength hop, charge-up pulses and Odyssey-specific hull lightning remain supported. Stock shields, engines and all other mounts remain intact. For local testing after restarting, use `AddShip chief_navigator_odyssey_ith_Standard`.
+**Odyssey (Ithaca), Domaindessy prototype:** uses the supplied Domain Odyssey sprite, four fixed wings and built-in Surveying Equipment. Its base air group is two Broadsword wings and two Khopesh wings. Interception Command Matrix replaces the Broadswords with recolored Thunder-based Lightning Superiority Fighters carrying miniature Cloudswarm PD, a Light Dual Autocannon and the high-delay fighter Ion Cannon. Siege Munitions Compiler replaces the Khopeshes with Tridents; Fortress Autoloader Core then upgrades those Tridents into recolored Poseidons with two double Atropos racks each (four torpedoes per bomber). The large energy mounts take conventional weapons and the aft medium missile mount remains removed. Research selects the fixed wings while ordinary fighter/bomber behavior and carrier systems remain. Restart before using `AddShip chief_navigator_odyssey_ith_Standard`. See [air-group settings and verification](docs/DOMAINDESSY_AIR_GROUP.md). Both Ithaca prototypes are excluded from normal production, generated market stock (including black markets), arms dealers and random fleet spawns; Kleon's scripted Onslaught transfer is retained.
 
 Avici retains three Lesser, two Greater and one Transcendent Manifestation patrols, now using vanilla Dweller ships only. The SEP-derived Banshee, Brain and Hunter encounters are disabled. Existing owned patrols convert only their surviving imported members when idle, without replenishing casualties. Budai has a vanilla Transcendent escort with no additional Maws; its one-time replacement also updates saved SEP escorts. See the [development notes](docs/DEV_AVICI_DWELLERS.md) for compatibility details.
 
@@ -78,7 +78,7 @@ The inherited concept and its decision boundaries are recorded in [docs/CONCEPT.
 ## Installation
 
 Download `Chief-Navigator-0.6.2.zip` from
-[the 0.6.2 release](https://github.com/c4tntnitro-netizen/Chief-Navigator/releases/tag/v0.6.2)
+[the 0.6.2 release](https://github.com/c4tntnitro-netizen/Chief-Navigator/releases/tag/v0.6.3)
 and extract its `Chief Navigator` folder into `Starsector/mods`.
 The mod folder must contain `mod_info.json` directly. When updating, replace
 the previous mod folder with the new one rather than merging its files.

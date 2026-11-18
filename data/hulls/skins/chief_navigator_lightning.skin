@@ -1,0 +1,14 @@
+{
+  "baseHullId": "thunder",
+  "skinHullId": "chief_navigator_lightning",
+  "hullName": "Lightning Superiority Fighter",
+  "descriptionId": "chief_navigator_lightning",
+  "tech": "Ithaca",
+  "incompatibleWithBaseHull": true,
+  "spriteName": "graphics/ships/ithaca/chief_navigator_lightning.png",
+  "tags": [
+    "no_dealer",
+    "no_autofit",
+    "no_bp_drop"
+  ]
+}
