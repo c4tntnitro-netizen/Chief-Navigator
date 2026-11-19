@@ -192,9 +192,14 @@ public final class WaypointTroyIntel extends BaseIntelPlugin {
     }
 
     @Override
+    public void notifyPlayerAboutToOpenIntelScreen() {
+        SinniNavigationGuidance.invalidateMapTarget();
+        super.notifyPlayerAboutToOpenIntelScreen();
+    }
+
+    @Override
     public SectorEntityToken getMapLocation(SectorMapAPI map) {
-        return TroyArrivalScript.getMapTarget(
-                SinniNavigationGuidance.getCurrentGuidance().getTarget());
+        return SinniNavigationGuidance.getCurrentMapTarget();
     }
 
     @Override

@@ -73,11 +73,10 @@ public final class SinniOneMoreHorizonIntel extends BaseIntelPlugin {
     @Override
     public void createSmallDescription(
             TooltipMakerAPI info, float width, float height) {
+        SinniSystemVignetteScript.refreshSightseeingAvailability();
         info.addImage(
                 SinniContact.getPortraitSprite(),
                 width, 128f, 10f);
-        SinniSystemVignetteScript.LastRequestTarget target =
-                SinniSystemVignetteScript.getActiveLastRequestTarget();
         if (complete
                 || SinniSystemVignetteScript.isOneMoreHorizonComplete()) {
             info.addPara("Sinni has completed her chart of every stellar "
@@ -101,44 +100,20 @@ public final class SinniOneMoreHorizonIntel extends BaseIntelPlugin {
                 Misc.getHighlightColor(),
                 "+2 Burn speed cap",
                 "+1 base Burn level");
-        List<SinniSystemVignetteScript.LastRequestTarget> destinations =
-                SinniSystemVignetteScript
-                        .getRemainingSightseeingDestinations();
-        if (!destinations.isEmpty()) {
-            info.addPara("Remaining systems:", 10f);
-            for (SinniSystemVignetteScript.LastRequestTarget destination
-                    : destinations) {
-                String type = SinniSystemVignetteScript.categoryDisplayName(
-                        destination.category);
-                String system = SinniSystemVignetteScript.displayName(
-                        destination.system);
-                info.addPara(type + ": %s",
-                        3f,
-                        Misc.getTextColor(),
-                        Misc.getHighlightColor(),
-                        system);
-            }
-        }
-        if (target != null
-                && !SinniSystemVignetteScript.isComplete(target.category)) {
-            String type = SinniSystemVignetteScript.categoryDisplayName(
-                    target.category);
-            info.addPara("Sinni has asked to visit a %s in %s: the final "
-                            + "unseen category on her personal chart.",
-                    10f,
-                    Misc.getTextColor(),
-                    Misc.getHighlightColor(),
-                    type,
-                    SinniSystemVignetteScript.displayName(target.system));
+        info.addPara("Stellar categories:", 10f);
+        for (SinniSystemVignetteScript.Category category
+                : SinniSystemVignetteScript.getRequiredSightseeingCategories()) {
+            boolean done = SinniSystemVignetteScript.isComplete(category);
+            info.addPara(SinniSystemVignetteScript.categoryDisplayName(category)
+                            + ": %s", 3f, Misc.getTextColor(),
+                    done ? Misc.getPositiveHighlightColor() : Misc.getHighlightColor(),
+                    done ? "Completed" : "Remaining");
         }
     }
 
     @Override
     public SectorEntityToken getMapLocation(SectorMapAPI map) {
-        SinniSystemVignetteScript.LastRequestTarget target =
-                SinniSystemVignetteScript.getActiveLastRequestTarget();
-        return target == null ? null
-                : SinniSystemVignetteScript.objectiveToken(target.system);
+        return null;
     }
 
     @Override
@@ -163,9 +138,6 @@ public final class SinniOneMoreHorizonIntel extends BaseIntelPlugin {
         if (complete || SinniSystemVignetteScript.isOneMoreHorizonComplete()) {
             return "Chart completed";
         }
-        SinniSystemVignetteScript.LastRequestTarget target =
-                SinniSystemVignetteScript.getActiveLastRequestTarget();
-        if (target != null) return "Visit " + target.system.getName();
         if (SinniSystemVignetteScript.isAllTypesCompletionPending()) {
             return "Review the completed chart with Sinni";
         }

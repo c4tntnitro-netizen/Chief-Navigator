@@ -5,11 +5,13 @@ import chiefnavigator.weapons.IthacaResearchUpgrades;
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.CampaignFleetAPI;
 import com.fs.starfarer.api.campaign.LocationAPI;
+import com.fs.starfarer.api.campaign.SectorAPI;
 import com.fs.starfarer.api.campaign.SectorEntityToken;
 import com.fs.starfarer.api.campaign.StarSystemAPI;
 import com.fs.starfarer.api.campaign.econ.MarketAPI;
 import com.fs.starfarer.api.impl.campaign.GateEntityPlugin;
 import java.util.List;
+import java.lang.ref.WeakReference;
 import org.lwjgl.util.vector.Vector2f;
 
 /** Resolves the current story objective into navigator-readable directions. */
@@ -22,6 +24,86 @@ public final class SinniNavigationGuidance {
     };
 
     private SinniNavigationGuidance() { }
+
+    // The native Intel panel requests its selected marker every UI frame.
+    // Share the resolved marker between the contact and story Intel entries;
+    // never retain a previous campaign through a process-static reference.
+    private static final long MAP_REFRESH_NANOS = 1_000_000_000L;
+    private static WeakReference<SectorAPI> mapSector = new WeakReference<>(null);
+    private static WeakReference<LocationAPI> mapLocation = new WeakReference<>(null);
+    private static WeakReference<SectorEntityToken> mapTarget = new WeakReference<>(null);
+    private static boolean mapCached;
+    private static boolean mapHadTarget;
+    private static long mapResolvedAt;
+
+    static void invalidateMapTarget() {
+        mapCached = false;
+        mapSector.clear();
+        mapLocation.clear();
+        mapTarget.clear();
+    }
+
+    /** Lazy UI lookup only: no timer script and no briefing/optional-advice work. */
+    public static SectorEntityToken getCurrentMapTarget() {
+        SectorAPI sector = Global.getSector();
+        if (sector == null) {
+            invalidateMapTarget();
+            return null;
+        }
+        SectorEntityToken target = mapTarget.get();
+        if (!mapCached || mapSector.get() != sector
+                || mapLocation.get() != sector.getCurrentLocation()
+                || mapHadTarget && target == null
+                || System.nanoTime() - mapResolvedAt >= MAP_REFRESH_NANOS) {
+            return cacheMapTarget(resolveCurrentTarget());
+        }
+        return target;
+    }
+
+    private static SectorEntityToken cacheMapTarget(SectorEntityToken target) {
+        SectorAPI sector = Global.getSector();
+        if (sector == null) {
+            invalidateMapTarget();
+            return null;
+        }
+        SectorEntityToken marker = TroyArrivalScript.getMapTarget(target);
+        mapSector = new WeakReference<>(sector);
+        mapLocation = new WeakReference<>(sector.getCurrentLocation());
+        mapTarget = new WeakReference<>(marker);
+        mapHadTarget = marker != null;
+        mapResolvedAt = System.nanoTime();
+        mapCached = true;
+        return marker;
+    }
+
+    /** Same objective as the briefing, without formatting text or optional leads. */
+    private static SectorEntityToken resolveCurrentTarget() {
+        if (!SinniEventideIntel.isBriefed()) {
+            MarketAPI eventide = Global.getSector().getEconomy().getMarket("eventide");
+            return eventide == null ? null : eventide.getPrimaryEntity();
+        }
+        if (!Global.getSector().getMemoryWithoutUpdate().getBoolean(
+                OdysseyExpanseSystem.ENTERED)) {
+            StarSystemAPI troy = TroyArrivalScript.findWaypointTroy();
+            if (troy == null) return null;
+            return Global.getSector().getMemoryWithoutUpdate().getBoolean(
+                    TroyArrivalScript.WORMHOLE_OPENED)
+                    ? TroyArrivalScript.findOdysseyWormhole(troy)
+                    : TroyArrivalScript.findDepartureStation(troy);
+        }
+        if (!MenelausTrial.isAccepted()) return OdysseyExpanseSystem.getFobIthaca();
+        int stage = MenelausTrial.getCurrentLaborStage();
+        SectorEntityToken target = MenelausTrial.getCurrentObjectiveLocation();
+        if (stage != MenelausTrial.LABOR_COMPLETE) return target;
+        StarSystemAPI ashen = OdysseyExpanseSystem.findSystemById(
+                OdysseyExpanseSystem.ASHEN_VERGE_ID);
+        if (ashen != null) target = ashen.getEntityById(OdysseyExpanseSystem.FOB_ITHACA_GATE_ID);
+        if (!OdysseyExpanseSystem.isFobIthacaGate(target)) return null;
+        if (!GateEntityPlugin.isScanned(target)) return target;
+        return PostLaborHuntIntel.isAvailable(PostLaborHuntIntel.Target.BUDAI)
+                || PostLaborHuntIntel.isAvailable(PostLaborHuntIntel.Target.UNGAIKYO)
+                ? OdysseyExpanseSystem.getFobIthaca() : null;
+    }
 
     public static final class Guidance {
         private final String destination;
@@ -44,6 +126,14 @@ public final class SinniNavigationGuidance {
     }
 
     public static Guidance getCurrentGuidance() {
+        // Explicitly opening a description or asking Sinni always reads live
+        // quest/cargo/position state, and updates the shared map marker too.
+        Guidance guidance = buildCurrentGuidance();
+        cacheMapTarget(guidance.getTarget());
+        return guidance;
+    }
+
+    private static Guidance buildCurrentGuidance() {
         if (Global.getSector() == null) {
             return new Guidance("No course available",
                     "The navigation network is offline.",

@@ -156,9 +156,14 @@ public final class SinniContactIntel extends ContactIntel {
     }
 
     @Override
+    public void notifyPlayerAboutToOpenIntelScreen() {
+        SinniNavigationGuidance.invalidateMapTarget();
+        super.notifyPlayerAboutToOpenIntelScreen();
+    }
+
+    @Override
     public SectorEntityToken getMapLocation(SectorMapAPI map) {
-        SectorEntityToken target = TroyArrivalScript.getMapTarget(
-                SinniNavigationGuidance.getCurrentGuidance().getTarget());
+        SectorEntityToken target = SinniNavigationGuidance.getCurrentMapTarget();
         return target == null ? super.getMapLocation(map) : target;
     }
 }

@@ -176,6 +176,9 @@ public final class AviciStarvingPopulationRegression {
         Method population = OdysseyPredatorScript.class.getDeclaredMethod("ensureStarvingPopulation");
         population.setAccessible(true);
         try {
+            // Retirement now belongs to load/relevant events; recurring live
+            // population behavior must not reintroduce the retired slots.
+            OdysseyPredatorScript.retireAviciStarvingThreat(f.avici);
             population.invoke(null);
             population.invoke(null);
         } catch (InvocationTargetException failure) {
@@ -184,7 +187,7 @@ public final class AviciStarvingPopulationRegression {
             throw failure;
         }
         check(f.removed.equals(List.of(old.api)) && f.fleets.equals(List.of(f.player.api)),
-                "Actual repeated population maintenance must retire Avici without spawning replacement patrols");
+                "Event retirement followed by repeated population maintenance must not respawn Avici Starving patrols");
         f.unchanged();
     }
 

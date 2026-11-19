@@ -144,7 +144,8 @@ public final class IthacaResearchUpgrades {
     public static int getCampaignMask() {
         if (Global.getSector() == null) return 0;
         if (isMaximumUpgradeOverrideEnabled()) return ALL_UPGRADES;
-        return captureRecoveredComponents();
+        migrateLegacyUnlocks();
+        return getStoredMask();
     }
 
     /**
@@ -171,9 +172,11 @@ public final class IthacaResearchUpgrades {
         int previous = Global.getSector().getMemoryWithoutUpdate().getInt(
                 RECOVERED_MASK_KEY);
         int recovered = previous | installedMask;
-        if (Global.getSector().getPlayerFleet() != null) {
+        if ((recovered & ALL_UPGRADES) != ALL_UPGRADES
+                && Global.getSector().getPlayerFleet() != null) {
             CargoAPI cargo = Global.getSector().getPlayerFleet().getCargo();
             for (int index = 0; index < COMPONENT_IDS.length; index++) {
+                if ((recovered & (1 << index)) != 0) continue;
                 SpecialItemData item = new SpecialItemData(COMPONENT_IDS[index], null);
                 if (cargo.getQuantity(CargoAPI.CargoItemType.SPECIAL, item) >= 1f) {
                     recovered |= 1 << index;
@@ -184,6 +187,10 @@ public final class IthacaResearchUpgrades {
         if (recovered != previous) {
             Global.getSector().getMemoryWithoutUpdate().set(
                     RECOVERED_MASK_KEY, recovered);
+            if ((recovered & ORIGINAL_UPGRADES) == ORIGINAL_UPGRADES
+                    && (previous & ORIGINAL_UPGRADES) != ORIGINAL_UPGRADES) {
+                chiefnavigator.quest.AviciResearchStationScript.install();
+            }
         }
     }
 
@@ -210,6 +217,10 @@ public final class IthacaResearchUpgrades {
             }
         }
         setStoredMask(mask);
+        if (installed > 0) {
+            chiefnavigator.quest.MenelausTrialScript.requestReconciliation();
+            chiefnavigator.quest.AviciResearchStationScript.install();
+        }
         return installed;
     }
 
@@ -242,6 +253,7 @@ public final class IthacaResearchUpgrades {
 
     /** Exact Menelaus-facing state for all independently installed parts. */
     public static String getUpgradeLedger() {
+        captureRecoveredComponents();
         int mask = getInstalledMask();
         CargoAPI cargo = Global.getSector() == null
                 || Global.getSector().getPlayerFleet() == null
@@ -279,7 +291,8 @@ public final class IthacaResearchUpgrades {
     /** Actual installed state; unlike the combat mask, ignores test overrides. */
     private static int getInstalledMask() {
         if (Global.getSector() == null) return 0;
-        return captureRecoveredComponents();
+        migrateLegacyUnlocks();
+        return getStoredMask();
     }
 
     private static void setStoredMask(int mask) {

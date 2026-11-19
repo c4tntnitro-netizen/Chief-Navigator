@@ -234,6 +234,7 @@ public final class AviciDwellerPopulationRegression {
         final Fleet playerFleet;
         double days;
         int factoryCalls;
+        int populationQueries;
         boolean paused, absent, failFactory, missingVariant, entered;
         SectorEntityToken dialogTarget;
 
@@ -251,7 +252,10 @@ public final class AviciDwellerPopulationRegression {
                     return systemMemory.api;
                 }
                 if (method.equals("getCenter")) return centerToken;
-                if (method.equals("getEntityById")) return local.get(args[0]);
+                if (method.equals("getEntityById")) {
+                    if (((String) args[0]).startsWith("chief_navigator_avici_manifestation_")) populationQueries++;
+                    return local.get(args[0]);
+                }
                 if (method.equals("getJumpPoints")) return Collections.singletonList(jump);
                 if (method.equals("getFleets")) return fleets(local);
                 if (method.equals("addEntity")) {
@@ -273,6 +277,7 @@ public final class AviciDwellerPopulationRegression {
             CampaignClockAPI clock = mock(CampaignClockAPI.class, (method, args) -> {
                 if (method.equals("getTimestamp")) return Math.round(days * 1000d);
                 if (method.equals("getElapsedDaysSince")) return (float) (days - ((Long) args[0]) / 1000d);
+                if (method.equals("convertToDays")) return ((Number) args[0]).floatValue();
                 return null;
             });
             InteractionDialogAPI interaction = mock(InteractionDialogAPI.class,
@@ -660,6 +665,28 @@ public final class AviciDwellerPopulationRegression {
         }
     }
 
+    private static void scheduledReplacement() {
+        Fixture f = new Fixture();
+        f.unlocked();
+        for (int i=0;i<6;i++) {
+            String key="$"+AviciDwellerPopulation.id(i);
+            f.saved.values.put(key+"_spawned_v1",true);
+            f.saved.values.put(key+"_lost_at_v1",0L);
+        }
+        AviciDwellerPopulation watcher = new AviciDwellerPopulation();
+        f.days=0.1; watcher.advance(0.1f);
+        int queries=f.populationQueries;
+        check(queries==6 && f.factoryCalls==0,"Load reconstructs six saved loss deadlines without creation");
+        for (int i=0;i<200;i++) { f.days+=0.1; watcher.advance(0.1f); }
+        check(f.populationQueries==queries && f.factoryCalls==0,"Idle timer does not query slots before the deadline");
+        f.days=30.1; watcher.advance(10f);
+        check(f.patrols()==6 && f.factoryCalls==6,"Due timer validates and creates the six eligible replacements");
+        queries=f.populationQueries;
+        for (int i=0;i<200;i++) { f.days+=0.1; watcher.advance(0.1f); }
+        check(f.populationQueries==queries && f.factoryCalls==6,"Live cached patrols do not repeat replacement scans");
+        System.out.println("PASS: saved Avici deadlines, 400 idle advances without slot searches, due replacements");
+    }
+
     public static void main(String[] args) throws Exception {
         SectorAPI priorSector = Global.getSector();
         SettingsAPI priorSettings = Global.getSettings();
@@ -670,6 +697,7 @@ public final class AviciDwellerPopulationRegression {
             ownershipAndRosters();
             verifiedLossAndMissingClaims();
             savedPortedMembersRetire();
+            scheduledReplacement();
             System.out.println("PASS: first-entry Avici unlock, three Lesser/two Greater/one Transcendent patrols, "
                     + "no player tracking, sparse tier rosters, scoped ownership, busy/empty claims, "
                     + "Budai birth compatibility, and verified-loss replacement.");

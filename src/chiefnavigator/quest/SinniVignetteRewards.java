@@ -236,11 +236,8 @@ final class SinniVignetteRewards {
             return;
         }
         StarSystemAPI system = (StarSystemAPI) player.getContainingLocation();
-        SinniSystemVignetteScript.Candidate candidate =
-                SinniSystemVignetteScript.classifySystem(system);
-        if (candidate == null
-                || candidate.category
-                        != SinniSystemVignetteScript.Category.MAIN_SEQUENCE) {
+        if (!SinniSystemVignetteScript.hasSystemCategory(system,
+                SinniSystemVignetteScript.Category.MAIN_SEQUENCE)) {
             return;
         }
 

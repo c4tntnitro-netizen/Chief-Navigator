@@ -119,7 +119,7 @@ def main():
         'min crew':0,'max crew':0,'cargo':200,'fuel':400,'fuel/ly':10,'range':40,'max burn':7,
         'base value':750000,'CR to deploy':10,'peak CR sec':720,'CR loss/sec':.25,
         'supplies/rec':100,'supplies/mo':100,'hints':'SHIP_WITH_MODULES, UNBOARDABLE, HIDE_IN_CODEX',
-        'tags':'hide_in_codex, no_autofit, no_dealer','rarity':0,'breakProb':.5,'minPieces':3,'maxPieces':4}
+        'tags':'hide_in_codex, no_autofit, no_dealer, no_sell, restricted','rarity':0,'breakProb':.5,'minPieces':3,'maxPieces':4}
     assert set(values)<=set(header)
     upsert_row(csvpath,ID,[values.get(key,'') for key in header])
     hullmodpath=ROOT/'data/hullmods/hull_mods.csv'

@@ -14,6 +14,7 @@ import com.fs.starfarer.api.campaign.LocationAPI;
 import com.fs.starfarer.api.campaign.NascentGravityWellAPI;
 import com.fs.starfarer.api.campaign.PlanetAPI;
 import com.fs.starfarer.api.campaign.SectorEntityToken;
+import com.fs.starfarer.api.campaign.SectorAPI;
 import com.fs.starfarer.api.campaign.SpecialItemData;
 import com.fs.starfarer.api.campaign.StarSystemAPI;
 import com.fs.starfarer.api.campaign.ai.FleetAssignmentDataAPI;
@@ -60,10 +61,23 @@ import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.HashMap;
+import java.util.Map;
+import java.lang.ref.WeakReference;
 import org.lwjgl.util.vector.Vector2f;
 
 /** Six-system Odyssey constellation in remote Abyssal hyperspace. */
 public final class OdysseyExpanseSystem {
+    // Runtime lookups share an event-invalidated index. Generation/claim checks below
+    // deliberately retain their uncached, authoritative sector search.
+    private static WeakReference<SectorAPI> lookupSector = new WeakReference<>(null);
+    private static final Map<String, WeakReference<StarSystemAPI>> systemLookups = new HashMap<>();
+
+    public static void invalidateSystemLookupCache() {
+        lookupSector.clear();
+        systemLookups.clear();
+    }
+
     public static final String SYSTEM_ID = "chief_navigator_odyssey_expanse";
     public static final String ENTRY_ID = "chief_navigator_odyssey_ingress";
     public static final String ENTERED = "$chief_navigator_odyssey_expanse_entered";
@@ -657,6 +671,7 @@ public final class OdysseyExpanseSystem {
     }
 
     public static StarSystemAPI ensureExists() {
+        invalidateSystemLookupCache();
         StarSystemAPI existing = findExisting();
         // Static world topology is created once and is serialized by the
         // campaign.  A normal load, chart open, or interaction must never
@@ -702,6 +717,7 @@ public final class OdysseyExpanseSystem {
         ensureSystemMusic(expanse, placeholders);
         reserveAbyssalHole();
         ensureShowcaseEncounters(expanse, findSystem(DEVOURED_REACH_ID));
+        invalidateSystemLookupCache();
         return expanse;
     }
 
@@ -1837,6 +1853,9 @@ public final class OdysseyExpanseSystem {
         BaseSalvageSpecial.addExtraSalvage(station, componentLoot);
         memory.set(RESEARCH_COMPONENT_PROVISIONED_PREFIX
                 + AVICI_RESEARCH_STATION_ID, true);
+        // This one-shot reveal can run after the Labor watcher in the same
+        // frame. Queue the new objective after it actually exists.
+        MenelausTrialScript.requestReconciliation();
         if (Global.getSector().getCampaignUI() != null) {
             Global.getSector().getCampaignUI().addMessage(
                     "Research station located in Sanghata orbit, Avici.");
@@ -4363,13 +4382,30 @@ public final class OdysseyExpanseSystem {
 
     /** Stable lookup used by campaign population scripts and save repair. */
     public static StarSystemAPI findSystemById(String id) {
-        return findSystem(id);
+        SectorAPI sector = Global.getSector();
+        if (sector == null || id == null) return null;
+        if (lookupSector.get() != sector) {
+            systemLookups.clear();
+            for (StarSystemAPI candidate : sector.getStarSystems()) {
+                String candidateId = candidate.getOptionalUniqueId();
+                if (candidateId != null && !systemLookups.containsKey(candidateId)) {
+                    systemLookups.put(candidateId, new WeakReference<>(candidate));
+                }
+            }
+            lookupSector = new WeakReference<>(sector);
+        }
+        WeakReference<StarSystemAPI> reference = systemLookups.get(id);
+        StarSystemAPI candidate = reference == null ? null : reference.get();
+        // Recheck ownership on every hit; neither foreign claims nor changed
+        // markers grant permission to mutate a system. Load, generation and
+        // campaign location changes invalidate positive and negative entries.
+        return isOwnedSystem(candidate, id) ? candidate : null;
     }
 
     /** Stable lookup for one of Anatolia's three hollow worlds. */
     public static SectorEntityToken getDevouredWorld(int index) {
         if (index < 0 || index >= HOLLOW_WORLD_IDS.length) return null;
-        StarSystemAPI reach = findSystem(DEVOURED_REACH_ID);
+        StarSystemAPI reach = findSystemById(DEVOURED_REACH_ID);
         if (reach == null) return null;
         SectorEntityToken world = reach.getEntityById(HOLLOW_WORLD_IDS[index]);
         return world != null
@@ -4379,7 +4415,7 @@ public final class OdysseyExpanseSystem {
 
     /** Stable destination lookup for the post-Troy expedition objective. */
     public static SectorEntityToken getFobIthaca() {
-        StarSystemAPI ashenVerge = findSystem(ASHEN_VERGE_ID);
+        StarSystemAPI ashenVerge = findSystemById(ASHEN_VERGE_ID);
         if (ashenVerge == null) return null;
         SectorEntityToken ithaca = ashenVerge.getEntityById(FOB_ITHACA_ID);
         return isFobIthaca(ithaca) ? ithaca : null;

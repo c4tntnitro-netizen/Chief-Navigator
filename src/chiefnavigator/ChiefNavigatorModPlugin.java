@@ -83,6 +83,9 @@ public final class ChiefNavigatorModPlugin extends BaseModPlugin {
 
     @Override
     public void onGameLoad(boolean newGame) {
+        OdysseyExpanseSystem.invalidateSystemLookupCache();
+        SinniSystemVignetteScript.invalidateSightseeingCache();
+        chiefnavigator.quest.CampaignMaintenanceEvents.install();
         // Detect first installation before the other hooks write mod state.
         // Previously modded saves retain their serialized world, including
         // missing objects; clean existing campaigns receive it exactly once.
@@ -205,6 +208,7 @@ public final class ChiefNavigatorModPlugin extends BaseModPlugin {
         Global.getSector().removeTransientScriptsOfClass(
                 OdysseyExpanseControlScript.class);
         OdysseyExpanseControlScript.restoreTransverseJump();
+        OdysseyExpanseSystem.invalidateSystemLookupCache();
     }
 
     @Override

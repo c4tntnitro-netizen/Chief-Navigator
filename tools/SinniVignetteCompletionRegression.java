@@ -89,6 +89,7 @@ public final class SinniVignetteCompletionRegression {
         final Map<String, Object> saved = new HashMap<>();
         final PlanetAPI star;
         final StarSystemAPI system;
+        int fleetReads;
 
         SystemFixture(String id, String starType, boolean nebula, String tag) {
             MemoryAPI memory = memory(saved);
@@ -109,7 +110,10 @@ public final class SinniVignetteCompletionRegression {
                 if (name.equals("hasBlackHole")) return StarTypes.BLACK_HOLE.equals(starType);
                 if (name.equals("hasPulsar")) return StarTypes.NEUTRON_STAR.equals(starType);
                 if (name.equals("hasTag")) return tag != null && tag.equals(args[0]);
-                if (name.equals("getFleets")) return Collections.emptyList();
+                if (name.equals("getFleets")) {
+                    fleetReads++;
+                    return Collections.emptyList();
+                }
                 if (name.equals("getType")) return nebula
                         ? StarSystemGenerator.StarSystemType.NEBULA
                         : StarSystemGenerator.StarSystemType.SINGLE;
@@ -131,6 +135,7 @@ public final class SinniVignetteCompletionRegression {
         boolean dialogShowing;
         boolean transitioning;
         boolean recruited = true;
+        int systemReads;
 
         Fixture(SystemFixture... fixtures) {
             for (SystemFixture fixture : fixtures) systems.add(fixture.system);
@@ -217,7 +222,10 @@ public final class SinniVignetteCompletionRegression {
                 if (name.equals("getImportantPeople")) return people;
                 if (name.equals("getIntelManager")) return manager;
                 if (name.equals("getCampaignUI")) return ui;
-                if (name.equals("getStarSystems")) return systems;
+                if (name.equals("getStarSystems")) {
+                    systemReads++;
+                    return new ArrayList<>(systems);
+                }
                 if (name.equals("getStarSystem")) {
                     for (StarSystemAPI system : systems) {
                         if (args[0].equals(system.getId())) return system;
@@ -241,7 +249,7 @@ public final class SinniVignetteCompletionRegression {
     }
 
     static SystemFixture nebula() {
-        return new SystemFixture("completion_regression_nebula", StarTypes.YELLOW, true, null);
+        return new SystemFixture("completion_regression_nebula", "nebula_center_average", true, null);
     }
 
     static SystemFixture blackHole() {
@@ -381,9 +389,12 @@ public final class SinniVignetteCompletionRegression {
                 StarTypes.WHITE_DWARF, false, null);
         SystemFixture ashen = new SystemFixture(OdysseyExpanseSystem.ASHEN_VERGE_ID,
                 StarTypes.YELLOW, true, null);
+        sanzu.saved.put("$chief_navigator_odyssey_authored_system_v1", true);
+        ashen.saved.put("$chief_navigator_odyssey_authored_system_v1", true);
         Fixture fixture = new Fixture(nebula, blackHole, core, sanzu, ashen);
         check(SinniSystemVignetteScript.getRequiredSightseeingCount() == 2,
-                "Only available ordinary remote categories may count toward chart completion");
+                "Only available ordinary remote categories may count toward chart completion: "
+                        + SinniSystemVignetteScript.getRequiredSightseeingCategories());
         fixture.earned(SinniSystemVignetteScript.Category.NEBULA);
         fixture.earned(SinniSystemVignetteScript.Category.BLACK_HOLE);
         fixture.ticks(4);
@@ -439,6 +450,46 @@ public final class SinniVignetteCompletionRegression {
                 "A corrected stale delay must release the finale after the actual final category's day");
     }
 
+    static void checkIdleWorkAndDynamicCategories() {
+        SystemFixture nebula = nebula();
+        SystemFixture blackHole = blackHole();
+        Fixture fixture = new Fixture(nebula, blackHole);
+        for (int i = 0; i < 500; i++) {
+            fixture.systems.add(new SystemFixture("extra_" + i,
+                    StarTypes.BLACK_HOLE, false, null).system);
+        }
+        fixture.earned(SinniSystemVignetteScript.Category.NEBULA);
+        fixture.watcher.advance(0.5f);
+        check(fixture.systemReads == 0, "Watcher must wait a full second");
+        fixture.watcher.advance(0.5f);
+        check(fixture.systemReads == 1, "First second takes one category census");
+        fixture.ticks(1000);
+        check(fixture.systemReads == 1 && nebula.fleetReads == 0,
+                "1000 idle checks in a completed category must not rescan 502 systems or nearby fleets");
+        fixture.currentSystem = blackHole.system;
+        fixture.watcher.advance(0.5f);
+        check(fixture.systemReads == 1, "Travel must also respect the one-second gate");
+        fixture.watcher.advance(0.5f);
+        check(fixture.systemReads == 2, "Travel refreshes available categories once");
+        fixture.ticks(3);
+        check(fixture.scenes.size() == 1 && blackHole.fleetReads == 1,
+                "An eligible arrival must still check safety and open its scene");
+        SinniSystemVignetteScript.markComplete(SinniSystemVignetteScript.Category.BLACK_HOLE);
+        fixture.ticks(4);
+        check(fixture.systemReads == 2 && SinniSystemVignetteScript.isAllTypesCompletionPending(),
+                "Completion uses the existing category census");
+        fixture.systems.add(new SystemFixture("new_white_dwarf",
+                StarTypes.WHITE_DWARF, false, null).system);
+        fixture.advanceDays(1f);
+        fixture.dialogShowing = false;
+        fixture.ticks(4);
+        check(fixture.scenes.size() == 1 && !SinniSystemVignetteScript.isAllTypesCompletionPending(),
+                "A dynamically added category must block a stale finale before it opens");
+        check(SinniSystemVignetteScript.getRequiredSightseeingCount() == 3,
+                "The checklist includes the new category");
+        System.out.println("502-system chart: 1 census across 1000 idle checks; 0 idle hostile-fleet scans; 1-second gate verified.");
+    }
+
     public static void main(String[] args) {
         SettingsAPI previousSettings = Global.getSettings();
         SectorAPI previousSector = Global.getSector();
@@ -448,6 +499,7 @@ public final class SinniVignetteCompletionRegression {
             checkAvailableCategoryCensus();
             checkLegacyPendingDelay();
             checkStaleDelayOnLastCategory();
+            checkIdleWorkAndDynamicCategories();
             System.out.println("Sinni vignette completion regression checks passed.");
         } finally {
             Global.setSettings(previousSettings);

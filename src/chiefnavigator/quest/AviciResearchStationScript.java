@@ -2,11 +2,10 @@ package chiefnavigator.quest;
 
 import com.fs.starfarer.api.EveryFrameScript;
 import com.fs.starfarer.api.Global;
-import com.fs.starfarer.api.util.IntervalUtil;
 
-/** Reveals the final research station after the six original parts are recovered. */
+/** One-shot reveal reconciliation after load or an actual cargo event. */
 public final class AviciResearchStationScript implements EveryFrameScript {
-    private final IntervalUtil interval = new IntervalUtil(1f, 1.5f);
+    private boolean done;
 
     public static void install() {
         if (Global.getSector() == null) return;
@@ -17,14 +16,12 @@ public final class AviciResearchStationScript implements EveryFrameScript {
 
     @Override
     public void advance(float amount) {
-        if (Global.getSector() == null || Global.getSector().isPaused()
+        if (done || Global.getSector() == null || Global.getSector().isPaused()
                 || amount <= 0f) return;
-        interval.advance(amount);
-        if (interval.intervalElapsed()) {
-            OdysseyExpanseSystem.introduceAviciResearchStation();
-        }
+        OdysseyExpanseSystem.introduceAviciResearchStation();
+        done = true;
     }
 
-    @Override public boolean isDone() { return false; }
+    @Override public boolean isDone() { return done; }
     @Override public boolean runWhilePaused() { return false; }
 }

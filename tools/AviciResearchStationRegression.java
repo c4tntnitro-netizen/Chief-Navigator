@@ -315,6 +315,35 @@ public final class AviciResearchStationRegression {
         check(f.factoryCalls == 1 && f.saved.api.getBoolean(ATTEMPTED), "Failed native factory must remain latched across later ticks");
     }
 
+    private static void eventDrivenReveal() throws Exception {
+        Fixture f = new Fixture();
+        AviciResearchStationScript.install();
+        EveryFrameScript job = f.scripts.get(0);
+        job.advance(1f);
+        check(job.isDone(), "Unqualified load reconciliation must retire, not poll");
+        f.recover(6);
+        for (int i = 0; i < 600; i++) job.advance(1f);
+        check(f.factoryCalls == 0, "A retired reveal job must perform no more world checks");
+        ResearchStationSalvageListener listener = new ResearchStationSalvageListener();
+        listener.reportPlayerNonMarketTransaction(null, null);
+        check(f.scripts.size() == 1 && f.scripts.get(0) != job,
+                "Committed salvage schedules one fresh reconciliation");
+        job = f.scripts.get(0);
+        f.paused = true;
+        job.advance(1f);
+        check(!job.isDone() && f.factoryCalls == 0, "Cargo events must defer world mutation while paused");
+        f.paused = false;
+        job.advance(1f);
+        check(job.isDone() && f.factoryCalls == 1, "Resuming reveals the station exactly once");
+        listener.reportPlayerMarketTransaction(null);
+        listener.reportCargoScreenOpened();
+        listener.reportPlayerClosedMarket(null);
+        listener.reportCurrentLocationChanged(null, f.avici);
+        check(f.scripts.size() == 1, "Repeated cargo/location events coalesce into one job");
+        f.scripts.get(0).advance(1f);
+        check(f.factoryCalls == 1, "Later events cannot recreate an existing station");
+    }
+
     public static void main(String[] args) throws Exception {
         SectorAPI priorSector = Global.getSector();
         SettingsAPI priorSettings = Global.getSettings();
@@ -322,6 +351,7 @@ public final class AviciResearchStationRegression {
         try {
             prerequisitesAndSalvage();
             savedClaimsAndFailures();
+            eventDrivenReveal();
             System.out.println("Avici research station regression passed");
         } finally {
             Global.setSector(priorSector);

@@ -25,6 +25,7 @@ import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
+import java.lang.ref.WeakReference;
 import org.lwjgl.util.vector.Vector2f;
 
 /** Six independently owned, finite-roster Avici patrols, unlocked by the first visit. */
@@ -45,6 +46,9 @@ public final class AviciDwellerPopulation implements EveryFrameScript {
         "Lesser Manifestation", "Greater Manifestation", "Transcendent Manifestation"
     };
     private final IntervalUtil interval = new IntervalUtil(1f, 1.5f);
+    private boolean initialized;
+    private float nextValidationDays = Float.POSITIVE_INFINITY;
+    private final List<WeakReference<CampaignFleetAPI>> patrols = new ArrayList<>();
 
     public static void install() {
         if (Global.getSector() == null) return;
@@ -54,11 +58,37 @@ public final class AviciDwellerPopulation implements EveryFrameScript {
 
     @Override public void advance(float amount) {
         if (Global.getSector() == null || Global.getSector().isPaused() || amount <= 0f) return;
+        if (Global.getSector().getClock() == null) return;
+        nextValidationDays -= Global.getSector().getClock().convertToDays(amount);
+        if (!initialized || nextValidationDays <= 0f) {
+            initialized = true;
+            patrols.clear();
+            maintainPopulation(patrols);
+            nextValidationDays = nextReplacementDelay();
+        }
         interval.advance(amount);
-        if (interval.intervalElapsed()) maintainPopulation();
+        if (interval.intervalElapsed()) {
+            // Movement/avoidance remains local active behavior. Identity and
+            // slot checks belong to initialization, loss deadlines and events.
+            for (WeakReference<CampaignFleetAPI> reference : patrols) {
+                CampaignFleetAPI fleet = reference.get();
+                if (fleet == null || !isOwnedFleet(fleet) || fleet.isEmpty()
+                        || TroyArrivalScript.isFleetBusyForMutation(fleet)
+                        || !(fleet.getContainingLocation() instanceof StarSystemAPI)) continue;
+                StarSystemAPI location = (StarSystemAPI) fleet.getContainingLocation();
+                if (OdysseyExpanseSystem.MESSINA_ID.equals(location.getOptionalUniqueId())
+                        && OdysseyPredatorScript.advancesPhysicalState(location)) {
+                    configurePatrol(fleet, location);
+                }
+            }
+        }
     }
 
     static void maintainPopulation() {
+        maintainPopulation(null);
+    }
+
+    private static void maintainPopulation(List<WeakReference<CampaignFleetAPI>> tracked) {
         if (Global.getSector() == null || Global.getSector().getClock() == null) return;
         StarSystemAPI avici = OdysseyExpanseSystem.findSystemById(OdysseyExpanseSystem.MESSINA_ID);
         if (avici == null) return;
@@ -68,10 +98,22 @@ public final class AviciDwellerPopulation implements EveryFrameScript {
         MemoryAPI memory = Global.getSector().getMemoryWithoutUpdate();
         for (int slot = 0; slot < SUFFIXES.length; slot++) {
             String id = id(slot);
-            SectorEntityToken claim = findClaim(avici, id);
+            SectorEntityToken claim = avici.getEntityById(id);
+            if (claim == null) {
+                // Remote claims cannot be maintained here. Search for them
+                // only when creation is possible, to prevent duplicates.
+                Object loss = memory.get(lostAtKey(id));
+                if (memory.getBoolean(spawnedKey(id))) {
+                    if (!(loss instanceof Number)) continue;
+                    float elapsed = Global.getSector().getClock().getElapsedDaysSince(((Number) loss).longValue());
+                    if (!Float.isFinite(elapsed) || elapsed < REPLACEMENT_DELAY_DAYS) continue;
+                }
+                claim = findClaim(avici, id);
+            }
             if (claim != null) {
                 if (isOwnedFleet(claim)) {
                     CampaignFleetAPI fleet = (CampaignFleetAPI) claim;
+                    if (tracked != null) tracked.add(new WeakReference<>(fleet));
                     // Retained empty tokens, transitions and ongoing interactions remain authoritative.
                     if (fleet.getContainingLocation() == avici && !fleet.isEmpty()
                             && !TroyArrivalScript.isFleetBusyForMutation(fleet)) {
@@ -82,14 +124,27 @@ public final class AviciDwellerPopulation implements EveryFrameScript {
                 }
                 continue;
             }
-            Object loss = memory.get(lostAtKey(id));
-            if (memory.getBoolean(spawnedKey(id))) {
-                if (!(loss instanceof Number)) continue;
-                float elapsed = Global.getSector().getClock().getElapsedDaysSince(((Number) loss).longValue());
-                if (!Float.isFinite(elapsed) || elapsed < REPLACEMENT_DELAY_DAYS) continue;
-            }
             createPatrol(avici, slot);
+            SectorEntityToken created = avici.getEntityById(id);
+            if (tracked != null && isOwnedFleet(created)) {
+                tracked.add(new WeakReference<>((CampaignFleetAPI) created));
+            }
         }
+    }
+
+    private static float nextReplacementDelay() {
+        MemoryAPI memory = Global.getSector().getMemoryWithoutUpdate();
+        float next = Float.POSITIVE_INFINITY;
+        for (int slot = 0; slot < SUFFIXES.length; slot++) {
+            Object lost = memory.get(lostAtKey(id(slot)));
+            if (!(lost instanceof Number)) continue;
+            float elapsed = Global.getSector().getClock().getElapsedDaysSince(((Number) lost).longValue());
+            float remaining = REPLACEMENT_DELAY_DAYS - elapsed;
+            // An elapsed but blocked slot waits for a relevant world/fleet
+            // event, rather than retrying a failed claim/factory every frame.
+            if (Float.isFinite(remaining) && remaining > 0f) next = Math.min(next, remaining);
+        }
+        return next;
     }
 
     /** Exact IDs and our own marker are both required; a Dweller faction alone grants no ownership. */
@@ -284,6 +339,7 @@ public final class AviciDwellerPopulation implements EveryFrameScript {
         if (!(memory.get(lostAtKey(id)) instanceof Number)) {
             memory.set(lostAtKey(id), Global.getSector().getClock().getTimestamp());
         }
+        install();
     }
 
     private static final class LossListener implements FleetEventListener {
@@ -291,6 +347,7 @@ public final class AviciDwellerPopulation implements EveryFrameScript {
                 CampaignFleetAPI primaryWinner, BattleAPI battle) {
             if (fleet != null && fleet.isEmpty() && battle != null
                     && battle.wasFleetDefeated(fleet, primaryWinner)) recordLoss(fleet);
+            else if (fleet != null && isOwnedFleet(fleet)) install();
         }
 
         @Override public void reportFleetDespawnedToListener(CampaignFleetAPI fleet,

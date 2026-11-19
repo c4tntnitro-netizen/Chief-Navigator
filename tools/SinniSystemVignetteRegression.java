@@ -64,6 +64,18 @@ public final class SinniSystemVignetteRegression {
             boolean nebula,
             boolean blackHole,
             boolean pulsar) {
+        return system(systemId, starType, nebula, blackHole, pulsar,
+                nebula ? StarSystemGenerator.StarSystemType.NEBULA
+                        : StarSystemGenerator.StarSystemType.SINGLE);
+    }
+
+    static StarSystemAPI system(
+            String systemId,
+            String starType,
+            boolean nebula,
+            boolean blackHole,
+            boolean pulsar,
+            StarSystemGenerator.StarSystemType systemType) {
         PlanetAPI star = starType == null ? null : mock(
                 PlanetAPI.class,
                 (name, args) -> name.equals("getTypeId") ? starType : null);
@@ -79,8 +91,7 @@ public final class SinniSystemVignetteRegression {
             if (name.equals("hasBlackHole")) return blackHole;
             if (name.equals("hasPulsar")) return pulsar;
             if (name.equals("getType")) {
-                return nebula ? StarSystemGenerator.StarSystemType.NEBULA
-                        : StarSystemGenerator.StarSystemType.SINGLE;
+                return systemType;
             }
             return null;
         });
@@ -110,6 +121,7 @@ public final class SinniSystemVignetteRegression {
             if (name.equals("getStar")) return primary;
             if (name.equals("getSecondary")) return secondary;
             if (name.equals("getTertiary")) return tertiary;
+            if (name.equals("hasSystemwideNebula")) return true;
             if (name.equals("getType")) {
                 return StarSystemGenerator.StarSystemType.SINGLE;
             }
@@ -231,6 +243,47 @@ public final class SinniSystemVignetteRegression {
 
         expectCategory(StarTypes.YELLOW, true, false, false,
                 SinniSystemVignetteScript.Category.NEBULA, "nebula");
+        // Native SINGLE systems in NEBULA constellations also report
+        // hasSystemwideNebula=true. World Mill in the reported save is one.
+        SinniSystemVignetteScript.Candidate worldMill =
+                SinniSystemVignetteScript.classifySystem(system(
+                        "system_180e", StarTypes.BLUE_GIANT, true, false, false,
+                        StarSystemGenerator.StarSystemType.SINGLE));
+        check(worldMill != null
+                        && worldMill.category == SinniSystemVignetteScript.Category.GIANT_STAR
+                        && "blue_giant".equals(worldMill.subtype)
+                        && "massive_star".equals(worldMill.sceneId),
+                "World Mill's blue giant must not become a Nebula objective because of constellation clouds");
+        String[] cloudedTypes = {StarTypes.YELLOW, StarTypes.WHITE_DWARF,
+                StarTypes.BLACK_HOLE, StarTypes.NEUTRON_STAR};
+        SinniSystemVignetteScript.Category[] cloudedCategories = {
+                SinniSystemVignetteScript.Category.MAIN_SEQUENCE,
+                SinniSystemVignetteScript.Category.WHITE_DWARF,
+                SinniSystemVignetteScript.Category.BLACK_HOLE,
+                SinniSystemVignetteScript.Category.NEUTRON_STAR};
+        for (int i = 0; i < cloudedTypes.length; i++) {
+            SinniSystemVignetteScript.Candidate clouded =
+                    SinniSystemVignetteScript.classifySystem(system(
+                            null, cloudedTypes[i], true, i == 2, i == 3,
+                            StarSystemGenerator.StarSystemType.SINGLE));
+            check(clouded != null && clouded.category == cloudedCategories[i],
+                    "Constellation clouds must preserve stellar category: " + cloudedTypes[i]);
+        }
+        check(SinniSystemVignetteScript.classifySystem(system(
+                        null, null, true, false, false,
+                        StarSystemGenerator.StarSystemType.SINGLE)).category
+                        == SinniSystemVignetteScript.Category.NEBULA,
+                "Starless systemwide nebula must retain fallback support");
+        check(SinniSystemVignetteScript.classifySystem(system(
+                        null, null, false, false, false,
+                        StarSystemGenerator.StarSystemType.NEBULA)).category
+                        == SinniSystemVignetteScript.Category.NEBULA,
+                "Explicit nebula system must not require constellation clouds");
+        check(SinniSystemVignetteScript.classifySystem(system(
+                        null, "nebula_center_average", true, false, false,
+                        StarSystemGenerator.StarSystemType.NEBULA)).category
+                        == SinniSystemVignetteScript.Category.NEBULA,
+                "Native nebula with its hidden star reference must remain a Nebula objective");
         expectCategory(StarTypes.BLACK_HOLE, false, true, false,
                 SinniSystemVignetteScript.Category.BLACK_HOLE, "black_hole");
         expectCategory(StarTypes.NEUTRON_STAR, false, false, true,
@@ -551,7 +604,7 @@ public final class SinniSystemVignetteRegression {
 
         StarSystemAPI farNebula = destinationSystem(
                 "regression_far_nebula", "Far Nebula",
-                StarTypes.YELLOW, true, false, false, 9000f, 0f);
+                "nebula_center_average", true, false, false, 9000f, 0f);
         StarSystemAPI blackHole = destinationSystem(
                 "regression_black_hole", "Black Reach",
                 StarTypes.BLACK_HOLE, false, true, false, 3000f, 0f);
@@ -560,7 +613,7 @@ public final class SinniSystemVignetteRegression {
                 StarTypes.WHITE_DWARF, false, false, false, 2000f, 0f);
         StarSystemAPI nearNebula = destinationSystem(
                 "regression_near_nebula", "Near Nebula",
-                StarTypes.YELLOW, true, false, false, 1000f, 0f);
+                "nebula_center_average", true, false, false, 1000f, 0f);
         StarSystemAPI excludedCoreMainSequence = mock(
                 StarSystemAPI.class, (name, values) -> {
                     if (name.equals("getId")
@@ -602,40 +655,19 @@ public final class SinniSystemVignetteRegression {
                 destinationSystems, null,
                 destinationMemory);
 
-        List<SinniSystemVignetteScript.LastRequestTarget> destinations =
-                SinniSystemVignetteScript
-                        .getRemainingSightseeingDestinations();
-        check(destinations.size() == 2,
-                "Destination list must omit completed, unavailable, and "
-                        + "ineligible categories");
-        check(destinations.get(0).category
-                        == SinniSystemVignetteScript.Category.NEBULA,
-                "Destination list must retain exploration-category order");
-        check(destinations.get(0).system == nearNebula,
-                "Without a player location, destination selection must keep "
-                        + "the first eligible system deterministic");
-        check(destinations.get(1).category
-                        == SinniSystemVignetteScript.Category.BLACK_HOLE,
-                "Black-hole destination must follow the nebula destination");
-        check(destinations.get(1).system == blackHole,
-                "Destination list must expose an actual system per category");
-
-        destinationMemory.put(
-                "$chief_navigator_sinni_last_request_active_v1",
-                Boolean.TRUE);
-        destinationMemory.put(
-                "$chief_navigator_sinni_last_request_category_v1",
-                SinniSystemVignetteScript.Category.NEBULA.id);
-        destinationMemory.put(
-                "$chief_navigator_sinni_last_request_system_v1",
-                farNebula.getId());
-        destinations = SinniSystemVignetteScript
-                .getRemainingSightseeingDestinations();
-        check(destinations.size() == 2,
-                "An active last request must not hide other remaining rows");
-        check(destinations.get(0).system == farNebula,
-                "Active final-request target must override nearest-system "
-                        + "recalculation");
+        List<SinniSystemVignetteScript.Category> categories =
+                SinniSystemVignetteScript.getRequiredSightseeingCategories();
+        check(categories.equals(Arrays.asList(
+                        SinniSystemVignetteScript.Category.NEBULA,
+                        SinniSystemVignetteScript.Category.BLACK_HOLE,
+                        SinniSystemVignetteScript.Category.WHITE_DWARF)),
+                "Checklist includes each available exploration category once, including completed categories");
+        check(SinniSystemVignetteScript.getCompletedSightseeingCount() == 1,
+                "Checklist preserves completed white-dwarf progress");
+        destinationMemory.put("$chief_navigator_sinni_last_request_active_v1", true);
+        destinationMemory.put("$chief_navigator_sinni_last_request_system_v1", farNebula.getId());
+        check(new SinniOneMoreHorizonIntel().getMapLocation(null) == null,
+                "Even a legacy targeted request must not expose a recommended destination");
 
         checkAviciVisitHistory();
         System.out.println("Sinni system-vignette regression checks passed.");

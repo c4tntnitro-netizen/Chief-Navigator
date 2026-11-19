@@ -200,7 +200,7 @@ public final class MenelausTrial {
         return false;
     }
 
-    /** Polls persistent objective POIs and materializes unlocked allies. */
+    /** Reconciles objective POIs and unlocked allies after relevant quest/world events. */
     public static void refreshProgress(StarSystemAPI system) {
         if (system == null || Global.getSector() == null) return;
         reconcileLegacyLaborReports();
@@ -281,6 +281,7 @@ public final class MenelausTrial {
     public static void accept(TextPanelAPI text) {
         boolean newlyAccepted = !isAccepted();
         memory().set(ACCEPTED, true);
+        MenelausTrialScript.requestReconciliation();
         if (newlyAccepted) {
             // New campaigns use explicit Menelaus report gates. Older saves
             // are reconciled separately from the stage they had reached.
@@ -384,6 +385,7 @@ public final class MenelausTrial {
             return false;
         }
         memory().set(FINAL_LABOR_FAILED, true);
+        MenelausTrialScript.requestReconciliation();
         memory().unset(FINAL_DEBRIEF_COMPLETE);
         MenelausTrialIntel.syncProgress(true);
         return true;
@@ -422,6 +424,7 @@ public final class MenelausTrial {
     public static boolean completeFinalDebrief() {
         if (!isFinalDebriefPending()) return false;
         memory().set(FINAL_DEBRIEF_COMPLETE, true);
+        MenelausTrialScript.requestReconciliation();
         receiveDomainEpic();
         PostLaborHuntIntel.sync(null);
         MenelausCompletionDialogPlugin.request();
@@ -435,6 +438,7 @@ public final class MenelausTrial {
             return false;
         }
         memory().set(FINAL_LABOR_BRIEFED, true);
+        MenelausTrialScript.requestReconciliation();
         MenelausTrialIntel.ensureExists(text);
         FinalLaborMusic.playMissionStart();
         return true;
@@ -645,6 +649,7 @@ public final class MenelausTrial {
         String flag = getLaborReportFlag(stage);
         if (flag == null) return false;
         memory().set(flag, true);
+        MenelausTrialScript.requestReconciliation();
 
         StarSystemAPI expanse = OdysseyExpanseSystem.findExisting();
         if (expanse != null) {

@@ -440,6 +440,24 @@ public final class OdysseyPredatorScript implements EveryFrameScript {
 
     private final IntervalUtil interval = new IntervalUtil(0.35f, 0.55f);
     private float bastionRepairSeconds;
+    private static java.lang.ref.WeakReference<com.fs.starfarer.api.campaign.SectorAPI>
+            populationSector = new java.lang.ref.WeakReference<>(null);
+    private static long populationRevision;
+    private long observedPopulationRevision = -1;
+    private boolean observedLaborComplete;
+
+    public static void requestPopulationReconciliation() {
+        currentPopulationRevision();
+        populationRevision++;
+    }
+
+    private static long currentPopulationRevision() {
+        if (populationSector.get() != Global.getSector()) {
+            populationSector = new java.lang.ref.WeakReference<>(Global.getSector());
+            populationRevision = 0;
+        }
+        return populationRevision;
+    }
     @Override
     public void advance(float amount) {
         if (Global.getSector() == null) return;
@@ -448,7 +466,6 @@ public final class OdysseyPredatorScript implements EveryFrameScript {
         UngaikyoMusic.releaseBattleMusic();
         BudaiMusic.releaseBattleMusic();
         BudaiSalvageDialogPlugin.tryShowPending();
-        IthacaResearchUpgrades.captureRecoveredComponents();
         IthacaResearchUpgrades.captureIsaRefractionUnlock();
         applyCharybdisTrackingOverride();
         if (MenelausTrial.isFinalLaborActive()) {
@@ -474,6 +491,16 @@ public final class OdysseyPredatorScript implements EveryFrameScript {
                     Global.getSector().getClock().convertToDays(bastionRepairSeconds));
         }
         bastionRepairSeconds = 0f;
+        if (CampaignMaintenanceEvents.consumeClosedInteraction()) {
+            requestPopulationReconciliation();
+            MenelausTrialScript.requestReconciliation();
+            AviciDwellerPopulation.install();
+        }
+        long revision = currentPopulationRevision();
+        boolean completed = MenelausTrial.isComplete();
+        boolean reconcile = observedPopulationRevision != revision || observedLaborComplete != completed;
+        observedPopulationRevision = revision;
+        observedLaborComplete = completed;
         ensureStarvingPopulation();
         ensureMonthlyIthacaStrike();
         maintainIthacaEndgameConsoleInvasion();
@@ -481,8 +508,11 @@ public final class OdysseyPredatorScript implements EveryFrameScript {
         ensureFinalLaborInvasion();
         // Labor V now ends with its Gate-scan defeat scene and departure.
         // The former untested sector-wide incursion controller is retired.
-        TroyArrivalScript.retireTimeFreezeFacetSample();
-        ensurePostLaborUngaikyo();
+        if (reconcile) {
+            retireAviciStarvingThreat(OdysseyExpanseSystem.findSystemById(OdysseyExpanseSystem.MESSINA_ID));
+            TroyArrivalScript.retireTimeFreezeFacetSample();
+            ensurePostLaborUngaikyo();
+        }
         ensureCharybdisHunter();
         maintainDerelictJumpPointClearance();
         maintainDevouredJumpPointClearance();
@@ -528,6 +558,7 @@ public final class OdysseyPredatorScript implements EveryFrameScript {
     static void configureStarvingThreatIdentity(CampaignFleetAPI fleet) {
         if (fleet == null || isPlayerControlledFleet(fleet)) return;
         if (TroyArrivalScript.isFleetBusyForMutation(fleet)) return;
+        if (!FleetIdentityMaintenance.needsRepair(fleet)) return;
         String factionId = getStarvingThreatFactionId(fleet);
         if (fleet.getFaction() == null
                 || !factionId.equals(fleet.getFaction().getId())) {
@@ -556,6 +587,7 @@ public final class OdysseyPredatorScript implements EveryFrameScript {
             fleet.getFleetData().setSyncNeeded();
             fleet.getFleetData().syncIfNeeded();
         }
+        FleetIdentityMaintenance.repaired(fleet);
     }
 
     /** Repairs legacy member variants without mutating shared stock variants. */
@@ -934,7 +966,9 @@ public final class OdysseyPredatorScript implements EveryFrameScript {
                 sectorMemory.set(migratedKey, true);
                 continue;
             }
-            SectorEntityToken existing = system.getEntityById(id);
+            PopulationSlotSchedule.Slot slot = PopulationSlotSchedule.get(system, id);
+            if (!slot.ready()) continue;
+            SectorEntityToken existing = slot.claim();
             if (existing instanceof CampaignFleetAPI) {
                 CampaignFleetAPI claimedFleet = (CampaignFleetAPI) existing;
                 if (isPlayerControlledFleet(claimedFleet)
@@ -987,11 +1021,13 @@ public final class OdysseyPredatorScript implements EveryFrameScript {
                             <= ROGUE_DERELICT_PLAYER_SPAWN_CLEARANCE) {
                 // Defer first creation until the player has left the site;
                 // never materialize a hostile patrol on top of them.
+                slot.defer(0.1f);
                 continue;
             }
             spawnRogueDerelictFleet(system, index);
             sectorMemory.set(spawnedKey, true);
             sectorMemory.set(migratedKey, true);
+            slot.changed();
         }
     }
 
@@ -1393,7 +1429,7 @@ public final class OdysseyPredatorScript implements EveryFrameScript {
         for (String systemId : DERELICT_PATROL_SYSTEM_IDS) {
             StarSystemAPI system = OdysseyExpanseSystem.findSystemById(
                     systemId);
-            if (system == null) continue;
+            if (system == null || !advancesPhysicalState(system)) continue;
             for (CampaignFleetAPI fleet : system.getFleets()) {
                 if (isAuthoredMobileDerelict(fleet)) {
                     clearDerelictJumpArrivalZone(fleet, system);
@@ -1406,12 +1442,18 @@ public final class OdysseyPredatorScript implements EveryFrameScript {
     private static void maintainDevouredJumpArrivalClearance() {
         StarSystemAPI system = OdysseyExpanseSystem.findSystemById(
                 OdysseyExpanseSystem.DEVOURED_REACH_ID);
-        if (system == null) return;
+        if (system == null || !advancesPhysicalState(system)) return;
         for (CampaignFleetAPI fleet : system.getFleets()) {
             if (isDevouredFeedingMass(fleet)) {
                 clearJumpArrivalZone(fleet, system);
             }
         }
+    }
+
+    static boolean advancesPhysicalState(StarSystemAPI system) {
+        CampaignFleetAPI player = Global.getSector().getPlayerFleet();
+        return system.activeThisFrame()
+                || player != null && player.getContainingLocation() == system;
     }
 
     /** Refreshes native nav repulsion without touching patrol/pursuit orders. */
@@ -1582,9 +1624,6 @@ public final class OdysseyPredatorScript implements EveryFrameScript {
                 ALPHA_STARVING_PATROL_COUNT,
                 ALPHA_STARVING_PATROL_OFFSETS,
                 "hunting through the Odyssey Expanse");
-        retireAviciStarvingThreat(
-                OdysseyExpanseSystem.findSystemById(
-                        OdysseyExpanseSystem.MESSINA_ID));
         ensureRegionalStarvingPatrols(
                 OdysseyExpanseSystem.findSystemById(
                         OdysseyExpanseSystem.SILENT_WAKE_ID),
@@ -1668,8 +1707,9 @@ public final class OdysseyPredatorScript implements EveryFrameScript {
         maintainConsoleIthacaStrikes(ashen, center);
 
         MemoryAPI systemMemory = ashen.getMemoryWithoutUpdate();
-        SectorEntityToken existing = ashen.getEntityById(
-                ITHACA_MONTHLY_STRIKE_ID);
+        PopulationSlotSchedule.Slot slot = PopulationSlotSchedule.get(ashen, ITHACA_MONTHLY_STRIKE_ID);
+        if (!slot.ready()) return;
+        SectorEntityToken existing = slot.claim();
         CampaignFleetAPI fleet = existing instanceof CampaignFleetAPI
                 ? (CampaignFleetAPI) existing : null;
         if (fleet != null && !isAuthoredStarvingThreatFleet(fleet)) {
@@ -1690,6 +1730,7 @@ public final class OdysseyPredatorScript implements EveryFrameScript {
                         + fleet.getFleetData().getMembersListCopy().size()
                         + ".");
                 ashen.removeEntity(fleet);
+                slot.changed();
                 return;
             }
             configureMonthlyIthacaStrike(fleet, ashen, center);
@@ -1708,18 +1749,23 @@ public final class OdysseyPredatorScript implements EveryFrameScript {
             logIthacaStrike("Monthly strike system initialized; scheduling "
                     + "the first deployment.");
             scheduleNextMonthlyIthacaStrike(systemMemory, Math.random());
+            slot.defer(systemMemory.getExpire(ITHACA_MONTHLY_STRIKE_COOLDOWN));
             return;
         }
-        if (systemMemory.contains(ITHACA_MONTHLY_STRIKE_COOLDOWN)) return;
+        if (systemMemory.contains(ITHACA_MONTHLY_STRIKE_COOLDOWN)) {
+            slot.defer(systemMemory.getExpire(ITHACA_MONTHLY_STRIKE_COOLDOWN));
+            return;
+        }
 
         logIthacaStrike("Monthly cooldown elapsed; attempting deployment.");
         fleet = spawnMonthlyIthacaStrike(ashen, center, Math.random());
         if (fleet != null) {
             scheduleNextMonthlyIthacaStrike(systemMemory, Math.random());
+            slot.changed();
         } else {
+            slot.defer(1f);
             logIthacaStrikeWarning("Monthly deployment failed to create a "
-                    + "usable fleet; it will retry on the next population "
-                    + "update.");
+                    + "usable fleet; retry scheduled in one campaign day.");
         }
     }
 
@@ -3454,7 +3500,9 @@ public final class OdysseyPredatorScript implements EveryFrameScript {
             String id = idPrefix + index;
             String pending = "$" + id + "_replacement_pending";
             String cooldown = "$" + id + "_replacement_cooldown";
-            SectorEntityToken existing = system.getEntityById(id);
+            PopulationSlotSchedule.Slot slot = PopulationSlotSchedule.get(system, id);
+            if (!slot.ready()) continue;
+            SectorEntityToken existing = slot.claim();
             if (existing instanceof CampaignFleetAPI
                     && (isPlayerControlledFleet((CampaignFleetAPI) existing)
                         || !((CampaignFleetAPI) existing)
@@ -3494,7 +3542,10 @@ public final class OdysseyPredatorScript implements EveryFrameScript {
                     system.getMemoryWithoutUpdate().set(pending, true);
                     system.getMemoryWithoutUpdate().set(cooldown, true, 3f);
                 }
-                if (system.getMemoryWithoutUpdate().contains(cooldown)) continue;
+                if (system.getMemoryWithoutUpdate().contains(cooldown)) {
+                    slot.defer(system.getMemoryWithoutUpdate().getExpire(cooldown));
+                    continue;
+                }
             }
             spawnStarvingFleet(
                     system,
@@ -3505,6 +3556,7 @@ public final class OdysseyPredatorScript implements EveryFrameScript {
             system.getMemoryWithoutUpdate().unset(pending);
             system.getMemoryWithoutUpdate().unset(cooldown);
             system.getMemoryWithoutUpdate().set("$" + id + "_was_present", true);
+            slot.changed();
         }
     }
 
@@ -3525,7 +3577,9 @@ public final class OdysseyPredatorScript implements EveryFrameScript {
             String wasPresent = "$" + id + "_was_present";
             String replacementPending = "$" + id + "_replacement_pending";
             String cooldown = "$" + id + "_replacement_cooldown";
-            SectorEntityToken existing = system.getEntityById(id);
+            PopulationSlotSchedule.Slot slot = PopulationSlotSchedule.get(system, id);
+            if (!slot.ready()) continue;
+            SectorEntityToken existing = slot.claim();
             if (existing instanceof CampaignFleetAPI
                     && (isPlayerControlledFleet((CampaignFleetAPI) existing)
                         || !((CampaignFleetAPI) existing)
@@ -3559,9 +3613,11 @@ public final class OdysseyPredatorScript implements EveryFrameScript {
                             replacementPending, true);
                     system.getMemoryWithoutUpdate().set(
                             cooldown, true, 6f + (float) Math.random() * 8f);
+                    slot.defer(system.getMemoryWithoutUpdate().getExpire(cooldown));
                     continue;
                 }
                 if (system.getMemoryWithoutUpdate().contains(cooldown)) {
+                    slot.defer(system.getMemoryWithoutUpdate().getExpire(cooldown));
                     continue;
                 }
             }
@@ -3570,6 +3626,7 @@ public final class OdysseyPredatorScript implements EveryFrameScript {
             system.getMemoryWithoutUpdate().unset(replacementPending);
             system.getMemoryWithoutUpdate().unset(cooldown);
             system.getMemoryWithoutUpdate().set(wasPresent, true);
+            slot.changed();
         }
     }
 
@@ -4894,6 +4951,7 @@ public final class OdysseyPredatorScript implements EveryFrameScript {
         if (TroyArrivalScript.isFleetBusyForMutation(fleet)) return;
         int tier = Math.max(FIRST_STRIKE,
                 Math.min(THIRD_STRIKE, requestedTier));
+        if (!FleetIdentityMaintenance.needsUpgrade(fleet, tier)) return;
         int[] counts = POST_LABOR_STRIKE_COUNTS[tier];
         java.util.List<FleetMemberAPI> members =
                 fleet.getFleetData().getMembersListCopy();
@@ -4925,6 +4983,7 @@ public final class OdysseyPredatorScript implements EveryFrameScript {
             fleet.getFleetData().setSyncNeeded();
             fleet.getFleetData().syncIfNeeded();
         }
+        FleetIdentityMaintenance.upgraded(fleet, tier);
     }
 
     private static int getPostLaborStrikeTier(CampaignFleetAPI fleet) {
@@ -5019,7 +5078,9 @@ public final class OdysseyPredatorScript implements EveryFrameScript {
         StarSystemAPI avici = OdysseyExpanseSystem.findSystemById(
                 OdysseyExpanseSystem.MESSINA_ID);
         if (avici == null) return null;
-        SectorEntityToken entity = avici.getEntityById(TroyArrivalScript.CHARYBDIS_FLEET_ID);
+        PopulationSlotSchedule.Slot slot = PopulationSlotSchedule.get(avici, TroyArrivalScript.CHARYBDIS_FLEET_ID);
+        if (!slot.ready()) return null;
+        SectorEntityToken entity = slot.claim();
         if (!(entity instanceof CampaignFleetAPI)) return null;
         CampaignFleetAPI fleet = (CampaignFleetAPI) entity;
         return isPlayerControlledFleet(fleet) ? null : fleet;
@@ -5089,6 +5150,7 @@ public final class OdysseyPredatorScript implements EveryFrameScript {
         fleet.getFleetData().syncIfNeeded();
 
         avici.addEntity(fleet);
+        PopulationSlotSchedule.invalidate(fleet.getId());
         // First materialization is far outside the system, never beside the
         // player or Kshaya. Normal pursuit/lair movement owns it thereafter.
         Vector2f center = avici.getCenter().getLocation();
@@ -5409,6 +5471,7 @@ public final class OdysseyPredatorScript implements EveryFrameScript {
         chiefnavigator.hullmods.StarvingThreatHullmod
                 .enforceHivePersonality(member);
         fleet.getFleetData().addFleetMember(member);
+        FleetIdentityMaintenance.invalidate(fleet);
         member.getRepairTracker().setCR(
                 member.getRepairTracker().getMaxCR());
         return member;

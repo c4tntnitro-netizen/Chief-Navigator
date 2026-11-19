@@ -21,6 +21,13 @@ public final class TaskForceSpartanFaction {
      * save state cannot turn an unmigrated attacker friendly.
      */
     public static void enforceRelations() {
+        if (Global.getSector() == null || Global.getSector().getFaction(ID) == null) return;
+        enforceDiplomacy();
+        reconcileDefenderRecognition();
+    }
+
+    /** Cheap policy enforcement; saved fleet recognition is reconciled on events. */
+    static void enforceDiplomacy() {
         if (Global.getSector() == null) return;
         FactionAPI spartan = Global.getSector().getFaction(ID);
         if (spartan == null) return;
@@ -29,7 +36,6 @@ public final class TaskForceSpartanFaction {
         setMutualRelationship(spartan, IthacaThreatPolicy.FACTION_ID, -1f);
         setMutualRelationship(spartan, Factions.THREAT, -1f);
         setMutualRelationship(spartan, Factions.OMEGA, -1f);
-        reconcileDefenderRecognition();
     }
 
     /** Native friendship must remain visible to Battle.pickSide. */

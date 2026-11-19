@@ -55,6 +55,8 @@ public final class FobIthacaRingCollisionScript implements EveryFrameScript {
             collisionContactsSuppressed = true;
         }
 
+        if (!OdysseyPredatorScript.advancesPhysicalState(system)) return;
+
         // Station mode and disabled AI do not stop campaign collision from
         // translating a fleet. Keep every fightable Ithaca station on its
         // authored structure, including Breach Defense Station in the center
@@ -85,16 +87,15 @@ public final class FobIthacaRingCollisionScript implements EveryFrameScript {
         float distanceSquared = dx * dx + dy * dy;
         if (distanceSquared <= 0.0001f) return;
 
-        float angle = (float) Math.toDegrees(Math.atan2(dy, dx));
-        if (angle < SOLID_ARC_START || angle > SOLID_ARC_END) {
-            return;
-        }
-
         float fleetRadius = Math.max(20f, Math.min(
                 MAX_FLEET_COLLISION_RADIUS, fleet.getRadius()));
         float halfWidth = STRUCTURE_HALF_WIDTH + fleetRadius;
         float innerRadius = CENTERLINE_RADIUS - halfWidth;
         float outerRadius = CENTERLINE_RADIUS + halfWidth;
+        if (distanceSquared <= innerRadius * innerRadius
+                || distanceSquared >= outerRadius * outerRadius) return;
+        float angle = (float) Math.toDegrees(Math.atan2(dy, dx));
+        if (angle < SOLID_ARC_START || angle > SOLID_ARC_END) return;
         float distance = (float) Math.sqrt(distanceSquared);
         if (distance <= innerRadius || distance >= outerRadius) return;
 

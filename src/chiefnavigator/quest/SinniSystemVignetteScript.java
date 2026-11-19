@@ -7,6 +7,7 @@ import com.fs.starfarer.api.campaign.FleetAssignment;
 import com.fs.starfarer.api.campaign.LocationAPI;
 import com.fs.starfarer.api.campaign.PlanetAPI;
 import com.fs.starfarer.api.campaign.SectorEntityToken;
+import com.fs.starfarer.api.campaign.SectorAPI;
 import com.fs.starfarer.api.campaign.StarSystemAPI;
 import com.fs.starfarer.api.campaign.TextPanelAPI;
 import com.fs.starfarer.api.campaign.ai.CampaignFleetAIAPI;
@@ -21,10 +22,9 @@ import chiefnavigator.campaign.DevouredRingEntityPlugin;
 import com.fs.starfarer.api.util.IntervalUtil;
 import com.fs.starfarer.api.util.Misc;
 import java.util.ArrayList;
-import java.util.EnumMap;
 import java.util.EnumSet;
 import java.util.List;
-import java.util.Map;
+import java.lang.ref.WeakReference;
 import org.lwjgl.util.vector.Vector2f;
 
 /**
@@ -145,7 +145,13 @@ public final class SinniSystemVignetteScript implements EveryFrameScript {
         Category.TRINARY
     };
 
-    private final IntervalUtil interval = new IntervalUtil(0.15f, 0.25f);
+    private final IntervalUtil interval = new IntervalUtil(1f, 1f);
+    private boolean horizonChecked;
+    private LocationAPI chartLocation;
+    private int chartCompletedMask;
+    private boolean chartStarted;
+    private static WeakReference<SectorAPI> chartSector = new WeakReference<>(null);
+    private static EnumSet<Category> availableCategories;
     private StarSystemAPI observedSystem;
     private int settledIntervals;
 
@@ -159,7 +165,20 @@ public final class SinniSystemVignetteScript implements EveryFrameScript {
         if (!interval.intervalElapsed()) return;
         migrateLegacyCategoryFlags();
         SinniVignetteRewards.advance(player);
-        syncOneMoreHorizon();
+        boolean started = memory().getBoolean(SinniBarEvent.STARTED);
+        int completedMask = explorationCompletionMask();
+        LocationAPI location = player.getContainingLocation();
+        if (!horizonChecked || chartStarted != started
+                || chartLocation != location || chartCompletedMask != completedMask) {
+            if (!horizonChecked || chartStarted != started || chartLocation != location) {
+                invalidateSightseeingCache();
+            }
+            syncOneMoreHorizon();
+            horizonChecked = true;
+            chartStarted = started;
+            chartLocation = location;
+            chartCompletedMask = completedMask;
+        }
 
         StarSystemAPI system = currentSystem(player);
         if (!isSinniInFleet(player) || system == null
@@ -181,38 +200,35 @@ public final class SinniSystemVignetteScript implements EveryFrameScript {
             return;
         }
 
-        // The authored Ithaca first-contact beat owns the final approach. In
-        // particular, this prevents any generic stellar vignette from winning
-        // the same campaign frame after an eastern-system arrival.
-        if (FobIthacaApproachScript.shouldTakeDialoguePriority(player)) {
-            return;
-        }
-
-        if (Global.getSector().getCampaignUI().isShowingDialog()
-                || Global.getSector().getCampaignUI().isShowingMenu()
-                || isTrackedByHostileFleet(player)) {
-            return;
-        }
-
         // Authored regional arrivals take precedence over stellar vignettes
         // and their epilogue. In particular, Avici's first view should not be
         // displaced by One More Horizon becoming ready on the same frame.
-        Candidate bespoke = classifyBespokeSystem(system);
-        if (bespoke != null && !isComplete(bespoke.category)) {
-            showVignette(bespoke, system, player);
-            return;
-        }
-
-        if (isAllTypesCompletionPending()) {
+        Candidate candidate = classifyBespokeSystem(system);
+        if (candidate != null && !isComplete(candidate.category)) {
+            // Keep the bespoke scene ahead of a ready chart finale.
+        } else if (isAllTypesCompletionPending()) {
             if (!isAllTypesCompletionReady()) return;
-            showVignette(new Candidate(
+            candidate = new Candidate(
                     Category.ALL_TYPES_COMPLETE,
-                    "all_types_complete"), system, player);
-            return;
+                    "all_types_complete");
+        } else {
+            candidate = findPendingVignette(system);
+            if (candidate == null) return;
         }
 
-        Candidate candidate = classifySystem(system);
-        if (candidate == null || isComplete(candidate.category)) return;
+        // Safety polling is only needed while there is an actual scene to
+        // deliver. Completed/irrelevant destinations never scan hostile fleets.
+        if (FobIthacaApproachScript.shouldTakeDialoguePriority(player)
+                || Global.getSector().getCampaignUI().isShowingDialog()
+                || Global.getSector().getCampaignUI().isShowingMenu()
+                || isTrackedByHostileFleet(player)) return;
+
+        if (candidate.category == Category.ALL_TYPES_COMPLETE) {
+            // Dynamic mods can add or transform systems without a universal
+            // topology callback. Recheck once at the point of commitment.
+            refreshSightseeingAvailability();
+            if (!isAllTypesCompletionPending()) return;
+        }
 
         showVignette(candidate, system, player);
     }
@@ -255,25 +271,70 @@ public final class SinniSystemVignetteScript implements EveryFrameScript {
     }
 
     static Candidate classifySystem(StarSystemAPI system) {
-        if (system == null) return null;
-        Candidate bespoke = classifyBespokeSystem(system);
-        if (bespoke != null) return bespoke;
-        if (!isExplorationVignetteSystem(system)) return null;
-        if (isTrinarySystem(system)) {
-            return new Candidate(Category.TRINARY, "trinary");
+        List<Candidate> candidates = classifySystemCategories(system);
+        return candidates.isEmpty() ? null : candidates.get(0);
+    }
+
+    private static Candidate findPendingVignette(StarSystemAPI system) {
+        for (Candidate candidate : classifySystemCategories(system)) {
+            if (!isComplete(candidate.category)) return candidate;
         }
-        if (Boolean.TRUE.equals(system.hasSystemwideNebula())
-                || system.getType() == StarSystemGenerator.StarSystemType.NEBULA) {
-            return new Candidate(Category.NEBULA, "nebula");
+        return null;
+    }
+
+    static boolean hasSystemCategory(StarSystemAPI system, Category category) {
+        for (Candidate candidate : classifySystemCategories(system)) {
+            if (candidate.category == category) return true;
+        }
+        return false;
+    }
+
+    /** All matches, independent of progress; ordering only chooses the next scene. */
+    private static List<Candidate> classifySystemCategories(StarSystemAPI system) {
+        List<Candidate> candidates = new ArrayList<>(EXPLORATION_CATEGORIES.length);
+        if (system == null) return candidates;
+        Candidate bespoke = classifyBespokeSystem(system);
+        if (bespoke != null) {
+            candidates.add(bespoke);
+            return candidates;
+        }
+        if (!isExplorationVignetteSystem(system)) return candidates;
+        if (isTrinarySystem(system)) {
+            candidates.add(new Candidate(Category.TRINARY, "trinary"));
+        }
+        PlanetAPI star = system.getStar();
+        // Explicit nebula systems retain first choice. Native hidden center
+        // stars have no stellar category; a modded real star can still qualify.
+        if (system.getType() == StarSystemGenerator.StarSystemType.NEBULA
+                || (star == null && Boolean.TRUE.equals(system.hasSystemwideNebula()))) {
+            candidates.add(new Candidate(Category.NEBULA, "nebula"));
         }
         if (system.hasBlackHole()) {
-            return new Candidate(Category.BLACK_HOLE, "black_hole");
+            candidates.add(new Candidate(Category.BLACK_HOLE, "black_hole"));
         }
         if (system.hasPulsar()) {
-            return new Candidate(Category.NEUTRON_STAR, "neutron_star");
+            candidates.add(new Candidate(Category.NEUTRON_STAR, "neutron_star"));
         }
+        addDistinctCandidate(candidates, classifyStar(star));
+        addDistinctCandidate(candidates, classifyStar(system.getSecondary()));
+        addDistinctCandidate(candidates, classifyStar(system.getTertiary()));
+        // Clouds are a second eligible category, after the actual stellar
+        // matches; a completed match must never hide an unfinished one.
+        if (Boolean.TRUE.equals(system.hasSystemwideNebula())) {
+            addDistinctCandidate(candidates, new Candidate(Category.NEBULA, "nebula"));
+        }
+        return candidates;
+    }
 
-        PlanetAPI star = system.getStar();
+    private static void addDistinctCandidate(List<Candidate> candidates, Candidate next) {
+        if (next == null) return;
+        for (Candidate candidate : candidates) {
+            if (candidate.category == next.category) return;
+        }
+        candidates.add(next);
+    }
+
+    private static Candidate classifyStar(PlanetAPI star) {
         if (star == null) return null;
         String type = star.getTypeId();
         if (StarTypes.BLACK_HOLE.equals(type)) {
@@ -519,49 +580,9 @@ public final class SinniSystemVignetteScript implements EveryFrameScript {
         return getStoredLastRequestTarget(null);
     }
 
-    /**
-     * Returns one real, nearby destination for each unfinished category.
-     * A legacy accepted request keeps its stored target only until the next
-     * campaign update retires that old detour state and its marker.
-     */
-    static List<LastRequestTarget> getRemainingSightseeingDestinations() {
-        List<LastRequestTarget> ordered = new ArrayList<>();
-        if (Global.getSector() == null
-                || Global.getSector().getStarSystems() == null) {
-            return ordered;
-        }
-
-        Vector2f origin = null;
-        CampaignFleetAPI player = Global.getSector().getPlayerFleet();
-        if (player != null) origin = player.getLocationInHyperspace();
-
-        Map<Category, LastRequestTarget> nearest =
-                new EnumMap<>(Category.class);
-        for (StarSystemAPI system : Global.getSector().getStarSystems()) {
-            Candidate candidate = classifySystem(system);
-            if (candidate == null
-                    || !isExplorationCategory(candidate.category)
-                    || isComplete(candidate.category)) {
-                continue;
-            }
-            float distance = origin == null ? 0f : Misc.getDistanceLY(
-                    origin, system.getLocation());
-            LastRequestTarget current = nearest.get(candidate.category);
-            if (current == null || distance < current.distanceLy) {
-                nearest.put(candidate.category, new LastRequestTarget(
-                        candidate.category, system, distance));
-            }
-        }
-
-        LastRequestTarget active = getActiveLastRequestTarget();
-        if (active != null && !isComplete(active.category)) {
-            nearest.put(active.category, active);
-        }
-        for (Category category : EXPLORATION_CATEGORIES) {
-            LastRequestTarget target = nearest.get(category);
-            if (target != null) ordered.add(target);
-        }
-        return ordered;
+    /** Available categories only; the chart never recommends a destination. */
+    static List<Category> getRequiredSightseeingCategories() {
+        return new ArrayList<>(getAvailableExplorationCategories());
     }
 
     static boolean isAllTypesCompletionPending() {
@@ -659,19 +680,44 @@ public final class SinniSystemVignetteScript implements EveryFrameScript {
     }
 
     private static EnumSet<Category> getAvailableExplorationCategories() {
-        EnumSet<Category> available = EnumSet.noneOf(Category.class);
-        if (Global.getSector() == null
-                || Global.getSector().getStarSystems() == null) {
-            return available;
+        SectorAPI sector = Global.getSector();
+        if (sector == null) return EnumSet.noneOf(Category.class);
+        if (chartSector.get() == sector && availableCategories != null) {
+            return availableCategories;
         }
-        for (StarSystemAPI system : Global.getSector().getStarSystems()) {
-            Candidate candidate = classifySystem(system);
-            if (candidate != null && isExplorationCategory(
-                    candidate.category)) {
-                available.add(candidate.category);
+        EnumSet<Category> available = EnumSet.noneOf(Category.class);
+        List<StarSystemAPI> systems = sector.getStarSystems();
+        if (systems == null) return available;
+        for (StarSystemAPI system : systems) {
+            for (Candidate candidate : classifySystemCategories(system)) {
+                if (isExplorationCategory(candidate.category)) {
+                    available.add(candidate.category);
+                }
             }
         }
+        chartSector = new WeakReference<>(sector);
+        availableCategories = available;
         return available;
+    }
+
+    /** No sector/system objects are retained strongly by the process cache. */
+    public static void invalidateSightseeingCache() {
+        chartSector = new WeakReference<>(null);
+        availableCategories = null;
+    }
+
+    /** Reconcile on chart access and before committing its final dialogue. */
+    static void refreshSightseeingAvailability() {
+        invalidateSightseeingCache();
+        syncOneMoreHorizon();
+    }
+
+    private static int explorationCompletionMask() {
+        int mask = 0;
+        for (int i = 0; i < EXPLORATION_CATEGORIES.length; i++) {
+            if (isComplete(EXPLORATION_CATEGORIES[i])) mask |= 1 << i;
+        }
+        return mask;
     }
 
     private static boolean areAllAvailableSightseeingCategoriesComplete() {
