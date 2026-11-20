@@ -1,0 +1,28 @@
+{
+  "edit": "Stronger built-in ImageGen reconstruction of remaining joins",
+  "raw_size": [
+    1897,
+    829
+  ],
+  "final_size": [
+    512,
+    224
+  ],
+  "source_alpha_bbox": [
+    4,
+    31,
+    1894,
+    803
+  ],
+  "native_alpha_bbox": [
+    2,
+    9,
+    510,
+    216
+  ],
+  "sampling": "nearest",
+  "original_native_alpha_exact": true,
+  "raw_retained": true,
+  "previous_versions_retained": true,
+  "sha256": "f431649a2286c1c7ab30aab336ad4ea72d86a89ef31d40118af20558b1e22e7b"
+}

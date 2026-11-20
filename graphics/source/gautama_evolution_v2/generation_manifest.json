@@ -1,0 +1,23 @@
+{
+  "status": "Current concept selection; not installed into runtime.",
+  "tool": "built-in image_gen",
+  "style": "Arthropod/crustacean hard shell, articulated scutes and recessed machinery; avoid fleshy tubes.",
+  "files": {
+    "base": "gautama_base.png",
+    "lv2": "gautama_lv2_concept.png",
+    "lv3": "gautama_lv3_selected.png",
+    "lv4": "gautama_lv4_selected.png"
+  },
+  "selection": {
+    "lv3": "User-selected exec-6c35817c-5ae9-4709-be43-bded67e3035a.png",
+    "lv4": "User-selected exec-59248cec-2b15-4b6e-8732-20a667e8e5e3.png",
+    "lv2": "C:\\Users\\myauc\\.codex\\generated_images\\01a16bbc-f551-7203-b431-346fac2e14ce\\exec-c73e51a1-128c-4cfb-815c-faa0d19c57c8.png"
+  },
+  "scaleFactors": {
+    "base": 1,
+    "lv2": 1.2,
+    "lv3": 1.44,
+    "lv4": 1.728
+  },
+  "registration": "Keep original geometry and engine anchors as the template. These are transparent concept masters; exact registration precedes runtime integration. No live hull, collision or engine data changed."
+}

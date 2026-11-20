@@ -1,0 +1,41 @@
+{
+  "method": "Built-in ImageGen edit + nearest native-size registration + OpenCV NORMAL_CLONE local Poisson reconstruction",
+  "size": [
+    512,
+    224
+  ],
+  "imagegen_raw_size": [
+    1897,
+    829
+  ],
+  "registration_raw_alpha_bbox": [
+    4,
+    32,
+    1894,
+    802
+  ],
+  "registration_original_alpha_bbox": [
+    2,
+    9,
+    510,
+    216
+  ],
+  "seam_detection": "Source-ID/coordinate discontinuities with visible RGB jump>25;7pixel dilation;eroded silhouette guard",
+  "seam_neighborhood_pixels": 11336,
+  "changed_pixels": 11074,
+  "visible_pixels": 83928,
+  "outside_mask_rgba_exact": true,
+  "original_alpha_exact": true,
+  "original_pixel_only_master_preserved": true,
+  "source_pixel_only": false,
+  "note": "New RGB values exist only inside documented seam neighborhoods; this version intentionally permits generated join pixels.",
+  "sha256": {
+    "input.png": "416961b603ba0395849f30b7d1871a5a62ec7ea0d5dd93184c080b6ae80827c6",
+    "imagegen_raw.png": "92fe5e779e18e21d0ca7099491cfd3898c63a74e87124ca94dfb3ada92b51589",
+    "threaxus_wall_module_clean.png": "0682d844fc33d95e6ec965302936b0791bcd96a3c41b031034cd3b8a88bf7d08"
+  },
+  "references": [
+    "https://docs.opencv.org/4.12.0/df/da0/group__photo__clone.html",
+    "https://docs.opencv.org/doc/doxygen/html/db/dda/classcv_1_1detail_1_1GraphCutSeamFinder.html"
+  ]
+}

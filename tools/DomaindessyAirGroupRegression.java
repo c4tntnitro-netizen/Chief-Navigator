@@ -75,6 +75,8 @@ public final class DomaindessyAirGroupRegression extends WallResearchRegression 
             check(variant.getPermaMods().contains("comp_armor"),"Preserve D-mod/permanent variant state");
             for(var entry:hulls.entrySet())check(entry.getValue().getBuiltInWings().equals(original.get(entry.getKey())),"Shared hull specs never change");
         }
+        stableProfile(false);
+        stableProfile(true);
         ShipHullSpecAPI foreign=hull("odyssey",List.of(),null);
         ShipVariantAPI variant=(ShipVariantAPI)variantConstructor.newInstance("stock",foreign);
         DomaindessyAirGroup.configure(variant,127,settings());
@@ -108,6 +110,34 @@ public final class DomaindessyAirGroupRegression extends WallResearchRegression 
         effect.applyEffectsBeforeShipCreation(ShipAPI.HullSize.CAPITAL_SHIP,stats,"test");
         check(lookups[0]==1,"Failed configuration is disabled rather than retried every callback");
         Global.setSettings(settings());Global.setSector(null);
+    }
+
+    static void stableProfile(boolean damaged)throws Exception {
+        ShipHullSpecAPI selected=hulls.get(DomaindessyAirGroup.profile(127)+(damaged?D:""));
+        ShipVariantAPI nativeVariant=(ShipVariantAPI)variantConstructor.newInstance("stable",selected);
+        int[] hullWrites={0}, wingRefreshes={0}, catalogReads={0};
+        boolean[] staleWing={false};
+        ShipVariantAPI counted=(ShipVariantAPI)Proxy.newProxyInstance(
+                ShipVariantAPI.class.getClassLoader(),new Class<?>[]{ShipVariantAPI.class},(p,m,a)-> {
+            if(m.getName().equals("setHullSpecAPI"))hullWrites[0]++;
+            if(m.getName().equals("refreshBuiltInWings")){wingRefreshes[0]++;staleWing[0]=false;}
+            if(m.getName().equals("getWingId")&&staleWing[0])return null;
+            try{return m.invoke(nativeVariant,a);}catch(InvocationTargetException e){throw e.getCause();}
+        });
+        SettingsAPI delegate=settings();
+        SettingsAPI countedSettings=(SettingsAPI)Proxy.newProxyInstance(
+                SettingsAPI.class.getClassLoader(),new Class<?>[]{SettingsAPI.class},(p,m,a)-> {
+            if(m.getName().equals("getAllShipHullSpecs"))catalogReads[0]++;
+            try{return m.invoke(delegate,a);}catch(InvocationTargetException e){throw e.getCause();}
+        });
+        for(int i=0;i<600;i++)DomaindessyAirGroup.configure(counted,127,countedSettings);
+        check(hullWrites[0]==0&&wingRefreshes[0]==0&&catalogReads[0]==0,
+                "Stable normal/D callbacks avoid hull writes, wing refreshes and catalog scans");
+        staleWing[0]=true;
+        DomaindessyAirGroup.configure(counted,127,countedSettings);
+        check(hullWrites[0]==0&&wingRefreshes[0]==1,"Stale wings still trigger native repair");
+        for(int i=0;i<4;i++)check(nativeVariant.getWingId(i).equals(selected.getBuiltInWings().get(i)),
+                "Stable native built-in wings preserved");
     }
 
     static void data()throws Exception {

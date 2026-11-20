@@ -71,11 +71,13 @@ public final class DriftingWallBeamEffect implements EveryFrameWeaponEffectPlugi
         }
         state.shimmerTime += amount;
         boolean active = hasVisibleBeam(weapon);
+        boolean lingering = !active && (state.cooldownAfterBeam || hullDischarge)
+                && hasLingeringBeam(engine, weapon);
         updateNavalCooldown(weapon, state,
-                active || (state.cooldownAfterBeam && hasLingeringBeam(engine, weapon)));
+                active || (state.cooldownAfterBeam && lingering));
         float chargeLevel = weapon.getChargeLevel();
         if (hullDischarge) state.chargePulses.advance(amount, engine, weapon,
-                active || hasLingeringBeam(engine, weapon));
+                active || lingering);
         boolean windingUp = chargeLevel > 0.01f && !active;
         logFiringTransitions(weapon, state, windingUp, active);
         state.debugElapsed += amount;
@@ -160,14 +162,16 @@ public final class DriftingWallBeamEffect implements EveryFrameWeaponEffectPlugi
     }
 
     private static boolean hasLingeringBeam(CombatEngineAPI engine, WeaponAPI weapon) {
-        if (engine.getBeams() == null) return false;
-        for (BeamAPI beam : engine.getBeams()) {
+        java.util.List<BeamAPI> beams = engine.getBeams();
+        if (beams == null) return false;
+        for (BeamAPI beam : beams) {
             if (beam != null && beam.getWeapon() == weapon && beam.getBrightness() > 0.05f) return true;
         }
         return false;
     }
 
     private static void logInitialization(WeaponAPI weapon, State state) {
+        if (!Global.getLogger(DriftingWallBeamEffect.class).isDebugEnabled()) return;
         ShipAPI source = weapon.getShip();
         String hull = source == null || source.getHullSpec() == null
                 ? "none" : source.getHullSpec().getHullId();
@@ -184,6 +188,10 @@ public final class DriftingWallBeamEffect implements EveryFrameWeaponEffectPlugi
 
     private static void logFiringTransitions(
             WeaponAPI weapon, State state, boolean windingUp, boolean active) {
+        if (!Global.getLogger(DriftingWallBeamEffect.class).isDebugEnabled()) {
+            state.windingUp = windingUp;
+            return;
+        }
         if (!state.transitionInitialized
                 || windingUp != state.windingUp
                 || active != state.active) {
@@ -206,6 +214,7 @@ public final class DriftingWallBeamEffect implements EveryFrameWeaponEffectPlugi
             State state,
             boolean windingUp,
             boolean active) {
+        if (!Global.getLogger(DriftingWallBeamEffect.class).isDebugEnabled()) return;
         ShipAPI ship = weapon.getShip();
         WeaponGroupAPI group = ship == null ? null : ship.getWeaponGroupFor(weapon);
         AutofireAIPlugin autofire = group == null

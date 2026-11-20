@@ -1,0 +1,38 @@
+{
+  "method": "native-pixel markings-only edits on protected armor interiors",
+  "size": [
+    80,
+    92
+  ],
+  "source_sha256": "05090fca70fd997ddeb3a1d680d24a14c8ff20c4022b55ab42713a96953ad5b2",
+  "no_source_resampling_or_geometric_edits": true,
+  "variants": [
+    {
+      "file": "variant_01.png",
+      "markings": "Offset traces",
+      "changed_pixels": 50,
+      "changed_foreground_percent": 0.927,
+      "alpha_identical": true,
+      "all_other_pixels_exact": true,
+      "sha256": "f5d40e53f90dc45e47bb581237dcb67c9caeae40db5ef5622ccf4719c1a2b176"
+    },
+    {
+      "file": "variant_02.png",
+      "markings": "Broken bands",
+      "changed_pixels": 42,
+      "changed_foreground_percent": 0.779,
+      "alpha_identical": true,
+      "all_other_pixels_exact": true,
+      "sha256": "bc6051d550809b0616c566ff64cb346fd0cfddbc92284924a903116f88148f26"
+    },
+    {
+      "file": "variant_03.png",
+      "markings": "Small block accents",
+      "changed_pixels": 23,
+      "changed_foreground_percent": 0.427,
+      "alpha_identical": true,
+      "all_other_pixels_exact": true,
+      "sha256": "1d672809738580aeca119448f63f6f9ed7c1271f258fd000a11737052cc457b8"
+    }
+  ]
+}

@@ -1,0 +1,461 @@
+{
+  "source_sha256": "7e605387f11e5d99414dc7537fe918c9f506e26749d218e7ec51435de7ab6f18",
+  "runtime_sha256": "7e605387f11e5d99414dc7537fe918c9f506e26749d218e7ec51435de7ab6f18",
+  "size": [
+    555,
+    502
+  ],
+  "pixels_unchanged": true,
+  "segmentation_alpha_threshold": 96,
+  "connected_components": 1,
+  "main_component_pixels": 116499,
+  "bounds_vertices": 146,
+  "contour_tolerance": 2.5,
+  "opaque_component_coverage": 0.9931759070893312,
+  "collision_area_pixels": 125784,
+  "collision_holes": "Native single ship outline fills enclosed holes; exterior concavities remain open.",
+  "center_bottom_left": [
+    277,
+    226
+  ],
+  "center_png": [
+    277.0,
+    276.0
+  ],
+  "collision_radius": 287,
+  "nexus_source": "data/hulls/remnant_station2.ship",
+  "nexus_native_center": [
+    256,
+    228
+  ],
+  "weapon_placements": [
+    {
+      "slot": "WS 001",
+      "nexus_anchor": {
+        "angle": 0,
+        "arc": 8,
+        "id": "WS 001",
+        "locations": [
+          325,
+          0
+        ],
+        "mount": "HARDPOINT",
+        "size": "LARGE",
+        "type": "STATION_MODULE"
+      },
+      "projected_pixel": [
+        277.0,
+        -49.0
+      ],
+      "painted_mount_pixel": [
+        277,
+        20
+      ],
+      "weapon": "pdburst",
+      "size": "SMALL"
+    },
+    {
+      "slot": "WS 007",
+      "nexus_anchor": {
+        "angle": 225,
+        "arc": 8,
+        "id": "WS 007",
+        "locations": [
+          -121,
+          -268
+        ],
+        "mount": "HARDPOINT",
+        "size": "LARGE",
+        "type": "STATION_MODULE"
+      },
+      "projected_pixel": [
+        545.0,
+        397.0
+      ],
+      "painted_mount_pixel": [
+        477,
+        378
+      ],
+      "weapon": "pdburst",
+      "size": "SMALL"
+    },
+    {
+      "slot": "WS 016",
+      "nexus_anchor": {
+        "angle": 135,
+        "arc": 8,
+        "id": "WS 016",
+        "locations": [
+          -115,
+          262
+        ],
+        "mount": "HARDPOINT",
+        "size": "LARGE",
+        "type": "STATION_MODULE"
+      },
+      "projected_pixel": [
+        15.0,
+        391.0
+      ],
+      "painted_mount_pixel": [
+        77,
+        378
+      ],
+      "weapon": "pdburst",
+      "size": "SMALL"
+    },
+    {
+      "slot": "WS 032",
+      "nexus_anchor": {
+        "angle": 180,
+        "arc": 8,
+        "id": "WS 032",
+        "locations": [
+          -113,
+          0
+        ],
+        "mount": "HARDPOINT",
+        "size": "LARGE",
+        "type": "STATION_MODULE"
+      },
+      "projected_pixel": [
+        277.0,
+        389.0
+      ],
+      "painted_mount_pixel": [
+        277,
+        381
+      ],
+      "weapon": "ionpulser",
+      "size": "MEDIUM"
+    },
+    {
+      "slot": "WS 033",
+      "nexus_anchor": {
+        "angle": 60,
+        "arc": 8,
+        "id": "WS 033",
+        "locations": [
+          117,
+          130
+        ],
+        "mount": "HARDPOINT",
+        "size": "LARGE",
+        "type": "STATION_MODULE"
+      },
+      "projected_pixel": [
+        147.0,
+        159.0
+      ],
+      "painted_mount_pixel": [
+        183,
+        199
+      ],
+      "weapon": "heavyblaster",
+      "size": "MEDIUM"
+    },
+    {
+      "slot": "WS 034",
+      "nexus_anchor": {
+        "angle": -60,
+        "arc": 8,
+        "id": "WS 034",
+        "locations": [
+          117,
+          -131
+        ],
+        "mount": "HARDPOINT",
+        "size": "LARGE",
+        "type": "STATION_MODULE"
+      },
+      "projected_pixel": [
+        408.0,
+        159.0
+      ],
+      "painted_mount_pixel": [
+        377,
+        199
+      ],
+      "weapon": "heavyblaster",
+      "size": "MEDIUM"
+    },
+    {
+      "slot": "WS 035",
+      "nexus_anchor": {
+        "angle": 75,
+        "arc": 8,
+        "id": "WS 035",
+        "locations": [
+          32,
+          201
+        ],
+        "mount": "HARDPOINT",
+        "size": "LARGE",
+        "type": "STATION_MODULE"
+      },
+      "projected_pixel": [
+        76.0,
+        244.0
+      ],
+      "painted_mount_pixel": [
+        105,
+        270
+      ],
+      "weapon": "tachyonlance",
+      "size": "LARGE"
+    },
+    {
+      "slot": "WS 036",
+      "nexus_anchor": {
+        "angle": 45,
+        "arc": 8,
+        "id": "WS 036",
+        "locations": [
+          217,
+          86
+        ],
+        "mount": "HARDPOINT",
+        "size": "LARGE",
+        "type": "STATION_MODULE"
+      },
+      "projected_pixel": [
+        191.0,
+        59.0
+      ],
+      "painted_mount_pixel": [
+        208,
+        99
+      ],
+      "weapon": "plasma",
+      "size": "LARGE"
+    },
+    {
+      "slot": "WS 037",
+      "nexus_anchor": {
+        "angle": -45,
+        "arc": 8,
+        "id": "WS 037",
+        "locations": [
+          217,
+          -86
+        ],
+        "mount": "HARDPOINT",
+        "size": "LARGE",
+        "type": "STATION_MODULE"
+      },
+      "projected_pixel": [
+        363.0,
+        59.0
+      ],
+      "painted_mount_pixel": [
+        345,
+        99
+      ],
+      "weapon": "plasma",
+      "size": "LARGE"
+    },
+    {
+      "slot": "WS 038",
+      "nexus_anchor": {
+        "angle": -75,
+        "arc": 8,
+        "id": "WS 038",
+        "locations": [
+          32,
+          -200
+        ],
+        "mount": "HARDPOINT",
+        "size": "LARGE",
+        "type": "STATION_MODULE"
+      },
+      "projected_pixel": [
+        477.0,
+        244.0
+      ],
+      "painted_mount_pixel": [
+        453,
+        270
+      ],
+      "weapon": "tachyonlance",
+      "size": "LARGE"
+    },
+    {
+      "slot": "WS 039",
+      "nexus_anchor": {
+        "angle": 180,
+        "arc": 8,
+        "id": "WS 039",
+        "locations": [
+          -136,
+          119
+        ],
+        "mount": "HARDPOINT",
+        "size": "LARGE",
+        "type": "STATION_MODULE"
+      },
+      "projected_pixel": [
+        158.0,
+        412.0
+      ],
+      "painted_mount_pixel": [
+        159,
+        414
+      ],
+      "weapon": "pdburst",
+      "size": "SMALL"
+    },
+    {
+      "slot": "WS 040",
+      "nexus_anchor": {
+        "angle": 180,
+        "arc": 8,
+        "id": "WS 040",
+        "locations": [
+          -136,
+          -117
+        ],
+        "mount": "HARDPOINT",
+        "size": "LARGE",
+        "type": "STATION_MODULE"
+      },
+      "projected_pixel": [
+        394.0,
+        412.0
+      ],
+      "painted_mount_pixel": [
+        398,
+        414
+      ],
+      "weapon": "pdburst",
+      "size": "SMALL"
+    }
+  ],
+  "engines": [],
+  "single_mobile_hull": false,
+  "mobile_core_with_modules": true,
+  "display_name": "Tetsu Kannon",
+  "attached_modules": [
+    {
+      "slot": {
+        "id": "WALL_LEFT",
+        "type": "STATION_MODULE",
+        "size": "LARGE",
+        "mount": "HARDPOINT",
+        "angle": -122.97772,
+        "arc": 0,
+        "locations": [
+          115.045,
+          194.611
+        ]
+      },
+      "pixel_pivot": [
+        82.38941911716483,
+        160.95496660274054
+      ],
+      "outward_pixel_normal": [
+        -0.8388822610354395,
+        -0.5443129174657432
+      ],
+      "edge": [
+        [
+          277.0,
+          8.0
+        ],
+        [
+          22.0,
+          401.0
+        ]
+      ],
+      "edge_length": 468.48052254069216,
+      "sprite_clockwise_rotation": 122.97772331381648,
+      "weapon_outward_local_angle": 180
+    },
+    {
+      "slot": {
+        "id": "WALL_RIGHT",
+        "type": "STATION_MODULE",
+        "size": "LARGE",
+        "mount": "HARDPOINT",
+        "angle": 123.18244,
+        "arc": 0,
+        "locations": [
+          115.285,
+          -195.455
+        ]
+      },
+      "pixel_pivot": [
+        472.45456766151517,
+        160.71546084221526
+      ],
+      "outward_pixel_normal": [
+        0.8369320957689398,
+        -0.5473067394723092
+      ],
+      "edge": [
+        [
+          534.0,
+          401.0
+        ],
+        [
+          277.0,
+          8.0
+        ]
+      ],
+      "edge_length": 469.57214568157684,
+      "sprite_clockwise_rotation": -123.18243952526123,
+      "weapon_outward_local_angle": 180
+    },
+    {
+      "slot": {
+        "id": "WALL_REAR",
+        "type": "STATION_MODULE",
+        "size": "LARGE",
+        "mount": "HARDPOINT",
+        "angle": -0.0,
+        "arc": 0,
+        "locations": [
+          -205.0,
+          -1.0
+        ]
+      },
+      "pixel_pivot": [
+        278.0,
+        481.0
+      ],
+      "outward_pixel_normal": [
+        -0.0,
+        1.0
+      ],
+      "edge": [
+        [
+          22.0,
+          401.0
+        ],
+        [
+          534.0,
+          401.0
+        ]
+      ],
+      "edge_length": 512.0,
+      "sprite_clockwise_rotation": 0.0,
+      "weapon_outward_local_angle": 180
+    }
+  ],
+  "dormant_until_all_modules_destroyed": true,
+  "awakened_speed": 70,
+  "awakened_acceleration": 20,
+  "awakened_deceleration": 15,
+  "awakened_turn_rate": 15,
+  "awakened_turn_acceleration": 25,
+  "system": "chief_navigator_threatxus_fabrication",
+  "swarm_density_multiplier": 10,
+  "swarm_core_extra_members": 500,
+  "swarm_core_radius_multiplier": 0.5,
+  "swarm_central_density_multiplier": 3,
+  "max_exodus_assault_units": 3,
+  "max_fabricators": 3,
+  "fabricator_variant": "fabricator_unit_Type450",
+  "base_speed": 10,
+  "passive_forward_drift": true,
+  "provisional_balance": true
+}

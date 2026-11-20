@@ -1,0 +1,110 @@
+[
+  {
+    "Slot": "COL_NAVAL_01",
+    "Weapon": "chief_navigator_drifting_wall_colossal_inert",
+    "Sprite": "graphics/weapons/chief_navigator_drifting_wall_colossal_inert.png",
+    "X": 2525,
+    "Y": 692,
+    "Angle": 35,
+    "Layer": 1
+  },
+  {
+    "Slot": "COL_NAVAL_02",
+    "Weapon": "chief_navigator_drifting_wall_colossal_inert",
+    "Sprite": "graphics/weapons/chief_navigator_drifting_wall_colossal_inert.png",
+    "X": 3079,
+    "Y": 674,
+    "Angle": 329,
+    "Layer": 1
+  },
+  {
+    "Slot": "COL_NAVAL_03",
+    "Weapon": "chief_navigator_drifting_wall_colossal_inert",
+    "Sprite": "graphics/weapons/chief_navigator_drifting_wall_colossal_inert.png",
+    "X": 1182,
+    "Y": 1580,
+    "Angle": 108,
+    "Layer": 1
+  },
+  {
+    "Slot": "COL_NAVAL_04",
+    "Weapon": "chief_navigator_drifting_wall_colossal_inert",
+    "Sprite": "graphics/weapons/chief_navigator_drifting_wall_colossal_inert.png",
+    "X": 4450,
+    "Y": 1580,
+    "Angle": 251,
+    "Layer": 1
+  },
+  {
+    "Slot": "LARGE_BALLISTIC_01",
+    "Weapon": "chief_navigator_drifting_wall_annihilator_launcher",
+    "Sprite": "graphics/weapons/chief_navigator_drifting_wall_annihilator_launcher.png",
+    "X": 1356,
+    "Y": 1040,
+    "Angle": 0,
+    "Layer": 0
+  },
+  {
+    "Slot": "LARGE_BALLISTIC_02",
+    "Weapon": "chief_navigator_drifting_wall_annihilator_launcher",
+    "Sprite": "graphics/weapons/chief_navigator_drifting_wall_annihilator_launcher.png",
+    "X": 4276,
+    "Y": 1040,
+    "Angle": 0,
+    "Layer": 0
+  },
+  {
+    "Slot": "LARGE_BALLISTIC_03",
+    "Weapon": "chief_navigator_drifting_wall_annihilator_launcher",
+    "Sprite": "graphics/weapons/chief_navigator_drifting_wall_annihilator_launcher.png",
+    "X": 1712,
+    "Y": 1376,
+    "Angle": 0,
+    "Layer": 0
+  },
+  {
+    "Slot": "LARGE_BALLISTIC_04",
+    "Weapon": "chief_navigator_drifting_wall_annihilator_launcher",
+    "Sprite": "graphics/weapons/chief_navigator_drifting_wall_annihilator_launcher.png",
+    "X": 3920,
+    "Y": 1376,
+    "Angle": 0,
+    "Layer": 0
+  },
+  {
+    "Slot": "LOCUST_PD_01",
+    "Weapon": "chief_navigator_ithaca_locust_pd_array",
+    "Sprite": "graphics/weapons/chief_navigator_ithaca_locust_pd_array_v1.png",
+    "X": 766,
+    "Y": 1228,
+    "Angle": 0,
+    "Layer": 1
+  },
+  {
+    "Slot": "LOCUST_PD_03",
+    "Weapon": "chief_navigator_ithaca_locust_pd_array",
+    "Sprite": "graphics/weapons/chief_navigator_ithaca_locust_pd_array_v1.png",
+    "X": 2196,
+    "Y": 348,
+    "Angle": 0,
+    "Layer": 1
+  },
+  {
+    "Slot": "LOCUST_PD_04",
+    "Weapon": "chief_navigator_ithaca_locust_pd_array",
+    "Sprite": "graphics/weapons/chief_navigator_ithaca_locust_pd_array_v1.png",
+    "X": 3436,
+    "Y": 348,
+    "Angle": 0,
+    "Layer": 1
+  },
+  {
+    "Slot": "LOCUST_PD_06",
+    "Weapon": "chief_navigator_ithaca_locust_pd_array",
+    "Sprite": "graphics/weapons/chief_navigator_ithaca_locust_pd_array_v1.png",
+    "X": 4866,
+    "Y": 1228,
+    "Angle": 0,
+    "Layer": 1
+  }
+]

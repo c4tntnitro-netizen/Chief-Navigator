@@ -105,6 +105,7 @@ These notes combine the subsequent 0.5.0 revisions, 0.5.1 updates, and changes i
 - Reduce Isa's naval-laser refraction to a quarter-strength secondary hop and remove her extra shield damage. Add her to Ithaca's comm directory while she is in the current officer roster, with one placeholder engineering topic.
 
 - Add the **Onslaught (ITH)** prototype using the supplied sprite, with two Ithaca naval lasers replacing its TPCs. Ship-mounted laser damage is halved to 1,000 energy DPS per gun; fortress naval lasers retain 2,000 DPS. Set the ship lasers' base range to 1,200 units and match their beam thickness to Ithaca's full-size naval lasers. Set the native firing flux cost to 900 per second per laser (1,800 for the pair). Base cooldown is 30 seconds, reduced to 12 seconds by the Naval Cycling Regulator. Replace the barrel-sized arcs with coordinated lightning along the two side hulls during charge/firing, omitting the central coaxial path. Remove the post-fire steam pending a visual rework; its appearance was reported as awkward. Existing installed Sea of Stars research and Isa's naval package improve the lasers. Stock geometry and the standard remaining loadout are retained. After Menelaus's final Labor V debrief, Aias Kleon offers it through a dialogue option in FOB Ithaca's comm directory. The transfer can be deferred and claimed once, including in existing completed saves.
+- Exclude both Ithaca prototypes, including every Odyssey research configuration, from normal production, generated market/black-market stock, arms dealers, blueprint drops and random fleets. Preserve the scripted Onslaught reward.
 
 - Replace new authored Combat Guard patrol and escort loadouts with native Domain drone variants.
 - Menelaus now grants **Automated Ships** once after the first Labor is accepted. A player who already has the skill receives **one skill point** instead.
@@ -163,5 +164,3 @@ These notes combine the subsequent 0.5.0 revisions, 0.5.1 updates, and changes i
 Replace the old mod folder with the eventual release package, install the required dependencies, and restart Starsector.
 
 Existing quest progress is retained. The system-name update changes labels in place. Existing Sinni officers retain their saved progression, and already-shown one-time conversations and endings are not replayed. Previously modded saves with missing static world content are not rebuilt automatically.
-
-- Exclude both Ithaca prototypes, including every Odyssey research configuration, from normal production, generated market/black-market stock, arms dealers, blueprint drops and random fleets. Preserve the scripted Onslaught reward.

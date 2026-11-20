@@ -42,11 +42,13 @@ public final class DomaindessyAirGroup extends BaseHullMod {
         String id = profile(mask);
         ShipHullSpecAPI target = settings.getHullSpec(id);
         if (original.isDHull()) {
-            target = null;
-            for (ShipHullSpecAPI candidate : settings.getAllShipHullSpecs()) {
-                if (candidate.isDHull() && id.equals(candidate.getDParentHullId())) {
-                    target = candidate;
-                    break;
+            target = id.equals(original.getDParentHullId()) ? original : null;
+            if (target == null) {
+                for (ShipHullSpecAPI candidate : settings.getAllShipHullSpecs()) {
+                    if (candidate.isDHull() && id.equals(candidate.getDParentHullId())) {
+                        target = candidate;
+                        break;
+                    }
                 }
             }
         }
@@ -58,8 +60,12 @@ public final class DomaindessyAirGroup extends BaseHullMod {
         }
         // Only the owned variant changes. Settings' shared specs are never edited.
         try {
-            variant.setHullSpecAPI(target);
-            variant.refreshBuiltInWings();
+            boolean refresh = original != target;
+            for (int bay = 0; !refresh && bay < 4; bay++) {
+                refresh = !target.getBuiltInWings().get(bay).equals(variant.getWingId(bay));
+            }
+            if (original != target) variant.setHullSpecAPI(target);
+            if (refresh) variant.refreshBuiltInWings();
             // Clear only the retired built-in lasers on existing prototype variants.
             // Conventional player-fitted weapons in either large mount remain intact.
             for (String slot : new String[]{"WS 002", "WS 003"}) {

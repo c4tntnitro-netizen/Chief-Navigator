@@ -1,0 +1,84 @@
+{
+  "hull": "chief_navigator_odyssey_ith",
+  "variant": "chief_navigator_odyssey_ith_Standard",
+  "laser": "chief_navigator_odyssey_ith_naval_laser",
+  "base_geometry": "odyssey",
+  "stock_sprite_sha256": "913bb23d435cdd79c5518c9db59c0658243785ad5eed796100e58c4365848604",
+  "runtime_sprite_sha256": "51b7e63f2e671e94813674b918d87a4c8bf0800c90dcd18e289a74b6d2dd125b",
+  "dimensions": [
+    168,
+    400
+  ],
+  "paint_method": "masked Lab color transfer from runtime Onslaught (ITH): lightness statistics and luminance-conditioned reference chroma",
+  "uses_image_generation": false,
+  "palette_reference": "graphics/ships/ithaca/chief_navigator_onslaught_ith.png",
+  "emblem_reference": "graphics/source/domain_ship_recolor_20261112/color_transfer/domain_emblem_layer.png",
+  "alpha_and_protected_machinery_unchanged": true,
+  "naval_slots": [
+    "WS 002",
+    "WS 003"
+  ],
+  "naval_mount_size": "LARGE",
+  "naval_slot_type": "ENERGY",
+  "stats_cloned_from": "chief_navigator_onslaught_ith_naval_laser",
+  "laser_stats": {
+    "range": "1200",
+    "damage/second": "1000",
+    "energy/second": "900",
+    "burst delay": "30",
+    "chargeup": "3",
+    "chargedown": "0.75",
+    "burst size": "5"
+  },
+  "teal_lab_chroma": [
+    -7.287579536437988,
+    1.703931450843811
+  ],
+  "painted_pixels": 15642,
+  "navy_pixels": 1255,
+  "palette_reference_sha256": "8964613a6145659331b6752d206fcc194d8f81673b7c17e0c4ddd1ba89d92516",
+  "teal_transfer_statistics": {
+    "source_mean_Lab": [
+      64.17829132080078,
+      -0.46200355887413025,
+      -4.856245994567871
+    ],
+    "source_std_Lab": [
+      18.027761459350586,
+      1.3664199113845825,
+      10.222390174865723
+    ],
+    "reference_mean_Lab": [
+      59.49921798706055,
+      -7.287579536437988,
+      1.703931450843811
+    ],
+    "reference_std_Lab": [
+      9.841379165649414,
+      2.1304872035980225,
+      2.009551763534546
+    ]
+  },
+  "navy_transfer_statistics": {
+    "source_mean_Lab": [
+      59.5338249206543,
+      -0.9622145295143127,
+      -19.764528274536133
+    ],
+    "source_std_Lab": [
+      14.5133638381958,
+      1.1615262031555176,
+      11.711555480957031
+    ],
+    "reference_mean_Lab": [
+      35.638301849365234,
+      -1.4987521171569824,
+      -0.02938261069357395
+    ],
+    "reference_std_Lab": [
+      10.865983009338379,
+      3.083590269088745,
+      3.9676907062530518
+    ]
+  }
+}

@@ -3,10 +3,10 @@
   "name": "Chief Navigator",
   "author": "c4tntnitro-netizen",
   "utility": "false",
-  "version": "0.6.5",
+  "version": "0.5.2-dev",
   "description": "An expedition quest about following master navigator Sinni through the Abyss to the lost Domain macrobase FOB Ithaca.",
   "gameVersion": "0.98.5a-RC7",
-  "jars": ["jars/ChiefNavigator.jar"],
+  "jars": ["jars/ChiefNavigator.upkeep-once-20261119.jar"],
   "modPlugin": "chiefnavigator.ChiefNavigatorModPlugin",
   "dependencies": [
     {

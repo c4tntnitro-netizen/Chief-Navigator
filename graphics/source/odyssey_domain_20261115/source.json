@@ -1,0 +1,25 @@
+{
+  "source_file": "C:\\Users\\myauc\\AppData\\Local\\Temp\\codex-clipboard-848eb63c-e39d-4151-8504-9b3d43a39aaf.png",
+  "source_sha256": "7bcce66a369fc7ccc72a6d48f785c0fd1354052d5ad92fb2eca6a44dc6d18cdd",
+  "source_dimensions": [
+    288,
+    400
+  ],
+  "crop": [
+    60,
+    0,
+    228,
+    400
+  ],
+  "native_dimensions": [
+    168,
+    400
+  ],
+  "crop_discards_visible_pixels": false,
+  "resampling": false,
+  "removed_mount": "WS 006",
+  "fighter_bays": 3,
+  "added_builtin_mods": [
+    "surveying_equipment"
+  ]
+}

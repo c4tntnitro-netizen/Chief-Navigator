@@ -1,0 +1,17 @@
+{
+  "file": "hive_boss_uncanny_v1.png",
+  "tool": "built-in image_gen",
+  "prompt_file": "hive_boss_uncanny_v1.prompt.txt",
+  "reference": "native_threat_hive_reference.png",
+  "size": [
+    1091,
+    1441
+  ],
+  "mode": "RGBA",
+  "sha256": "dacf5d4bd46bf4367341b6975f953a66342e02b06503edbeeef5b9317d180899",
+  "alpha_extrema": [
+    0,
+    255
+  ],
+  "status": "first concept, superseded by geoduck/Bobbit exploration; no runtime integration"
+}

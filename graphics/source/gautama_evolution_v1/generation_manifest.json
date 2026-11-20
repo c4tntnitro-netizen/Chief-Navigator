@@ -1,0 +1,58 @@
+{
+  "status": "Generated concept masters; not installed into runtime hulls.",
+  "tool": "built-in image_gen",
+  "reference": "C:\\Program Files (x86)\\Fractal Softworks\\Starsector\\mods\\Chief Navigator\\graphics\\ships\\odyssey_bosses\\chief_navigator_scylla_v2.png",
+  "outputs": [
+    {
+      "stage": "lv2",
+      "source": "C:\\Users\\myauc\\.codex\\generated_images\\01a16bbc-f551-7203-b431-346fac2e14ce\\exec-d92af507-0fa7-4479-8615-b0d956637938.png",
+      "target": "C:\\Program Files (x86)\\Fractal Softworks\\Starsector\\mods\\Chief Navigator\\graphics\\source\\gautama_evolution_v1\\gautama_lv2_concept.png"
+    },
+    {
+      "stage": "lv3",
+      "source": "C:\\Users\\myauc\\.codex\\generated_images\\01a16bbc-f551-7203-b431-346fac2e14ce\\exec-1a9eb29f-1c45-435e-932f-14da11bf1414.png",
+      "target": "C:\\Program Files (x86)\\Fractal Softworks\\Starsector\\mods\\Chief Navigator\\graphics\\source\\gautama_evolution_v1\\gautama_lv3_concept.png"
+    },
+    {
+      "stage": "lv4",
+      "source": "C:\\Users\\myauc\\.codex\\generated_images\\01a16bbc-f551-7203-b431-346fac2e14ce\\exec-e642d11a-55e9-4cd3-b266-9e19b867ba4e.png",
+      "target": "C:\\Program Files (x86)\\Fractal Softworks\\Starsector\\mods\\Chief Navigator\\graphics\\source\\gautama_evolution_v1\\gautama_lv4_concept.png"
+    }
+  ],
+  "baseGeometry": {
+    "canvas": [
+      570,
+      555
+    ],
+    "pivot": [
+      285,
+      277.5
+    ],
+    "collisionRadius": 279,
+    "engineLocalCoordinates": [
+      [
+        -77.5,
+        -201
+      ],
+      [
+        -140,
+        -27
+      ],
+      [
+        -134,
+        -115.5
+      ],
+      [
+        -101.5,
+        64.5
+      ]
+    ]
+  },
+  "uniformScaleFactors": {
+    "base": 1,
+    "lv2": 1.2,
+    "lv3": 1.44,
+    "lv4": 1.728
+  },
+  "integrationNote": "Preserve the authored base geometry as the registration template. Before runtime use, register/export generated masters to the original normalized canvas and outlet positions; apply a single uniform scale to art, bounds, weapons, engines and shields. Generated art has not changed live specifications."
+}

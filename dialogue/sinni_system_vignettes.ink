@@ -1,4 +1,4 @@
-// ============================================================
+﻿// ============================================================
 // SINNI - STELLAR SYSTEM VIGNETTES
 // ============================================================
 //
@@ -115,77 +115,220 @@ SINNI - SYSTEM VIGNETTES
 
 === sinni_nebula ===
 
-The stars disappear one by one as your fleet pushes deeper into {system_name}.
+The bridge is dark.
 
-Soon there is nothing outside but darkness.
+Your Ops has taken up this new policy of dimming the lights on a 12-hour cycle. "Keeps our circadian rhythms steady," he claimed after reading it once in some book. "The human mind needs periodic rest," he claims. On restless nights like this one, all you've noticed is that it's become harder to navigate your own damn ship. You dink your head against an overhang that you swear wasn't there before.
 
-It is a sparse shift right now. Only a skeleton crew mans the panels, maintaining your fleet trajectory. You find Sinni at the navigation hub. She's staring out the command opticals at the blackness.
+Groaning, you find a seat. There's just a skeleton crew here at the moment. Among them, Sinni.
+* ["Nav. Howdy."] -> sinni_nebula_greeting
+* ["Wasn't Enya supposed to be on shift?"] -> sinni_nebula_enya
+* ["Boo."] -> sinni_nebula_boo
 
-Great banks of dust drift past the bridge windows, sometimes translucent, sometimes thick enough to swallow the running lights of ships only a few kilometers away.
+=== sinni_nebula_greeting ===
 
-She is fiddling with a knob.
+Sinni looks up from her console.
 
-With a sudden blinding light, the bridge windows turn pure white. Then, slowly, shapes come into view. You are staring out at a great nebula, its vast folds and filaments traced and projected across the bridge windows in stunning detail.
+"Captain."
 
-"Look."
+-> sinni_nebula_drawing
 
-She seems pleased by this.
+=== sinni_nebula_enya ===
 
-* ["What am I looking at?"] -> sinni_nebula_center
+"We exchanged watches," Sinni explains. "She had personal matters."
 
-=== sinni_nebula_center ===
+* ["Don't let her slack off."] -> sinni_nebula_enya_2
+* ["Don't let her push you around."] -> sinni_nebula_enya_2
 
-"We ingest the dust emissions around us. What you're seeing is a reconstructed far-infrared volume."
+=== sinni_nebula_enya_2 ===
 
-Sinni turns the knob another fraction. The image shifts. A dark ridge separates into two, revealing another immense sheet of dust behind it.
+Sinni nods once, her face colored by the blue glow of her console.
 
-"The dust absorbs starlight and gives the energy back at longer wavelengths."
+"I won't."
 
-Another filament slips slowly out from behind the first. You realize that the nebula isn't merely scrolling past you. It is unfolding.
+-> sinni_nebula_drawing
 
-* ["It's moving."] -> sinni_nebula_moving
+=== sinni_nebula_boo ===
 
-=== sinni_nebula_moving ===
+Sinni doesn't turn around.
 
-"No. We are."
+"Captain."
 
-Sinni points toward one of the nearer clouds as it drifts rapidly across the structures behind it.
+-> sinni_nebula_drawing
 
-"Parallax. That cloud and the one behind it looked joined when we entered the system."
+=== sinni_nebula_drawing ===
 
-She checks the sensor reconstruction.
+Now that you're closer, you can see Sinni fiddling with something in her lap. It's a TriPad. She has a stylus in hand and every now and then, she traces a line over the screen, adding another curve to the touchpad.
 
-"They're about half a light-year apart."
+* ["What are you doing?"] -> sinni_nebula_2
 
-Sinni's gaze fixes on the cloud before her.
+=== sinni_nebula_2 ===
 
-"What you're seeing is depth becoming time. We cross in hours what the cloud takes millennia to change."
+"This."
 
-Another immense fold separates from the darkness.
+Sinni enlarges a section of her display. A nebula fills the screen, its wispy contours traced in thin white lines. She makes an adjustment, and the image resolves into a tangled web of edges and filaments.
 
-"Something larger than the entire Samsarra solar system, breathing and twisting in the starry sea."
+"Mapping density gradients," she explains.
 
-The fleet continues forward.
+* ["Aren't nebulae practically vacuum?"] -> sinni_nebula_3
 
-Another black wall separates into layers.
+=== sinni_nebula_3 ===
 
-* ["That makes your job harder."] -> sinni_nebula_harder
+"Correct."
 
-=== sinni_nebula_harder ===
+Sinni traces another line across the screen.
 
-"Yes. But don't worry."
+"The densities are far too low to present any navigational hazard. Even the thickest regions are nearly empty."
 
-She indicates a series of faint lines.
+She draws another curve.
 
-"We can navigate by velocity. Gravity. Time."
+* ["Then what's the point?"] -> sinni_nebula_4
 
-Another bank of dust rolls across the enhanced opticals, swallowing several distant stars.
+=== sinni_nebula_4 ===
 
-"We stride forward by the last light in our path."
+"Look here."
 
-+[skill gained: nebula plotting: -1% sensor profile.]
+Sinni turns the TriPad toward you and enlarges two overlapping filaments.
 
-* [Continue.] -> sinni_system_menu
+"They appear to be connected."
+
+She rotates the image. The two filaments separate, revealing an enormous gulf between them.
+
+"Half a light-year apart."
+
+You look at the gap. On the display, it's barely the width of your finger.
+
+"The whole complex extends across several light-years. Larger than the entire Samsarra system."
+
+Sinni slowly rotates the reconstruction. What had appeared to be a single tangled cloud begins separating into great sheets and folds, some extending far behind the others.
+
+"The dust absorbs starlight and emits the energy again in the far-infrared. We can reconstruct its structure from those emissions."
+
+She brings up a second image alongside the first. The clouds are almost identical, but not quite. A few of the nearer filaments have shifted against the more distant ones.
+
+* ["It's moving."] -> sinni_nebula_5
+
+* ["What's different between these two?"] -> sinni_nebula_6
+
+=== sinni_nebula_5 ===
+
+"Half-right. We are."
+
+Sinni points toward one of the nearer clouds.
+
+-> sinni_nebula_6
+
+=== sinni_nebula_6 ===
+
+"Parallax. The fleet has changed its position relative to the nebula."
+
+She advances the two images, one over the other. The nearer structures drift across those behind them, revealing folds and gaps that were previously invisible.
+
+"We cross in hours what these clouds take millennia to change. "
+
+She returns to her drawing. For a while, you watch her work. A line here, another there. She seems quite absorbed in it.
+
+* ["So what are you making?"] -> sinni_nebula_7
+
+* ["You still haven't told me what this is for."] -> sinni_nebula_7
+
+=== sinni_nebula_7 ===
+
+Sinni pauses.
+
+Then she looks down at the TriPad.
+
+"Mm."
+
+She makes a final stroke with her stylus. "Here."
+
+She places the TriPad on the console and transfers the image to the main display. The web of white lines expands across the bridge, hundreds of thin contours suspended against a black background.
+
+Sinni selects another layer.
+
+Then another.
+
+The first hints of color appear along the filaments. Deep crimson spreads across one of the nearer clouds, fading into violet and indigo along its edges. Beyond it, an immense sheet of dust emerges in brilliant gold, its folds catching the light of stars hidden somewhere behind it.
+
+More colors bloom across the display. Blues, reds, and greens, each tracing a different part of the reconstructed cloud. The tangled lines resolve into vast, luminous structures, billowing across the screen like some impossible ocean frozen in motion.
+
+The whole bridge is bathed in color. Everyone in the skeleton crew turns to look at the majesty.
+
+Sinni sits back.
+
+// ============================================================
+// UI IMAGE: SINNI'S NEBULA PAINTING
+// ============================================================
+// Display artwork here, before the player dialogue choices.
+//
+// Image: "Spitzer and Hubble Create Colorful Masterpiece"
+// Source:
+// https://science.nasa.gov/asset/hubble/spitzer-and-hubble-create-colorful-masterpiece/
+//
+// IMPLEMENTATION NOTE:
+// Show the image in the Starsector dialogue UI.
+// Display a visible, unobtrusive credit directly below the image:
+//
+// "Image: NASA/JPL-Caltech; NASA/ESA,
+// T. Megeath (University of Toledo), M. Robberto (STScI)"
+//
+// Also retain the full attribution in the mod's asset credits.
+// Do not display these implementation comments as dialogue.
+// ============================================================
+
+* ["You were drawing?"] -> sinni_nebula_art
+* ["That's beautiful."] -> sinni_nebula_beautiful
+* ["So not work at all."] -> sinni_nebula_navigation
+
+=== sinni_nebula_art ===
+
+"Yes."
+
+Sinni looks at the image.
+
+* [Continue.] -> sinni_nebula_end
+* ["You know you're on the clock right?"] -> sinni_nebula_emergency_burn
+
+=== sinni_nebula_beautiful ===
+
+Sinni turns toward you.
+
+A small smile appears on her face.
+
+* [Continue.] -> sinni_nebula_end
+* ["You know you're on the clock right?"] -> sinni_nebula_emergency_burn
+
+=== sinni_nebula_navigation ===
+
+"No."
+
+She studies the image for another moment.
+
+"Not everything has to be."
+
+* [Continue.] -> sinni_nebula_end
+* ["You know you're on the clock right?"] -> sinni_nebula_emergency_burn
+
+=== sinni_nebula_emergency_burn ===
+
+"Captain." Sinni rises and bows. "I just remembered. I have personal matters."
+
+Your nav flees.
+-> sinni_nebula_end_2
+
+=== sinni_nebula_end ===
+
+"Captain." Sinni rises and bows. "Enya should be here soon."
+-> sinni_nebula_end_2
+
+=== sinni_nebula_end_2 ===
+
+You look again at the nebula. The colors are still slowly shifting as Sinni makes minute corrections to her work.
+
+Somewhere in the immense darkness outside, the real clouds continue their almost imperceptible motion.
+[skill gained: nebula plotting: -1% sensor profile.]
+
+* [Leave.] -> sinni_system_menu
+* [Set Sinni's drawing as your screensaver.] -> sinni_system_menu
 
 // BLACK HOLE
 

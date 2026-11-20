@@ -1,0 +1,24 @@
+{
+  "hull": "chief_navigator_onslaught_ith",
+  "variant": "chief_navigator_onslaught_ith_Standard",
+  "laser": "chief_navigator_onslaught_ith_naval_laser",
+  "supplied_sprite_sha256": "8964613a6145659331b6752d206fcc194d8f81673b7c17e0c4ddd1ba89d92516",
+  "runtime_sprite_sha256": "8964613a6145659331b6752d206fcc194d8f81673b7c17e0c4ddd1ba89d92516",
+  "sprite_dimensions": [
+    288,
+    384
+  ],
+  "stock_tpc_slots": [
+    "WS 016",
+    "WS 017"
+  ],
+  "base_geometry": "onslaught",
+  "uses_image_generation": false,
+  "laser_base_stats_from": "chief_navigator_drifting_wall_colossal_inert",
+  "laser_damage_multiplier": 0.5,
+  "laser_base_range": 1200,
+  "laser_beam_width": 90,
+  "laser_beam_width_from": "chief_navigator_drifting_wall_colossal_inert",
+  "laser_flux_per_second": 900,
+  "laser_base_cooldown": 30.0
+}

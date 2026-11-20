@@ -1,20 +1,20 @@
 # Chief Navigator work board
 
-Updated November 17, 2026. This is the starting board for requested work and
+Updated November 18, 2026. This is the starting board for requested work and
 development changes that still need player testing.
 
 November 17 release validation: user reports "FULL PLAYtest done" and authorizes release of the 0.6.2 candidate. CN-033 remains an unconfirmed known issue; this report does not establish every historical card's separate acceptance criteria.
 
 | Backlog | In Progress | Needs Testing | Done |
 | --- | --- | --- | --- |
-| [CN-001 Static Sinni dialogue](#cn-001-static-sinni-dialogue) | No implementation currently active | [CN-004 Natural Gautama spawns](#cn-004-natural-gautama-spawns) | [CN-012 Push Sinni text update](#cn-012-push-sinni-text-update) |
+| [CN-001 Static Sinni dialogue](#cn-001-static-sinni-dialogue) |  | [CN-004 Natural Gautama spawns](#cn-004-natural-gautama-spawns) | [CN-012 Push Sinni text update](#cn-012-push-sinni-text-update) |
 | [CN-002 Menelaus Continue cleanup](#cn-002-menelaus-continue-cleanup) | | [CN-005 Sinni dialogue playthrough](#cn-005-sinni-dialogue-playthrough) | [CN-013 Uncapped Ithaca artwork](#cn-013-uncapped-ithaca-artwork) |
-| [CN-003 Budai weapons in bounties](#cn-003-budai-weapons-in-bounties) | | | [CN-006 Troy fleet-limit behavior](#cn-006-troy-fleet-limit-behavior) |
+| | | | [CN-006 Troy fleet-limit behavior](#cn-006-troy-fleet-limit-behavior) |
+| | | | [CN-003 Budai weapons in bounties](#cn-003-budai-weapons-in-bounties) |
 | [CN-014 Odyssey system names for 1.0.0](#cn-014-odyssey-system-names-for-100) | | [CN-007 Ungaikyo Overseer and mirrors](#cn-007-ungaikyo-overseer-and-mirrors) | |
 | [CN-015 Evolving Gautama finale](#cn-015-evolving-gautama-finale) | | [CN-008 Avici enemies](#cn-008-avici-enemies) | |
 | [CN-016 Reincarnation swarm markers](#cn-016-reincarnation-swarm-markers) | | [CN-009 Seventh station and Abyssal Lens](#cn-009-seventh-station-and-abyssal-lens) | |
 | [CN-017 Final survivor and Ungaikyo retreat](#cn-017-final-survivor-and-ungaikyo-retreat) | | [CN-010 Ithaca storage compatibility](#cn-010-ithaca-storage-compatibility) | |
-| [CN-018 Remove Combat Guard units for 1.0](#cn-018-remove-combat-guard-units-for-10) | | | |
 | [CN-019 Debug console command cleanup](#cn-019-debug-console-command-cleanup) | | | |
 | [CN-021 Research station persists when component is left behind](#cn-021-research-station-persists-when-component-is-left-behind) | | | |
 | | | | [CN-022 Naval turrets render beneath missile housings](#cn-022-naval-turrets-render-beneath-missile-housings) |
@@ -30,8 +30,16 @@ November 17 release validation: user reports "FULL PLAYtest done" and authorizes
 | [CN-030 Aias Kleon side missions for each Labor](#cn-030-aias-kleon-side-missions-for-each-labor) | | | |
 | [CN-031 Sinni as an XO for SiC](#cn-031-sinni-as-an-xo-for-sic) | | | |
 | | | [CN-032 Peerless optional dependency verification](#cn-032-peerless-optional-dependency-verification) | |
-
 | [CN-033 Survey ships can be fought twice](#cn-033-survey-ships-can-be-fought-twice) | | | |
+| [CN-034 Mirrored Onslaught (ITH) does not fire naval lasers](#cn-034-mirrored-onslaught-ith-does-not-fire-naval-lasers) | | | |
+| [CN-035 Sinni accelerated start](#cn-035-sinni-accelerated-start) | | | |
+
+| | | | [CN-036 Release Sea of Stars 0.6.4](#cn-036-release-sea-of-stars-064) |
+|  |  | [CN-037 Campaign background performance pass](#cn-037-campaign-background-performance-pass) |  |
+|  |  | [CN-038 Keep research components until dialogue installation](#cn-038-keep-research-components-until-dialogue-installation) |  |
+|  |  | [CN-039 Simplify One More Horizon and cache Sinni guidance](#cn-039-simplify-one-more-horizon-and-cache-sinni-guidance) |  |
+| | | | [CN-040 Choose unfinished overlapping Sinni categories](#cn-040-choose-unfinished-overlapping-sinni-categories) |
+|  |  | [CN-041 Restrict Tetsu Kannon acquisition](#cn-041-restrict-tetsu-kannon-acquisition) |  |
 
 ## How cards move
 
@@ -47,6 +55,28 @@ action. After implementation, record the build/check results and the remaining
 player test. Move it to Done only after its acceptance criteria are met.
 
 ## Backlog
+
+### CN-035 Sinni accelerated start
+
+**Status:** Backlog; requested November 18, 2026.
+
+**Requested outcome:** a short opening-story rewrite for Sea of Stars that gives the player Sinni as soon as possible, near the beginning of a campaign.
+
+**Next action:** outline a brief introduction and recruitment sequence, identify the recruitment prerequisites that need to change, and connect the accelerated opening coherently to the later expedition story.
+
+**Acceptance:** the player can recruit Sinni through a short early-campaign story sequence without lengthy prerequisite progression. Her introduction preserves her character and leads coherently into the rest of Sea of Stars.
+
+**Delivery:** Unverified; implementation has not started.
+
+### CN-034 Mirrored Onslaught (ITH) does not fire naval lasers
+
+**Status:** Backlog; user-reported November 17, 2026, after the 0.6.2 release. Not yet independently reproduced.
+
+**Report:** The Onslaught (ITH) does not fire its lasers when mirrored.
+
+**Next action:** reproduce with a mirrored Onslaught (ITH), identify the encounter and mirror-generation path, and compare its naval-laser firing behavior with the original ship. Record weapon fit, charge-up behavior, target/range, flux and any relevant log errors before assigning a cause.
+
+**Acceptance:** the mirrored ship fires its naval lasers under valid combat conditions, including after reconstruction if applicable; ordinary Onslaught (ITH) firing remains intact.
 
 ### CN-033 Survey ships can be fought twice
 
@@ -82,7 +112,9 @@ preserve the asked flag, portraits, and continuations that reveal new text.
 
 ### CN-003 Budai weapons in bounties
 
-**Next action:** reproduce the report that boss-only weapons appear in an
+**Status:** Done. User confirmed November 19, 2026.
+
+**Original next action:** reproduce the report that boss-only weapons appear in an
 ordinary bounty fleet. The actual generation path remains unidentified.
 
 **Acceptance:** capture an affected campaign's fitting-faction weapon knowledge,
@@ -159,7 +191,11 @@ Coordinate the rebirth and its marker with CN-015 and CN-016.
 
 ### CN-018 Remove Combat Guard units for 1.0
 
-**Target release:** 1.0. **Status:** Backlog; deferred until the 1.0 cleanup.
+**Status:** Obsolete. User retired this card on November 19, 2026; it is
+removed from the board table and kept below only as a historical record.
+Do not schedule this removal for 1.0.
+
+**Former target release:** 1.0.
 
 **Requested outcome:** remove the custom Combat Guard unit family entirely
 from the mod. The 1.0 release does not need to load saves from earlier versions.
@@ -576,3 +612,102 @@ normal rebuild stays uncapped, and the armed preview remains a separate image.
 CN-022 implementation update: custom naval artwork now renders on ABOVE_SHIPS_LAYER after station weapon housings. Focused compilation and renderer regression pass. Installed JAR changes only ColossalNavalTurretRenderer.class. Restart and verify overlap during rotation/firing, glow and damage flashes. Live appearance remains unconfirmed.
 
 November 5, 2026: user confirmed CN-022 and CN-025 fixed in game and authorized release publication; this supersedes their earlier pending-test notes.
+
+
+## 0.6.4 release record
+
+### CN-036 Release Sea of Stars 0.6.4
+
+**Status:** Done; published and publicly verified November 18, 2026.
+
+**Target release:** 0.6.4
+
+**Included:** The user reviewed and approved the staged scope, then authorized publication. Released 0.6.4 starts from 0.6.3 and contains CN-037 through CN-041.
+
+**Verification:** Full Java 17 build, 909 native dialogue rules and 28 targeted checks pass against the staged candidate. The 428-file ZIP passes CRC, all payload hashes, version and runtime checks. The isolated source checkout is clean. The user completed a local run; this does not prove a measured FPS gain or resolution of the original reporter's stutter.
+
+**Next action:** Release complete. Follow up on the original affected-player performance report and the separately recorded unresolved bugs.
+
+**Delivery:** Released in [0.6.4](https://github.com/c4tntnitro-netizen/Chief-Navigator/releases/tag/v0.6.4), commit `fa5a335706752d6d83f90bbf0c76fdb785721c53`. Public ZIP/checksum and all 428 payloads verified against the approved candidate.
+
+**Local verified package:** [Chief-Navigator-0.6.4.zip](../out_continuous_release_20261111/source/dist/Chief-Navigator-0.6.4.zip).
+
+**Release notes:** [0.6.4 notes](../out_continuous_release_20261111/source/docs/RELEASE_NOTES_0.6.4.md).
+
+**Package SHA-256:** a938be25e19e094d1463859c0d03045ae0cc3ed80c1dd25212c99755f5989bb6.
+
+**Not included:** CN-035 Sinni accelerated start; uninstalled combat experiments; fixes for CN-033 survey-ship repeat fights or CN-034 mirrored Onslaught lasers. The pre-combat Budai Disengage hang remains an unresolved intermittent report: Windows recorded one hang and the retry after restarting worked. No Budai fix is claimed.
+
+**Performance evidence limit:** negative CPU/GC values in the supplied VisualVM Monitor screenshot are invalid measurements. No quantified FPS improvement, leak diagnosis or confirmed stutter cure is claimed.
+
+### CN-037 Campaign background performance pass
+
+**Status:** Needs Testing; released November 18, 2026; the stated player follow-up remains open.
+
+**Target release:** 0.6.4
+
+**Included:** Move research reconciliation, quest objective markers, fleet identity/legacy repairs, population replacement scheduling and system references onto relevant events, saved deadlines and cached lookups. Live fleet movement and encounter behavior remain active.
+
+**Verification:** Targeted local regressions verify idle loops avoid repeated world searches, replacements respect saved deadlines, and caches reset across campaign loads. User reports a completed local run. Original affected-player comparison remains outstanding.
+
+**Next action:** Ask the original stutter reporter to compare the updated build on the same affected save; do not claim their stutter fixed yet.
+
+**Delivery:** Released in [0.6.4](https://github.com/c4tntnitro-netizen/Chief-Navigator/releases/tag/v0.6.4), commit `fa5a335706752d6d83f90bbf0c76fdb785721c53`. Public ZIP/checksum and all 428 payloads verified against the approved candidate.
+
+### CN-038 Keep research components until dialogue installation
+
+**Status:** Needs Testing; released November 18, 2026; the stated player follow-up remains open.
+
+**Target release:** 0.6.4
+
+**Included:** Mark all seven research components as mission items so cargo transfer, storage, sale or jettison cannot remove them. Their intended Menelaus installation dialogue still consumes them.
+
+**Verification:** Native mission-item handling and existing upgrade regression checks verified locally; only seven tag cells change.
+
+**Next action:** Confirm retained components remain available and the intended upgrade dialogue consumes the selected component.
+
+**Delivery:** Released in [0.6.4](https://github.com/c4tntnitro-netizen/Chief-Navigator/releases/tag/v0.6.4), commit `fa5a335706752d6d83f90bbf0c76fdb785721c53`. Public ZIP/checksum and all 428 payloads verified against the approved candidate.
+
+### CN-039 Simplify One More Horizon and cache Sinni guidance
+
+**Status:** Needs Testing; released November 18, 2026; the stated player follow-up remains open.
+
+**Target release:** 0.6.4
+
+**Included:** One More Horizon lists completed and remaining stellar categories without named destinations or quest map recommendations. Check vignettes once per second. Cache chart availability and Intel navigation targets; refresh meaningful guidance on relevant access or events.
+
+**Verification:** Local tests cover the one-second cadence, event/refreshed census, deferred hostile checks, guidance/marker cache invalidation and preserved quest progression.
+
+**Next action:** Review the category-only quest display and responsive Ask Sinni guidance in the staged build.
+
+**Delivery:** Released in [0.6.4](https://github.com/c4tntnitro-netizen/Chief-Navigator/releases/tag/v0.6.4), commit `fa5a335706752d6d83f90bbf0c76fdb785721c53`. Public ZIP/checksum and all 428 payloads verified against the approved candidate.
+
+### CN-040 Choose unfinished overlapping Sinni categories
+
+**Status:** Done; implemented, regression-tested and user-accepted November 18, 2026.
+
+**Target release:** 0.6.4
+
+**Included:** A system may satisfy several categories. Pick an unfinished match, play its scene, and mark only that category on the final dialogue choice. This fixes blue giants in nebula clouds such as World Mill. Include matching companion-star categories, preserve authored story exclusions and make the checklist count every available match.
+
+**Verification:** Regression reproduced the original classifier failure. Overlap tests cover both completion orders, interrupted scenes, reloads, mixed trinary systems, category deduplication, real nebula centers, excluded systems and Main Sequence reward eligibility.
+
+**User acceptance:** the user observed successive vignettes completing one after another and explicitly accepted this behavior. Keep each scene's individual category completion; do not add visited-system tracking. The regression verifies selection and completion isolation.
+
+**Next action:** none for the accepted behavior; investigate only if a new failure is reported.
+
+**Delivery:** Released in [0.6.4](https://github.com/c4tntnitro-netizen/Chief-Navigator/releases/tag/v0.6.4), commit `fa5a335706752d6d83f90bbf0c76fdb785721c53`. Public ZIP/checksum and all 428 payloads verified against the approved candidate.
+
+### CN-041 Restrict Tetsu Kannon acquisition
+
+**Status:** Needs Testing; released November 18, 2026; the stated player follow-up remains open.
+
+**Target release:** 0.6.4
+
+**Included:** Add restricted and no_sell to the Tetsu Kannon hull and keep its asset builder synchronized. Preserve existing no-dealer/no-autofit tags, mission availability and all ship stats.
+
+**Verification:** Local one-cell CSV and builder audits passed. Included in 0.6.4; this tag fix was made after 0.6.3 and was not in that release.
+
+**Next action:** Review acquisition restrictions; explicit console grants and the test mission remain intentional access routes.
+
+**Delivery:** Released in [0.6.4](https://github.com/c4tntnitro-netizen/Chief-Navigator/releases/tag/v0.6.4), commit `fa5a335706752d6d83f90bbf0c76fdb785721c53`. Public ZIP/checksum and all 428 payloads verified against the approved candidate.

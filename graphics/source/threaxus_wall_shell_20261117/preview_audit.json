@@ -1,0 +1,12 @@
+{
+  "size": [
+    909,
+    758
+  ],
+  "world_units_per_pixel": 1,
+  "parent_facing": 90,
+  "module_pose_source": "native .ship slot location/angle",
+  "rotation_sampling": "nearest; preview only",
+  "input_assets_resized": false,
+  "note": "Source sprite assembly preview; weapon housings are rendered by the actual game."
+}

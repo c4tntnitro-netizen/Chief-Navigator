@@ -1,0 +1,79 @@
+{
+  "method": "64 deterministic orthogonal-projection histogram matches in CIELAB (iterative distribution transfer), final luminance CDF match",
+  "seed": 20261117,
+  "source_size": [
+    1897,
+    829
+  ],
+  "reference_size": [
+    512,
+    224
+  ],
+  "output_size": [
+    1897,
+    829
+  ],
+  "alpha_identical": true,
+  "transparent_rgb_identical": true,
+  "same_source_colors_map_identically": true,
+  "source_unique_foreground_colors": 94413,
+  "full_resolution_retained": true,
+  "exact_alpha_weighted_unique_color_compression": true,
+  "no_resampling_or_spatial_operations": true,
+  "Lab_statistics": {
+    "original": {
+      "mean": [
+        32.2989,
+        1.6125,
+        8.4959
+      ],
+      "std": [
+        19.7039,
+        1.6527,
+        4.603
+      ]
+    },
+    "reference": {
+      "mean": [
+        30.997,
+        0.4108,
+        7.8687
+      ],
+      "std": [
+        17.424,
+        1.9482,
+        4.4454
+      ]
+    },
+    "output": {
+      "mean": [
+        30.9966,
+        0.4096,
+        7.8676
+      ],
+      "std": [
+        17.4222,
+        1.9417,
+        4.4451
+      ]
+    }
+  },
+  "Lab_marginal_quantile_mean_abs_error": {
+    "before": [
+      2.113477169159306,
+      1.2071502815296402,
+      0.7120261398850298
+    ],
+    "after": [
+      0.011092001835173738,
+      0.025232795405153875,
+      0.022988733557093858
+    ]
+  },
+  "sha256": {
+    "source_original.png": "51750e34516227d53ac11acbedf46aecdf8b23d87195c03539a1b19e615f87c7",
+    "palette_reference.png": "c5b3190c2ad676d2ebe32bf046f8fb4af516ec8fa9d9284479c9868b12ba5a2b",
+    "threaxus_wall_module_fullres_palette_restored.png": "4265f9be0a08ba797cdbbe8336da0a21fd0b00fa1db64342c95679979497b069"
+  },
+  "runtime_integration": false
+}

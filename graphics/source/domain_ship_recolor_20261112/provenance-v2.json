@@ -1,0 +1,18 @@
+{
+  "file": "ship_domain_teal_navy_v2.png",
+  "dimensions": [
+    1086,
+    1448
+  ],
+  "mode": "RGBA",
+  "alpha_extrema": [
+    0,
+    255
+  ],
+  "sha256": "42cafd8a118d6bd0ceacec54e0684f2964451834c6d4c166a3e041af39e94d17",
+  "generator": "built-in image_gen",
+  "edit_target": "ship_domain_teal_navy_v1.png",
+  "marking_reference": "domain_marking_reference.png",
+  "prompt": "prompt-v2.txt",
+  "runtime_integration": false
+}

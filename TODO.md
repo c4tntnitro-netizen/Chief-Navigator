@@ -2,6 +2,8 @@
 
 Project work is tracked in the [Chief Navigator work board](docs/PROJECT_BOARD.md).
 
+- [ ] Investigate mirrored Onslaught (ITH) failing to fire its naval lasers — [CN-034, Backlog](docs/PROJECT_BOARD.md#cn-034-mirrored-onslaught-ith-does-not-fire-naval-lasers).
+
 - [ ] Investigate potential bug: survey ships can be fought twice — [CN-033, Backlog](docs/PROJECT_BOARD.md#cn-033-survey-ships-can-be-fought-twice).
 
 - [ ] Verify in-game startup and campaign save/load without Peerless Skills, then update dependency documentation — [CN-032, Needs Testing](docs/PROJECT_BOARD.md#cn-032-peerless-optional-dependency-verification).

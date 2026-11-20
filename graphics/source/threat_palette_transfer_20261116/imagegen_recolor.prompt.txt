@@ -1,0 +1,7 @@
+Use case: style-transfer / precise-object-edit
+Asset type: recolored top-down pixel-art Starsector ship sprite on a genuinely transparent background.
+Image 1 is the EDIT TARGET: a narrow vertical industrial ship with orange-red tanks, armor plates, exposed pipes and machinery.
+Image 2 is a COLOR PALETTE REFERENCE ONLY: the native Threat Hive sprite with muted aged ivory/bone armor, grey-green and taupe metal, dark charcoal/brown recesses and subdued bronze hardware.
+Recolor Image 1 into Image 2's color scheme. Replace the bright orange-red paint on the tanks, domes and large armor plates with the reference's aged ivory and desaturated olive-grey/taupe tones. Bring the rest of the hardware into the same muted dark brown, charcoal, grey-green and restrained bronze palette. Preserve the first image's recognizable shading, panel texture, tiny mechanical details and crisp pixel-art appearance.
+Preserve Image 1's exact ship design, narrow vertical silhouette, proportions, orientation, component placements, circular tanks, machinery, pipes, engines and transparent padding. This is a color-only edit. Do not copy the second ship's shape, widen the first ship, add Hive-like geometry, invent components, change the lighting, add organic structures, blur the pixel detail or turn it into a glossy 3D render.
+Output exactly one complete recolored version of Image 1, front toward the top, full ship visible. Genuine transparent background with no black rectangle, colored haze, halo, shadow, checkerboard, text, labels, watermark or extra objects.

@@ -1,0 +1,20 @@
+{
+  "date": "2026-11-11",
+  "mode": "built-in image_gen",
+  "status": "versioned art candidate; not installed or published",
+  "editTarget": "graphics/ships/chief_navigator_ithaca_intact_generated_v1.png",
+  "reference": "../../starsector-core/graphics/ships/derelict/survey_mothership_battle.png",
+  "output": "ithaca_wall_survey_livery_v1.png",
+  "dimensions": [
+    1999,
+    787
+  ],
+  "sourceDimensions": [
+    5632,
+    2216
+  ],
+  "format": "PNG RGBA; verified alpha 0-255",
+  "sha256": "e137be8222d8547c27c02eb3466a445e330898a71766509863c3c2e24001d3bb",
+  "prompt": "prompt-v1.txt",
+  "integrationNote": "Generated canvas is smaller than runtime source. Exact geometry/mount alignment and edge fringe cleanup must be addressed before installing. Preserve canonical uncapped master, runtime sprite, hull coordinates, mounts, collision and existing campaign ring. Original game-derived references retain their existing terms."
+}

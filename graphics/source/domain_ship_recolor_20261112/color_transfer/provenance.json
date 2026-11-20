@@ -1,0 +1,35 @@
+{
+  "method": "Spatial armor masks plus warm-paint selection; reference-sampled Lab chroma transfer; source lightness retained in teal pass.",
+  "source_sha256": "416e71482ef388b54cacc458483436c3b4b48e616afdfe92b4af4e3e8ed9fd9a",
+  "dimensions": [
+    288,
+    384
+  ],
+  "teal_reference_Lab_ab": [
+    -7.09375,
+    3.234375
+  ],
+  "navy_reference_Lab_ab": [
+    -2.59375,
+    1.59375
+  ],
+  "selected_armor_pixels": 26988,
+  "navy_selected_pixels": 4795,
+  "painted_emblem_pixels": 185,
+  "alpha_exact": true,
+  "protected_machinery_exact": true,
+  "all_pixels_outside_masks_exact": true,
+  "transparent_pixels_exact": true,
+  "uses_image_generation": false,
+  "runtime_integration": false,
+  "rebuild_script": "tools/recolor_domain_ship.py",
+  "outputs": [
+    "ship_domain_color_transfer_v1.png",
+    "ship_domain_color_transfer_livery_v1.png",
+    "armor_mask.png",
+    "machinery_protection_mask.png",
+    "navy_paint_mask.png",
+    "domain_emblem_layer.png",
+    "comparison_2x.png"
+  ]
+}

@@ -1,0 +1,369 @@
+{
+  "source_sha256": "5b110268a1b7b3e4a02e40507a463a037209f1011ffd346fec6187573dd4f62c",
+  "runtime_sha256": "5b110268a1b7b3e4a02e40507a463a037209f1011ffd346fec6187573dd4f62c",
+  "source_pixels_unchanged": true,
+  "size": [
+    513,
+    225
+  ],
+  "center_bottom_left": [
+    256.5,
+    112.5
+  ],
+  "collision_radius": 260,
+  "bounds_vertices": 179,
+  "opaque_coverage": 0.9964411144930929,
+  "mounts": [
+    {
+      "slot": "L1",
+      "pixel": [
+        230,
+        181
+      ],
+      "local": [
+        -68.5,
+        26.5
+      ],
+      "size": "LARGE",
+      "type": "BALLISTIC",
+      "mount": "TURRET",
+      "weapon": "neoferric_quadcoil",
+      "angle": 180,
+      "arc": 190
+    },
+    {
+      "slot": "L2",
+      "pixel": [
+        283,
+        181
+      ],
+      "local": [
+        -68.5,
+        -26.5
+      ],
+      "size": "LARGE",
+      "type": "BALLISTIC",
+      "mount": "TURRET",
+      "weapon": "neoferric_quadcoil",
+      "angle": 180,
+      "arc": 190
+    },
+    {
+      "slot": "M1",
+      "pixel": [
+        76,
+        128
+      ],
+      "local": [
+        -15.5,
+        180.5
+      ],
+      "size": "MEDIUM",
+      "type": "BALLISTIC",
+      "mount": "TURRET",
+      "weapon": "heavy_mass_driver",
+      "angle": 180,
+      "arc": 210
+    },
+    {
+      "slot": "M2",
+      "pixel": [
+        437,
+        128
+      ],
+      "local": [
+        -15.5,
+        -180.5
+      ],
+      "size": "MEDIUM",
+      "type": "BALLISTIC",
+      "mount": "TURRET",
+      "weapon": "heavy_mass_driver",
+      "angle": 180,
+      "arc": 210
+    },
+    {
+      "slot": "H1",
+      "pixel": [
+        137,
+        178
+      ],
+      "local": [
+        -65.5,
+        119.5
+      ],
+      "size": "MEDIUM",
+      "type": "MISSILE",
+      "mount": "HARDPOINT",
+      "weapon": "chief_navigator_threaxus_swarm_launcher",
+      "angle": 180,
+      "arc": 5
+    },
+    {
+      "slot": "H2",
+      "pixel": [
+        376,
+        178
+      ],
+      "local": [
+        -65.5,
+        -119.5
+      ],
+      "size": "MEDIUM",
+      "type": "MISSILE",
+      "mount": "HARDPOINT",
+      "weapon": "chief_navigator_threaxus_swarm_launcher",
+      "angle": 180,
+      "arc": 5
+    },
+    {
+      "slot": "S1",
+      "pixel": [
+        98,
+        107
+      ],
+      "local": [
+        5.5,
+        158.5
+      ],
+      "size": "SMALL",
+      "type": "BALLISTIC",
+      "mount": "TURRET",
+      "weapon": "light_mass_driver",
+      "angle": 180,
+      "arc": 210
+    },
+    {
+      "slot": "S2",
+      "pixel": [
+        415,
+        107
+      ],
+      "local": [
+        5.5,
+        -158.5
+      ],
+      "size": "SMALL",
+      "type": "BALLISTIC",
+      "mount": "TURRET",
+      "weapon": "light_mass_driver",
+      "angle": 180,
+      "arc": 210
+    },
+    {
+      "slot": "S3",
+      "pixel": [
+        198,
+        182
+      ],
+      "local": [
+        -69.5,
+        58.5
+      ],
+      "size": "SMALL",
+      "type": "BALLISTIC",
+      "mount": "TURRET",
+      "weapon": "light_mass_driver",
+      "angle": 180,
+      "arc": 200
+    },
+    {
+      "slot": "S4",
+      "pixel": [
+        315,
+        182
+      ],
+      "local": [
+        -69.5,
+        -58.5
+      ],
+      "size": "SMALL",
+      "type": "BALLISTIC",
+      "mount": "TURRET",
+      "weapon": "light_mass_driver",
+      "angle": 180,
+      "arc": 200
+    },
+    {
+      "slot": "S5",
+      "pixel": [
+        103,
+        146
+      ],
+      "local": [
+        -33.5,
+        153.5
+      ],
+      "size": "SMALL",
+      "type": "ENERGY",
+      "mount": "TURRET",
+      "weapon": "voltaic_discharge",
+      "angle": 180,
+      "arc": 360
+    },
+    {
+      "slot": "S6",
+      "pixel": [
+        411,
+        146
+      ],
+      "local": [
+        -33.5,
+        -154.5
+      ],
+      "size": "SMALL",
+      "type": "ENERGY",
+      "mount": "TURRET",
+      "weapon": "voltaic_discharge",
+      "angle": 180,
+      "arc": 360
+    },
+    {
+      "slot": "S7",
+      "pixel": [
+        122,
+        24
+      ],
+      "local": [
+        88.5,
+        134.5
+      ],
+      "size": "SMALL",
+      "type": "ENERGY",
+      "mount": "TURRET",
+      "weapon": "voltaic_discharge",
+      "angle": 180,
+      "arc": 360
+    },
+    {
+      "slot": "S8",
+      "pixel": [
+        391,
+        24
+      ],
+      "local": [
+        88.5,
+        -134.5
+      ],
+      "size": "SMALL",
+      "type": "ENERGY",
+      "mount": "TURRET",
+      "weapon": "voltaic_discharge",
+      "angle": 180,
+      "arc": 360
+    }
+  ],
+  "attachments": [
+    {
+      "slot": {
+        "id": "WALL_LEFT",
+        "type": "STATION_MODULE",
+        "size": "LARGE",
+        "mount": "HARDPOINT",
+        "angle": -122.97772,
+        "arc": 0,
+        "locations": [
+          115.045,
+          194.611
+        ]
+      },
+      "pixel_pivot": [
+        82.38941911716483,
+        160.95496660274054
+      ],
+      "outward_pixel_normal": [
+        -0.8388822610354395,
+        -0.5443129174657432
+      ],
+      "edge": [
+        [
+          277.0,
+          8.0
+        ],
+        [
+          22.0,
+          401.0
+        ]
+      ],
+      "edge_length": 468.48052254069216,
+      "sprite_clockwise_rotation": 122.97772331381648,
+      "weapon_outward_local_angle": 180
+    },
+    {
+      "slot": {
+        "id": "WALL_RIGHT",
+        "type": "STATION_MODULE",
+        "size": "LARGE",
+        "mount": "HARDPOINT",
+        "angle": 123.18244,
+        "arc": 0,
+        "locations": [
+          115.285,
+          -195.455
+        ]
+      },
+      "pixel_pivot": [
+        472.45456766151517,
+        160.71546084221526
+      ],
+      "outward_pixel_normal": [
+        0.8369320957689398,
+        -0.5473067394723092
+      ],
+      "edge": [
+        [
+          534.0,
+          401.0
+        ],
+        [
+          277.0,
+          8.0
+        ]
+      ],
+      "edge_length": 469.57214568157684,
+      "sprite_clockwise_rotation": -123.18243952526123,
+      "weapon_outward_local_angle": 180
+    },
+    {
+      "slot": {
+        "id": "WALL_REAR",
+        "type": "STATION_MODULE",
+        "size": "LARGE",
+        "mount": "HARDPOINT",
+        "angle": -0.0,
+        "arc": 0,
+        "locations": [
+          -205.0,
+          -1.0
+        ]
+      },
+      "pixel_pivot": [
+        278.0,
+        481.0
+      ],
+      "outward_pixel_normal": [
+        -0.0,
+        1.0
+      ],
+      "edge": [
+        [
+          22.0,
+          401.0
+        ],
+        [
+          534.0,
+          401.0
+        ]
+      ],
+      "edge_length": 512.0,
+      "sprite_clockwise_rotation": 0.0,
+      "weapon_outward_local_angle": 180
+    }
+  ],
+  "module_hitpoints": 15000,
+  "module_armor": 1000,
+  "native_fragment_capacity": 200,
+  "native_fragment_regrowth_multiplier": 10,
+  "native_weapon_stats_and_sprites": true,
+  "launcher_waiting_smoke_compatibility": true
+}

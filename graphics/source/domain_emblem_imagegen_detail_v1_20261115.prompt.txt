@@ -1,0 +1,9 @@
+Tool: built-in image_gen.imagegen (edit mode)
+Input: domain_emblem_4x_20261115.png
+Output: domain_emblem_imagegen_detail_v1_20261115.png
+Original and earlier deterministic upscales preserved. Authoring asset only; no runtime reference replaced.
+
+Use case: precise-object-edit.
+Asset type: enhanced naval hull insignia texture for a Starsector ship sprite.
+Input image 1 is the edit target: the existing small gold emblem and its navy/teal hull-panel backing. Faithfully upscale and reconstruct fine detail from this image rather than enlarging its square pixels. Preserve the exact overall design, proportions, orientation, and tight rectangular composition: one small gold compass/star-like central mark inside a gold circular ring with its existing tiny dot details, enclosed by the existing narrow gold diamond border. Retain the dark navy diamond/panel backing and muted weathered teal hull texture around it. Preserve the entire backing as part of the asset; do not extract just the gold emblem. Keep the existing edge translucency and no extra padding.
+Add only plausible fine detail consistent with the source: crisp fine gold linework, subtle chipped gold pigment, delicate scratches, and restrained worn metal/paint grain. Match the source's muted antique gold, deep navy, and desaturated teal colors. Flat top-down painted game-sprite texture; retain its restrained, worn industrial character. No redesign, no added symbols, no lettering, no watermark, no neon glow, no glossy raised medallion, no perspective changes or extra objects. Preserve transparency where present. Output a higher-resolution PNG with the same approximately 35:37 aspect ratio.

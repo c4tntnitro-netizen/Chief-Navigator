@@ -1,0 +1,18 @@
+{
+  "file": "ship_domain_teal_navy_v1.png",
+  "dimensions": [
+    1086,
+    1448
+  ],
+  "mode": "RGBA",
+  "alpha_extrema": [
+    0,
+    255
+  ],
+  "sha256": "39f277af2b49efcd7cb54a5f2c3532670731564584a4811160090854b7b6c0e4",
+  "generator": "built-in image_gen",
+  "target": "original_ship.png",
+  "palette_reference": "survey_ship_palette_reference.png",
+  "prompt": "prompt.txt",
+  "runtime_integration": false
+}

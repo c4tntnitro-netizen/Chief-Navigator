@@ -1,0 +1,28 @@
+{
+  "tool": "built-in image_gen",
+  "prompt": "imagegen_recolor.prompt.txt",
+  "source": "source_original.png",
+  "palette_reference": "palette_reference.png",
+  "imagegen_size": [
+    1041,
+    1511
+  ],
+  "imagegen_mode": "RGBA",
+  "imagegen_alpha_extrema": [
+    0,
+    255
+  ],
+  "distribution_size": [
+    248,
+    360
+  ],
+  "distribution_alpha_exactly_preserved": true,
+  "imagegen_result_is_generative_reinterpretation": true,
+  "comparison_only_resizes_for_display": true,
+  "runtime_integration": false,
+  "sha256": {
+    "imagegen_recolor.png": "6ec419ec9041e28c0c053e8f34bccf03b94da1d515ed52f48f4ea835172e76d0",
+    "distribution_transfer.png": "60c579b08f92c953c10f59e704907d17f35da0224472300a850df0e8c213cd9f",
+    "comparison.png": "0115487d762e50cd20e0471dd6c43ad8b8ef4af87440e9d9e6c332eb4750aa09"
+  }
+}

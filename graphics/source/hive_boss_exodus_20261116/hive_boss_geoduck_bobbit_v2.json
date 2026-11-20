@@ -1,0 +1,25 @@
+{
+  "file": "hive_boss_geoduck_bobbit_v2.png",
+  "tool": "built-in image_gen",
+  "prompt_files": [
+    "hive_boss_geoduck_bobbit_v2.prompt.txt",
+    "hive_boss_geoduck_bobbit_v2_cutout.prompt.txt"
+  ],
+  "reference_files": [
+    "native_threat_hive_reference.png",
+    "hive_boss_uncanny_v1.png"
+  ],
+  "size": [
+    1024,
+    1536
+  ],
+  "mode": "RGBA",
+  "alpha_extrema": [
+    0,
+    254
+  ],
+  "fully_transparent_pixels_pct": 56.99,
+  "sha256": "fd1dcae445858aae425d5d5afc9e36264bad090290c9f9bda5bdcfd935ef6e57",
+  "status": "concept reference; not yet rebuilt as separate animation parts or integrated",
+  "animation_research": "../../../docs/HIVE_BOSS_ARTICULATION.md"
+}

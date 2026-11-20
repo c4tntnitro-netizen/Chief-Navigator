@@ -1,0 +1,379 @@
+{
+  "size": [
+    512,
+    224
+  ],
+  "visible_bbox": [
+    2,
+    8,
+    510,
+    216
+  ],
+  "visible_pixels": 83928,
+  "source_pixels_only": true,
+  "pixel_copy_check": "Every visible output RGBA equals its recorded source coordinate",
+  "transforms": [
+    "integer crop/translation",
+    "quarter-turn transpose",
+    "horizontal mirror",
+    "binary silhouette mask"
+  ],
+  "resampling": false,
+  "blending": false,
+  "recoloring": false,
+  "generated_pixels": false,
+  "source_pixel_counts": {
+    "fabricator.png": 13177,
+    "fragment_single.png": 4122,
+    "overseer.png": 5512,
+    "threat_assault_unit.png": 18526,
+    "threat_hive.png": 12161,
+    "threat_skirmish.png": 10018,
+    "threat_standoff_unit.png": 20412
+  },
+  "source_sha256": {
+    "fabricator.png": "8b79db5628ba933b1a24e15b783eb3e3f737c259f5f99303081b7c0b287f894f",
+    "fragment_single.png": "56d0ae7ebd18715b0336ca651c1d70cc11be0a13abb690a9b311d528b7d44f6d",
+    "overseer.png": "fce8f03ffc4c28977648059191d1582a4e738e08b61cfcbd0ce85495e338c38d",
+    "threat_assault_unit.png": "334c82990103b3ea8d8967bf27df1c73013010446264ed399f047903a2a5b2d9",
+    "threat_hive.png": "7dc6ca1e198fc7cf16d06ff49e10e284828d8347c338cd9dd4499d26842e4643",
+    "threat_skirmish.png": "0f07676ed39936424ca95f9cdf3acf0981dc1ea21b23a923004f0e1753a67d0c",
+    "threat_standoff_unit.png": "78ae354e66f404388008f658ae7a9dcddba460cd733c29bebcd89f759722ab79"
+  },
+  "output_sha256": "fc68f95ff13247a2157d1241a7561613dac80460ba62c1ce3e58f7822ba913cf",
+  "shape_reference": "Ithaca Wall stepped/clipped-corner armor section; shape only",
+  "scale_reference": "Threatxus central triangle approximately468-512px per side;512px canvas length",
+  "layers": [
+    {
+      "source": "threat_hive.png",
+      "crop": [
+        70,
+        160,
+        150,
+        270
+      ],
+      "position": [
+        90,
+        112
+      ],
+      "quarter_turns_ccw": 1,
+      "mirror_x": false
+    },
+    {
+      "source": "threat_hive.png",
+      "crop": [
+        70,
+        160,
+        150,
+        270
+      ],
+      "position": [
+        200,
+        112
+      ],
+      "quarter_turns_ccw": 1,
+      "mirror_x": false
+    },
+    {
+      "source": "threat_hive.png",
+      "crop": [
+        70,
+        160,
+        150,
+        270
+      ],
+      "position": [
+        310,
+        112
+      ],
+      "quarter_turns_ccw": 1,
+      "mirror_x": false
+    },
+    {
+      "source": "fabricator.png",
+      "crop": [
+        34,
+        111,
+        346,
+        290
+      ],
+      "position": [
+        100,
+        25
+      ],
+      "quarter_turns_ccw": 0,
+      "mirror_x": false
+    },
+    {
+      "source": "threat_standoff_unit.png",
+      "crop": [
+        0,
+        0,
+        124,
+        148
+      ],
+      "position": [
+        16,
+        40
+      ],
+      "quarter_turns_ccw": 0,
+      "mirror_x": false
+    },
+    {
+      "source": "threat_standoff_unit.png",
+      "crop": [
+        0,
+        0,
+        124,
+        148
+      ],
+      "position": [
+        372,
+        40
+      ],
+      "quarter_turns_ccw": 0,
+      "mirror_x": true
+    },
+    {
+      "source": "overseer.png",
+      "crop": [
+        6,
+        0,
+        142,
+        70
+      ],
+      "position": [
+        0,
+        44
+      ],
+      "quarter_turns_ccw": 1,
+      "mirror_x": false
+    },
+    {
+      "source": "overseer.png",
+      "crop": [
+        6,
+        0,
+        142,
+        70
+      ],
+      "position": [
+        442,
+        44
+      ],
+      "quarter_turns_ccw": 1,
+      "mirror_x": true
+    },
+    {
+      "source": "fabricator.png",
+      "crop": [
+        0,
+        88,
+        78,
+        190
+      ],
+      "position": [
+        2,
+        72
+      ],
+      "quarter_turns_ccw": 1,
+      "mirror_x": false
+    },
+    {
+      "source": "fabricator.png",
+      "crop": [
+        0,
+        88,
+        78,
+        190
+      ],
+      "position": [
+        408,
+        72
+      ],
+      "quarter_turns_ccw": 1,
+      "mirror_x": true
+    },
+    {
+      "source": "threat_assault_unit.png",
+      "crop": [
+        0,
+        0,
+        160,
+        102
+      ],
+      "position": [
+        74,
+        6
+      ],
+      "quarter_turns_ccw": 0,
+      "mirror_x": false
+    },
+    {
+      "source": "threat_assault_unit.png",
+      "crop": [
+        0,
+        0,
+        160,
+        102
+      ],
+      "position": [
+        278,
+        6
+      ],
+      "quarter_turns_ccw": 0,
+      "mirror_x": true
+    },
+    {
+      "source": "threat_standoff_unit.png",
+      "crop": [
+        79,
+        1,
+        173,
+        66
+      ],
+      "position": [
+        209,
+        8
+      ],
+      "quarter_turns_ccw": 0,
+      "mirror_x": false
+    },
+    {
+      "source": "fabricator.png",
+      "crop": [
+        130,
+        7,
+        250,
+        128
+      ],
+      "position": [
+        195,
+        50
+      ],
+      "quarter_turns_ccw": 1,
+      "mirror_x": false
+    },
+    {
+      "source": "threat_hive.png",
+      "crop": [
+        20,
+        25,
+        192,
+        150
+      ],
+      "position": [
+        170,
+        68
+      ],
+      "quarter_turns_ccw": 0,
+      "mirror_x": false
+    },
+    {
+      "source": "threat_skirmish.png",
+      "crop": [
+        1,
+        6,
+        81,
+        77
+      ],
+      "position": [
+        34,
+        80
+      ],
+      "quarter_turns_ccw": 0,
+      "mirror_x": false
+    },
+    {
+      "source": "threat_skirmish.png",
+      "crop": [
+        1,
+        6,
+        81,
+        77
+      ],
+      "position": [
+        398,
+        80
+      ],
+      "quarter_turns_ccw": 0,
+      "mirror_x": true
+    },
+    {
+      "source": "threat_standoff_unit.png",
+      "crop": [
+        65,
+        66,
+        183,
+        159
+      ],
+      "position": [
+        197,
+        120
+      ],
+      "quarter_turns_ccw": 0,
+      "mirror_x": false
+    },
+    {
+      "source": "fragment_single.png",
+      "crop": [
+        0,
+        0,
+        44,
+        44
+      ],
+      "position": [
+        44,
+        174
+      ],
+      "quarter_turns_ccw": 0,
+      "mirror_x": false
+    },
+    {
+      "source": "fragment_single.png",
+      "crop": [
+        0,
+        0,
+        44,
+        44
+      ],
+      "position": [
+        128,
+        174
+      ],
+      "quarter_turns_ccw": 0,
+      "mirror_x": false
+    },
+    {
+      "source": "fragment_single.png",
+      "crop": [
+        0,
+        0,
+        44,
+        44
+      ],
+      "position": [
+        340,
+        174
+      ],
+      "quarter_turns_ccw": 0,
+      "mirror_x": true
+    },
+    {
+      "source": "fragment_single.png",
+      "crop": [
+        0,
+        0,
+        44,
+        44
+      ],
+      "position": [
+        424,
+        174
+      ],
+      "quarter_turns_ccw": 0,
+      "mirror_x": true
+    }
+  ],
+  "integration": "Art study only; current15-module awakening mission remains separate"
+}
