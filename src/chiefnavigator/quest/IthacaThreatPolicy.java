@@ -1,6 +1,7 @@
 package chiefnavigator.quest;
 
 import com.fs.starfarer.api.Global;
+import com.fs.starfarer.api.campaign.CampaignClockAPI;
 import com.fs.starfarer.api.campaign.CampaignFleetAPI;
 import com.fs.starfarer.api.campaign.FactionAPI;
 import com.fs.starfarer.api.campaign.FleetAssignment;
@@ -10,6 +11,8 @@ import com.fs.starfarer.api.campaign.rules.MemoryAPI;
 import com.fs.starfarer.api.impl.campaign.ids.Factions;
 import com.fs.starfarer.api.impl.campaign.ids.MemFlags;
 import com.fs.starfarer.api.util.Misc;
+import java.lang.ref.WeakReference;
+import java.util.ArrayList;
 import java.util.List;
 
 /** Player-hostile siege machines that concentrate on Task Force Spartan. */
@@ -18,7 +21,48 @@ public final class IthacaThreatPolicy {
     private static final String CHECKED = "$chief_navigator_threat_opportunity_checked";
     private static final String HOSTILE = "$chief_navigator_threat_opportunity_hostile";
 
+    // Every Lacedaemon patrol calls apply() in the same population tick. The
+    // guard upkeep (refill, full repair, CR) only needs to run once per tick;
+    // later patrols reuse that result. Weak references keep a previous
+    // campaign from being retained after a load.
+    private static long guardTimestamp = Long.MIN_VALUE;
+    private static WeakReference<StarSystemAPI> guardSystem =
+            new WeakReference<StarSystemAPI>(null);
+    private static List<WeakReference<CampaignFleetAPI>> guardFleets =
+            new ArrayList<WeakReference<CampaignFleetAPI>>();
+
     private IthacaThreatPolicy() { }
+
+    static List<CampaignFleetAPI> spartanGuardsThisTick(StarSystemAPI system) {
+        CampaignClockAPI clock = Global.getSector() == null
+                ? null : Global.getSector().getClock();
+        if (clock == null) {
+            return OdysseyExpanseSystem.ensureFobIthacaSpartanGuards(system);
+        }
+        long now = clock.getTimestamp();
+        if (now == guardTimestamp && guardSystem.get() == system) {
+            List<CampaignFleetAPI> cached =
+                    new ArrayList<CampaignFleetAPI>(guardFleets.size());
+            for (WeakReference<CampaignFleetAPI> ref : guardFleets) {
+                CampaignFleetAPI guard = ref.get();
+                if (guard == null) {
+                    cached = null;
+                    break;
+                }
+                cached.add(guard);
+            }
+            if (cached != null) return cached;
+        }
+        List<CampaignFleetAPI> guards = OdysseyExpanseSystem
+                .ensureFobIthacaSpartanGuards(system);
+        guardTimestamp = now;
+        guardSystem = new WeakReference<StarSystemAPI>(system);
+        guardFleets = new ArrayList<WeakReference<CampaignFleetAPI>>(guards.size());
+        for (CampaignFleetAPI guard : guards) {
+            guardFleets.add(new WeakReference<CampaignFleetAPI>(guard));
+        }
+        return guards;
+    }
 
     public static void initializeRelations() {
         FactionAPI faction = Global.getSector().getFaction(FACTION_ID);
@@ -91,8 +135,7 @@ public final class IthacaThreatPolicy {
             return true;
         }
 
-        List<CampaignFleetAPI> spartans = OdysseyExpanseSystem
-                .ensureFobIthacaSpartanGuards(system);
+        List<CampaignFleetAPI> spartans = spartanGuardsThisTick(system);
         if (spartans.isEmpty()) return false;
         int hash = fleet.getId() == null ? 0 : fleet.getId().hashCode();
         CampaignFleetAPI spartan = spartans.get(

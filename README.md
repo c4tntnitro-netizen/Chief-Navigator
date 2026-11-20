@@ -1,15 +1,17 @@
 # Chief Navigator
 
-**Campaign performance update:** Background campaign work now uses cached lookups and relevant events for research tracking, objective markers, fleet repairs and replacement scheduling. Sinni checks for vignettes once per second; overlapping systems offer an unfinished matching category. One More Horizon lists the categories to discover without recommending destinations. Research components remain in cargo until installed through dialogue. See the [0.6.4 release notes](docs/RELEASE_NOTES_0.6.4.md).
+**Campaign upkeep fix (0.6.5):** After Ungaikyo is defeated, the leftover-encounter cleanup stops once a pass finds nothing left, and FOB Ithaca's Spartan guard upkeep runs once per campaign tick instead of once per Lacedaemon patrol. See the [0.6.5 release notes](docs/RELEASE_NOTES_0.6.5.md).
+
+**Campaign performance update (0.6.4):** Background campaign work now uses cached lookups and relevant events for research tracking, objective markers, fleet repairs and replacement scheduling. Sinni checks for vignettes once per second; overlapping systems offer an unfinished matching category. One More Horizon lists the categories to discover without recommending destinations. Research components remain in cargo until installed through dialogue. See the [0.6.4 release notes](docs/RELEASE_NOTES_0.6.4.md).
 
 **Tetsu Kannon prototype:** In Missions → **Tetsu Kannon Test**, strip three breakaway Threat wall modules from an inert, protected core. The exposed core then wakes up and pursues hostile ships at70 base speed, firing its own weapons and fabricating Exodus Assault Units and stock Fabricators. Its broad1,500-fragment cloud retains the denser center; no engine flares are rendered. Assault priority and separate caps of three Assault Units/three Fabricators include unfinished builds. The original555x502 core pixels,146-point collision outline and twelve gun mounts remain intact; internal `threatxus` IDs remain compatible and new art/code filenames use `threaxus`. Each wall uses the exact supplied513x225 sprite and fourteen stock Threat guns, including two fixed Swarm Launchers; a local200-fragment reserve powers the launchers. The earlier512x224 pixel-only art study and its provenance remain archived. Healthy wall launchers no longer generate false GraphicsLib damage smoke while waiting at their swarm cap. Restart Starsector for the new mission/runtime. See [prototype settings and validation](docs/THREATXUS_PROTOTYPE.md).
 
 **Threat boss systems:** All three Gautama configurations retain native Extraction Protocol. Threatxus uses assault fabrication, while its special units carry Exodus Plague: twin tapered streams, independent jitter, 400 packets per activation, kinetic impacts and Defabricate conversion, with a twenty-second cooldown. The former standalone stream weapon and its old mission remain removed. See [system settings and verification](docs/EXODUS_PLAGUE.md).
 
-**Version 0.6.4 — Starsector 0.98.5a-RC7.**
+**Version 0.6.5 — Starsector 0.98.5a-RC7.**
 
-[Download Chief Navigator 0.6.4](https://github.com/c4tntnitro-netizen/Chief-Navigator/releases/tag/v0.6.4).
-See the [0.6.4 release notes](docs/RELEASE_NOTES_0.6.4.md).
+[Download Chief Navigator 0.6.5](https://github.com/c4tntnitro-netizen/Chief-Navigator/releases/tag/v0.6.5).
+See the [0.6.5 release notes](docs/RELEASE_NOTES_0.6.5.md).
 
 **Peerless Skills is optional.** When it is enabled, finishing Menelaus's final Labor debrief grants one Peerless point. Train using **Peerless skills...** above vanilla skill reassignment or **Intel > Contacts > [your character] - Peerless training**. SiC uses the contact route; Menelaus and Sinni do not offer training.
 
@@ -79,8 +81,8 @@ The inherited concept and its decision boundaries are recorded in [docs/CONCEPT.
 
 ## Installation
 
-Download `Chief-Navigator-0.6.2.zip` from
-[the 0.6.2 release](https://github.com/c4tntnitro-netizen/Chief-Navigator/releases/tag/v0.6.4)
+Download `Chief-Navigator-0.6.5.zip` from
+[the 0.6.5 release](https://github.com/c4tntnitro-netizen/Chief-Navigator/releases/tag/v0.6.5)
 and extract its `Chief Navigator` folder into `Starsector/mods`.
 The mod folder must contain `mod_info.json` directly. When updating, replace
 the previous mod folder with the new one rather than merging its files.

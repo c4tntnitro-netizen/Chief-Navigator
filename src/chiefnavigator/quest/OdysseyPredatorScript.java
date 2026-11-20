@@ -4826,11 +4826,35 @@ public final class OdysseyPredatorScript implements EveryFrameScript {
         }
     }
 
+    /**
+     * Sector whose post-defeat Ungaikyo cleanup has already finished a clean
+     * pass. Weak, so a previous campaign is never retained; each load checks
+     * once again.
+     */
+    private static java.lang.ref.WeakReference<
+            com.fs.starfarer.api.campaign.SectorAPI> ungaikyoCleanupDoneFor =
+                    new java.lang.ref.WeakReference<
+                            com.fs.starfarer.api.campaign.SectorAPI>(null);
+
+    /**
+     * The Ungaikyo defeat is permanent and nothing re-creates the rematch, so
+     * once a whole-sector cleanup pass finds nothing left (and no busy fleet
+     * blocked it), further passes this session are pure cost.
+     */
+    static void runUngaikyoCleanupUntilClean() {
+        if (ungaikyoCleanupDoneFor.get() == Global.getSector()) return;
+        if (TroyArrivalScript.cleanupGautamaFinalRematch()) {
+            ungaikyoCleanupDoneFor = new java.lang.ref.WeakReference<
+                    com.fs.starfarer.api.campaign.SectorAPI>(
+                            Global.getSector());
+        }
+    }
+
     /** Maintains the one-time Ungaikyo encounter after Labor V's debrief. */
     private static void ensurePostLaborUngaikyo() {
         if (!MenelausTrial.isComplete()) return;
         if (isUngaikyoRematchDefeated()) {
-            TroyArrivalScript.cleanupGautamaFinalRematch();
+            runUngaikyoCleanupUntilClean();
             return;
         }
         StarSystemAPI lastLight = OdysseyExpanseSystem.findSystemById(
