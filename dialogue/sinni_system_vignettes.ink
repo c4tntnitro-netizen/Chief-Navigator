@@ -1683,7 +1683,7 @@ You pretend not to notice.
 
 [Quest completed: ONE MORE HORIZON]
 
-[Reward gained: +2 Burn speed cap; +1 base Burn level.]
+[Reward gained: +1 base Burn level. In hyperspace, your fleet's burn can exceed the usual limit of 20, up to 30.]
 
 * [Continue.] -> sinni_system_menu
 

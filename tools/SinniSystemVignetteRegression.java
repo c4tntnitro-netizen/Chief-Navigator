@@ -236,8 +236,6 @@ public final class SinniSystemVignetteRegression {
                 "Giant-star reward must remain one-percent survey savings");
         check(SinniVignetteRewards.MASSIVE_STAR_CREW_LOSS_MULT == 0.99f,
                 "Legacy massive-star reward must remain save-compatible");
-        check(SinniVignetteRewards.ALL_TYPES_BURN_SPEED_CAP_BONUS == 2f,
-                "Completed chart must add two to the Burn speed cap");
         check(SinniVignetteRewards.ALL_TYPES_BASE_BURN_BONUS == 1f,
                 "Completed chart must add one base Burn level");
 

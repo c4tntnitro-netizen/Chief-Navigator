@@ -2,6 +2,8 @@
 
 Project work is tracked in the [Chief Navigator work board](docs/PROJECT_BOARD.md).
 
+- [ ] Revise the Sinni accelerated start — [CN-042, Backlog](docs/PROJECT_BOARD.md#cn-042-revise-the-sinni-accelerated-start).
+
 - [ ] Investigate mirrored Onslaught (ITH) failing to fire its naval lasers — [CN-034, Backlog](docs/PROJECT_BOARD.md#cn-034-mirrored-onslaught-ith-does-not-fire-naval-lasers).
 
 - [ ] Investigate potential bug: survey ships can be fought twice — [CN-033, Backlog](docs/PROJECT_BOARD.md#cn-033-survey-ships-can-be-fought-twice).

@@ -36,7 +36,6 @@ final class SinniVignetteRewards {
     static final float WHITE_DWARF_SUPPLY_USE_MULT = 0.99f;
     static final float GIANT_STAR_SURVEY_COST_MULT = 0.99f;
     static final float MASSIVE_STAR_CREW_LOSS_MULT = 0.99f;
-    static final float ALL_TYPES_BURN_SPEED_CAP_BONUS = 2f;
     static final float ALL_TYPES_BASE_BURN_BONUS = 1f;
 
     private static final String NEBULA_MOD =
@@ -89,6 +88,7 @@ final class SinniVignetteRewards {
     static void advance(CampaignFleetAPI player) {
         if (Global.getSector() == null || player == null) return;
         applyPassiveBonuses(player);
+        SinniBurnCap.ensureRunning(player);
         ensureMainSequenceReward(player);
         maintainMainSequenceReward();
     }
@@ -105,20 +105,19 @@ final class SinniVignetteRewards {
     private static void applyPassiveBonuses(CampaignFleetAPI player) {
         boolean chartComplete =
                 SinniSystemVignetteScript.isOneMoreHorizonComplete();
+        // Fleetwide max burn is the stat that sets the usable burn level.
+        // movementSpeedMod is only read for pursuit detection range in this
+        // build, so the old cap modifier is cleared rather than reapplied.
+        player.getStats().getMovementSpeedMod().unmodifyFlat(
+                ALL_TYPES_SPEED_CAP_MOD);
+        player.getStats().getFleetwideMaxBurnMod().unmodifyFlat(
+                ALL_TYPES_SPEED_CAP_MOD);
         if (chartComplete) {
-            float speedPerBurn = Global.getSettings().getFloat(
-                    "speedPerBurnLevel");
-            player.getStats().getMovementSpeedMod().modifyFlat(
-                    ALL_TYPES_SPEED_CAP_MOD,
-                    ALL_TYPES_BURN_SPEED_CAP_BONUS * speedPerBurn,
-                    "Sinni: completed stellar chart");
             player.getStats().getFleetwideMaxBurnMod().modifyFlat(
                     ALL_TYPES_BASE_BURN_MOD,
                     ALL_TYPES_BASE_BURN_BONUS,
                     "Sinni: completed stellar chart");
         } else {
-            player.getStats().getMovementSpeedMod().unmodifyFlat(
-                    ALL_TYPES_SPEED_CAP_MOD);
             player.getStats().getFleetwideMaxBurnMod().unmodifyFlat(
                     ALL_TYPES_BASE_BURN_MOD);
         }

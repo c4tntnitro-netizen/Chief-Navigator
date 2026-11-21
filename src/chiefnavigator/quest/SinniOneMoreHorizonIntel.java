@@ -47,6 +47,16 @@ public final class SinniOneMoreHorizonIntel extends BaseIntelPlugin {
         }
     }
 
+    /** Console/testing: completes the quest now. False if already complete. */
+    public static boolean forceComplete() {
+        if (Global.getSector() == null
+                || SinniSystemVignetteScript.isOneMoreHorizonComplete()) {
+            return false;
+        }
+        SinniSystemVignetteScript.completeOneMoreHorizon();
+        return true;
+    }
+
     static void complete() {
         if (Global.getSector() == null) return;
         for (IntelInfoPlugin item : Global.getSector().getIntelManager()
@@ -94,12 +104,13 @@ public final class SinniOneMoreHorizonIntel extends BaseIntelPlugin {
                 Misc.getTextColor(),
                 Misc.getHighlightColor(),
                 completed + " / " + required);
-        info.addPara("Reward: %s and %s.",
+        info.addPara("Reward: %s. In hyperspace, your fleet's burn can exceed "
+                        + "the usual limit of 20, up to %s.",
                 10f,
                 Misc.getTextColor(),
                 Misc.getHighlightColor(),
-                "+2 Burn speed cap",
-                "+1 base Burn level");
+                "+1 base Burn level",
+                "30");
         info.addPara("Stellar categories:", 10f);
         for (SinniSystemVignetteScript.Category category
                 : SinniSystemVignetteScript.getRequiredSightseeingCategories()) {

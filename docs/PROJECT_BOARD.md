@@ -33,6 +33,7 @@ November 17 release validation: user reports "FULL PLAYtest done" and authorizes
 | [CN-033 Survey ships can be fought twice](#cn-033-survey-ships-can-be-fought-twice) | | | |
 | [CN-034 Mirrored Onslaught (ITH) does not fire naval lasers](#cn-034-mirrored-onslaught-ith-does-not-fire-naval-lasers) | | | |
 | [CN-035 Sinni accelerated start](#cn-035-sinni-accelerated-start) | | | |
+| [CN-042 Revise the Sinni accelerated start](#cn-042-revise-the-sinni-accelerated-start) | | | |
 
 | | | | [CN-036 Release Sea of Stars 0.6.4](#cn-036-release-sea-of-stars-064) |
 |  |  | [CN-037 Campaign background performance pass](#cn-037-campaign-background-performance-pass) |  |
@@ -58,15 +59,27 @@ player test. Move it to Done only after its acceptance criteria are met.
 
 ### CN-035 Sinni accelerated start
 
-**Status:** Backlog; requested November 18, 2026.
+**Status:** Backlog (on hold); implemented November 20, 2026, then held back from release at the user's request the same day.
 
 **Requested outcome:** a short opening-story rewrite for Sea of Stars that gives the player Sinni as soon as possible, near the beginning of a campaign.
 
-**Next action:** outline a brief introduction and recruitment sequence, identify the recruitment prerequisites that need to change, and connect the accelerated opening coherently to the later expedition story.
+**Decision (November 20, 2026):** keep the existing bar scene ("basically the same") but open it from the start of every campaign. The three former recruitment gates (integrated Janus Device from the Galatia story, completed Hyperspace Topography, Onslaught Mk.I sensor unlock) now hold back only the Eventide marker, the **Visit Sinni's office** option and the briefing. Replaces the old gating for all campaigns; no setting.
+
+**Delivered:** early-recruit variants of Sinni's closing bar line and the accept text (drafted by Claude, approved by the user November 20, 2026); an honest **"Only as far as the charts go."** reply for captains who have met neither Threat nor Dwellers; a readiness checklist in the story Intel; Sinni's guidance lists what is missing; one Intel update when Eventide opens. Saves where Sinni already joined are unaffected.
 
 **Acceptance:** the player can recruit Sinni through a short early-campaign story sequence without lengthy prerequisite progression. Her introduction preserves her character and leads coherently into the rest of Sea of Stars.
 
-**Delivery:** Unverified; implementation has not started.
+**Delivery:** Held. The complete implementation (six classes, rules.csv rows, Ink, README text and `tools/SinniAcceleratedStartRegression.java`) is saved in `out_cn035_hold_20261120/` and is neither installed nor released. Its jar `jars/ChiefNavigator.sinni-accelerated-text-20261120.jar` is retained unused.
+
+### CN-042 Revise the Sinni accelerated start
+
+**Status:** Backlog; requested by the user November 20, 2026.
+
+**Request:** "let me revise the accelerated start later". The user will revise CN-035 (Sinni joins from the first bar meeting; Eventide opens after the Janus Device, full Hyperspace Topography and the Onslaught Mk.I).
+
+**Next action:** wait for the user's revisions; the scope (dialogue, conditions or both) is theirs to set.
+
+**Acceptance:** the user's revisions are applied to `rules.csv`, `dialogue/sinni_intro.ink` and any affected Intel or guidance text, and the Sinni regressions pass.
 
 ### CN-034 Mirrored Onslaught (ITH) does not fire naval lasers
 

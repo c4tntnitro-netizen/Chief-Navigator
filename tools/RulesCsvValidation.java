@@ -9,6 +9,20 @@ import org.json.JSONObject;
 
 /** External build check against the installed game's actual CSV parser. */
 public final class RulesCsvValidation {
+    /** The obfuscated loader name differs between game builds (RC7: void, RC8: G). */
+    static java.lang.reflect.Method nativeCsvParser() throws Exception {
+        for (String name : new String[] {"com.fs.starfarer.loading.G", "com.fs.starfarer.loading.void"}) {
+            try {
+                java.lang.reflect.Method parser = Class.forName(name).getMethod("o00000", String.class);
+                if (java.lang.reflect.Modifier.isStatic(parser.getModifiers())
+                        && parser.getReturnType() == JSONArray.class) return parser;
+            } catch (ClassNotFoundException | NoSuchMethodException ignored) {
+                // Try the next known build's name.
+            }
+        }
+        throw new ClassNotFoundException("Installed Starsector CSV loader not found (tried loading.G, loading.void)");
+    }
+
     public static void main(String[] args) throws Exception {
         if (args.length != 1) throw new IllegalArgumentException("Expected rules.csv path");
         String source = Files.readString(Path.of(args[0]), StandardCharsets.UTF_8);
@@ -16,8 +30,7 @@ public final class RulesCsvValidation {
         try {
             // This installed loader appears in the startup crash stack. Keep
             // engine internals confined to this external verification tool.
-            rows = (JSONArray) Class.forName("com.fs.starfarer.loading.void")
-                    .getMethod("o00000", String.class).invoke(null, source);
+            rows = (JSONArray) nativeCsvParser().invoke(null, source);
         } catch (InvocationTargetException ex) {
             throw new IllegalStateException("Starsector rejected " + args[0], ex.getCause());
         }
