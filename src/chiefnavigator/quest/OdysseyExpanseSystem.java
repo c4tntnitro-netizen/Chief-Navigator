@@ -2423,7 +2423,7 @@ public final class OdysseyExpanseSystem {
         station.setAI(null);
         station.setDoNotAdvanceAI(true);
         station.clearAssignments();
-        station.setVelocity(0f, 0f);
+        IthacaSectionEncounter.stopCampaignDrift(station);
         station.setFixedLocation(
                 ithaca.getLocation().x + FOB_ITHACA_GATE_DEFENSE_OFFSET_X,
                 ithaca.getLocation().y + FOB_ITHACA_GATE_DEFENSE_OFFSET_Y);
@@ -2508,7 +2508,7 @@ public final class OdysseyExpanseSystem {
         station.setStationMode(true);
         station.setAI(null);
         station.setDoNotAdvanceAI(true);
-        station.setVelocity(0f, 0f);
+        IthacaSectionEncounter.stopCampaignDrift(station);
         station.setLocation(
                 ithaca.getLocation().x + FOB_ITHACA_GATE_DEFENSE_OFFSET_X,
                 ithaca.getLocation().y + FOB_ITHACA_GATE_DEFENSE_OFFSET_Y);

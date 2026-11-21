@@ -210,60 +210,115 @@ A forgotten remnant of the mighty 14th Battlegroup. There, the Battlegroup shoul
 chiefNavigatorSinniAlphaOdysseyMapNotice,ChiefNavigatorSinniVignette_sinni_alpha_odyssey_map_notice,,"SetTextHighlightColors hColor
 SetTextHighlights ""You can ask Sinni for guidance or open her custom starscape map of the Orion Knot through Contacts. Her map is also available in the Adept of the Stars and Waves Intel entry.""",You can ask Sinni for guidance or open her custom starscape map of the Orion Knot through Contacts. Her map is also available in the Adept of the Stars and Waves Intel entry.,100:complete_alpha_odyssey:Continue.,Highlighted guidance and map notice at the end of the first Alpha Odyssey arrival.
 
-chiefNavigatorSinniVignetteNebula,ChiefNavigatorSinniVignette_sinni_nebula,,,"The stars disappear one by one as your fleet pushes deeper into $chiefNavigatorSinniSystemName.
+chiefNavigatorSinniVignetteNebula,ChiefNavigatorSinniVignette_sinni_nebula,,,"The bridge is dark.
 
-Soon there is nothing outside but darkness.
+Your Ops has taken up this new policy of dimming the lights on a 12-hour cycle. ""Keeps our circadian rhythms steady,"" he claimed after reading it once in some book. ""The human mind needs periodic rest,"" he claims. On restless nights like this one, all you've noticed is that it's become harder to navigate your own damn ship. You dink your head against an overhang that you swear wasn't there before.
 
-It is a sparse shift right now. Only a skeleton crew mans the panels, maintaining your fleet trajectory. You find Sinni at the navigation hub. She's staring out the command opticals at the blackness.
+Groaning, you find a seat. There's just a skeleton crew here at the moment. Among them, Sinni.","0:sinni_nebula_greeting:""Nav. Howdy.""
+1:sinni_nebula_enya:""Wasn't Enya supposed to be on shift?""
+2:sinni_nebula_boo:""Boo.""","Sinni nebula painting vignette; supplied November 18, 2026."
+chiefNavigatorSinniVignetteNebulaGreeting,ChiefNavigatorSinniVignette_sinni_nebula_greeting,,FireAll ChiefNavigatorSinniVignette_sinni_nebula_drawing,"Sinni looks up from her console.
 
-Great banks of dust drift past the bridge windows, sometimes translucent, sometimes thick enough to swallow the running lights of ships only a few kilometers away.
+""Captain.""",,"Sinni nebula painting vignette; supplied November 18, 2026."
+chiefNavigatorSinniVignetteNebulaEnya,ChiefNavigatorSinniVignette_sinni_nebula_enya,,,"""We exchanged watches,"" Sinni explains. ""She had personal matters.""","0:sinni_nebula_enya_2:""Don't let her slack off.""
+1:sinni_nebula_enya_2_choice_2:""Don't let her push you around.""","Sinni nebula painting vignette; supplied November 18, 2026."
+chiefNavigatorSinniVignetteNebulaEnya2Choice2,ChiefNavigatorSinniVignette_sinni_nebula_enya_2_choice_2,,FireAll ChiefNavigatorSinniVignette_sinni_nebula_enya_2,,,"Sinni nebula painting vignette; supplied November 18, 2026."
+chiefNavigatorSinniVignetteNebulaEnya2,ChiefNavigatorSinniVignette_sinni_nebula_enya_2,,FireAll ChiefNavigatorSinniVignette_sinni_nebula_drawing,"Sinni nods once, her face colored by the blue glow of her console.
 
-She is fiddling with a knob.
+""I won't.""",,"Sinni nebula painting vignette; supplied November 18, 2026."
+chiefNavigatorSinniVignetteNebulaBoo,ChiefNavigatorSinniVignette_sinni_nebula_boo,,FireAll ChiefNavigatorSinniVignette_sinni_nebula_drawing,"Sinni doesn't turn around.
 
-With a sudden blinding light, the bridge windows turn pure white. Then, slowly, shapes come into view. You are staring out at a great nebula, its vast folds and filaments traced and projected across the bridge windows in stunning detail.
+""Captain.""",,"Sinni nebula painting vignette; supplied November 18, 2026."
+chiefNavigatorSinniVignetteNebulaDrawing,ChiefNavigatorSinniVignette_sinni_nebula_drawing,,,"Now that you're closer, you can see Sinni fiddling with something in her lap. It's a TriPad. She has a stylus in hand and every now and then, she traces a line over the screen, adding another curve to the touchpad.","0:sinni_nebula_2:""What are you doing?""","Sinni nebula painting vignette; supplied November 18, 2026."
+chiefNavigatorSinniVignetteNebula2,ChiefNavigatorSinniVignette_sinni_nebula_2,,,"""This.""
 
-""Look.""
+Sinni enlarges a section of her display. A nebula fills the screen, its wispy contours traced in thin white lines. She makes an adjustment, and the image resolves into a tangled web of edges and filaments.
 
-She seems pleased by this.","0:sinni_nebula_center:""What am I looking at?""",Sinni stellar-system vignette dialogue.
-chiefNavigatorSinniVignetteNebulaCenter,ChiefNavigatorSinniVignette_sinni_nebula_center,,,"""We ingest the dust emissions around us. What you're seeing is a reconstructed far-infrared volume.""
+""Mapping density gradients,"" she explains.","0:sinni_nebula_3:""Aren't nebulae practically vacuum?""","Sinni nebula painting vignette; supplied November 18, 2026."
+chiefNavigatorSinniVignetteNebula3,ChiefNavigatorSinniVignette_sinni_nebula_3,,,"""Correct.""
 
-Sinni turns the knob another fraction. The image shifts. A dark ridge separates into two, revealing another immense sheet of dust behind it.
+Sinni traces another line across the screen.
 
-""The dust absorbs starlight and gives the energy back at longer wavelengths.""
+""The densities are far too low to present any navigational hazard. Even the thickest regions are nearly empty.""
 
-Another filament slips slowly out from behind the first. You realize that the nebula isn't merely scrolling past you. It is unfolding.","0:sinni_nebula_moving:""It's moving.""",Sinni stellar-system vignette dialogue.
-chiefNavigatorSinniVignetteNebulaMoving,ChiefNavigatorSinniVignette_sinni_nebula_moving,,,"""No. We are.""
+She draws another curve.","0:sinni_nebula_4:""Then what's the point?""","Sinni nebula painting vignette; supplied November 18, 2026."
+chiefNavigatorSinniVignetteNebula4,ChiefNavigatorSinniVignette_sinni_nebula_4,,,"""Look here.""
 
-Sinni points toward one of the nearer clouds as it drifts rapidly across the structures behind it.
+Sinni turns the TriPad toward you and enlarges two overlapping filaments.
 
-""Parallax. That cloud and the one behind it looked joined when we entered the system.""
+""They appear to be connected.""
 
-She checks the sensor reconstruction.
+She rotates the image. The two filaments separate, revealing an enormous gulf between them.
 
-""They're about half a light-year apart.""
+""Half a light-year apart.""
 
-Sinni's gaze fixes on the cloud before her.
+You look at the gap. On the display, it's barely the width of your finger.",0:chief_navigator_auto_page_chief_navigator_sinni_vignette_nebula4_2:Continue.,"Sinni nebula painting vignette; supplied November 18, 2026. Auto-paged 1/3."
+chiefNavigatorSinniVignetteNebula4Page2,ChiefNavigatorSinniVignette_chief_navigator_auto_page_chief_navigator_sinni_vignette_nebula4_2,,,"""The whole complex extends across several light-years. Larger than the entire Samsarra system.""
 
-""What you're seeing is depth becoming time. We cross in hours what the cloud takes millennia to change.""
+Sinni slowly rotates the reconstruction. What had appeared to be a single tangled cloud begins separating into great sheets and folds, some extending far behind the others.
 
-Another immense fold separates from the darkness.
+""The dust absorbs starlight and emits the energy again in the far-infrared. We can reconstruct its structure from those emissions.""",0:chief_navigator_auto_page_chief_navigator_sinni_vignette_nebula4_3:Continue.,Automatic runtime continuation 2/3 for chiefNavigatorSinniVignetteNebula4.
+chiefNavigatorSinniVignetteNebula4Page3,ChiefNavigatorSinniVignette_chief_navigator_auto_page_chief_navigator_sinni_vignette_nebula4_3,,,"She brings up a second image alongside the first. The clouds are almost identical, but not quite. A few of the nearer filaments have shifted against the more distant ones.","0:sinni_nebula_5:""It's moving.""
+1:sinni_nebula_6:""What's different between these two?""",Automatic runtime continuation 3/3 for chiefNavigatorSinniVignetteNebula4.
+chiefNavigatorSinniVignetteNebula5,ChiefNavigatorSinniVignette_sinni_nebula_5,,FireAll ChiefNavigatorSinniVignette_sinni_nebula_6,"""Half-right. We are.""
 
-""Something larger than the entire Samsarra solar system, breathing and twisting in the starry sea.""
+Sinni points toward one of the nearer clouds.",,"Sinni nebula painting vignette; supplied November 18, 2026."
+chiefNavigatorSinniVignetteNebula6,ChiefNavigatorSinniVignette_sinni_nebula_6,,,"""Parallax. The fleet has changed its position relative to the nebula.""
 
-The fleet continues forward.
+She advances the two images, one over the other. The nearer structures drift across those behind them, revealing folds and gaps that were previously invisible.
 
-Another black wall separates into layers.","0:sinni_nebula_harder:""That makes your job harder.""",Sinni stellar-system vignette dialogue.
-chiefNavigatorSinniVignetteNebulaHarder,ChiefNavigatorSinniVignette_sinni_nebula_harder,,,"""Yes. But don't worry.""
+""We cross in hours what these clouds take millennia to change. ""
 
-She indicates a series of faint lines.
+She returns to her drawing. For a while, you watch her work. A line here, another there. She seems quite absorbed in it.","0:sinni_nebula_7:""So what are you making?""
+1:sinni_nebula_7_choice_2:""You still haven't told me what this is for.""","Sinni nebula painting vignette; supplied November 18, 2026."
+chiefNavigatorSinniVignetteNebula7Choice2,ChiefNavigatorSinniVignette_sinni_nebula_7_choice_2,,FireAll ChiefNavigatorSinniVignette_sinni_nebula_7,,,"Sinni nebula painting vignette; supplied November 18, 2026."
+chiefNavigatorSinniVignetteNebula7,ChiefNavigatorSinniVignette_sinni_nebula_7,,,"Sinni pauses.
 
-""We can navigate by velocity. Gravity. Time.""
+Then she looks down at the TriPad.
 
-Another bank of dust rolls across the enhanced opticals, swallowing several distant stars.
+""Mm.""
 
-""We stride forward by the last light in our path.""
+She makes a final stroke with her stylus. ""Here.""
 
-[skill gained: nebula plotting: -1% sensor profile.]",0:complete_nebula:Continue.,Sinni stellar-system vignette dialogue.
+She places the TriPad on the console and transfers the image to the main display. The web of white lines expands across the bridge, hundreds of thin contours suspended against a black background.
+
+Sinni selects another layer.",0:chief_navigator_auto_page_chief_navigator_sinni_vignette_nebula7_2:Continue.,"Sinni nebula painting vignette; supplied November 18, 2026. Auto-paged 1/3."
+chiefNavigatorSinniVignetteNebula7Page2,ChiefNavigatorSinniVignette_chief_navigator_auto_page_chief_navigator_sinni_vignette_nebula7_2,,,"Then another.
+
+The first hints of color appear along the filaments. Deep crimson spreads across one of the nearer clouds, fading into violet and indigo along its edges. Beyond it, an immense sheet of dust emerges in brilliant gold, its folds catching the light of stars hidden somewhere behind it.
+
+More colors bloom across the display. Blues, reds, and greens, each tracing a different part of the reconstructed cloud. The tangled lines resolve into vast, luminous structures, billowing across the screen like some impossible ocean frozen in motion.",0:chief_navigator_auto_page_chief_navigator_sinni_vignette_nebula7_3:Continue.,Automatic runtime continuation 2/3 for chiefNavigatorSinniVignetteNebula7.
+chiefNavigatorSinniVignetteNebula7Page3,ChiefNavigatorSinniVignette_chief_navigator_auto_page_chief_navigator_sinni_vignette_nebula7_3,,"ChiefNavigatorSinniNebulaCMD ""Image: NASA/JPL-Caltech; NASA/ESA,"" ""T. Megeath (University of Toledo), M. Robberto (STScI)""","The whole bridge is bathed in color. Everyone in the skeleton crew turns to look at the majesty.
+
+Sinni sits back.","0:sinni_nebula_art:""You were drawing?""
+1:sinni_nebula_beautiful:""That's beautiful.""
+2:sinni_nebula_navigation:""So not work at all.""",Automatic runtime continuation 3/3 for chiefNavigatorSinniVignetteNebula7.
+chiefNavigatorSinniVignetteNebulaArt,ChiefNavigatorSinniVignette_sinni_nebula_art,,,"""Yes.""
+
+Sinni looks at the image.","0:sinni_nebula_end:Continue.
+1:sinni_nebula_emergency_burn:""You know you're on the clock right?""","Sinni nebula painting vignette; supplied November 18, 2026."
+chiefNavigatorSinniVignetteNebulaBeautiful,ChiefNavigatorSinniVignette_sinni_nebula_beautiful,,,"Sinni turns toward you.
+
+A small smile appears on her face.","0:sinni_nebula_end:Continue.
+1:sinni_nebula_emergency_burn:""You know you're on the clock right?""","Sinni nebula painting vignette; supplied November 18, 2026."
+chiefNavigatorSinniVignetteNebulaNavigation,ChiefNavigatorSinniVignette_sinni_nebula_navigation,,,"""No.""
+
+She studies the image for another moment.
+
+""Not everything has to be.""","0:sinni_nebula_end:Continue.
+1:sinni_nebula_emergency_burn:""You know you're on the clock right?""","Sinni nebula painting vignette; supplied November 18, 2026."
+chiefNavigatorSinniVignetteNebulaEmergencyBurn,ChiefNavigatorSinniVignette_sinni_nebula_emergency_burn,,FireAll ChiefNavigatorSinniVignette_sinni_nebula_end_2,"""Captain."" Sinni rises and bows. ""I just remembered. I have personal matters.""
+
+Your nav flees.",,"Sinni nebula painting vignette; supplied November 18, 2026."
+chiefNavigatorSinniVignetteNebulaEnd,ChiefNavigatorSinniVignette_sinni_nebula_end,,FireAll ChiefNavigatorSinniVignette_sinni_nebula_end_2,"""Captain."" Sinni rises and bows. ""Enya should be here soon.""",,"Sinni nebula painting vignette; supplied November 18, 2026."
+chiefNavigatorSinniVignetteNebulaEnd2,ChiefNavigatorSinniVignette_sinni_nebula_end_2,,,"You look again at the nebula. The colors are still slowly shifting as Sinni makes minute corrections to her work.
+
+Somewhere in the immense darkness outside, the real clouds continue their almost imperceptible motion.
+
+[skill gained: nebula plotting: -1% sensor profile.]","0:complete_nebula:Leave.
+1:complete_nebula_screensaver:Set Sinni's drawing as your screensaver.","Sinni nebula painting vignette; supplied November 18, 2026."
+chiefNavigatorSinniVignetteCompleteNebulaScreensaver,ChiefNavigatorSinniVignette_complete_nebula_screensaver,,"$global.chief_navigator_sinni_nebula_screensaver = true
+DismissDialog",,,"Sinni nebula painting vignette; supplied November 18, 2026."
 chiefNavigatorSinniVignetteBlackHole,ChiefNavigatorSinniVignette_sinni_black_hole,,,"You return to the bridge to find most of the navigation overlays missing.
 
 The fleet is still precisely on course. Collision warnings remain active, the tactical plot is untouched, and the navigation computer continues counting down to your destination.
@@ -1169,7 +1224,7 @@ You pretend not to notice.
 
 [Quest completed: ONE MORE HORIZON]
 
-[Reward gained: +2 Burn speed cap; +1 base Burn level.]",0:complete_one_more_horizon:Continue.,Sinni stellar-system vignette dialogue.
+[Reward gained: +1 base Burn level. In hyperspace, your fleet's burn can exceed the usual limit of 20, up to 30.]",0:complete_one_more_horizon:Continue.,Sinni stellar-system vignette dialogue.
 chiefNavigatorSinniVignetteNebulaNavigate,ChiefNavigatorSinniVignette_sinni_nebula_navigate,,,"""The sea. This.""
 
 She indicates a series of faint lines.

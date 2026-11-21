@@ -313,9 +313,9 @@ public final class SinniVignetteCompletionRegression {
                 "Final choice must persist completion and clear its pending state and delay");
         check(fixture.intel.size() == 1 && fixture.intel.get(0).isEnding(),
                 "The existing sightseeing Intel must complete instead of being recreated");
-        check(fixture.movementSpeed.getFlatBonus() == 100f
-                        && fixture.maxBurn.getFlatBonus() == 1f,
-                "The completed chart must keep its existing Burn rewards");
+        check(fixture.movementSpeed.getFlatBonus() == 0f
+                        && fixture.maxBurn.computeEffective(0f) == 1f,
+                "The completed chart must add +1 base Burn level as fleetwide max burn");
     }
 
     static void checkLegacyRequestRetirement() {

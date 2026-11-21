@@ -4,13 +4,17 @@ import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.CampaignFleetAPI;
 import com.fs.starfarer.api.campaign.CustomCampaignEntityAPI;
 import com.fs.starfarer.api.campaign.LocationAPI;
+import com.fs.starfarer.api.campaign.SectorAPI;
 import com.fs.starfarer.api.campaign.SectorEntityToken;
 import com.fs.starfarer.api.campaign.StarSystemAPI;
 import com.fs.starfarer.api.fleet.FleetMemberAPI;
 import com.fs.starfarer.api.fleet.FleetMemberType;
 import com.fs.starfarer.api.impl.campaign.ids.MemFlags;
 import com.fs.starfarer.api.impl.campaign.ids.Tags;
+import java.lang.ref.WeakReference;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import org.lwjgl.util.vector.Vector2f;
 
 /** Three persistent, fixed, independently attackable FOB Ithaca stations. */
@@ -57,8 +61,6 @@ public final class IthacaSectionEncounter {
     private static final String REBUILD_PROGRESS_PREFIX =
             "$chief_navigator_ithaca_bastion_rebuild_days_";
     static final float BASTION_REPAIR_DAYS = 30f;
-    private static final String STATION_DRIFT_TRACE =
-            "$chief_navigator_ithaca_station_drift_trace_v1";
     private static final String EMPTY_CAMPAIGN_SPRITE =
             "graphics/fx/empty.png";
     private static final String COMBAT_WALL_SPRITE =
@@ -71,6 +73,10 @@ public final class IthacaSectionEncounter {
     // an attacker can physically overlap it and initiate a campaign battle.
     private static final float COMBAT_STATION_RADIUS = 2150f;
     private static final float STATION_DRIFT_LOG_THRESHOLD = 2f;
+    /** Station ids whose drift was already logged since the save loaded. */
+    private static final Set<String> DRIFT_LOGGED = new HashSet<String>();
+    private static WeakReference<SectorAPI> driftLoggedSector =
+            new WeakReference<SectorAPI>(null);
     private static final Vector2f HIDDEN_CAMPAIGN_SPRITE_SIZE =
             new Vector2f(1f, 1f);
     static final float CAMPAIGN_INTERACTION_RADIUS = 450f;
@@ -671,7 +677,7 @@ public final class IthacaSectionEncounter {
         fleet.setAI(null);
         fleet.setDoNotAdvanceAI(true);
         fleet.clearAssignments();
-        fleet.setVelocity(0f, 0f);
+        stopCampaignDrift(fleet);
         fleet.setFixedLocation(
                 center.getLocation().x + section.combatOffsetX,
                 center.getLocation().y + section.combatOffsetY);
@@ -837,7 +843,7 @@ public final class IthacaSectionEncounter {
             station.setFixedLocation(
                     center.getLocation().x + section.combatOffsetX,
                     center.getLocation().y + section.combatOffsetY);
-            station.setVelocity(0f, 0f);
+            stopCampaignDrift(station);
             hideCampaignSprite(station);
             station.forceSync();
         }
@@ -854,6 +860,7 @@ public final class IthacaSectionEncounter {
      * disabled campaign AI prevent intentional travel, but campaign fleet
      * collision can still translate a station when a hostile fleet presses
      * into it. The fightable target must remain on its authored ring module.
+     * A displacement is logged once per station per loaded save.
      */
     static void anchorCampaignStations(SectorEntityToken center) {
         if (!OdysseyExpanseSystem.isFobIthaca(center)
@@ -867,25 +874,46 @@ public final class IthacaSectionEncounter {
             float dy = station.getLocation().y - y;
             float displacement = (float) Math.sqrt(dx * dx + dy * dy);
             if (displacement >= STATION_DRIFT_LOG_THRESHOLD
-                    && !station.getMemoryWithoutUpdate().contains(
-                            STATION_DRIFT_TRACE)) {
+                    && firstDriftThisLoad(station.getId())) {
                 Global.getLogger(IthacaSectionEncounter.class).warn(
                         "[ITHACA_STATION_ANCHOR] Re-pinning "
                         + station.getId() + " after campaign displacement="
                         + displacement + ", radiusFromIthaca="
                         + distance(station, center) + ", velocity="
                         + station.getVelocity() + ", inBattle="
-                        + (station.getBattle() != null) + ".");
-                station.getMemoryWithoutUpdate().set(
-                        STATION_DRIFT_TRACE, true, 0.25f);
+                        + (station.getBattle() != null)
+                        + " (logged once per station per load).");
             }
             station.setStationMode(true);
             station.setAI(null);
             station.setDoNotAdvanceAI(true);
-            station.setVelocity(0f, 0f);
+            stopCampaignDrift(station);
             station.setLocation(x, y);
             station.setFacing(0f);
         }
+    }
+
+    /**
+     * Stops a parked station drifting. BaseLocation.advance moves every
+     * entity by its own stored velocity (SectorEntityToken.getVelocity()),
+     * while CampaignFleet.setVelocity only sets the movement module's
+     * velocity, which is copied back to the stored one only while the fleet
+     * has a move destination. A station has none, so an old stored velocity
+     * would carry it at that speed forever; clear both.
+     */
+    static void stopCampaignDrift(CampaignFleetAPI station) {
+        station.setVelocity(0f, 0f);
+        station.getVelocity().set(0f, 0f);
+    }
+
+    /** True the first time a station's drift is seen since the save loaded. */
+    private static boolean firstDriftThisLoad(String stationId) {
+        SectorAPI sector = Global.getSector();
+        if (driftLoggedSector.get() != sector) {
+            DRIFT_LOGGED.clear();
+            driftLoggedSector = new WeakReference<SectorAPI>(sector);
+        }
+        return DRIFT_LOGGED.add(stationId);
     }
 
     private static float distance(

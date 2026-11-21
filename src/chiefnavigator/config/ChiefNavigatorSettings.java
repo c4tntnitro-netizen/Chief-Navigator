@@ -10,6 +10,8 @@ public final class ChiefNavigatorSettings {
     public static final int DEFAULT_TROY_FLEET_DP_LIMIT = 50;
     public static final int MIN_TROY_FLEET_DP_LIMIT = 1;
     public static final int MAX_TROY_FLEET_DP_LIMIT = 1000;
+    public static final String SANZU_CLOUDS = "chiefNavigatorSanzuClouds";
+    public static final boolean DEFAULT_SANZU_CLOUDS = true;
 
     private ChiefNavigatorSettings() { }
 
@@ -28,6 +30,21 @@ public final class ChiefNavigatorSettings {
                     Math.min(MAX_TROY_FLEET_DP_LIMIT, configured));
         } catch (RuntimeException | LinkageError unavailable) {
             return DEFAULT_TROY_FLEET_DP_LIMIT;
+        }
+    }
+
+    /** Whether Sanzu draws its cloud banks; on unless LunaLib turns it off. */
+    public static boolean isSanzuCloudsEnabled() {
+        try {
+            SettingsAPI settings = Global.getSettings();
+            if (settings == null || settings.getModManager() == null
+                    || !settings.getModManager().isModEnabled("lunalib")) {
+                return DEFAULT_SANZU_CLOUDS;
+            }
+            Boolean configured = ChiefNavigatorLunaSettings.getSanzuClouds();
+            return configured == null ? DEFAULT_SANZU_CLOUDS : configured;
+        } catch (RuntimeException | LinkageError unavailable) {
+            return DEFAULT_SANZU_CLOUDS;
         }
     }
 }

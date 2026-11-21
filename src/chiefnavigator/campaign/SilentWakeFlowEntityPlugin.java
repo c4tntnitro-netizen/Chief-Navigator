@@ -1,5 +1,6 @@
 package chiefnavigator.campaign;
 
+import chiefnavigator.config.ChiefNavigatorSettings;
 import chiefnavigator.quest.OdysseyExpanseSystem;
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.CampaignEngineLayers;
@@ -29,6 +30,19 @@ public final class SilentWakeFlowEntityPlugin
     private static final int PARTICLES_PER_PATH = 40;
     private static final int BACKGROUND_PARTICLES_PER_PATH = 20;
     private static final float CLOUD_PLANET_PASSTHROUGH_CHANCE = 0.30f;
+    /** Rim points of every mist ellipse, computed once with the original formula. */
+    private static final int ELLIPSE_SEGMENTS = 24;
+    private static final float[] ELLIPSE_COS = new float[ELLIPSE_SEGMENTS + 1];
+    private static final float[] ELLIPSE_SIN = new float[ELLIPSE_SEGMENTS + 1];
+    static {
+        for (int step = 0; step <= ELLIPSE_SEGMENTS; step++) {
+            float arc = (float) (Math.PI * 2d * step / 24d);
+            ELLIPSE_COS[step] = (float) Math.cos(arc);
+            ELLIPSE_SIN[step] = (float) Math.sin(arc);
+        }
+    }
+    /** How often the Sanzu clouds setting is re-read while rendering. */
+    private static final long CLOUD_SETTING_REFRESH_NANOS = 1_000_000_000L;
     private static final float LEE_LENGTH_RADII = 8f;
     private static final String FOG_VERTEX_SHADER =
             "#version 120\n"
@@ -170,6 +184,13 @@ public final class SilentWakeFlowEntityPlugin
     private float systemCloudPhase;
     private float backgroundCloudPhase;
     private float fogTime;
+    // Per-frame scratch vectors, reused instead of allocated for every cloud.
+    private transient Vector2f scratchPoint;
+    private transient Vector2f scratchBefore;
+    private transient Vector2f scratchAfter;
+    private transient Vector2f scratchCenter;
+    private transient boolean cloudsEnabled = true;
+    private transient long cloudSettingCheckedAt;
 
     @Override
     public void init(SectorEntityToken entity, Object pluginParams) {
@@ -405,13 +426,36 @@ public final class SilentWakeFlowEntityPlugin
         float alpha = viewport.getAlphaMult();
         if (alpha <= 0f) return;
         if (layer == CampaignEngineLayers.TERRAIN_1) {
-            renderBackgroundClouds(viewport, alpha);
+            if (cloudsEnabled()) renderBackgroundClouds(viewport, alpha);
         } else if (layer == CampaignEngineLayers.TERRAIN_2) {
             renderFlowSheet(alpha);
-            renderClouds(viewport, alpha);
+            if (cloudsEnabled()) renderClouds(viewport, alpha);
         } else if (layer == CampaignEngineLayers.ABOVE_STATIONS) {
             renderPlanetOverflow(viewport, alpha);
         }
+    }
+
+    /**
+     * The LunaLib "Sanzu clouds" setting turns off both cloud banks; the
+     * glints and the vapor flowing off the planets stay. Re-read once a second
+     * so a saved change applies without reloading.
+     */
+    private boolean cloudsEnabled() {
+        long now = System.nanoTime();
+        if (cloudSettingCheckedAt == 0L
+                || now - cloudSettingCheckedAt > CLOUD_SETTING_REFRESH_NANOS) {
+            cloudsEnabled = ChiefNavigatorSettings.isSanzuCloudsEnabled();
+            cloudSettingCheckedAt = now;
+        }
+        return cloudsEnabled;
+    }
+
+    private void ensureScratchVectors() {
+        if (scratchPoint != null) return;
+        scratchPoint = new Vector2f();
+        scratchBefore = new Vector2f();
+        scratchAfter = new Vector2f();
+        scratchCenter = new Vector2f();
     }
 
     /**
@@ -832,6 +876,7 @@ public final class SilentWakeFlowEntityPlugin
 
     /** Sparse moving glints provide direction without recreating solid bands. */
     private void renderFlowHighlights(float alpha) {
+        ensureScratchVectors();
         Vector2f origin = entity.getLocation();
         GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
         GL11.glDisable(GL11.GL_TEXTURE_2D);
@@ -847,7 +892,8 @@ public final class SilentWakeFlowEntityPlugin
                     float progress = start + step * 0.0065f;
                     if (progress >= 1f) break;
                     float fade = (float) Math.sin(Math.PI * step / 16f);
-                    Vector2f point = samplePath(path, progress);
+                    Vector2f point = samplePathInto(
+                            path, progress, false, scratchPoint);
                     GL11.glColor4f(
                             0.42f,
                             0.72f,
@@ -868,6 +914,7 @@ public final class SilentWakeFlowEntityPlugin
      * depth without flattening the brighter foreground smoke into one layer.
      */
     private void renderBackgroundClouds(ViewportAPI viewport, float alpha) {
+        ensureScratchVectors();
         Vector2f origin = entity.getLocation();
         GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
         GL11.glDisable(GL11.GL_TEXTURE_2D);
@@ -885,35 +932,44 @@ public final class SilentWakeFlowEntityPlugin
                 boolean passesThroughPlanets = hash01(
                         path, particleIndex, 200)
                         < CLOUD_PLANET_PASSTHROUGH_CHANCE;
-                Vector2f point = samplePath(
-                        path, progress, passesThroughPlanets);
-                Vector2f before = samplePath(
-                        path,
-                        Math.max(0f, progress - 0.011f),
-                        passesThroughPlanets);
-                Vector2f after = samplePath(
-                        path,
-                        Math.min(0.999f, progress + 0.011f),
-                        passesThroughPlanets);
-                float tangentX = after.x - before.x;
-                float tangentY = after.y - before.y;
-                float tangentLength = (float) Math.sqrt(
-                        tangentX * tangentX + tangentY * tangentY);
-                if (tangentLength < 1f) tangentLength = 1f;
                 float lateralOffset = (hash01(path, particleIndex, 102) - 0.5f)
                         * (740f + hash01(path, particleIndex, 103) * 980f);
-                point.x += -tangentY / tangentLength * lateralOffset;
-                point.y += tangentX / tangentLength * lateralOffset;
-                point.x += origin.x;
-                point.y += origin.y;
-
                 float sizeRoll = hash01(path, particleIndex, 104);
                 float size = 520f + sizeRoll * sizeRoll * 980f;
                 float width = size
                         * (1.00f + hash01(path, particleIndex, 105) * 1.16f);
                 float height = size
                         * (0.80f + hash01(path, particleIndex, 106) * 0.62f);
-                if (!viewport.isNearViewport(point, Math.max(width, height))) {
+                float reach = Math.max(width, height);
+                Vector2f point = samplePathInto(
+                        path, progress, passesThroughPlanets, scratchPoint);
+                // The cloud sits at most |lateralOffset| from its path point, so
+                // skip clouds that are off screen before sampling the tangent.
+                scratchCenter.set(origin.x + point.x, origin.y + point.y);
+                if (!viewport.isNearViewport(
+                        scratchCenter, reach + Math.abs(lateralOffset))) {
+                    continue;
+                }
+                Vector2f before = samplePathInto(
+                        path,
+                        Math.max(0f, progress - 0.011f),
+                        passesThroughPlanets,
+                        scratchBefore);
+                Vector2f after = samplePathInto(
+                        path,
+                        Math.min(0.999f, progress + 0.011f),
+                        passesThroughPlanets,
+                        scratchAfter);
+                float tangentX = after.x - before.x;
+                float tangentY = after.y - before.y;
+                float tangentLength = (float) Math.sqrt(
+                        tangentX * tangentX + tangentY * tangentY);
+                if (tangentLength < 1f) tangentLength = 1f;
+                point.x += -tangentY / tangentLength * lateralOffset;
+                point.y += tangentX / tangentLength * lateralOffset;
+                point.x += origin.x;
+                point.y += origin.y;
+                if (!viewport.isNearViewport(point, reach)) {
                     continue;
                 }
 
@@ -935,6 +991,7 @@ public final class SilentWakeFlowEntityPlugin
     }
 
     private void renderClouds(ViewportAPI viewport, float alpha) {
+        ensureScratchVectors();
         Vector2f origin = entity.getLocation();
         GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
         GL11.glDisable(GL11.GL_TEXTURE_2D);
@@ -954,34 +1011,44 @@ public final class SilentWakeFlowEntityPlugin
                 boolean passesThroughPlanets = hash01(
                         path, particleIndex, 201)
                         < CLOUD_PLANET_PASSTHROUGH_CHANCE;
-                Vector2f point = samplePath(
-                        path, progress, passesThroughPlanets);
-                Vector2f before = samplePath(
-                        path,
-                        Math.max(0f, progress - 0.008f),
-                        passesThroughPlanets);
-                Vector2f after = samplePath(
-                        path,
-                        Math.min(0.999f, progress + 0.008f),
-                        passesThroughPlanets);
-                float tangentX = after.x - before.x;
-                float tangentY = after.y - before.y;
-                float tangentLength = (float) Math.sqrt(
-                        tangentX * tangentX + tangentY * tangentY);
-                if (tangentLength < 1f) tangentLength = 1f;
                 float lateralOffset = (hash01(path, particleIndex, 2) - 0.5f)
                         * (420f + hash01(path, particleIndex, 8) * 720f);
-                point.x += -tangentY / tangentLength * lateralOffset;
-                point.y += tangentX / tangentLength * lateralOffset;
-                point.x += origin.x;
-                point.y += origin.y;
                 float sizeRoll = hash01(path, particleIndex, 3);
                 float size = 360f + sizeRoll * sizeRoll * 640f;
                 float width = size
                         * (1.00f + hash01(path, particleIndex, 4) * 1.08f);
                 float height = size
                         * (0.78f + hash01(path, particleIndex, 5) * 0.62f);
-                if (!viewport.isNearViewport(point, Math.max(width, height))) {
+                float reach = Math.max(width, height);
+                Vector2f point = samplePathInto(
+                        path, progress, passesThroughPlanets, scratchPoint);
+                // The cloud sits at most |lateralOffset| from its path point, so
+                // skip clouds that are off screen before sampling the tangent.
+                scratchCenter.set(origin.x + point.x, origin.y + point.y);
+                if (!viewport.isNearViewport(
+                        scratchCenter, reach + Math.abs(lateralOffset))) {
+                    continue;
+                }
+                Vector2f before = samplePathInto(
+                        path,
+                        Math.max(0f, progress - 0.008f),
+                        passesThroughPlanets,
+                        scratchBefore);
+                Vector2f after = samplePathInto(
+                        path,
+                        Math.min(0.999f, progress + 0.008f),
+                        passesThroughPlanets,
+                        scratchAfter);
+                float tangentX = after.x - before.x;
+                float tangentY = after.y - before.y;
+                float tangentLength = (float) Math.sqrt(
+                        tangentX * tangentX + tangentY * tangentY);
+                if (tangentLength < 1f) tangentLength = 1f;
+                point.x += -tangentY / tangentLength * lateralOffset;
+                point.y += tangentX / tangentLength * lateralOffset;
+                point.x += origin.x;
+                point.y += origin.y;
+                if (!viewport.isNearViewport(point, reach)) {
                     continue;
                 }
 
@@ -1140,11 +1207,11 @@ public final class SilentWakeFlowEntityPlugin
         GL11.glBegin(GL11.GL_TRIANGLE_FAN);
         GL11.glColor4f(red, green, blue, alpha);
         GL11.glVertex2f(centerX, centerY);
-        for (int step = 0; step <= 24; step++) {
-            float arc = (float) (Math.PI * 2d * step / 24d);
-            float localX = (float) Math.cos(arc) * radiusX;
-            float localY = (float) Math.sin(arc) * radiusY;
-            GL11.glColor4f(red, green, blue, 0f);
+        // Colour is OpenGL state: set the transparent rim colour once.
+        GL11.glColor4f(red, green, blue, 0f);
+        for (int step = 0; step <= ELLIPSE_SEGMENTS; step++) {
+            float localX = ELLIPSE_COS[step] * radiusX;
+            float localY = ELLIPSE_SIN[step] * radiusY;
             GL11.glVertex2f(
                     centerX + localX * cosRotation
                             - localY * sinRotation,
@@ -1154,14 +1221,11 @@ public final class SilentWakeFlowEntityPlugin
         GL11.glEnd();
     }
 
-    private Vector2f samplePath(int path, float progress) {
-        return samplePath(path, progress, false);
-    }
-
-    private Vector2f samplePath(
+    private Vector2f samplePathInto(
             int path,
             float progress,
-            boolean passesThroughPlanets) {
+            boolean passesThroughPlanets,
+            Vector2f out) {
         float[][] sourceX = passesThroughPlanets
                 ? planetPassthroughPathX : pathX;
         float[][] sourceY = passesThroughPlanets
@@ -1172,13 +1236,14 @@ public final class SilentWakeFlowEntityPlugin
         float exact = progress * (lengthForPath - 1f);
         int lower = Math.min(lengthForPath - 2, (int) exact);
         float fraction = exact - lower;
-        return new Vector2f(
+        out.set(
                 sourceX[path][lower]
                         + (sourceX[path][lower + 1] - sourceX[path][lower])
                         * fraction,
                 sourceY[path][lower]
                         + (sourceY[path][lower + 1] - sourceY[path][lower])
                         * fraction);
+        return out;
     }
 
     private float fractional(float value) {

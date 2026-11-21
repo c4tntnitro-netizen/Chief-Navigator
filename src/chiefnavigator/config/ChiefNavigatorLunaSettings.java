@@ -10,4 +10,9 @@ final class ChiefNavigatorLunaSettings {
         return LunaSettings.getInt(ChiefNavigatorSettings.MOD_ID,
                 ChiefNavigatorSettings.TROY_FLEET_DP_LIMIT);
     }
+
+    static Boolean getSanzuClouds() {
+        return LunaSettings.getBoolean(ChiefNavigatorSettings.MOD_ID,
+                ChiefNavigatorSettings.SANZU_CLOUDS);
+    }
 }

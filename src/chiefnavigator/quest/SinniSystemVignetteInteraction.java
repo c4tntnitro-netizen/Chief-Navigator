@@ -106,7 +106,9 @@ public final class SinniSystemVignetteInteraction
     protected void handleOptionSelected(String optionText, Object optionData) {
         if (optionData == null) return;
         String optionId = optionData.toString();
-        if (("complete_" + candidate.category.id).equals(optionId)) {
+        if (("complete_" + candidate.category.id).equals(optionId)
+                || (candidate.category == SinniSystemVignetteScript.Category.NEBULA
+                    && "complete_nebula_screensaver".equals(optionId))) {
             SinniSystemVignetteScript.markComplete(candidate.category);
         } else if ("accept_last_request".equals(optionId)) {
             SinniSystemVignetteScript.acceptLastRequest(
